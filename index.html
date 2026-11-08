@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="V-Taper">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#eef1f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#10141b" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<title>V-Taper PPL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: app shell — sticky header, day strip, session card, fixed bottom tab bar. Day types coloured like Olympic plates (push red, pull blue, legs yellow). */
+:root{
+  --bg:#eef1f5; --surface:#ffffff; --surface-2:#e4e8ef; --fg:#141a24; --muted:#5b6577; --line:#d3d9e3;
+  --push:#d6332a; --pull:#1f5fd1; --legs:#c99100; --rest:#7a8599;
+  --push-soft:#fbe4e2; --pull-soft:#e1eafb; --legs-soft:#faf0d4; --rest-soft:#e7eaf0;
+  --done:#1d8a54;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#10141b; --surface:#181e28; --surface-2:#212937; --fg:#e8ecf2; --muted:#93a0b4; --line:#2a3342;
+  --push:#ff5a4f; --pull:#5b93ff; --legs:#f2bd2c; --rest:#8d99ad;
+  --push-soft:#3a1d1c; --pull-soft:#1a2740; --legs-soft:#382d10; --rest-soft:#232a36;
+  --done:#3ccf85; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10141b; --surface:#181e28; --surface-2:#212937; --fg:#e8ecf2; --muted:#93a0b4; --line:#2a3342;
+  --push:#ff5a4f; --pull:#5b93ff; --legs:#f2bd2c; --rest:#8d99ad;
+  --push-soft:#3a1d1c; --pull-soft:#1a2740; --legs-soft:#382d10; --rest-soft:#232a36;
+  --done:#3ccf85; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:0 calc(88px + env(safe-area-inset-bottom,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:640px;margin:0 auto}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:16px 10px}
+.brand{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h1{font-family:var(--display);font-weight:800;font-size:2.4rem;line-height:1;margin:0;letter-spacing:.01em;text-transform:uppercase}
+.phase{font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h2{font-family:var(--display);font-weight:800;font-size:1.9rem;line-height:1.05;margin:0;text-transform:uppercase;text-wrap:balance}
+h3{font-family:var(--display);font-weight:600;font-size:1.25rem;margin:0;text-transform:uppercase;letter-spacing:.02em}
+p{margin:0}
+.muted{color:var(--muted)}
+
+/* Day strip */
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:12px}
+.day{border:0;border-radius:10px;padding:8px 0 7px;background:var(--surface);color:var(--fg);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--body);box-shadow:inset 0 0 0 1px var(--line)}
+.day b{font-family:var(--display);font-weight:800;font-size:1.05rem;line-height:1}
+.day span{font-size:.62rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.day i{width:18px;height:4px;border-radius:2px;background:var(--c)}
+.day[aria-pressed="true"]{background:var(--c);box-shadow:none}
+.day[aria-pressed="true"] b,.day[aria-pressed="true"] span{color:#fff}
+.day[aria-pressed="true"] i{background:#fff}
+.day:focus-visible,.tab:focus-visible,.set:focus-visible,button:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+
+/* Session */
+.session{margin-top:14px;display:flex;flex-direction:column;gap:12px}
+.hero{border-radius:16px;padding:18px;background:var(--soft);display:flex;flex-direction:column;gap:8px}
+.hero .tag{font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--c)}
+.meta{display:flex;gap:16px;flex-wrap:wrap;font-size:.9rem;color:var(--muted)}
+.meta strong{color:var(--fg);font-variant-numeric:tabular-nums}
+.progress{height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden}
+.progress div{height:100%;background:var(--c);width:0;transition:width .3s}
+.ex{background:var(--surface);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:inset 0 0 0 1px var(--line)}
+.ex.complete{box-shadow:inset 0 0 0 2px var(--done)}
+.ex-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.ex-name{font-weight:600;font-size:1.05rem;line-height:1.3;min-width:0}
+.ex-name small{display:block;font-weight:400;font-size:.85rem;color:var(--muted);margin-top:2px}
+.scheme{font-family:var(--display);font-weight:800;font-size:1.25rem;white-space:nowrap;font-variant-numeric:tabular-nums}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+.chip.new{background:var(--soft);color:var(--c)}
+.sets{display:flex;gap:8px;flex-wrap:wrap}
+.set{width:42px;height:42px;border-radius:50%;border:2px solid var(--line);background:transparent;color:var(--muted);
+  font-family:var(--display);font-weight:800;font-size:1.05rem;cursor:pointer;display:grid;place-items:center}
+.set[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:#fff}
+.reset{align-self:flex-start;border:0;background:none;color:var(--muted);font:600 .85rem var(--body);text-decoration:underline;cursor:pointer;padding:4px 0}
+
+/* Generic panels */
+.view{margin-top:14px;display:flex;flex-direction:column;gap:12px}
+.panel{background:var(--surface);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;box-shadow:inset 0 0 0 1px var(--line)}
+.panel ul,.panel ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.lead{font-size:1.02rem}
+.row{display:grid;grid-template-columns:5.5rem 1fr;gap:10px;padding-block:8px;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:0}
+.row b{font-family:var(--display);font-weight:800;font-size:1.05rem;text-transform:uppercase}
+.stage{display:flex;gap:12px;align-items:flex-start}
+.stage .wk{flex:0 0 auto;font-family:var(--display);font-weight:800;font-size:.95rem;text-transform:uppercase;background:var(--surface-2);border-radius:8px;padding:4px 8px;white-space:nowrap}
+.stage p{min-width:0}
+.finding{display:flex;flex-direction:column;gap:4px;padding-block:10px;border-top:1px solid var(--line)}
+.finding:first-of-type{border-top:0;padding-top:0}
+.finding .what{font-weight:600}
+.finding a{color:var(--pull);font-size:.85rem;font-weight:600;word-break:break-word}
+.warn{background:var(--push-soft)}
+.warn h3{color:var(--push)}
+
+/* Tab bar */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);
+  padding:8px max(16px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+nav.tabs .in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.tab{border:0;background:none;color:var(--muted);font:600 .78rem var(--body);letter-spacing:.06em;text-transform:uppercase;padding:10px 0;border-radius:10px;cursor:pointer}
+.tab[aria-selected="true"]{color:var(--fg);background:var(--surface-2)}
+@media (prefers-reduced-motion:reduce){.progress div{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <h1>V-Taper PPL</h1>
+      <span class="phase">Cut phase · 6 days</span>
+    </div>
+    <div class="days" id="days" role="group" aria-label="Choose a day"></div>
+  </header>
+
+  <main>
+    <section id="v-train" class="session"></section>
+
+    <section id="v-cardio" class="view" hidden>
+      <div class="panel">
+        <h2>Cardio plan</h2>
+        <p class="lead">On a cut, cardio adds to your calorie burn. Lifting is still what keeps the muscle, so keep cardio easy enough that it never hurts your sessions.</p>
+      </div>
+      <div class="panel">
+        <h3>Weekly layout</h3>
+        <div class="row"><b>Daily</b><p>8–10k steps. This is your main fat-loss tool after diet.</p></div>
+        <div class="row"><b>Tue</b><p>25 min incline walk or bike after Pull A. Easy pace: you could talk in full sentences.</p></div>
+        <div class="row"><b>Fri</b><p>25 min incline walk or bike after Pull B, same easy pace.</p></div>
+        <div class="row"><b>Sat</b><p>Optional sprint work after Legs B. Follow the progression below.</p></div>
+        <div class="row"><b>Sun</b><p>Rest. A relaxed walk is fine.</p></div>
+      </div>
+      <div class="panel">
+        <h3>Sprint progression</h3>
+        <p class="muted">Warm up first every time: 5 min jog, leg swings, A-skips. Never sprint flat out while the hernia is unrepaired.</p>
+        <div class="stage"><span class="wk">Wk 1–4</span><p>6–8 strides of 60–80 m at about 70% effort. Walk back to recover.</p></div>
+        <div class="stage"><span class="wk">Wk 5–8</span><p>4–6 hill sprints, 10–15 seconds at about 85%. Hills cut groin stress.</p></div>
+        <div class="stage"><span class="wk">Wk 9+</span><p>4–6 flat sprints of 40–60 m at about 90%, with 2–3 min rest between.</p></div>
+      </div>
+      <div class="panel">
+        <h3>If fat loss stalls</h3>
+        <p>Add 2,000 daily steps or a third 25-minute session before cutting food further. Change one thing at a time and give it two weeks.</p>
+      </div>
+    </section>
+
+    <section id="v-rules" class="view" hidden>
+      <div class="panel">
+        <h2>How to progress</h2>
+        <ol>
+          <li>Start with a weight you can lift for the bottom of the rep range.</li>
+          <li>Add reps each week until every set reaches the top of the range.</li>
+          <li>Then add the smallest jump (2.5 kg, or the next dumbbell) and repeat.</li>
+          <li>Compounds stop 1–2 reps short of failure. Isolation work goes to 0–1 reps short.</li>
+          <li>Deload every 6–8 weeks, or if strength drops two sessions in a row: same exercises, half the sets.</li>
+        </ol>
+        <p class="muted">On a cut, holding your numbers steady is a win.</p>
+      </div>
+      <div class="panel">
+        <h3>Cut nutrition</h3>
+        <ul>
+          <li>Lose about 0.5–1% of bodyweight a week, closer to 0.5% as you get leaner.</li>
+          <li>Protein around 2–2.2 g per kg of bodyweight, spread over 3–4 meals.</li>
+          <li>Keep most carbs around your training.</li>
+          <li>Sleep 7–9 hours. Short sleep makes a cut cost more muscle.</li>
+        </ul>
+      </div>
+      <div class="panel warn">
+        <h3>Hernia and back rules</h3>
+        <ul>
+          <li>No max-effort singles or grinding reps, especially squats, RDLs and leg press.</li>
+          <li>Breathe out through the hard part of each rep instead of holding your breath.</li>
+          <li>Stop the exercise if you feel a bulge, dragging or sharp pain in your groin.</li>
+          <li>If rows or RDLs flare your lower back, swap to chest-supported rows and lying leg curls.</li>
+          <li>Get the night-time back pain checked by a GP or physio if it continues.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="v-science" class="view" hidden>
+      <div class="panel">
+        <h2>Where this comes from</h2>
+        <p class="lead">The structure follows peer-reviewed hypertrophy research. Exercise choice follows what you enjoy, because research rarely picks one best exercise and consistency matters more.</p>
+        <p class="muted">Jeff Nippard's programmes are built on much of this same research. Arnold's split is classic bodybuilding: high volume, each muscle twice a week, proven in practice more than in studies. This plan takes the evidence-based parts and your favourite lifts.</p>
+      </div>
+      <div class="panel">
+        <h3>Key findings used</h3>
+        <div class="finding">
+          <span class="what">Train each muscle twice a week</span>
+          <p>A 2016 meta-analysis found twice-weekly training grew more muscle than once a week. That is why every muscle appears on two days here.</p>
+          <a href="https://pubmed.ncbi.nlm.nih.gov/27102172/" target="_blank" rel="noopener">Schoenfeld et al., 2016 · Sports Medicine</a>
+        </div>
+        <div class="finding">
+          <span class="what">More weekly sets, more growth, up to a point</span>
+          <p>Growth rose with weekly volume, with 10+ sets per muscle doing best. A later review suggested 12–20 weekly sets for trained men. Priority muscles here sit in that range.</p>
+          <a href="https://pubmed.ncbi.nlm.nih.gov/27433992/" target="_blank" rel="noopener">Schoenfeld et al., 2017 · J Sports Sciences</a>
+          <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8884877/" target="_blank" rel="noopener">Baz-Valle et al., 2022 · J Human Kinetics</a>
+        </div>
+        <div class="finding">
+          <span class="what">Overhead triceps work beats pushdowns alone</span>
+          <p>Over 12 weeks, the triceps long head grew about 28.5% with overhead extensions versus 19.6% with pushdowns. Both push days include an overhead extension.</p>
+          <a href="https://pubmed.ncbi.nlm.nih.gov/35819335/" target="_blank" rel="noopener">Maeo et al., 2023 · Eur J Sport Science</a>
+        </div>
+        <div class="finding">
+          <span class="what">Protein benefits level off around 1.6 g/kg</span>
+          <p>A 49-study meta-analysis found little extra muscle gain above about 1.6 g/kg a day. Cutting raises needs, so this plan aims a little higher.</p>
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28698222/" target="_blank" rel="noopener">Morton et al., 2018 · Br J Sports Med</a>
+        </div>
+        <div class="finding">
+          <span class="what">Lose weight slowly to keep muscle</span>
+          <p>A review of natural bodybuilding prep recommends losing about 0.5–1% of bodyweight a week. Faster losses cost more muscle and strength.</p>
+          <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4033492/" target="_blank" rel="noopener">Helms et al., 2014 · JISSN</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav class="tabs" aria-label="Sections">
+  <div class="in" role="tablist">
+    <button class="tab" role="tab" id="t-train" data-v="train" aria-selected="true">Train</button>
+    <button class="tab" role="tab" id="t-cardio" data-v="cardio" aria-selected="false">Cardio</button>
+    <button class="tab" role="tab" id="t-rules" data-v="rules" aria-selected="false">Rules</button>
+    <button class="tab" role="tab" id="t-science" data-v="science" aria-selected="false">Science</button>
+  </div>
+</nav>
+
+<script>
+const PLAN = [
+  {d:"Mon",type:"push",name:"Push A",focus:"Chest strength, triceps",time:"65–70 min",ex:[
+    ["Incline DB press",3,"6–10","Main lift. Stop 1–2 reps short of failure."],
+    ["Bench press",3,"6–8","Controlled. Breathe out as you press."],
+    ["Smith machine shoulder press",3,"8–10",""],
+    ["Cable fly",3,"12–15","Deep stretch at the start of each rep.",["New"]],
+    ["Cable lateral raise",4,"12–15","",["V-taper"]],
+    ["Overhead cable triceps extension",3,"10–12","Stretch at the bottom.",["Research-backed"]],
+    ["Triceps pushdown",3,"12–15","Last set to failure."]]},
+  {d:"Tue",type:"pull",name:"Pull A",focus:"Lat width, biceps, side delts",time:"65 min + 25 min cardio",ex:[
+    ["Pull-ups (or lat pulldown)",4,"6–10","Main lift. Add weight once you hit 10.",["V-taper"]],
+    ["Chest-supported row",3,"8–12","Spares your lower back."],
+    ["Single-arm cable pulldown",3,"10–12","Drive the elbow to your hip.",["V-taper"]],
+    ["DB lateral raise",3,"15–20","",["V-taper"]],
+    ["Rear delt fly",3,"15",""],
+    ["Incline DB curl",3,"10–12","Full stretch at the bottom."],
+    ["Hammer curl",3,"12",""]]},
+  {d:"Wed",type:"legs",name:"Legs A",focus:"Quads, core",time:"60–65 min",ex:[
+    ["Barbell squat",3,"6–10","Keep 2–3 reps in the tank. Swap to hack squat if your groin or back complains.",["Careful"]],
+    ["Leg press",3,"10–15","Breathe out as you push. No breath-holding."],
+    ["Leg extension",3,"12–15",""],
+    ["Seated leg curl",3,"10–12",""],
+    ["Calf press",4,"12–15","Pause at the bottom."],
+    ["Hip abductor",3,"15–20",""],
+    ["Core: dead bug + glute-squeeze plank",3,"8/side · 30s","Fixes pelvic tilt. Back pressed flat on dead bugs."]]},
+  {d:"Thu",type:"push",name:"Push B",focus:"Shoulders first, triceps",time:"60–65 min",ex:[
+    ["Smith machine shoulder press",4,"6–10","Main lift, done fresh.",["V-taper"]],
+    ["Incline Smith press",3,"8–10",""],
+    ["Pec deck fly",3,"12–15","Squeeze for a second at the middle.",["New"]],
+    ["Lateral raise (DB or machine)",4,"12–20","Last set: drop set.",["V-taper"]],
+    ["Overhead DB triceps extension",3,"10–12","",["Research-backed"]],
+    ["Triceps pushdown (rope)",3,"12–15",""],
+    ["Push-ups (finisher)",1,"max","Optional. Leave 1–2 reps in the tank."]]},
+  {d:"Fri",type:"pull",name:"Pull B",focus:"Back thickness, biceps",time:"65 min + 25 min cardio",ex:[
+    ["Lat pulldown (wide or neutral)",3,"8–12","",["V-taper"]],
+    ["Barbell row",3,"8–10","Moderate load. Swap to machine row if your back complains.",["Careful"]],
+    ["Seated cable row",3,"10–12",""],
+    ["Cable lateral raise",3,"15","",["V-taper"]],
+    ["Face pull",3,"15",""],
+    ["EZ-bar curl",3,"8–10",""],
+    ["Cable curl",3,"12–15","Last set to failure."]]},
+  {d:"Sat",type:"legs",name:"Legs B",focus:"Hamstrings, glutes",time:"60 min + optional sprints",ex:[
+    ["Romanian deadlift",3,"8–10","Moderate load, neutral back.",["Careful"]],
+    ["Hip thrust",3,"10–12","Squeeze at the top."],
+    ["Hack squat",3,"10–12",""],
+    ["Lying leg curl",3,"10–12",""],
+    ["Calf press",4,"15",""],
+    ["Hip abductor",3,"15–20",""],
+    ["Couch stretch + 90/90 hip stretch",2,"60–90s/side","Do the couch stretch daily if you can."]]},
+  {d:"Sun",type:"rest",name:"Rest",focus:"Recover",time:"",ex:[]}
+];
+const LABEL={push:"Push",pull:"Pull",legs:"Legs",rest:"Rest"};
+const store={get(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}},
+             set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let ticks=store.get("vtppl-ticks")||{};
+let current=(new Date().getDay()+6)%7;
+const daysEl=document.getElementById("days"), trainEl=document.getElementById("v-train");
+
+function colors(t){return `--c:var(--${t});--soft:var(--${t}-soft)`}
+function renderDays(){
+  daysEl.innerHTML=PLAN.map((p,i)=>`<button class="day" id="day-${i}" style="${colors(p.type)}" aria-pressed="${i===current}" data-i="${i}"><b>${p.d}</b><span>${LABEL[p.type]}</span><i></i></button>`).join("");
+}
+function count(i){const p=PLAN[i];let tot=0,done=0;p.ex.forEach((e,j)=>{for(let s=0;s<e[1];s++){tot++;if(ticks[`${i}-${j}-${s}`])done++}});return [done,tot]}
+function renderSession(){
+  const p=PLAN[current], st=colors(p.type);
+  if(p.type==="rest"){
+    trainEl.innerHTML=`<div class="hero" style="${st}"><span class="tag">Sunday</span><h2>Rest day</h2>
+      <p>Walk, stretch and eat your protein. Muscle gets built while you recover.</p>
+      <ul style="margin:4px 0 0;padding-left:20px"><li>Relaxed walk toward your step target</li><li>Couch stretch, 60–90 seconds per side</li><li>Prep meals for the week</li></ul></div>`;
+    return;
+  }
+  const [done,tot]=count(current);
+  trainEl.innerHTML=`<div class="hero" style="${st}">
+      <span class="tag">${p.d} · ${LABEL[p.type]}</span><h2>${p.name}</h2><p>${p.focus}</p>
+      <div class="meta"><span><strong>${p.ex.length}</strong> exercises</span><span><strong>${tot}</strong> sets</span><span><strong>${p.time}</strong></span></div>
+      <div class="progress" aria-hidden="true"><div id="bar"></div></div>
+      <p class="muted" id="count">${done} of ${tot} sets done</p>
+    </div>`+
+    p.ex.map((e,j)=>{
+      const sets=Array.from({length:e[1]},(_,s)=>{const k=`${current}-${j}-${s}`;return `<button class="set" id="s-${k}" data-k="${k}" aria-pressed="${!!ticks[k]}" aria-label="${e[0]} set ${s+1}">${s+1}</button>`}).join("");
+      const allDone=Array.from({length:e[1]},(_,s)=>ticks[`${current}-${j}-${s}`]).every(Boolean);
+      const chips=(e[4]||[]).map(c=>`<span class="chip${c==="New"?" new":""}">${c}</span>`).join("");
+      return `<article class="ex${allDone?" complete":""}" style="${st}" data-j="${j}">
+        <div class="ex-top"><div class="ex-name">${e[0]}${e[3]?`<small>${e[3]}</small>`:""}</div><div class="scheme">${e[1]} × ${e[2]}</div></div>
+        ${chips?`<div class="chips">${chips}</div>`:""}
+        <div class="sets">${sets}</div></article>`}).join("")+
+    `<button class="reset" id="reset">Clear today's ticks</button>`;
+  document.getElementById("bar").style.width=(tot?done/tot*100:0)+"%";
+}
+daysEl.addEventListener("click",e=>{const b=e.target.closest(".day");if(!b)return;current=+b.dataset.i;renderDays();renderSession()});
+trainEl.addEventListener("click",e=>{
+  const s=e.target.closest(".set");
+  if(s){const k=s.dataset.k;ticks[k]=!ticks[k];if(!ticks[k])delete ticks[k];store.set("vtppl-ticks",ticks);renderSession();return}
+  if(e.target.id==="reset"){Object.keys(ticks).forEach(k=>{if(k.startsWith(current+"-"))delete ticks[k]});store.set("vtppl-ticks",ticks);renderSession()}
+});
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",x===t));
+  ["train","cardio","rules","science"].forEach(v=>document.getElementById("v-"+v).hidden=v!==t.dataset.v);
+  document.getElementById("days").hidden=t.dataset.v!=="train";
+  window.scrollTo(0,0);
+}));
+renderDays();renderSession();
+</script>
+<script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))}</script>
+</body>
+</html>
