@@ -1,5 +1,5 @@
 // Offline support: the page loads from the network when online (so updates show), and from cache with no signal.
-const CACHE = "vtaper-v3";
+const CACHE = "vtaper-v4";
 const CORE = ["./", "index.html", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", e => {
