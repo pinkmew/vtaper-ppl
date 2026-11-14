@@ -1,14 +1,33 @@
 {
-  "name": "V-Taper PPL",
-  "short_name": "V-Taper",
+  "name": "Costante",
+  "short_name": "Costante",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#10141b",
-  "theme_color": "#10141b",
+  "background_color": "#0e0a07",
+  "theme_color": "#0e0a07",
   "icons": [
-    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
-    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
-    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
-  ]
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "description": "Train consistently. Lifting, cardio, recovery and friends in one game."
 }

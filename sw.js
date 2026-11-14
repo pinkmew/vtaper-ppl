@@ -1,6 +1,6 @@
 // Offline support: the page loads from the network when online (so updates show), and from cache with no signal.
-const CACHE = "vtaper-v16";
-const CORE = ["./", "index.html", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"];
+const CACHE = "costante-v17";
+const CORE = ["./", "index.html", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "logo.svg"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
@@ -38,8 +38,8 @@ self.addEventListener("fetch", e => {
 // Push notifications: show them, and open the right screen when tapped.
 self.addEventListener("push", e => {
   let d = {};
-  try { d = e.data ? e.data.json() : {}; } catch (_) { d = { title: "V-Taper", body: e.data ? e.data.text() : "" }; }
-  e.waitUntil(self.registration.showNotification(d.title || "V-Taper", {
+  try { d = e.data ? e.data.json() : {}; } catch (_) { d = { title: "Costante", body: e.data ? e.data.text() : "" }; }
+  e.waitUntil(self.registration.showNotification(d.title || "Costante", {
     body: d.body || "", tag: d.tag || undefined, renotify: !!d.tag, icon: "icon-192.png", badge: "icon-192.png", data: { url: d.url || "" }
   }));
 });

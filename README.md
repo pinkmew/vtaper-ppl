@@ -1,4 +1,4 @@
-# V-Taper PPL
+# Costante
 
 A 6-day push/pull/legs cut plan as an offline web app.
 

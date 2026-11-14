@@ -1,4 +1,4 @@
-// V-Taper "push" function: sends the notifications that are due.
+// Costante "push" function: sends the notifications that are due.
 // Paste this whole file into Supabase → Edge Functions → Deploy a new function → Via editor, name it "push".
 // Needs secrets VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY and VAPID_SUBJECT (Edge Functions → Secrets).
 // It only sends notifications that are already due, so it's safe to leave "Verify JWT" off.
