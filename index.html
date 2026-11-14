@@ -544,7 +544,7 @@ button.cd{border:0;cursor:pointer;font-family:var(--body);position:relative;padd
 .evo span{display:flex;flex-direction:column;align-items:center;gap:4px}
 .evo small{font-size:.72rem;color:var(--muted);line-height:1.2}
 .evo i{font-style:normal;color:var(--muted);font-size:1.3rem}
-.evo .lock svg{filter:brightness(0);opacity:.55}
+.evo .lock img{filter:brightness(0);opacity:.55}
 .sprite{image-rendering:pixelated;display:block}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6%)}}
 .bob{display:inline-block;animation:bob 1.6s steps(4) infinite}
@@ -656,6 +656,84 @@ body{min-height:100vh;min-height:calc(100vh - env(safe-area-inset-top,0px))}
 .steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px}
 
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---- v12: chests, items, rotating shop ---- */
+.ph{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ph .link{align-self:center}
+.chestrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.chestbtn{border:0;cursor:pointer;font-family:var(--body);color:var(--fg);border-radius:16px;padding:10px 4px;display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0;
+  background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--rc) 26%,transparent),transparent 70%),var(--surface-2);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--rc) 50%,var(--line))}
+.chestbtn b{font-size:.92rem}
+.chestbtn .price{padding:3px 10px;font-size:.85rem;background:var(--bg)}
+.invrow{display:flex;align-items:center;gap:10px;padding-block:8px;border-top:1px solid var(--line)}
+.panel .ph+.invrow{border-top:0}
+.inv-t{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3}
+.inv-t .muted{font-size:.8rem}
+.odds{display:flex;flex-direction:column;gap:2px}
+.odrow{display:flex;align-items:center;gap:10px;padding:6px 2px;border-top:1px solid var(--line);font-weight:600;font-size:.92rem}
+.odrow:first-child{border-top:0}
+.odrow i{width:10px;height:10px;border-radius:3px;background:var(--rc);flex:0 0 auto}
+.odrow span{flex:1;min-width:0}
+.odrow b{font-variant-numeric:tabular-nums}
+.sect-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.cdn{font-size:.8rem;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.price s,.gemn s{opacity:.6;font-weight:700;margin-right:2px}
+.gemn s{font-size:1.1rem}
+.boostchip{display:inline-block;font-size:.72rem;font-weight:900;color:var(--ink);background:var(--xp);border-radius:999px;padding:1px 7px;vertical-align:1px}
+.chestopen{display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px 0}
+.shake{animation:shake .5s ease-in-out infinite;filter:drop-shadow(0 0 18px color-mix(in srgb,var(--rc) 70%,transparent))}
+@keyframes shake{0%,100%{transform:rotate(0) scale(1)}20%{transform:rotate(-7deg) scale(1.04)}40%{transform:rotate(6deg) scale(1.06)}60%{transform:rotate(-5deg) scale(1.08)}80%{transform:rotate(4deg) scale(1.1)}}
+.reveal{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:12px 0 4px;overflow:hidden}
+.reveal h2{margin:0}
+.reveal p{margin:0;max-width:300px}
+.rays{position:absolute;left:50%;top:78px;width:340px;height:340px;margin:-170px 0 0 -170px;border-radius:50%;pointer-events:none;
+  background:repeating-conic-gradient(color-mix(in srgb,var(--rc) 40%,transparent) 0 9deg,transparent 9deg 24deg);-webkit-mask:radial-gradient(circle,#000 18%,transparent 66%);mask:radial-gradient(circle,#000 18%,transparent 66%);animation:spin 14s linear infinite}
+.rv-pic{position:relative;min-height:120px;display:grid;place-items:center;filter:drop-shadow(0 0 16px color-mix(in srgb,var(--rc) 75%,transparent))}
+.pop{animation:popin .55s cubic-bezier(.2,1.6,.4,1)}
+@keyframes popin{from{transform:scale(.2) rotate(-10deg);opacity:0}to{transform:none;opacity:1}}
+.fr-hoard{background:conic-gradient(#ffcf4a,#b8741a,#ffe9a0,#c98a1c,#ffcf4a);--gl:#ffcf4a;animation:glowp 2s ease-in-out infinite}
+.fr-hoard::before{content:"";position:absolute;inset:calc(var(--s)*-.2);background:radial-gradient(circle 2px at 20% 18%,#fff6c8 98%,transparent),radial-gradient(circle 1.6px at 82% 26%,#ffe08a 98%,transparent),radial-gradient(circle 2px at 76% 86%,#fff6c8 98%,transparent),radial-gradient(circle 1.4px at 14% 74%,#ffe08a 98%,transparent),radial-gradient(circle 1.6px at 50% 2%,#fff 98%,transparent);animation:tw 1.1s ease-in-out infinite alternate,spin 10s linear infinite}
+.bn-vault{background:radial-gradient(circle 2px at 30px 20px,#fff3b0,transparent),radial-gradient(circle 1.5px at 90px 60px,#ffd96a,transparent),radial-gradient(ellipse at 50% 120%,rgba(255,196,60,.55),transparent 60%),linear-gradient(180deg,#2a1a08,#4a2e0c 60%,#7a4e12);background-size:120px 80px,150px 100px,auto,auto;animation:rise 6s linear infinite}
+
+/* ---- v12: chat ---- */
+.crow{width:100%;display:flex;align-items:center;gap:12px;border:0;background:none;padding:10px 0;border-top:1px solid var(--line);color:var(--fg);text-align:left;cursor:pointer;font-family:var(--body)}
+.chats .crow:first-child{border-top:0}
+.crow-t{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3}
+.crow-t b,.crow-t .muted{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.crow-t .muted{font-size:.86rem}
+.crow.un .crow-t .muted{color:var(--fg);font-weight:700}
+.crow-r{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:0 0 auto}
+.udot{width:10px;height:10px;border-radius:50%;background:var(--xp)}
+.chat{position:fixed;left:0;right:0;top:0;height:100%;z-index:26;background:var(--bg);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+.chat[hidden]{display:none}
+body.chatting{overflow:hidden}
+body.chatting .tabs,body.chatting .rest{display:none}
+.chat-h{display:flex;align-items:center;gap:6px;padding:6px 12px;border-bottom:1px solid var(--line);background:var(--surface);flex:0 0 auto}
+.chat-who{flex:1;min-width:0;display:flex;align-items:center;gap:10px;border:0;background:none;color:var(--fg);text-align:left;cursor:pointer;font-family:var(--body);padding:4px 0}
+.chat-who .gc-badge{width:36px;height:36px;font-size:1.1rem;border-radius:11px}
+.chat-who .prow-t .muted{font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chat-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.chat-list .empty{margin:auto 0}
+.cday{align-self:center;font-size:.74rem;font-weight:800;color:var(--muted);background:var(--surface);border-radius:999px;padding:3px 10px;margin:10px 0 6px}
+.cmsg{display:flex;align-items:flex-end;gap:6px;max-width:82%}
+.cmsg.first{margin-top:6px}
+.cmsg.me{align-self:flex-end;justify-content:flex-end}
+.cav{width:26px;flex:0 0 auto}
+.cbw{display:flex;flex-direction:column;min-width:0;align-items:flex-start}
+.cmsg.me .cbw{align-items:flex-end}
+.cname{font-size:.72rem;font-weight:800;color:var(--muted);margin:0 0 2px 10px}
+.bub{border:0;font:500 1rem/1.35 var(--body);text-align:left;padding:8px 12px;border-radius:18px;background:var(--surface-2);color:var(--fg);white-space:pre-wrap;overflow-wrap:anywhere;max-width:100%;cursor:default}
+.cmsg.me .bub{background:var(--xp);color:var(--ink);cursor:pointer}
+.bub.pend{opacity:.6}
+.bub.fail{background:var(--push);color:#fff}
+.ctime{font-size:.7rem;color:var(--muted);margin:2px 8px 4px}
+.chat-in{display:flex;align-items:flex-end;gap:8px;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--surface);flex:0 0 auto}
+.chat-in textarea{flex:1;min-width:0;resize:none;min-height:40px;height:40px;font:500 16px/1.35 var(--body);padding:9px 14px;border-radius:20px;border:1px solid var(--line);background:var(--surface-2);color:var(--fg);max-height:120px}
+.chat-in .btn{border-radius:20px;padding-inline:16px;height:40px}
+/* ---- v12: notifications ---- */
+.notif .switch{align-items:center;padding-block:4px}
+.notif .switch>span{flex:1}
+.switch input.tm,.tm{width:auto;height:auto;margin:0;font:700 16px var(--body);color:var(--fg);background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:6px 8px;flex:0 0 auto;width:auto}
 </style>
 </head>
 <body>
@@ -933,7 +1011,7 @@ const clone=o=>JSON.parse(JSON.stringify(o));
 
 /* ---------- State ---------- */
 const KEY="vtppl-state-v1";
-const blank=()=>({v:2,name:"Lifter",avatar:"",sessions:{},bw:{},earned:{},tpl:{},custom:{},days:{},planName:"",plans:[],active:"",rotate:false,rotWeek:"",editBack:"",spent:0,gemsEarned:0,owned:{},equip:{frame:"",banner:"",theme:"",title:""},chal:{},visits:{},founder:false,pets:{},pet:""});
+const blank=()=>({v:2,name:"Lifter",avatar:"",sessions:{},bw:{},earned:{},tpl:{},custom:{},days:{},planName:"",plans:[],active:"",rotate:false,rotWeek:"",editBack:"",spent:0,gemsEarned:0,owned:{},equip:{frame:"",banner:"",theme:"",title:""},chal:{},visits:{},founder:false,pets:{},pet:"",inv:{},frozen:{},boostOn:null,notif:{}});
 const defaultTpl=d=>PLAN[d].ex.map((e,j)=>({u:`d${d}-${j}`,id:e[0],sets:e[2],reps:e[3],note:e[4]}));
 function migrate(s){
   if(!s||!s.sessions)return null;
@@ -1011,9 +1089,9 @@ function volOf(x,set,date){const k=EX[x]?.kind;if(k==="load")return (set.w||0)*(
 /* ---------- Derived stats ---------- */
 function compute(){
   const TDAYS=Math.max(1,[0,1,2,3,4,5,6].filter(d=>P(d).type!=="rest").length),WT=Math.min(5,TDAYS);
-  const best={},first={},hist={},prs=[],Lb={},stepB={},rankUps=[];let sets=0,finished=0,volume=0,warm=0,drops=0;const weeks={},dates=new Set(),times=[];
+  const best={},first={},hist={},prs=[],Lb={},stepB={},rankUps=[];let sets=0,finished=0,volume=0,warm=0,drops=0,bonusXP=0;const weeks={},dates=new Set(),times=[];
   for(const s of sortedSessions()){
-    const sb={},rows={};
+    const sb={},rows={},s0=sets,p0=prs.length,r0=rankUps.length;
     for(const set of doneSets(s)){
       if(set.t==="w"){warm++;continue}
       sets++;volume+=volOf(set.x,set,s.date);
@@ -1031,8 +1109,11 @@ function compute(){
       if(isNew)stepB[x]=st;else if(st>stepB[x]){rankUps.push({x,date:s.date,k:s.k,from:stepB[x],to:st});stepB[x]=st}
       (hist[x]=hist[x]||[]).push({date:s.date,k:s.k,sc,sets:rows[x],pr});
     }
-    if(s.finished){finished++;dates.add(s.date);if(s.at)times.push(s.at);const w=weekStart(s.date);(weeks[w]=weeks[w]||new Set()).add(s.day)}
+    if(s.finished){finished++;dates.add(s.date);if(s.at)times.push(s.at);const w=weekStart(s.date);(weeks[w]=weeks[w]||new Set()).add(s.day);
+      if(s.boost>1)bonusXP+=Math.round((s.boost-1)*((sets-s0)*10+(prs.length-p0)*50+(rankUps.length-r0)*40+100))}
   }
+  // A streak freeze counts as a training day for the weekly target and keeps the day streak alive.
+  const frozen=state.frozen||{};for(const f of Object.keys(frozen)){const w=weekStart(f);(weeks[w]=weeks[w]||new Set()).add("f"+f)}
   let streak=0,w=weekStart(today());
   if(!(weeks[w]&&weeks[w].size>=WT))w=addDays(w,-7);
   while(weeks[w]&&weeks[w].size>=WT){streak++;w=addDays(w,-7)}
@@ -1040,12 +1121,12 @@ function compute(){
   for(const k of Object.keys(weeks).sort()){if(weeks[k].size>=WT){run=(prev&&addDays(prev,7)===k)?run+1:1;bestStreak=Math.max(bestStreak,run);prev=k}else{run=0;prev=k}}
   // Day streak: training days in a row. A Sunday off doesn't break it.
   let dstreak=0,d=today();if(!dates.has(d))d=addDays(d,-1);
-  for(let i=0;i<500;i++){if(dates.has(d))dstreak++;else if(parseD(d).getDay()!==0)break;d=addDays(d,-1)}
+  for(let i=0;i<500;i++){if(dates.has(d))dstreak++;else if(parseD(d).getDay()!==0&&!frozen[d])break;d=addDays(d,-1)}
   const perfect=Object.values(weeks).some(s=>s.size>=TDAYS);
   const tierOf=x=>first[x]==null?null:{step:stepB[x],i:Math.floor(stepB[x]/3),L:Lb[x]??null,g:best[x]/first[x]-1};
-  const ctx={TDAYS,WT,best,first,hist,prs,sets,finished,volume,warm,drops,streak,bestStreak,dstreak,perfect,tierOf,stepB,rankUps,dates,times};
+  const ctx={TDAYS,WT,best,first,hist,prs,sets,finished,volume,warm,drops,streak,bestStreak,dstreak,perfect,tierOf,stepB,rankUps,dates,times,bonusXP};
   const badgeXP=Object.keys(state.earned).reduce((a,id)=>a+(BADGES.find(b=>b.id===id)?.xp||0),0);
-  const xp=sets*10+prs.length*50+finished*100+rankUps.length*40+badgeXP;
+  const xp=sets*10+prs.length*50+finished*100+rankUps.length*40+badgeXP+bonusXP;
   return {...ctx,xp,...levelOf(xp)};
 }
 function levelOf(xp){let L=1,need=200,acc=0;while(xp>=acc+need){acc+=need;L++;need=200+75*(L-1)}
@@ -1181,12 +1262,12 @@ $("#modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal()})
 
 /* ---------- Rest timer ---------- */
 let restEnd=0,restIv=null;
-function startRest(sec){restEnd=Date.now()+sec*1000;$("#rest").hidden=false;$("#rest").classList.remove("go");tickRest();clearInterval(restIv);restIv=setInterval(tickRest,250)}
+function startRest(sec,x){pushRest(sec,x);restEnd=Date.now()+sec*1000;$("#rest").hidden=false;$("#rest").classList.remove("go");tickRest();clearInterval(restIv);restIv=setInterval(tickRest,250)}
 function tickRest(){const left=Math.ceil((restEnd-Date.now())/1000);
-  if(left<=0){$("#restlbl").textContent="Rest done";$("#restt").textContent="Go";$("#rest").classList.add("go");if(left<-6)stopRest();return}
+  if(left<=0){if(!$("#rest").classList.contains("go")&&!document.hidden)pushRestCancel();$("#restlbl").textContent="Rest done";$("#restt").textContent="Go";$("#rest").classList.add("go");if(left<-6)stopRest();return}
   $("#restlbl").textContent="Rest";$("#restt").textContent=Math.floor(left/60)+":"+String(left%60).padStart(2,"0")}
 function stopRest(){clearInterval(restIv);$("#rest").hidden=true}
-$("#restskip").addEventListener("click",stopRest);
+$("#restskip").addEventListener("click",()=>{stopRest();pushRestCancel()});
 
 /* ---------- Header ---------- */
 function renderHeader(c){
@@ -1227,7 +1308,7 @@ function renderTrain(){
   const rest=p.type==="rest";
   let tot=0,done=0;slots.forEach(sl=>{for(let s=0;s<sl.sets;s++){tot++;if(sess.sets[setKey(sl.u,s)]?.done)done++}});
   const xpSets=doneSets(sess).filter(s=>s.t!=="w").length;
-  const sessPRs=c.prs.filter(x=>x.k===key).length,sessRU=c.rankUps.filter(x=>x.k===key).length,sessXP=xpSets*10+sessPRs*50+sessRU*40+(sess.finished?100:0);
+  const sessPRs=c.prs.filter(x=>x.k===key).length,sessRU=c.rankUps.filter(x=>x.k===key).length,sessXP=Math.round((xpSets*10+sessPRs*50+sessRU*40+(sess.finished?100:0))*(sess.boost||1));
   let html="";
   if(rest&&!slots.length){
     el.innerHTML=`<div class="hero" style="${st}"><span class="tag">${DAYNAMES[current]}</span><h2>Rest day</h2>
@@ -1240,7 +1321,7 @@ function renderTrain(){
     <span class="tag">${p.d} · ${esc(p.tag||LABEL[p.type])} · ${fmtD(today())}</span><h2>${rest?"Extra session":p.name}</h2><p>${rest?"Logged on your rest day":p.focus}</p>
     <div class="meta"><span><strong>${slots.length}</strong> exercises</span><span><strong>${tot}</strong> sets</span>${p.time&&!sess.mod?`<span><strong>${p.time}</strong></span>`:""}</div>
     <span class="bar"><i style="width:${tot?done/tot*100:0}%"></i></span>
-    <p class="muted"><span class="num">${done} of ${tot}</span> sets · <span class="num">+${sessXP}</span> XP${sessPRs?` · ${sessPRs} PR${sessPRs>1?"s":""}`:""}${sessRU?` · ${sessRU} rank up${sessRU>1?"s":""}`:""}</p>
+    <p class="muted"><span class="num">${done} of ${tot}</span> sets · <span class="num">+${sessXP}</span> XP${sess.boost>1?` <span class="boostchip">×${sess.boost}</span>`:!sess.finished&&state.boostOn?` <span class="boostchip">×${state.boostOn.m} on finish</span>`:""}${sessPRs?` · ${sessPRs} PR${sessPRs>1?"s":""}`:""}${sessRU?` · ${sessRU} rank up${sessRU>1?"s":""}`:""}</p>
     ${rest?"":`<div class="hero-actions"><button id="edittpl">Edit ${DAYNAMES[current]}'s plan</button></div>`}
   </div>`;
   if(sess.mod)html+=`<div class="changed"><p><b>Changed for today.</b> Your regular ${esc(p.d)} plan is untouched and comes back next week.</p>
@@ -1319,7 +1400,7 @@ vt.addEventListener("click",e=>{
       if(wi&&EX[x]?.kind==="load"&&!(w>0)){wi.focus();toast("!","Add the weight first","Type the weight you lifted.","");return}
       commit(()=>{setVal(k,x,"r",r);if(wi)setVal(k,x,"w",w);setVal(k,x,"done",true)});
     }else commit(()=>setVal(k,x,"done",turningOn),{quiet:!turningOn});
-    if(turningOn&&typ!=="d")startRest(typ==="w"||EX[x]?.kind==="none"?45:BIG.has(x)?120:75);
+    if(turningOn&&typ!=="d")startRest(typ==="w"||EX[x]?.kind==="none"?45:BIG.has(x)?120:75,x);
     refresh();return;
   }
   const b=e.target.closest("button");if(!b)return;
@@ -1338,9 +1419,10 @@ vt.addEventListener("click",e=>{
     case "backtpl":{const s=getSess(false);s.mod=false;syncSess(s);
       for(const k of Object.keys(s.sets)){const u=k.split("|")[0];if(!s.ex.some(sl=>sl.u===u)&&!s.sets[k].done)delete s.sets[k]}
       save();toast("✓","Back to your regular plan","Anything you already logged today is kept.","");refresh();break}
-    case "finish":{const key=sessKey(today(),current);const res=commit(()=>{const s=getSess(true);s.finished=true;s.name=P(current).name;s.at=new Date().toTimeString().slice(0,5)},{noLevelModal:true});
+    case "finish":{const key=sessKey(today(),current);const boost=state.boostOn;const res=commit(()=>{const s=getSess(true);s.finished=true;s.name=P(current).name;s.at=new Date().toTimeString().slice(0,5);if(boost){s.boost=boost.m;state.boostOn=null}},{noLevelModal:true});
+      if(boost)setTimeout(()=>toast("⚡",`×${boost.m} XP boost used`,"This workout's XP is boosted.",""),400);pushSchedule();
       {const s=state.sessions[key],c2=compute(),ws=doneSets(s).filter(x=>x.t!=="w");postActivity("workout",{name:s.name,sets:ws.length,volume:Math.round(ws.reduce((a,x)=>a+volOf(x.x,x,s.date),0)),prs:c2.prs.filter(p=>p.k===key).map(p=>exName(p.x))})}
-      showSummary(key,res);stopRest();refresh();break}
+      showSummary(key,res);stopRest();pushRestCancel();refresh();break}
     case "summary":showSummary(sessKey(today(),current));break;
     case "clearday":{const m=openModal(`<h2>Clear today's log?</h2><p>This removes every set and change you made for ${esc(P(current).d)} today. Other days stay as they are.</p>
       <div class="btnrow"><button class="btn danger" id="mclear">Clear log</button><button class="btn ghost" data-close>Cancel</button></div>`);
@@ -1669,7 +1751,7 @@ function renderProfile(){
     html+=`<div class="bwlist">${days.slice(-5).reverse().map(d=>`<div class="bwrow"><span>${fmtD(d)}</span><span><b>${state.bw[d].toFixed(1)} kg</b> <button class="x-btn" data-del="${d}" aria-label="Delete ${fmtD(d)} weigh-in">Delete</button></span></div>`).join("")}</div>`;
   }
   html+=`</div>`;
-  html+=accountPanel();
+  html+=accountPanel()+notifPanel();
   html+=`<div class="panel"><h3>Backup</h3><p class="muted" style="font-size:.9rem">${me?"Your account backs everything up automatically. You can also copy a text backup.":"Your logs live on this phone only. Create an account above, or copy a backup now and then and paste it into Notes."} Workout photos stay on this phone.</p>
     <div class="btnrow"><button class="btn sm ghost" id="copybk">Copy backup</button><button class="btn sm ghost" id="showrestore">Restore from backup</button></div>
     <div id="restorebox" hidden style="display:flex;flex-direction:column;gap:8px"><textarea id="restoretx" placeholder="Paste your backup here"></textarea><button class="btn sm" id="dorestore">Restore</button></div>
@@ -1745,11 +1827,11 @@ function emblem(step,size=44){
 function showSummary(key,res){
   const c=compute(),s=state.sessions[key],p=P(s.day),sets=doneSets(s).filter(x=>x.t!=="w");
   const vol=sets.reduce((a,x)=>a+volOf(x.x,x,s.date),0),prs=c.prs.filter(x=>x.k===key),rus=c.rankUps.filter(x=>x.k===key);
-  const xp=sets.length*10+prs.length*50+rus.length*40+100+(res?res.newBadges.reduce((a,b)=>a+b.xp,0):0);
+  const bst=s.boost>1?s.boost:1,xp=Math.round((sets.length*10+prs.length*50+rus.length*40+100)*bst)+(res?res.newBadges.reduce((a,b)=>a+b.xp,0):0);
   const lvUp=res&&res.after.level>res.before.level;
   openModal(`${lvUp?`<div class="burst"><b>${c.level}</b></div>`:""}
     <div style="display:flex;flex-direction:column;gap:4px;${lvUp?"text-align:center":""}"><span class="eyebrow">${lvUp?`Level up · ${esc(c.title)}`:"Workout complete"}</span><h2>${esc(p.type==="rest"?"Extra session":p.name)} done</h2></div>
-    <div class="sumgrid"><div><b>${sets.length}</b><span>Sets</span></div><div><b>${fmtNum(vol)}</b><span>kg moved</span></div><div><b style="color:var(--xp)">+${xp}</b><span>XP</span></div></div>
+    <div class="sumgrid"><div><b>${sets.length}</b><span>Sets</span></div><div><b>${fmtNum(vol)}</b><span>kg moved</span></div><div><b style="color:var(--xp)">+${xp}</b><span>XP${bst>1?` · ×${bst} boost`:""}</span></div></div>
     ${rus.length?`<div class="panel" style="padding:12px"><span class="eyebrow">Rank ups</span>${rus.map(r=>`<div class="rurow">${emblem(r.to,30)}<span><b>${stepName(r.to)}</b><br><span class="muted">${esc(exName(r.x))}</span></span></div>`).join("")}</div>`:""}
     ${prs.length?`<div class="panel" style="padding:12px"><span class="eyebrow">Personal records</span>${prs.map(r=>`<p>${esc(exName(r.x))}</p>`).join("")}</div>`:(rus.length?"":`<p class="muted">No PRs today. Matching your numbers on a cut still counts as progress.</p>`)}
     <div style="display:flex;flex-direction:column;gap:6px"><span class="muted num">Level ${c.level} · ${fmtNum(c.into)} / ${fmtNum(c.need)} XP</span><span class="bar"><i style="width:${(c.into/c.need*100).toFixed(1)}%"></i></span></div>
@@ -1914,12 +1996,12 @@ const SHOP={
   {id:"frost",name:"Frost",price:400,r:1},{id:"royal",name:"Royal",price:400,r:1},{id:"prism",name:"Prism",price:400,r:1},{id:"pulse",name:"Heartbeat",price:450,r:1,anim:1},
   {id:"rgb",name:"RGB spin",price:800,r:2,anim:1},{id:"orbit",name:"Orbit",price:800,r:2,anim:1},{id:"solar",name:"Solar flare",price:900,r:2,anim:1},{id:"thunder",name:"Thunder",price:900,r:2,anim:1},
   {id:"lunar",name:"Moonrise",price:1500,r:3,anim:1},{id:"mars",name:"Red planet",price:1500,r:3,anim:1},{id:"clock",name:"Clockwork",price:1600,r:3,anim:1},{id:"inferno",name:"Inferno",price:1800,r:3,anim:1},{id:"champion",name:"Champion",price:1800,r:3},
-  {id:"founder",name:"Founder",price:0,r:3,exclusive:true}]},
+  {id:"founder",name:"Founder",price:0,r:3,exclusive:true},{id:"hoard",name:"Dragon hoard",price:0,r:3,anim:1,chest:1}]},
  banner:{label:"Profile banners",tab:"Banners",blurb:"A background for your profile card. Epic and Legendary banners are animated.",items:[
   {id:"",name:"None",price:0,r:0},{id:"sunset",name:"Sunset",price:100,r:0},{id:"ocean",name:"Deep sea",price:100,r:0},{id:"carbon",name:"Carbon",price:100,r:0},
   {id:"plates",name:"Plates",price:300,r:1},{id:"aurora",name:"Aurora",price:350,r:1,anim:1},
   {id:"stars",name:"Starfield",price:600,r:2,anim:1},{id:"snow",name:"Snowfall",price:600,r:2,anim:1},{id:"embers",name:"Embers",price:650,r:2,anim:1},{id:"neon",name:"Neon grid",price:700,r:2,anim:1},
-  {id:"galaxy",name:"Galaxy",price:1200,r:3,anim:1},{id:"goldfoil",name:"Gold foil",price:1200,r:3,anim:1},{id:"rgbwave",name:"RGB wave",price:1400,r:3,anim:1}]},
+  {id:"galaxy",name:"Galaxy",price:1200,r:3,anim:1},{id:"goldfoil",name:"Gold foil",price:1200,r:3,anim:1},{id:"rgbwave",name:"RGB wave",price:1400,r:3,anim:1},{id:"vault",name:"Treasure vault",price:0,r:3,anim:1,chest:1}]},
  theme:{label:"App themes",tab:"Themes",blurb:"Recolour the whole app.",items:[
   {id:"",name:"Ember",price:0,r:0},{id:"ocean",name:"Ocean",price:300,r:1},{id:"forest",name:"Forest",price:300,r:1},{id:"crimson",name:"Crimson",price:500,r:2},
   {id:"royal",name:"Royal",price:500,r:2},{id:"midnight",name:"Midnight",price:600,r:2},{id:"goldrush",name:"Gold rush",price:1000,r:3}]},
@@ -1931,7 +2013,7 @@ const SHOP={
   {id:"spartan",name:"Spartan",price:450,r:2},{id:"gladiator",name:"Gladiator",price:450,r:2},{id:"ironwarden",name:"Iron Warden",price:450,r:2},{id:"unbroken",name:"The Unbroken",price:500,r:2},
   {id:"prhunter",name:"PR Hunter",r:2,earn:{badge:"pr50",how:"Set 50 personal records"}},{id:"streaklord",name:"Streak Lord",r:2,earn:{badge:"st8",how:"Hit your weekly target 8 weeks in a row"}},{id:"beasttamer",name:"Beast Tamer",r:2,earn:{pet:1,how:"Raise a pet to its final form"}},
   {id:"imperator",name:"Imperator",price:900,r:3},{id:"titan",name:"Titan",price:900,r:3},{id:"apex",name:"Apex",price:1000,r:3},
-  {id:"centurion",name:"Centurion",r:3,earn:{badge:"s100",how:"Finish 100 workouts"}},{id:"golden",name:"Golden Physique",r:3,earn:{badge:"allgold",how:"Get 8 muscle groups to Gold"}},{id:"founder",name:"Founder",r:3,earn:{founder:1,how:"Open the app before its first birthday"}}]}
+  {id:"centurion",name:"Centurion",r:3,earn:{badge:"s100",how:"Finish 100 workouts"}},{id:"golden",name:"Golden Physique",r:3,earn:{badge:"allgold",how:"Get 8 muscle groups to Gold"}},{id:"founder",name:"Founder",r:3,earn:{founder:1,how:"Open the app before its first birthday"}},{id:"jackpot",name:"Jackpot",price:0,r:3,chest:1}]}
 };
 const THEMES={
  ocean:{bg:"#0a1218",surface:"#111d27","surface-2":"#1b2c3a",line:"#2a4254",fg:"#e8f4ff",muted:"#8fa9bd",xp:"#35b6ff","xp-hi":"#9ddcff","xp-soft":"#0c2b40",ink:"#04131d"},
@@ -1973,34 +2055,173 @@ const rarTag=it=>`<span class="rar" style="--rc:var(${RAR[it.r].v})">${RAR[it.r]
 const petItems=()=>Object.entries(PETS).map(([id,p])=>({id,name:p.names[0],r:p.r,price:p.price,el:p.el}));
 const shopItems=kind=>kind==="pet"?petItems():SHOP[kind].items;
 let shopTab="frame",shopRar=-1;
+/* ---------- Shop rotation: daily deals and a weekly set ---------- */
+function seedRand(seed){let h=2166136261>>>0;for(const ch of seed)h=Math.imul(h^ch.charCodeAt(0),16777619)>>>0;
+  return ()=>{h=(h+0x6D2B79F5)>>>0;let t=h;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296}}
+const shuffled=(arr,seed)=>{const r=seedRand(seed),a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const buyable=kind=>SHOP[kind].items.filter(it=>it.price>0&&!it.earn&&!it.exclusive&&!it.chest);
+const WEEK_N={frame:6,banner:4,theme:3,title:6};
+// Everyone sees the same set: it's picked from the week's date. At least one of each rarity when there is one.
+function weeklySet(kind){
+  const sh=shuffled(buyable(kind),"wk"+weekStart(today())+kind),pick=[];
+  for(let r=0;r<4;r++){const f=sh.find(i=>i.r===r);if(f)pick.push(f)}
+  for(const it of sh){if(pick.length>=WEEK_N[kind])break;if(!pick.includes(it))pick.push(it)}
+  return pick.slice(0,WEEK_N[kind]).sort((a,b)=>a.r-b.r||a.price-b.price);
+}
+const DEAL_OFF=.3;
+function dailyDeals(){
+  const pool=["frame","banner","theme","title"].flatMap(k=>buyable(k).map(it=>({kind:k,it}))),out=[];
+  for(const x of shuffled(pool,"deal"+today())){if(out.length>=3)break;if(!out.some(o=>o.kind===x.kind))out.push(x)}
+  return out.map(x=>({...x,price:Math.round(x.it.price*(1-DEAL_OFF)/5)*5}));
+}
+const untilTxt=ms=>{const m=Math.max(1,Math.round(ms/6e4)),d=Math.floor(m/1440),h=Math.floor(m%1440/60),mm=m%60;return d?`${d}d ${h}h`:h?`${h}h ${mm}m`:`${mm}m`};
+const msToMidnight=()=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate()+1)-n};
+const msToMonday=()=>parseD(addDays(weekStart(today()),7))-new Date();
+const cdText=k=>k==="day"?`New deals in ${untilTxt(msToMidnight())}`:`Changes in ${untilTxt(msToMonday())}`;
+setInterval(()=>{if(view==="shop")document.querySelectorAll("[data-cd]").forEach(el=>el.textContent=cdText(el.dataset.cd))},30000);
+
+/* ---------- Items, boosts and streak freezes ---------- */
+const ITEMS={
+  boost15:{name:"XP boost ×1.5",spr:"boost",r:0,desc:"Your next finished workout earns 1.5× XP."},
+  boost2:{name:"XP boost ×2",spr:"boost",r:1,desc:"Your next finished workout earns double XP."},
+  freeze:{name:"Streak freeze",spr:"freeze",r:1,max:5,desc:"Covers a missed day so your day streak survives. Used for you automatically."},
+  snack:{name:"Pet snack",spr:"snack",r:0,desc:"Gives your active pet 100 XP."}
+};
+const inv=()=>state.inv||(state.inv={});
+function addItem(id,n){const v=inv();v[id]=(v[id]||0)+n;const mx=ITEMS[id].max;
+  if(mx&&v[id]>mx){const extra=v[id]-mx;v[id]=mx;state.gemsEarned=(state.gemsEarned||0)+extra*20;return extra}return 0}
+function useItem(id){
+  const v=inv();if(!(v[id]>0))return;
+  if(id==="boost15"||id==="boost2"){
+    if(state.boostOn){toast("!","A boost is already waiting","It'll be used on your next finished workout.","");return}
+    v[id]--;state.boostOn={m:id==="boost2"?2:1.5};save();refresh();toast("⚡",`${ITEMS[id].name} ready`,"Finish your next workout to cash it in.","");return}
+  if(id==="snack"){if(!state.pet||!state.pets[state.pet]){toast("!","Choose a pet first","Pets are in the Pets section of the shop.","");return}
+    v[id]--;gainPet(100,true);save();refresh();toast("♥",`${petName(state.pet)} enjoyed that`,"+100 pet XP","");return}
+}
+// Missed days get covered by freezes when the app opens, as long as there are enough to bridge the whole gap.
+function useFreezes(){
+  const have=inv().freeze||0;if(!have)return;
+  const c=compute(),fz=state.frozen||(state.frozen={});let d=addDays(today(),-1);const gap=[];
+  for(let i=0;i<10&&!c.dates.has(d);i++){if(parseD(d).getDay()!==0&&!fz[d])gap.push(d);d=addDays(d,-1)}
+  if(!c.dates.has(d)||!gap.length||gap.length>have)return;
+  gap.forEach(x=>fz[x]=1);inv().freeze-=gap.length;save();
+  setTimeout(()=>toast("❄","Streak freeze used",`${gap.length===1?"Yesterday was":gap.length+" missed days were"} covered. Your streak lives on.`,""),700);
+}
+function invPanel(){
+  const v=inv(),has=Object.keys(ITEMS).some(k=>v[k]>0);
+  return `<div class="panel invp"><div class="ph"><h3>Your items</h3>${state.boostOn?`<span class="pill on">×${state.boostOn.m} XP ready</span>`:""}</div>
+    ${has?Object.entries(ITEMS).filter(([k])=>v[k]>0).map(([k,it])=>`<div class="invrow">${spriteImg(it.spr,36,it.name)}<span class="inv-t"><b>${esc(it.name)} <span class="muted num">×${v[k]}</span></b><span class="muted">${esc(it.desc)}</span></span>
+      ${k==="freeze"?`<span class="pill">Auto</span>`:`<button class="btn sm${k==="snack"?" ghost":""}" data-use="${k}" ${k.startsWith("boost")&&state.boostOn?"disabled":""}>${k==="snack"?"Feed":"Use"}</button>`}</div>`).join("")
+    :`<p class="muted" style="font-size:.88rem">Nothing yet. Chests drop XP boosts, streak freezes and pet snacks.</p>`}</div>`;
+}
+
+/* ---------- Chests ---------- */
+const DUP=[25,60,150,400];
+const CHEST_X=[{kind:"frame",id:"hoard"},{kind:"banner",id:"vault"},{kind:"title",id:"jackpot"}];
+const CHESTS=[
+ {id:"bronze",name:"Bronze chest",price:60,r:0,drops:[{w:30,t:"gems",lo:20,hi:50},{w:22,t:"snack",n:2},{w:18,t:"boost15",n:1},{w:12,t:"freeze",n:1},{w:14,t:"item",r:0},{w:4,t:"item",r:1}]},
+ {id:"silver",name:"Silver chest",price:150,r:1,drops:[{w:22,t:"gems",lo:60,hi:130},{w:15,t:"snack",n:5},{w:18,t:"boost2",n:1},{w:13,t:"freeze",n:2},{w:22,t:"item",r:1},{w:9,t:"item",r:2},{w:1,t:"item",r:3}]},
+ {id:"gold",name:"Gold chest",price:400,r:3,drops:[{w:15,t:"gems",lo:150,hi:320},{w:15,t:"boost2",n:2},{w:12,t:"freeze",n:3},{w:40,t:"item",r:2},{w:15,t:"item",r:3},{w:3,t:"excl"}]}
+];
+const KINDNAME1={frame:"Frame",banner:"Banner",theme:"Theme",title:"Title",pet:"Pet"};
+const dropName=d=>d.t==="gems"?`${d.lo}–${d.hi} gems`:d.t==="item"?`${RAR[d.r].n} item`:d.t==="excl"?"Chest-only Legendary":`${ITEMS[d.t].name}${d.n>1?" ×"+d.n:""}`;
+const dropRar=d=>d.t==="item"?d.r:d.t==="excl"?3:d.t==="gems"?0:ITEMS[d.t].r;
+const pct=(d,ch)=>{const p=d.w/ch.drops.reduce((a,x)=>a+x.w,0)*100;return (p<1?p.toFixed(1):Math.round(p))+"%"};
+function oddsHTML(ch){return `<div class="odds">${ch.drops.map(d=>`<div class="odrow" style="--rc:var(${RAR[dropRar(d)].v})"><i></i><span>${dropName(d)}</span><b class="num">${pct(d,ch)}</b></div>`).join("")}</div>`}
+const rnd=()=>{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]/4294967296};
+const itemPool=r=>["frame","banner","theme","title"].flatMap(k=>buyable(k).filter(i=>i.r===r).map(it=>({kind:k,it})))
+  .concat(Object.entries(PETS).filter(([,p])=>p.r===r).map(([id,p])=>({kind:"pet",it:{id,name:p.names[0],r:p.r}})));
+function grant(kind,id){if(kind==="pet"){state.pets[id]={xp:0};if(!state.pet)state.pet=id}else state.owned[kind+":"+id]=1}
+function rollChest(ch){
+  let x=rnd()*ch.drops.reduce((a,d)=>a+d.w,0),d=ch.drops[ch.drops.length-1];
+  for(const o of ch.drops){if(x<o.w){d=o;break}x-=o.w}
+  const gemsRes=(n,r,why)=>{state.gemsEarned=(state.gemsEarned||0)+n;return {pic:spriteImg("gems",112,"Gems"),title:`${n} gems`,sub:why||"Added to your gems.",r}};
+  if(d.t==="gems")return gemsRes(d.lo+Math.floor(rnd()*(d.hi-d.lo+1)),d.lo>=150?2:d.lo>=60?1:0);
+  if(ITEMS[d.t]){const extra=addItem(d.t,d.n);return {pic:spriteImg(ITEMS[d.t].spr,112,ITEMS[d.t].name),title:ITEMS[d.t].name+(d.n>1?` ×${d.n}`:""),sub:ITEMS[d.t].desc+(extra?` You were full, so ${extra} became ${extra*20} gems.`:""),r:ITEMS[d.t].r}}
+  const list=d.t==="excl"?CHEST_X.map(o=>({kind:o.kind,it:SHOP[o.kind].items.find(i=>i.id===o.id)})):itemPool(d.r);
+  const fresh=list.filter(o=>!owns(o.kind,o.it.id)),r=d.t==="excl"?3:d.r;
+  if(!fresh.length)return gemsRes(d.t==="excl"?600:DUP[r],r,`You already own every ${d.t==="excl"?"chest-only":RAR[r].n.toLowerCase()} item, so you get gems instead.`);
+  const o=fresh[Math.floor(rnd()*fresh.length)];grant(o.kind,o.it.id);
+  if(r>=2)postActivity("chest",{name:o.kind==="pet"?PETS[o.it.id].names[0]:o.it.name,kind:o.kind,r,chest:ch.name});
+  return {pic:preview(o.kind,o.it,true),title:o.kind==="pet"?PETS[o.it.id].names[0]:o.it.name,sub:`${KINDNAME1[o.kind]} · ${o.kind==="pet"?"it's in your Pets now":"tap it in the shop to equip"}`,r,item:o};
+}
+function openChest(id){
+  const ch=CHESTS.find(c=>c.id===id),g=gems(compute()),short=ch.price-g;
+  const m=openModal(`${mhead("Chests")}<div class="buy"><span class="bob">${spriteImg("chest-"+ch.id,120,ch.name)}</span><h2>${ch.name}</h2>
+      <div class="gemn">${GEM}<b>${ch.price}</b></div><span class="muted">You have ${fmtNum(g)} gems.${short>0?` You need ${short} more.`:""}</span></div>
+    <h3>What's inside</h3>${oddsHTML(ch)}
+    <p class="note">Items are ones you don't own yet. If you own them all, you get gems instead.</p>
+    <button class="btn" id="ch-open" ${short>0?"disabled":""}>${short>0?`Need ${short} more gems`:`Open for ${ch.price} gems`}</button>`);
+  m.querySelector("#mh-back").onclick=closeModal;
+  m.querySelector("#ch-open").onclick=()=>doOpen(ch);
+}
+function doOpen(ch){
+  const g=gems(compute());if(g<ch.price)return;
+  state.spent=(state.spent||0)+ch.price;const res=rollChest(ch);save();refresh();
+  const m=openModal(`<div class="chestopen" style="--rc:var(${RAR[res.r].v})"><span class="shake">${spriteImg("chest-"+ch.id,140,ch.name)}</span><span class="muted">Opening…</span></div>`);
+  setTimeout(()=>{if(!m.isConnected)return;const left=gems(compute());
+    m.innerHTML=`<div class="reveal" style="--rc:var(${RAR[res.r].v})"><span class="rays"></span><span class="rv-pic pop">${res.pic}</span>
+      ${rarTag({r:res.r})}<h2>${esc(res.title)}</h2><p class="muted">${esc(res.sub)}</p></div>
+      <div class="btnrow" style="justify-content:center"><button class="btn" id="rv-again" ${left<ch.price?"disabled":""}>${left<ch.price?"Not enough gems":`Open another (${ch.price})`}</button><button class="btn ghost" data-close>Done</button></div>
+      <p class="note" style="text-align:center">You have ${fmtNum(left)} gems.</p>`;
+    m.querySelector("[data-close]").onclick=closeModal;m.querySelector("#rv-again").onclick=()=>doOpen(ch)},1100);
+}
+function openOdds(){
+  const m=openModal(`${mhead("Drop rates")}<p class="muted" style="font-size:.9rem">The chance of each prize per chest. Items are a random one of that rarity you don't own yet: a frame, banner, theme, title or pet. If you own them all, you get ${DUP.map((n,i)=>`${n} (${RAR[i].n.toLowerCase()})`).join(", ")} gems instead.</p>
+    ${CHESTS.map(ch=>`<div class="panel" style="box-shadow:none;background:var(--surface-2)"><div class="ph"><h3>${ch.name}</h3><span class="price">${GEM}${ch.price}</span></div>${oddsHTML(ch)}</div>`).join("")}
+    <p class="note">Chest-only Legendaries: the Dragon hoard frame, Treasure vault banner and Jackpot title. Streak freezes cap at 5; extras become 20 gems each.</p>`);
+  m.querySelector("#mh-back").onclick=closeModal;
+}
+
+/* ---------- Shop screen ---------- */
+function shopCard(kind,it,dealPrice){
+  const g=gems(compute()),own=owns(kind,it.id),eq=kind==="pet"?state.pet===it.id:(state.equip[kind]||"")===it.id,free=kind==="pet"&&!Object.keys(state.pets).length&&it.r===0,price=dealPrice??it.price;
+  return `<button class="item${eq?" eq":""}" style="--rc:var(${RAR[it.r].v})" data-kind="${kind}" data-item="${it.id}"${dealPrice!=null?` data-deal="${dealPrice}"`:""}><span class="pv">${preview(kind,it)}</span>${kind==="title"?"":`<b>${esc(kind==="pet"&&own?PETS[it.id].names[petStage(petLevel(state.pets[it.id].xp).L)]:it.name)}</b>`}${rarTag(it)}
+    ${eq?`<span class="pill on">${kind==="pet"?"Active":"Equipped"}</span>`:own?`<span class="pill">${kind==="pet"?"Owned · make active":"Owned · equip"}</span>`:it.earn?`<span class="pill">Earned · locked</span>`:it.chest?`<span class="pill">Chest only</span>`:free?`<span class="pill on">Free starter</span>`
+      :`<span class="price${g<price?" short":""}">${dealPrice!=null?`<s>${it.price}</s>`:""}${GEM}${price}</span>`}</button>`;
+}
 function renderShop(c){
-  const g=gems(c),kinds=["frame","banner","theme","title","pet"],noPet=!Object.keys(state.pets).length;
+  const g=gems(c),kinds=["frame","banner","theme","title","pet"],noPet=!Object.keys(state.pets).length,rarOK=it=>shopRar===-1||it.r===shopRar;
+  const grid=(list,empty)=>list.length?`<div class="shopgrid">${list.join("")}</div>`:`<p class="muted" style="font-size:.88rem">${empty}</p>`;
   let h=`<div class="panel gembox"><div><span class="eyebrow">Your gems</span><div class="gemn">${GEM}<b>${fmtNum(g)}</b></div></div>
     <p class="muted" style="font-size:.85rem">Earn 10 for each daily challenge, 20 more for all three, and 25 every level up.</p></div>
+    <div class="panel chests"><div class="ph"><h3>Chests</h3><button class="link" id="ch-odds">Drop rates</button></div>
+      <div class="chestrow">${CHESTS.map(ch=>`<button class="chestbtn" data-chest="${ch.id}" style="--rc:var(${RAR[ch.r].v})"><span class="bob">${spriteImg("chest-"+ch.id,60,ch.name)}</span><b>${ch.name.split(" ")[0]}</b><span class="price${g<ch.price?" short":""}">${GEM}${ch.price}</span></button>`).join("")}</div>
+      <p class="note" style="padding:0">XP boosts, streak freezes, pet snacks, gems, and items you don't own yet.</p></div>
+    ${invPanel()}
+    <div class="sect-h"><h3 class="sect">Daily deals</h3><span class="cdn" data-cd="day">${cdText("day")}</span></div>
+    <div class="shopgrid">${dailyDeals().map(x=>shopCard(x.kind,x.it,x.price)).join("")}</div>
     <div class="subtabs" role="tablist">${kinds.map(k=>`<button role="tab" data-st="${k}" id="st-${k}" aria-selected="${shopTab===k}">${k==="pet"?"Pets":SHOP[k].tab}</button>`).join("")}</div>
     <div class="rarbar">${[["-1","All"]].concat(RAR.map((r,i)=>[String(i),r.n])).map(([v,n])=>`<button data-rf="${v}" aria-pressed="${String(shopRar)===v}" style="--rc:var(${v==="-1"?"--muted":RAR[+v].v})">${n}</button>`).join("")}</div>
-    <p class="note">${shopTab==="pet"?(noPet?"Choose your first pet. Embit or Driplet is free.":"Pets level up as you train and evolve at levels 8 and 20. Your active pet earns the XP."):SHOP[shopTab].blurb}</p>`;
-  const all=shopItems(shopTab).filter(it=>!it.exclusive||owns(shopTab,it.id));
-  const card=it=>{const kind=shopTab,own=owns(kind,it.id),eq=kind==="pet"?state.pet===it.id:(state.equip[kind]||"")===it.id,free=kind==="pet"&&noPet&&it.r===0;
-    return `<button class="item${eq?" eq":""}" style="--rc:var(${RAR[it.r].v})" data-kind="${kind}" data-item="${it.id}"><span class="pv">${preview(kind,it)}</span>${kind==="title"?"":`<b>${esc(kind==="pet"&&own?PETS[it.id].names[petStage(petLevel(state.pets[it.id].xp).L)]:it.name)}</b>`}${rarTag(it)}
-      ${eq?`<span class="pill on">${kind==="pet"?"Active":"Equipped"}</span>`:own?`<span class="pill">${kind==="pet"?"Owned · make active":"Owned · equip"}</span>`:it.earn?`<span class="pill">Earned · locked</span>`:free?`<span class="pill on">Free starter</span>`:`<span class="price${g<it.price?" short":""}">${GEM}${it.price}</span>`}</button>`};
-  RAR.forEach((R,i)=>{if(shopRar!==-1&&shopRar!==i)return;const list=all.filter(it=>it.r===i);if(!list.length)return;
-    h+=`<h3 class="sect rarh" style="--rc:var(${R.v})">${R.n}</h3><div class="shopgrid">${list.map(card).join("")}</div>`});
-  if(shopRar!==-1&&!all.some(it=>it.r===shopRar))h+=`<div class="empty"><b>Nothing here yet</b><span>There are no ${RAR[shopRar].n.toLowerCase()} items in this section.</span></div>`;
+    <p class="note">${shopTab==="pet"?(noPet?"Choose your first pet. Embit, Driplet or Sprigg is free.":"Pets level up as you train and evolve at levels 8 and 20. Your active pet earns the XP."):SHOP[shopTab].blurb}</p>`;
+  if(shopTab==="pet"){
+    const pets=petItems().filter(rarOK).sort((a,b)=>a.r-b.r||a.price-b.price);
+    h+=grid(pets.map(it=>shopCard("pet",it)),"No pets of this rarity.");
+  }else{
+    const week=weeklySet(shopTab).filter(rarOK),mine=SHOP[shopTab].items.filter(it=>owns(shopTab,it.id)&&rarOK(it));
+    h+=`<div class="sect-h"><h3 class="sect">This week</h3><span class="cdn" data-cd="week">${cdText("week")}</span></div>${grid(week.map(it=>shopCard(shopTab,it)),"Nothing of this rarity this week. Try All.")}
+      <h3 class="sect">Your collection</h3>${grid(mine.map(it=>shopCard(shopTab,it)),"Nothing of this rarity yet.")}`;
+    if(shopTab==="title"){const locked=SHOP.title.items.filter(it=>it.earn&&!owns("title",it.id)&&rarOK(it));if(locked.length)h+=`<h3 class="sect">Earn these</h3>${grid(locked.map(it=>shopCard("title",it)),"")}`}
+  }
   $("#v-shop").innerHTML=h;
 }
 $("#v-shop").addEventListener("click",e=>{
   const st=e.target.closest("[data-st]");if(st){shopTab=st.dataset.st;renderShop(compute());return}
   const rf=e.target.closest("[data-rf]");if(rf){shopRar=+rf.dataset.rf;renderShop(compute());return}
+  const cb=e.target.closest("[data-chest]");if(cb){openChest(cb.dataset.chest);return}
+  if(e.target.closest("#ch-odds")){openOdds();return}
+  const ub=e.target.closest("[data-use]");if(ub){useItem(ub.dataset.use);return}
   const b=e.target.closest(".item");if(!b)return;
   const kind=b.dataset.kind,it=shopItems(kind).find(i=>i.id===b.dataset.item),c=compute(),g=gems(c);
   if(owns(kind,it.id)){
     if(kind==="pet"){if(state.pet===it.id){openPet(it.id);return}state.pet=it.id;save();refresh();toast("✓",`${petName(it.id)} is now active`,"It earns XP as you train.","");return}
     if((state.equip[kind]||"")===it.id)return;
     state.equip[kind]=it.id;save();refresh();toast("✓",`${it.name} equipped`,SHOP[kind].label,"");return}
-  const free=kind==="pet"&&!Object.keys(state.pets).length&&it.r===0,price=free?0:it.price,short=it.earn?0:price-g;
-  const m=openModal(`${mhead("Shop")}<div class="buy"><span class="pv big">${preview(kind,it,true)}</span><h2>${esc(it.name)}</h2>${rarTag(it)}<span class="muted">${kind==="pet"?`${it.el} pet · evolves twice`:SHOP[kind].label}</span>
-      ${it.earn?"":`<div class="gemn">${GEM}<b>${free?"Free":price}</b></div>`}</div>
+  if(it.chest){toast("◆","Chest only","Found in Gold chests.","");return}
+  const deal=b.dataset.deal!=null&&dailyDeals().some(x=>x.kind===kind&&x.it.id===it.id)?+b.dataset.deal:null;
+  const free=kind==="pet"&&!Object.keys(state.pets).length&&it.r===0,price=free?0:deal??it.price,short=it.earn?0:price-g;
+  const m=openModal(`${mhead("Shop")}<div class="buy"><span class="pv big">${preview(kind,it,true)}</span><h2>${esc(it.name)}</h2>${rarTag(it)}<span class="muted">${kind==="pet"?`${PETS[it.id].el} pet · evolves twice`:SHOP[kind].label}${deal!=null?" · today's deal":""}</span>
+      ${it.earn?"":`<div class="gemn">${GEM}<b>${free?"Free":price}</b>${deal!=null?` <s class="muted">${it.price}</s>`:""}</div>`}</div>
     ${it.earn?`<p style="text-align:center"><b>Earned, not bought.</b><br><span class="muted">${esc(it.earn.how)}.</span></p>`
       :`<p class="muted" style="text-align:center">You have ${fmtNum(g)} gems.${short>0?` You need ${short} more.`:free?" Your first pet is free.":` You'll have ${fmtNum(g-price)} left.`}</p>`}
     ${kind==="pet"?`<div class="evo">${[0,1,2].map(i=>`<span>${sprite(it.id,i,52)}<small>${esc(PETS[it.id].names[i])}<br>${i===0?"Lv 1":i===1?"Lv 8":"Lv 20"}</small></span>`).join('<i>›</i>')}</div>`:""}
@@ -2013,57 +2234,341 @@ $("#v-shop").addEventListener("click",e=>{
     const ok=save();closeModal();refresh();toast(ok?"✓":"!",ok?`${it.name} unlocked`:"Couldn't save",ok?(kind==="pet"?"It's your active pet now.":"It's equipped now."):"","")});
 });
 
-/* ---------- Pixel pets ---------- */
-// Original creatures. Each form is drawn from a body shape plus mirrored detail pixels on a 16×16 grid.
-const PETS={
- embit:{el:"Fire",r:0,price:250,names:["Embit","Embrute","Infernox"],pal:{a:"#ff7a3c",b:"#d9481f",c:"#ffd9a0",o:"#4a1508",f:"#ffb23c",g:"#fff0a0"},forms:[
-  {rx:4.2,ry:4,cy:10.5,e:[6,9],parts:[[7,4,"f"],[7,5,"g"],[6,5,"f"],[6,6,"f"]]},
-  {rx:5.2,ry:5,cy:9.8,e:[5,8],parts:[[7,1,"f"],[7,2,"f"],[6,2,"f"],[7,3,"g"],[6,3,"f"],[5,3,"f"],[6,4,"g"],[5,4,"f"],[1,10,"a"],[1,9,"f"]]},
-  {rx:6.2,ry:5.8,cy:9.6,e:[5,8],big:1,parts:[[7,0,"f"],[7,1,"g"],[6,1,"f"],[7,2,"g"],[6,2,"f"],[5,2,"f"],[4,1,"f"],[4,2,"f"],[4,3,"f"],[5,3,"g"],[6,3,"g"],[0,7,"f"],[0,8,"f"],[1,6,"f"],[0,6,"g"]]}]},
- driplet:{el:"Water",r:0,price:250,names:["Driplet","Tidalin","Maelstrom"],pal:{a:"#4aa8ff",b:"#2a6fd6",c:"#d4f0ff",o:"#0b2450",f:"#8fd8ff",g:"#ffffff"},forms:[
-  {rx:4,ry:4,cy:10.5,e:[6,9],parts:[[7,6,"a"],[7,5,"a"],[7,4,"f"]]},
-  {rx:5,ry:5,cy:9.8,e:[5,8],parts:[[7,2,"f"],[7,3,"a"],[7,4,"a"],[6,4,"a"],[1,9,"f"],[0,8,"f"],[1,8,"a"]]},
-  {rx:6,ry:5.8,cy:9.6,e:[5,8],big:1,parts:[[7,0,"g"],[7,1,"f"],[6,1,"f"],[7,2,"a"],[6,2,"a"],[5,2,"f"],[4,3,"f"],[5,3,"a"],[6,3,"a"],[7,3,"a"],[0,7,"f"],[1,7,"a"],[0,8,"a"],[0,6,"g"],[1,6,"f"]]}]},
- pebblo:{el:"Rock",r:1,price:500,names:["Pebblo","Bouldoze","Mountitan"],pal:{a:"#b98a58",b:"#845c36",c:"#b98a58",o:"#2e1c0c",f:"#6fae4a",g:"#9be06a"},forms:[
-  {rx:4.8,ry:3.8,cy:10.8,e:[5,10],sleep:1,parts:[[7,6,"f"],[6,6,"g"],[5,6,"f"],[2,9,"b"],[3,12,"b"],[6,13,"b"]]},
-  {rx:5.8,ry:4.8,cy:10,e:[5,9],sleep:1,parts:[[7,4,"f"],[6,4,"g"],[5,4,"f"],[4,5,"g"],[1,8,"b"],[2,12,"b"],[5,13,"b"],[3,7,"b"]]},
-  {rx:6.8,ry:5.8,cy:9.8,e:[5,8],sleep:1,big:1,parts:[[7,3,"f"],[6,3,"g"],[5,3,"f"],[4,4,"g"],[7,2,"g"],[1,7,"b"],[0,9,"b"],[2,13,"b"],[5,14,"b"],[3,6,"b"],[2,10,"b"]]}]},
- zapkit:{el:"Electric",r:1,price:500,names:["Zapkit","Voltail","Thundrake"],pal:{a:"#4fdcc8",b:"#229c88",c:"#e0fff9",o:"#06342e",f:"#ffe45c",g:"#ffffff"},forms:[
-  {rx:4,ry:3.8,cy:10.8,e:[6,10],parts:[[7,6,"f"],[7,5,"f"],[6,4,"f"],[7,3,"g"]]},
-  {rx:5,ry:4.8,cy:10,e:[5,9],parts:[[7,4,"f"],[6,3,"f"],[7,2,"f"],[6,1,"g"],[2,6,"a"],[1,5,"f"],[0,10,"f"],[1,11,"f"],[0,12,"f"]]},
-  {rx:6,ry:5.6,cy:9.8,e:[5,8],big:1,parts:[[7,3,"f"],[6,2,"f"],[7,1,"f"],[6,0,"g"],[3,3,"a"],[2,2,"f"],[1,1,"g"],[1,6,"a"],[0,5,"f"],[0,9,"f"],[0,10,"g"],[1,11,"f"],[0,12,"f"]]}]},
- lumo:{el:"Mystic",r:2,price:1000,names:["Lumo","Lumora","Astralume"],pal:{a:"#b9a6ff",b:"#8a6fe0",c:"#f1ecff",o:"#2a1d5c",f:"#ffe98a",g:"#ffffff"},forms:[
-  {rx:3.8,ry:3.6,cy:8.5,e:[6,8],parts:[[7,2,"f"],[7,13,"a"],[7,14,"b"]]},
-  {rx:4.6,ry:4.4,cy:8.2,e:[5,7],parts:[[7,0,"g"],[7,1,"f"],[6,1,"f"],[5,2,"f"],[7,14,"a"],[6,14,"a"],[7,15,"b"],[2,7,"a"],[1,6,"f"]]},
-  {rx:5.4,ry:5,cy:8.2,e:[5,7],big:1,parts:[[7,0,"g"],[6,0,"f"],[5,1,"f"],[4,1,"f"],[3,2,"f"],[7,14,"a"],[6,14,"a"],[7,15,"b"],[1,6,"f"],[0,5,"g"],[1,7,"a"],[0,7,"f"],[0,9,"f"],[1,10,"f"]]}]},
- umbrit:{el:"Shadow",r:3,price:2000,names:["Umbrit","Noctern","Eclipsar"],pal:{a:"#5d4b80",b:"#3b2e58",c:"#a08ccc",o:"#100a1c",f:"#ff4d6d",g:"#ffd0da"},forms:[
-  {rx:4,ry:3.8,cy:10.8,e:[6,10],glow:1,parts:[[4,6,"o"],[4,5,"o"],[3,4,"f"]]},
-  {rx:5,ry:4.8,cy:10,e:[5,9],glow:1,parts:[[3,4,"o"],[4,4,"o"],[3,3,"o"],[2,2,"f"],[0,9,"b"],[0,8,"b"],[1,8,"b"]]},
-  {rx:6,ry:5.6,cy:9.8,e:[5,8],glow:1,big:1,parts:[[2,3,"o"],[3,3,"o"],[2,2,"o"],[1,1,"o"],[1,0,"f"],[7,2,"f"],[6,2,"g"],[7,1,"f"],[0,6,"b"],[0,7,"b"],[0,8,"b"],[1,7,"b"],[0,5,"f"]]}]}
+/* ---------- Pixel sprites ---------- */
+// Original creatures drawn on a 32×32 grid from simple shapes, then given a dark outline, shading and highlights in code.
+// Shapes: e = ellipse [cx,cy,rx,ry], p = polygon, r = rectangle. m:1 mirrors left↔right, n:1 means no inner line, f:1 means flat (no shading).
+const SPX={
+  hx:h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)),
+  hex:a=>"#"+a.map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,"0")).join(""),
+  mix(a,b,t){const A=SPX.hx(a),B=SPX.hx(b);return SPX.hex(A.map((v,i)=>v+(B[i]-v)*t))}
 };
-const spriteCache={};
-function sprite(id,st,size){
-  const key=id+st;
-  if(!spriteCache[key]){
-    const pt=PETS[id],f=pt.forms[st],pal={...pt.pal,w:"#ffffff"},px={};
-    const set=(x,y,k)=>{if(x>=0&&x<16&&y>=0&&y<16)px[x+","+y]=k},both=(x,y,k)=>{set(x,y,k);set(15-x,y,k)};
-    const inE=(x,y,rx,ry,cy)=>((x+.5-8)/rx)**2+((y+.5-cy)/ry)**2<=1;
-    for(let y=0;y<16;y++)for(let x=0;x<16;x++)if(inE(x,y,f.rx,f.ry,f.cy)){
-      let k=((x+.5-8)/f.rx*.55+(y+.5-f.cy)/f.ry)>.78?"b":"a";
-      if(inE(x,y,f.rx*.55,f.ry*.48,f.cy+f.ry*.38))k="c";set(x,y,k)}
-    const body=Object.keys(px);
-    for(const p of body){const [x,y]=p.split(",").map(Number);[[1,0],[-1,0],[0,1],[0,-1]].forEach(([dx,dy])=>{const q=(x+dx)+","+(y+dy);if(!px[q])set(x+dx,y+dy,"o")})}
-    f.parts.forEach(([x,y,k])=>both(x,y,k));
-    const [ex,ey]=f.e;
-    if(f.sleep){both(ex,ey+1,"o");both(ex+1,ey+1,"o")}
-    else if(f.glow){both(ex,ey,"f");both(ex,ey+1,"f");if(f.big){both(ex+1,ey,"g");both(ex+1,ey+1,"f")}}
-    else if(f.big){both(ex,ey,"w");both(ex+1,ey,"w");both(ex,ey+1,"w");both(ex+1,ey+1,"o")}
-    else{both(ex,ey,"w");both(ex,ey+1,"o")}
-    both(7,ey+3,"o");
-    spriteCache[key]=Object.entries(px).map(([p,k])=>{const [x,y]=p.split(",");return `<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${pal[k]}"/>`}).join("");
-  }
-  return `<svg class="sprite" width="${size}" height="${size}" viewBox="0 0 16 16" shape-rendering="crispEdges" role="img" aria-label="${PETS[id].names[st]}">${spriteCache[key]}</svg>`;
+const E=(cx,cy,rx,ry,c,o={})=>({t:"e",cx,cy,rx,ry,c,...o});
+const PG=(pts,c,o={})=>({t:"p",pts,c,...o});
+const RC=(x,y,w,h,c,o={})=>({t:"r",x,y,w,h,c,...o});
+const EYE=(x,y,k,o={})=>({t:"eye",x,y,k,...o});
+const DOT=(px,c,o={})=>({t:"d",px,c,...o});
+const SPR_FIX={K:"#1c1526",W:"#ffffff",M:"#8a2440",T:"#ff8fa8",G:"#ffd84a"};
+function sprInside(s,X,Y){
+  if(s.t==="e"){let dx=X-s.cx,dy=Y-s.cy;if(s.a){const r=-s.a*Math.PI/180,c=Math.cos(r),n=Math.sin(r);[dx,dy]=[dx*c-dy*n,dx*n+dy*c]}
+    if((dx/s.rx)**2+(dy/s.ry)**2>1)return false;if(s.hole&&(dx/s.hole[0])**2+(dy/s.hole[1])**2<=1)return false;return true}
+  if(s.t==="r")return X>=s.x&&X<s.x+s.w&&Y>=s.y&&Y<s.y+s.h;
+  if(s.t==="p"){let ins=false;const P=s.pts;for(let i=0,j=P.length-1;i<P.length;j=i++){const [xi,yi]=P[i],[xj,yj]=P[j];if((yi>Y)!==(yj>Y)&&X<(xj-xi)*(Y-yi)/(yj-yi)+xi)ins=!ins}return ins}
+  return false;
 }
+function sprMirror(s){
+  if(s.t==="e")return {...s,cx:32-s.cx,a:s.a?-s.a:0,m:0};
+  if(s.t==="r")return {...s,x:32-s.x-s.w,m:0};
+  if(s.t==="p")return {...s,pts:s.pts.map(([x,y])=>[32-x,y]),m:0};
+  if(s.t==="d")return {...s,px:s.px.map(([x,y])=>[31-x,y]),m:0};
+  if(s.t==="eye")return {...s,x:31-s.x,flip:1,m:0};
+  return s;
+}
+function sprBox(s){
+  if(s.t==="e"){const r=Math.max(s.rx,s.ry);return s.a?[s.cx,s.cy,r,r]:[s.cx,s.cy,s.rx,s.ry]}
+  if(s.t==="r")return [s.x+s.w/2,s.y+s.h/2,s.w/2,s.h/2];
+  const xs=s.pts.map(p=>p[0]),ys=s.pts.map(p=>p[1]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+  return [(x0+x1)/2,(y0+y1)/2,(x1-x0)/2,(y1-y0)/2];
+}
+// Eye shapes, drawn for the left eye; the right eye is mirrored.
+const EYES={
+  big:  ["KWK","KWK","KKK","KIK"].map(r=>r.replace("W","W")),
+  round:["WK","KK","KK"],
+  small:["WK","KK"],
+  happy:[".K.","K.K"],
+  sleep:["K..",".KK"],
+  angry:["KK..",".KKK",".WKK",".KKK"],
+  glow: ["FFG","FFF"],
+  glowbig:["F...","FFG.","FFFF",".FFF"],
+  star: [".G.","GWG",".G."]
+};
+EYES.big=["WKK","WKK","KKK","KIK"];
+function sprRender(def){
+  const N=32,pal={...SPR_FIX,...def.pal};const parts=[];
+  for(const s of def.parts){parts.push(s);if(s.m)parts.push(sprMirror(s))}
+  const shapes=parts.filter(s=>s.t==="e"||s.t==="r"||s.t==="p");
+  const own=new Int16Array(N*N).fill(-1);
+  shapes.forEach((s,i)=>{for(let y=0;y<N;y++)for(let x=0;x<N;x++)if(sprInside(s,x+.5,y+.5))own[y*N+x]=i});
+  const col=new Array(N*N).fill(null),base=new Array(N*N).fill(null);
+  const boxes=shapes.map(sprBox);
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){const i=own[y*N+x];if(i<0)continue;const s=shapes[i],c=pal[s.c]||s.c;base[y*N+x]=c;
+    let tone=c;
+    if(!s.f){const [cx,cy,hw,hh]=boxes[i],nx=(x+.5-cx)/Math.max(hw,1),ny=(y+.5-cy)/Math.max(hh,1),v=.5*nx+.86*ny,small=Math.min(hw,hh)<2.2;
+      if(v>(small?.75:.58))tone=SPX.mix(c,"#2a1640",.3);
+      else if(!small&&v<-.7&&!s.nl)tone=SPX.mix(c,"#fffbe6",.42)}
+    // A darker line where this shape sits on top of a different-coloured shape.
+    if(!s.n){for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const X=x+dx,Y=y+dy;if(X<0||Y<0||X>=N||Y>=N)continue;const j=own[Y*N+X];
+      if(j>=0&&j<i&&shapes[j].c!==s.c&&!shapes[j].n2){tone=SPX.mix(c,"#160c22",.55);break}}}
+    col[y*N+x]=tone}
+  // Outline: every empty pixel touching the creature takes a dark shade of its neighbour.
+  const out=col.slice();
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){if(col[y*N+x])continue;let nb=null;
+    for(const [dx,dy] of [[0,-1],[-1,0],[1,0],[0,1]]){const X=x+dx,Y=y+dy;if(X<0||Y<0||X>=N||Y>=N)continue;if(base[Y*N+X]){nb=base[Y*N+X];break}}
+    if(nb)out[y*N+x]=SPX.mix(nb,"#120a1a",.72)}
+  // Faces and details go on last.
+  for(const s of parts){
+    if(s.t==="d")s.px.forEach(([x,y])=>{if(x>=0&&y>=0&&x<N&&y<N)out[y*N+x]=pal[s.c]||s.c});
+    if(s.t==="eye"){let g=EYES[s.k];if(s.flip)g=g.map(r=>[...r].reverse().join(""));const w=g[0].length,x0=s.flip?s.x-w+1:s.x;
+      g.forEach((row,dy)=>[...row].forEach((ch,dx)=>{if(ch===".")return;const c=ch==="I"?(pal.i||pal.K):ch==="F"?(pal.f||"#ff4d6d"):ch==="G"&&s.k.startsWith("glow")?(pal.g||"#ffe0e6"):pal[ch];out[(s.y+dy)*N+x0+dx]=c}))}
+  }
+  return out;
+}
+const sprCache={};
+function spriteURL(key){
+  if(sprCache[key])return sprCache[key];
+  const px=sprRender(SPR[key]),cv=document.createElement("canvas");cv.width=32;cv.height=32;const g=cv.getContext("2d");
+  px.forEach((c,i)=>{if(c){g.fillStyle=c;g.fillRect(i%32,Math.floor(i/32),1,1)}});
+  return sprCache[key]=cv.toDataURL("image/png");
+}
+const spriteImg=(key,size,label)=>`<img class="sprite" src="${spriteURL(key)}" width="${size}" height="${size}" alt="${esc(label||"")}" draggable="false">`;
+
+// ---- The art ----
+const SPR={};
+const def=(k,pal,parts)=>{SPR[k]={pal,parts}};
+// Embit line (Fire): a crimson baby dragon with an ember crest
+const P_EMB={a:"#ef4d55",b:"#ad2840",c:"#ffd36a",d:"#fff0b8",e:"#ff8a2a",f:"#ffd23f",k:"#ff9f8f",i:"#4a0f14"};
+def("embit0",P_EMB,[
+  PG([[9.5,19],[4,12.5],[5.2,16.6],[3,18.6],[8,21.4]],"b",{m:1}),
+  E(22.6,25.6,3.4,1.8,"a",{a:-30}),PG([[24.6,22.4],[28.4,21.4],[27,25.4]],"b"),
+  E(11.6,27.6,3,2,"a",{m:1}),E(16,23,6.4,5.4,"a"),E(16,24.6,3.8,3.2,"c",{n:1}),DOT([[14,23],[15,23],[16,23],[17,23],[14,25],[15,25],[16,25],[17,25]],"#efb84a"),
+  E(9.6,22.6,1.7,2.4,"a",{m:1,a:25}),
+  PG([[10.6,10.6],[9.4,5],[13.4,9]],"d",{m:1}),
+  E(16,14.6,8,6.5,"a"),PG([[14,9],[16,5.4],[18,9]],"e",{n:1}),DOT([[15,8],[16,8],[16,7]],"f"),
+  EYE(10,12,"big",{m:1}),DOT([[14,18],[15,19]],"K",{m:1}),DOT([[8,17],[9,17]],"k",{m:1})]);
+def("embit1",P_EMB,[
+  PG([[10,17],[2,8],[3.6,13.6],[1,16],[4.6,18],[3.4,21.4],[9,21.6]],"b",{m:1}),DOT([[4,11],[5,14],[4,17],[5,19]],"#7e1c2e",{m:1}),
+  E(23.6,25,4,2,"a",{a:-30}),PG([[26.4,21],[30.6,19.6],[29,24.4]],"b"),
+  E(11,27.6,3.6,2.4,"a",{m:1}),E(16,21.8,7.6,6.6,"a"),E(16,23.6,4.6,4.2,"c",{n:1}),DOT([[13,22],[14,22],[15,22],[16,22],[17,22],[18,22],[14,24],[15,24],[16,24],[17,24],[14,26],[15,26],[16,26],[17,26]],"#efb84a"),
+  E(8.6,20.6,2,3.2,"a",{m:1,a:28}),
+  PG([[10.4,8.4],[7.4,1.4],[13,6.4]],"d",{m:1}),
+  E(16,11.8,7.4,6,"a"),PG([[13.4,6.4],[15,1.6],[16,4],[17,1.6],[18.6,6.4]],"e",{n:1}),PG([[14.8,6],[16,3.4],[17.2,6]],"f",{n:1}),
+  EYE(10,10,"angry",{m:1}),DOT([[13,15],[14,16],[15,16]],"K",{m:1}),DOT([[14,17],[17,17]],"W")]);
+def("embit2",P_EMB,[
+  PG([[10,15],[0.5,3],[2.6,10],[0.4,13.6],[3.6,15.4],[1.6,19.6],[6.6,21.4]],"b",{m:1}),DOT([[3,6],[4,9],[3,13],[4,16],[5,19]],"#7e1c2e",{m:1}),
+  E(25,25,4.2,2.2,"a",{a:-25}),PG([[27.6,21],[32,20],[30.4,25.6]],"b"),
+  E(10,27.6,4.2,2.8,"a",{m:1}),E(16,20.8,9,7.6,"a"),E(16,23,5.4,5.2,"c",{n:1}),DOT([[13,20],[14,20],[15,20],[16,20],[17,20],[18,20],[12,23],[13,23],[14,23],[15,23],[16,23],[17,23],[18,23],[19,23],[13,26],[14,26],[15,26],[16,26],[17,26],[18,26]],"#efb84a"),
+  E(6.6,19.5,2.6,3.8,"a",{m:1,a:32}),DOT([[4,22],[5,23]],"W",{m:1}),
+  PG([[10.6,7],[6.4,0.4],[12.6,4.6]],"d",{m:1}),
+  PG([[11,8],[12,2],[14,5],[16,0.4],[18,5],[20,2],[21,8]],"e"),PG([[13,7],[13.8,4],[15,5.6],[16,3],[17,5.6],[18.2,4],[19,7]],"f",{n:1}),
+  E(16,9.6,7,5.6,"a"),E(16,13,4.4,2.6,"a"),
+  EYE(10,8,"angry",{m:1}),DOT([[13,13],[14,14],[15,14]],"K",{m:1}),DOT([[13,14],[18,14]],"W"),DOT([[14,11],[17,11]],"b")]);
+
+// Driplet line (Water)
+const P_DRP={a:"#4fb0ff",b:"#2a76d8",c:"#d8f2ff",d:"#8fe3ff",e:"#ffffff",k:"#ff9fc0",i:"#0b3a8a"};
+def("driplet0",P_DRP,[
+  E(12,28,2.6,1.6,"b",{m:1}),E(8.2,23,3,1.6,"d",{m:1,a:-30}),
+  PG([[10.5,17],[16,4],[21.5,17]],"a"),E(16,21,8,7,"a"),E(16,24,4.6,3.6,"c",{n:1}),
+  DOT([[14,9],[14,10],[13,12]],"e"),
+  EYE(10,17,"big",{m:1}),DOT([[14,22],[15,23]],"K",{m:1}),DOT([[8,21],[9,21]],"k",{m:1})]);
+def("driplet1",P_DRP,[
+  PG([[21,25],[29.5,21],[28.6,25],[30.6,28.4],[22,28]],"b"),
+  E(16,22.4,8.6,6.4,"a"),E(16,24,5.4,4.2,"c",{n:1}),E(7.6,24.4,3.6,1.6,"a",{m:1,a:-25}),
+  PG([[13.4,7.6],[16,1.4],[18.6,7.6]],"d"),E(16,8,2.6,1.6,"d"),
+  E(16,13.6,8,6,"a"),E(16,16.4,3.4,2,"c",{n:1}),DOT([[15,15],[16,15]],"K"),
+  DOT([[11,17],[10,16],[11,18],[10,19]],"#2a76d8",{m:1}),
+  EYE(10,11,"big",{m:1}),DOT([[14,17],[15,18]],"K",{m:1}),DOT([[8,15],[9,15]],"k",{m:1}),DOT([[15,4],[15,5]],"e")]);
+def("driplet2",P_DRP,[
+  PG([[21,24],[31.5,14],[30,21],[31.5,29],[22,27.8]],"b"),PG([[23,24.5],[29.5,18],[29,25]],"d",{n:1}),
+  E(4.6,19.5,4.2,2,"d",{m:1,a:-28}),
+  E(11,28,3.6,2.2,"a",{m:1}),E(16,21.5,9.4,7.2,"a"),E(16,23.6,6,5,"c",{n:1}),DOT([[12,21],[19,21],[13,24],[18,24]],"#a9d9f2"),
+  PG([[10,5.5],[12,0.5],[14,3.5],[16,0],[18,3.5],[20,0.5],[22,5.5]],"e"),PG([[12,5],[13.4,2.6],[15,4.2],[16,2.2],[17,4.2],[18.6,2.6],[20,5]],"d",{n:1}),
+  E(16,10,7.6,5.8,"a"),E(6,12,1.2,3,"d",{m:1,a:-40}),
+  EYE(9,8,"angry",{m:1}),DOT([[12,13],[13,14],[14,14],[15,14]],"K",{m:1})]);
+
+// Pebblo line (Rock)
+const P_PEB={a:"#b3a596",b:"#7f705f",c:"#d8ccbd",d:"#62b648",e:"#a6e36a",f:"#ff9cc0",k:"#e9a59a"};
+def("pebblo0",P_PEB,[
+  E(11,28.4,2.6,1.6,"b",{m:1}),E(16,22,9,7,"a"),E(16,15.6,6.4,2.4,"d"),DOT([[15,12],[15,13],[16,13]],"#3f8a2e"),DOT([[13,11],[14,11],[14,12],[17,11],[18,11],[17,12]],"e"),
+  DOT([[9,24],[10,25],[10,26],[23,19],[22,20]],"b"),DOT([[12,17],[19,17],[20,18]],"e"),
+  EYE(11,20,"sleep",{m:1}),DOT([[15,24],[16,24]],"K"),DOT([[9,22],[10,22]],"k",{m:1})]);
+def("pebblo1",P_PEB,[
+  E(10.5,28.2,3.6,2.2,"b",{m:1}),E(5.5,22,3.6,4.4,"b",{m:1}),E(16,20.2,9.6,8,"a"),
+  E(16,12.6,7,3,"d"),DOT([[15,8],[15,9],[16,9],[15,7]],"#3f8a2e"),DOT([[13,6],[14,6],[14,7],[17,6],[18,6],[17,7],[18,5]],"e"),DOT([[11,10],[21,11],[19,10]],"e"),
+  DOT([[9,23],[10,24],[10,25],[24,18],[23,19],[23,20],[12,27]],"b"),DOT([[4,21],[5,20]],"#5c4e40",{m:1}),
+  EYE(10,17,"round",{m:1}),DOT([[10,15],[11,15],[12,16]],"b",{m:1}),DOT([[14,22],[15,23],[16,23]],"K",{m:1})]);
+def("pebblo2",P_PEB,[
+  E(9.5,28.4,4.4,2.4,"b",{m:1}),E(4,22.5,3.6,5,"b",{m:1,a:15}),
+  PG([[3.5,29],[8,11],[11.5,14],[16,3],[20.5,14],[24,11],[28.5,29]],"a"),
+  PG([[13.5,8.5],[16,3.4],[18.5,8.5],[17,7.5],[16,9],[15,7.5]],"W",{n:1,f:1}),PG([[6.8,15],[8,11.4],[9.6,13.4],[8.6,14.6]],"W",{n:1,f:1,m:1}),
+  E(16,27,10.5,2,"d"),DOT([[9,26],[12,25],[15,26],[18,25],[21,26],[24,25]],"e"),DOT([[13,24],[16,24]],"f"),
+  DOT([[11,17],[12,18],[21,16],[20,17],[14,12]],"b"),
+  EYE(10,17,"angry",{m:1}),DOT([[13,21],[14,22],[15,22]],"K",{m:1}),DOT([[14,23],[17,23]],"W")]);
+
+// Zapkit line (Electric): a teal critter with antenna orbs and a spark puff tail
+const P_ZAP={a:"#4fd8c6",b:"#239c8c",c:"#e8fffb",d:"#ffe14a",e:"#fff7b8",k:"#9ff0e4",i:"#06403a"};
+def("zapkit0",P_ZAP,[
+  E(23.4,24,3,2.8,"c"),DOT([[23,22],[24,23],[23,24],[24,25]],"d"),
+  DOT([[11,8],[11,9],[12,10],[20,8],[20,9],[19,10]],"b"),E(10.6,6.2,2.2,2.2,"d"),E(21.4,6.2,2.2,2.2,"d"),DOT([[10,5],[21,5]],"e"),
+  E(12.2,28,2.6,1.6,"a",{m:1}),E(16,23.6,6,5,"a"),E(16,24.8,3.6,3,"c",{n:1}),
+  E(16,15.4,8,6.4,"a"),DOT([[14,10],[15,11],[16,10],[17,11]],"d"),
+  EYE(10,13,"big",{m:1}),DOT([[14,18],[15,19]],"K",{m:1}),DOT([[8,17],[9,17]],"k",{m:1})]);
+def("zapkit1",P_ZAP,[
+  E(24.6,22.6,4,3.8,"c"),DOT([[24,20],[25,21],[24,22],[25,23],[24,24]],"d"),
+  DOT([[10,6],[10,5],[9,4],[9,3]],"b",{m:1}),E(8.4,2.4,2.2,2.2,"d",{m:1}),DOT([[8,1]],"e",{m:1}),
+  E(11.4,28,3,2,"a",{m:1}),E(16,22.4,6.6,6,"a"),E(16,23.8,3.8,3.8,"c",{n:1}),E(9.4,22,1.7,3,"a",{m:1,a:20}),
+  PG([[9,17],[11,15],[12.5,18.5],[14.5,16],[16,19],[17.5,16],[19.5,18.5],[21,15],[23,17],[20,20],[12,20]],"c",{n:1}),
+  E(16,12,7.4,5.8,"a"),DOT([[13,7],[14,8],[15,7],[16,8],[17,7],[18,8]],"d"),
+  EYE(10,10,"round",{m:1}),DOT([[10,9],[11,9]],"b",{m:1}),DOT([[14,15],[15,16]],"K",{m:1})]);
+def("zapkit2",P_ZAP,[
+  E(25.6,21,5,4.6,"c"),DOT([[25,17],[26,18],[25,19],[26,20],[25,21],[26,22]],"d"),
+  E(9.8,28,4,2.6,"a",{m:1}),E(16,21.6,8.6,7,"a"),E(16,23.6,5,4.6,"c",{n:1}),E(7.4,22,2.4,3.6,"a",{m:1,a:20}),DOT([[5,25],[6,26]],"W",{m:1}),
+  PG([[6,15],[3,10],[8,11.5],[7,6],[11,10],[12,4],[14.5,9],[16,3.5],[17.5,9],[20,4],[21,10],[25,6],[24,11.5],[29,10],[26,15],[22,18],[10,18]],"d"),
+  DOT([[10,5],[9,4],[9,3],[8,2]],"b",{m:1}),E(7,1.6,2,1.8,"d",{m:1}),
+  E(16,10.4,6.8,5.4,"a"),E(16,13.2,3.6,2.2,"c",{n:1}),
+  EYE(9,8,"angry",{m:1}),DOT([[14,13],[15,14]],"K",{m:1}),DOT([[14,15],[17,15]],"W")]);
+
+// Lumo line (Mystic)
+const P_LUM={a:"#cdbcff",b:"#9b84ee",c:"#f5f0ff",d:"#ffe27a",e:"#ff9ed2",k:"#ffb3d9",i:"#5b3fc4"};
+def("lumo0",P_LUM,[
+  E(21,23.5,1.3,1.2,"a"),E(23.2,22.4,1.3,1.3,"a"),E(25,20.4,1.3,1.4,"a"),E(26,17.8,1.3,1.5,"a"),PG([[26,12],[27,14],[29,14.2],[27.6,15.6],[28,17.6],[26,16.6],[24,17.6],[24.4,15.6],[23,14.2],[25,14]],"d"),
+  PG([[9,12],[9,4.5],[13.5,9]],"a",{m:1}),DOT([[10,7],[10,8],[11,8]],"e",{m:1}),
+  E(13.4,25.6,1.6,1.2,"a",{m:1}),E(16,21.4,5,4.4,"a"),E(16,22.4,3,2.6,"c",{n:1}),E(11,20.5,1.4,2,"a",{m:1,a:35}),
+  E(16,14,7.6,6.2,"a"),
+  DOT([[15,8],[16,8],[14,9],[15,9],[16,9],[17,9],[15,10],[16,10]],"d"),
+  EYE(10,12,"big",{m:1}),DOT([[15,17],[16,17]],"K"),DOT([[8,16],[9,16]],"k",{m:1}),DOT([[4,25],[3,26],[5,26],[4,27],[28,8],[27,9],[29,9],[28,10]],"d")]);
+def("lumo1",P_LUM,[
+  E(20,25,1.3,1.2,"a"),E(22.5,24.4,1.4,1.3,"a"),E(24.8,22.8,1.4,1.4,"a"),E(26.4,20.4,1.4,1.5,"a"),E(27,17.4,1.4,1.6,"a"),E(26.4,14.6,1.4,1.5,"a"),
+  PG([[24.5,10.5],[25.6,12.2],[27.6,12.2],[26,13.6],[26.6,15.6],[24.6,14.4],[22.8,15.6],[23.4,13.6],[21.8,12.2],[23.8,12.2]],"d"),
+  PG([[10,10],[4,2],[7,9.5],[2,12],[8.5,12.5]],"b",{m:1}),DOT([[4,3],[3,2],[5,2],[4,1]],"d",{m:1}),
+  E(13.6,27.8,1.6,1.3,"a",{m:1}),E(16,22,4.6,5.2,"a"),E(16,23.2,2.8,3.2,"c",{n:1}),E(10.6,21,1.4,2.6,"a",{m:1,a:30}),
+  E(16,12.6,7,5.8,"a"),DOT([[15,7],[16,7],[15,8],[16,8]],"e"),
+  EYE(10,11,"big",{m:1}),DOT([[15,16],[16,16]],"K"),DOT([[8,15],[9,15]],"k",{m:1})]);
+def("lumo2",P_LUM,[
+  E(16,4.6,7.6,2.4,"d",{hole:[5.4,1.1],n:1}),
+  E(19,27,1.4,1.3,"a"),E(21.8,26.8,1.5,1.4,"a"),E(24.6,25.8,1.6,1.5,"a"),E(27,23.8,1.6,1.6,"a"),E(28.6,21,1.6,1.7,"a"),E(29,17.8,1.6,1.7,"a"),
+  PG([[28.6,11],[29.8,13.2],[32,13.4],[30.4,15],[31,17.2],[28.8,16],[26.8,17.2],[27.4,15],[25.6,13.4],[27.8,13.2]],"d"),
+  PG([[11,17],[1.5,9],[3.5,15],[0.5,18],[4,20],[2,24],[10.5,22]],"c",{m:1}),DOT([[3,11],[4,14],[3,19],[4,22]],"#e2d6ff",{m:1}),
+  E(13,28.4,1.8,1.4,"a",{m:1}),E(16,21.6,5.6,6.2,"a"),E(16,22.8,3.4,4,"c",{n:1}),PG([[16,19],[17.6,21],[16,23.4],[14.4,21]],"e",{n:1}),E(10,20.4,1.6,3,"a",{m:1,a:35}),
+  PG([[10.6,9],[8.6,1.6],[13.6,6.6]],"a",{m:1}),DOT([[10,4],[10,5],[11,6]],"e",{m:1}),
+  E(16,11.6,6.8,5.6,"a"),DOT([[15,6],[16,6],[14,7],[15,7],[16,7],[17,7],[15,8],[16,8]],"d"),
+  EYE(10,10,"big",{m:1}),DOT([[15,15],[16,15]],"K"),DOT([[8,14],[9,14]],"k",{m:1})]);
+
+// Umbrit line (Shadow)
+const P_UMB={a:"#5e4c8a",b:"#3b2d60",c:"#9886c8",d:"#8a3d72",e:"#ffd76a",f:"#ff4d6d",g:"#ffe0e6",k:"#7a5aa8"};
+def("umbrit0",P_UMB,[
+  E(6,20,2.8,1.8,"b",{m:1,a:-30}),
+  PG([[9,14],[6,3],[14.5,10]],"a",{m:1}),PG([[9.2,12],[7.4,5.8],[12.4,10]],"d",{m:1,n:1}),
+  E(11,28,2.6,1.6,"b",{m:1}),E(16,20.8,8.6,7.2,"a"),E(16,24,4.4,3.2,"c",{n:1}),
+  EYE(10,17,"glow",{m:1}),DOT([[14,22],[15,22],[16,22],[17,22]],"K"),DOT([[14,23]],"W"),DOT([[17,23]],"W")]);
+def("umbrit1",P_UMB,[
+  PG([[10,18],[1,10],[2.6,16],[0.5,19],[4,21],[3,24.5],[9,23.5]],"b",{m:1}),DOT([[3,12],[4,15],[4,19],[5,22]],"d",{m:1}),
+  PG([[21,25],[27,27],[30,23],[28.6,26.4],[22,27.5]],"b"),
+  PG([[9.5,11],[6,0.5],[14,7.5]],"a",{m:1}),PG([[9.6,9.2],[7.6,3.4],[12.4,7.6]],"d",{m:1,n:1}),
+  E(12,28.2,2.6,1.6,"b",{m:1}),E(16,22.4,6.4,5.6,"a"),E(16,23.8,3.6,3.4,"c",{n:1}),
+  E(16,13,7.2,6,"a"),
+  EYE(10,12,"glow",{m:1}),DOT([[10,10],[11,11]],"b",{m:1}),DOT([[14,17],[15,17],[16,17],[17,17]],"K"),DOT([[14,18]],"W"),DOT([[17,18]],"W")]);
+def("umbrit2",P_UMB,[
+  PG([[10,15],[0.5,2],[3,9],[0,12],[3.6,14],[0.6,18],[5,19.5],[3,24],[9.6,22]],"b",{m:1}),DOT([[3,5],[4,8],[3,12],[4,16],[5,20]],"d",{m:1}),
+  PG([[20,24],[27,27],[31,21],[29.6,25.6],[23,28]],"b"),PG([[29.5,20],[31.8,19.6],[31,22.4]],"f",{n:1}),
+  E(10.4,28,3.6,2.4,"b",{m:1}),E(16,21.6,8.4,7,"a"),E(16,23.4,5,4.6,"c",{n:1}),
+  PG([[14,20],[17,18.5],[19,20.5],[18.5,23.5],[16.5,25],[17.6,22.6],[17,20.6]],"e",{n:1,f:1}),
+  E(7.6,20.6,2.2,3.4,"a",{m:1,a:25}),DOT([[5,23],[6,24]],"W",{m:1}),
+  PG([[10.5,8],[8,1.5],[5,0.5],[8,4],[9,8.5]],"c",{m:1}),
+  E(16,10.4,6.8,5.6,"a"),
+  EYE(9,8,"glowbig",{m:1}),DOT([[14,14],[15,14],[16,14],[17,14]],"K"),DOT([[14,15]],"W"),DOT([[17,15]],"W")]);
+
+// Sprigg line (Grass)
+const P_SPR={a:"#7fd56c",b:"#4ea84a",c:"#ecffd8",d:"#3d8f39",e:"#ffb3d6",f:"#ffe07a",k:"#ff9fb4",i:"#1d4a17"};
+def("sprigg0",P_SPR,[
+  DOT([[15,9],[16,9],[15,8],[16,10],[15,10]],"b"),E(12.4,6.4,3,1.5,"d",{a:-25}),E(19.6,6.4,3,1.5,"d",{a:25}),DOT([[11,6],[12,6],[19,6],[20,6]],"#69c45b"),
+  E(12,28,2.6,1.6,"b",{m:1}),E(16,23.2,6.2,5,"a"),E(16,24.4,3.6,3,"c",{n:1}),E(9.6,23,1.5,2.2,"a",{m:1,a:25}),
+  E(16,15.4,8,6.4,"a"),
+  EYE(10,13,"big",{m:1}),DOT([[14,18],[15,19]],"K",{m:1}),DOT([[8,17],[9,17]],"k",{m:1})]);
+def("sprigg1",P_SPR,[
+  E(25,23,4,1.8,"d",{a:-35}),E(24,26,3.4,1.6,"b",{a:-10}),
+  E(5.8,10,3.6,1.6,"d",{m:1,a:30}),
+  E(11.2,28,3,2,"b",{m:1}),E(16,22.4,6.8,5.8,"a"),E(16,23.8,4,3.8,"c",{n:1}),E(9.2,22,1.7,3,"a",{m:1,a:25}),
+  E(16,13,7.6,6,"a"),
+  E(16,5,3,2.6,"e"),DOT([[16,3],[15,3]],"#ff7fb8"),DOT([[15,7],[16,7]],"d"),E(13.4,6.4,1.8,1,"d",{a:-30}),E(18.6,6.4,1.8,1,"d",{a:30}),
+  EYE(10,11,"big",{m:1}),DOT([[14,16],[15,17]],"K",{m:1}),DOT([[8,15],[9,15]],"k",{m:1})]);
+def("sprigg2",P_SPR,[
+  E(10,28,4.2,2.6,"b",{m:1}),E(16,21,10,7.6,"a"),E(16,23.6,6,5,"c",{n:1}),
+  E(6.2,22,2.4,3.6,"a",{m:1,a:25}),DOT([[4,25],[5,26]],"W",{m:1}),
+  E(16,10.6,7.2,5.8,"a"),E(16,14,4,2.4,"a"),
+  E(10.5,3.6,3,2.2,"e",{a:-20}),E(21.5,3.6,3,2.2,"e",{a:20}),E(16,1.8,2.6,2,"e"),E(8.4,7.4,2.8,2,"e",{a:-50,m:1}),
+  E(16,5.4,2.8,2.4,"f",{n:1}),DOT([[15,5],[16,5]],"#f0b93a"),
+  E(4,13,3.6,1.6,"d",{m:1,a:25}),
+  EYE(9,9,"angry",{m:1}),DOT([[13,14],[14,15],[15,15]],"K",{m:1}),DOT([[14,16],[17,16]],"W")]);
+
+// Flexo line (Fighting)
+const P_FLX={a:"#ffb98f",b:"#e08a5f",c:"#ffe8d6",d:"#e8343e",e:"#ffd24a",f:"#2f3046",k:"#ff8f84",i:"#4a1f10"};
+def("flexo0",P_FLX,[
+  PG([[22,11],[28,8.5],[27,12],[30,13],[23,14]],"d"),
+  E(12,28,2.8,1.7,"b",{m:1}),E(16,22.6,7,5.6,"a"),E(16,24,4,3.4,"c",{n:1}),
+  E(16,15.4,7.8,6.2,"a"),RC(8,11,16,2.4,"d",{f:1}),DOT([[12,11],[13,11],[18,11],[19,11]],"#ff6a70"),
+  E(7.6,22.4,2.6,2.6,"d",{m:1}),DOT([[6,21],[7,21]],"#ff8086",{m:1}),
+  EYE(10,14,"angry",{m:1}),DOT([[14,19],[15,19]],"K",{m:1}),DOT([[8,18],[9,18]],"k",{m:1})]);
+def("flexo1",P_FLX,[
+  PG([[22,9],[29,6],[28,10],[31,11.5],[23,12.4]],"d"),
+  E(11,28.2,3,2,"a",{m:1}),RC(10,22.5,12,4.5,"f"),E(16,20.6,7.2,5.6,"a"),E(16,20.6,4,3.4,"c",{n:1}),DOT([[15,19],[16,19],[15,21],[16,21]],"b"),
+  E(7,16.2,2.2,3.6,"a",{m:1,a:-25}),E(6.6,13.4,2.4,2,"a",{m:1}),E(6.2,9.4,2.8,2.8,"d",{m:1}),DOT([[5,8],[6,8]],"#ff8086",{m:1}),
+  E(16,12.4,6.6,5.4,"a"),RC(9.4,8.4,13.2,2.2,"d",{f:1}),
+  EYE(10,11,"angry",{m:1}),DOT([[13,15],[14,16],[15,16]],"K",{m:1}),DOT([[14,17],[17,17]],"W")]);
+def("flexo2",P_FLX,[
+  PG([[20,4],[27,2],[26,5],[29,6],[21,7]],"d"),
+  E(11.6,28,3.4,2.6,"a",{m:1}),RC(10,23,12,3.6,"f"),E(16,21.6,5.4,3.6,"a"),
+  E(16,14.6,10,6,"a"),E(5.8,12,4.2,3.6,"a",{m:1}),E(3.6,17,2.4,3.4,"a",{m:1,a:10}),E(3.2,21.4,2.7,2.6,"d",{m:1}),
+  DOT([[11,15],[12,16],[13,16],[14,16],[15,15]],"b",{m:1}),DOT([[15,18],[16,18],[15,20],[16,20]],"b"),DOT([[14,19],[17,19],[14,21],[17,21]],"b"),
+  RC(9.6,22,12.8,2.6,"e",{f:1}),RC(14.4,21.6,3.2,3.4,"#c9962a",{f:1}),
+  E(16,6.6,4.6,4,"a"),RC(11.4,3.6,9.2,1.8,"d",{f:1}),
+  EYE(13,6,"small",{m:1}),DOT([[15,9],[16,9]],"K")]);
+
+// Gulpo line (chubby big-eater)
+const P_GUL={a:"#c48c5c",b:"#93633e",c:"#fff0d6",d:"#ff9aa8",e:"#e9524a",k:"#ffb0a8",i:"#3a2214"};
+def("gulpo0",P_GUL,[
+  E(9,12.6,2.2,2.2,"a",{m:1}),DOT([[8,12],[9,12]],"d",{m:1}),
+  E(11.6,28.4,2.8,1.6,"b",{m:1}),E(16,21.6,8.6,7.2,"a"),E(16,24,5.4,4.4,"c",{n:1}),
+  E(9.6,20.6,2.8,2.4,"c",{m:1,n:1}),DOT([[8,20],[9,20]],"k",{m:1}),
+  E(16,25,2.2,2,"e"),DOT([[16,22],[16,23]],"#5a8a2a"),DOT([[15,24]],"#ff9d8f"),
+  E(12.6,24.6,1.6,1.4,"a",{m:1}),
+  EYE(10,16,"happy",{m:1}),DOT([[15,20],[16,20]],"K"),DOT([[15,15],[16,15],[15,14],[16,14]],"b")]);
+def("gulpo1",P_GUL,[
+  E(8.4,9.6,2.6,2.6,"a",{m:1}),DOT([[7,9],[8,9],[8,10]],"d",{m:1}),
+  E(10.6,28.2,3.6,2.2,"b",{m:1}),E(16,20.6,10,8.4,"a"),E(16,23.6,6.8,5.4,"c",{n:1}),
+  E(8.6,18.6,3.2,2.6,"c",{m:1,n:1}),DOT([[7,18],[8,18]],"k",{m:1}),
+  RC(13,20,6,7,"#d9b98a"),RC(13,20,6,1.6,"#8a5a3a",{f:1}),DOT([[14,23],[15,23],[16,23],[17,23]],"#a07a4e"),
+  E(11.6,23.6,2,1.8,"a",{m:1}),
+  EYE(10,14,"big",{m:1}),DOT([[15,19],[16,19]],"K"),DOT([[15,12],[16,12],[15,13],[16,13],[15,11],[16,11]],"b")]);
+def("gulpo2",P_GUL,[
+  E(7.6,8,3,3,"a",{m:1}),DOT([[6,7],[7,7],[7,8],[6,8]],"d",{m:1}),
+  E(9.4,28.2,4.6,2.6,"b",{m:1}),E(16,19.6,12.4,9.6,"a"),E(16,23,8.4,6.4,"c",{n:1}),
+  E(6.6,17.6,3.4,2.8,"c",{m:1,n:1}),DOT([[5,17],[6,17],[7,17]],"k",{m:1}),
+  E(4.6,24,2.6,3,"a",{m:1}),DOT([[3,26],[4,27]],"W",{m:1}),
+  DOT([[15,10],[16,10],[15,11],[16,11],[15,9],[16,9],[14,9],[17,9]],"b"),
+  EYE(10,14,"sleep",{m:1}),DOT([[14,18],[15,19],[16,19]],"K",{m:1}),DOT([[23,10],[24,9],[25,10],[26,8],[27,7],[26,7]],"#7fb2ff")]);
+
+// Chests and items
+const P_CH={bronze:{a:"#b8743c",b:"#7a4a24",c:"#e0a066",d:"#d99a55",e:"#ffe08a"},silver:{a:"#9fb3c8",b:"#5e738a",c:"#dbe6f2",d:"#c4d2e2",e:"#ffffff"},gold:{a:"#f2b632",b:"#a86e12",c:"#ffe48a",d:"#ffd04a",e:"#fffbe0"}};
+for(const [k,p] of Object.entries(P_CH)){
+  def("chest-"+k,{...p,w:"#6b4122",l:"#2e2433"},[
+    E(16,9.6,12,5.6,"a"),RC(4,10,24,6,"a"),RC(4,15,24,12,"w"),RC(4,15,24,1.6,"b",{f:1}),
+    RC(3.4,9.6,2.6,17.4,"d"),RC(26,9.6,2.6,17.4,"d"),RC(14.2,5,3.6,22,"d"),RC(13,13,6,6,"c"),RC(15,15,2,2.6,"l",{f:1}),
+    DOT([[8,8],[9,7],[10,7],[11,6],[12,6]],"e"),DOT([[7,19],[7,22],[22,19],[22,22],[10,24]],"b")]);
+}
+def("boost",{a:"#9fe6ff",b:"#5a7fa8",c:"#ffd84a",d:"#ff8a3d",e:"#ffffff",g:"#8a5a3a"},[
+  RC(13,3,6,3.6,"g"),RC(12,6,8,2,"b"),RC(13.4,8,5.2,4,"a"),E(16,20,9,8.4,"a"),E(16,22,7.4,6,"c",{n:1}),E(16,24,5.4,3.6,"d",{n:1}),
+  DOT([[10,15],[10,16],[11,14],[14,18],[12,21]],"e"),DOT([[16,19],[18,21],[15,24]],"#fff2a0")]);
+def("freeze",{a:"#a9e7ff",b:"#4b9fd6",c:"#e6f9ff",d:"#ffffff"},[
+  PG([[16,2],[28,9],[28,23],[16,30],[4,23],[4,9]],"a"),PG([[16,2],[28,9],[16,16],[4,9]],"c",{n:1}),
+  DOT([[16,10],[16,11],[16,12],[16,13],[16,14],[13,12],[19,12],[14,11],[18,11],[14,13],[18,13]],"d"),
+  DOT([[9,20],[10,21],[11,22],[22,20],[21,21],[20,22],[16,22],[16,23],[16,24],[16,25]],"b")]);
+def("snack",{a:"#e9524a",b:"#b33a33",c:"#ffd1c4",d:"#5a8a2a",e:"#7fbf44"},[
+  E(16,19,10,9,"a"),E(12,13,3,2,"c",{n:1,f:1}),RC(15,5,2,6,"#6b4122"),E(20.6,7,4,2,"e",{a:-25}),DOT([[18,7],[19,7],[20,6]],"d")]);
+def("gems",{a:"#4fd8ff",b:"#2a8ad6",c:"#c9f4ff",d:"#ffffff"},[
+  PG([[9,6],[23,6],[29,13],[16,29],[3,13]],"a"),PG([[9,6],[23,6],[25,13],[7,13]],"c",{n:1}),PG([[7,13],[25,13],[16,29]],"b",{n:1}),DOT([[11,8],[12,8],[10,9]],"d")]);
+
+/* ---------- Pixel pets ---------- */
+const PETS={
+ embit:{el:"Fire",r:0,price:250,names:["Embit","Embrute","Infernox"]},
+ driplet:{el:"Water",r:0,price:250,names:["Driplet","Tidalin","Maelstrom"]},
+ sprigg:{el:"Grass",r:0,price:250,names:["Sprigg","Bramblet","Thornox"]},
+ pebblo:{el:"Rock",r:1,price:500,names:["Pebblo","Bouldoze","Mountitan"]},
+ zapkit:{el:"Electric",r:1,price:500,names:["Zapkit","Voltail","Thundrake"]},
+ flexo:{el:"Fighting",r:1,price:600,names:["Flexo","Brawlo","Titanox"]},
+ lumo:{el:"Mystic",r:2,price:1000,names:["Lumo","Lumora","Astralume"]},
+ gulpo:{el:"Normal",r:2,price:1000,names:["Gulpo","Gulpaw","Gorgemaw"]},
+ umbrit:{el:"Shadow",r:3,price:2000,names:["Umbrit","Noctern","Eclipsar"]}
+};
+const sprite=(id,st,size)=>spriteImg(id+st,size,PETS[id]?PETS[id].names[st]:"");
 function petLevel(xp){let L=1,need=100;while(xp>=need){xp-=need;L++;need=100*L}return {L,into:xp,need}}
 const petStage=L=>L>=20?2:L>=8?1:0;
 const petName=id=>PETS[id].names[petStage(petLevel(state.pets[id]?.xp||0).L)];
@@ -2215,7 +2720,7 @@ function cloudInit(){
       if(ev==="PASSWORD_RECOVERY")openNewPassword();
       const u=session&&session.user;
       if(u&&(!me||me.id!==u.id)){me=u;afterSignIn()}
-      else if(!u&&ev!=="TOKEN_REFRESHED"){me=null;myProfile=null;cloud.status="signedout";social.loaded=false;refresh()}
+      else if(!u&&ev!=="TOKEN_REFRESHED"){stopLive();me=null;myProfile=null;cloud.status="signedout";social.loaded=false;refresh()}
     },0);
   });
 }
@@ -2234,6 +2739,8 @@ async function afterSignIn(){
   state.name=myProfile.username;
   if(LINK.type==="signup")setTimeout(()=>toast("✓","Email confirmed","You're signed in.",""),300);
   await syncOnSignIn();
+  startLive();loadSocial();
+  await pushRefresh();if(push.sub){try{await savePushSub()}catch(e){}}pushSchedule();if(view==="profile")renderProfile();
 }
 async function createProfile(username){
   const u=cleanName(username);if(!USERRE.test(u))return {ok:false,msg:"Use 3–20 letters, numbers or underscores."};
@@ -2458,20 +2965,23 @@ document.addEventListener("click",async e=>{
   const a=e.target.closest("[data-auth]");if(a){openAuth(a.dataset.auth);return}
   if(e.target.closest("#acct-sync")){await pushNow();toast(cloud.status==="synced"?"✓":"!",cloud.status==="synced"?"Saved to your account":"Couldn't save",cloud.status==="synced"?"":cloud.err,"");return}
   if(e.target.closest("#acct-out")){confirmBox("Sign out of your account? Your progress stays on this phone too.","Sign out",async()=>{
-    if(meta().dirty)await pushNow();await sb.auth.signOut();closeModal();toast("✓","Signed out","","")});}
+    if(meta().dirty)await pushNow();if(push.sub)await sb.from("push_subs").delete().eq("endpoint",push.sub.endpoint).then(()=>{},()=>{});await sb.auth.signOut();closeModal();toast("✓","Signed out","","")});}
 });
 
 /* ---------- Friends tab ---------- */
 const social={loaded:false,loading:false,at:0,friendships:[],profiles:{},stats:{},feed:[],groups:[],members:{},search:null};
 let friendTab="feed";
 async function loadSocial(force){
-  if(!sb||!me||!myProfile||social.loading)return;
+  if(!sb||!me||!myProfile)return;
+  if(social.loading){if(force)social.again=true;return social.wait}
   if(!force&&social.loaded&&Date.now()-social.at<30000)return;
-  social.loading=true;
+  social.loading=true;let done;social.wait=new Promise(r=>done=r);
   try{
-    const [fr,gm,fd]=await Promise.all([sb.from("friendships").select("*"),sb.from("group_members").select("group_id,user_id"),
-      sb.from("activity").select("*").gte("created_at",new Date(Date.now()-7*864e5).toISOString()).order("created_at",{ascending:false}).limit(80)]);
+    const [fr,gm,fd,ms]=await Promise.all([sb.from("friendships").select("*"),sb.from("group_members").select("group_id,user_id"),
+      sb.from("activity").select("*").gte("created_at",new Date(Date.now()-7*864e5).toISOString()).order("created_at",{ascending:false}).limit(80),
+      sb.from("messages").select("*").order("id",{ascending:false}).limit(300)]);
     for(const r of [fr,gm,fd])if(r.error)throw r.error;
+    if(!ms.error){takeMsgs(ms.data);chat.ready=true}
     social.friendships=fr.data;social.feed=fd.data;
     const myG=[...new Set(gm.data.filter(x=>x.user_id===me.id).map(x=>x.group_id))];
     social.members={};gm.data.forEach(x=>{if(myG.includes(x.group_id))(social.members[x.group_id]=social.members[x.group_id]||[]).push(x.user_id)});
@@ -2484,10 +2994,11 @@ async function loadSocial(force){
     social.groups=gr.data.sort((a,b)=>a.name.localeCompare(b.name));
     social.loaded=true;social.at=Date.now();social.err="";
   }catch(e){social.err=sbErr(e)}
-  social.loading=false;if(view==="friends")renderFriends();
-  {const tb=$("#tb-friends"),n=social.loaded?incoming().length:0;tb.hidden=!n;tb.textContent=n}
+  social.loading=false;done();if(social.again){social.again=false;return loadSocial(true)}
+  if(view==="friends"&&!chat.open)renderFriends();updateBadges();
+  if(pendingRoute&&social.loaded){const k=pendingRoute;pendingRoute=null;openChat(k)}
 }
-setInterval(()=>{if(view==="friends"&&!document.hidden&&me)loadSocial()},60000);
+setInterval(()=>{if(!document.hidden&&me&&myProfile)loadSocial()},60000);
 const relOf=id=>social.friendships.find(f=>f.requester===id||f.addressee===id);
 const friendIds=()=>social.friendships.filter(f=>f.status==="accepted").map(f=>f.requester===me.id?f.addressee:f.requester);
 const incoming=()=>social.friendships.filter(f=>f.status==="pending"&&f.addressee===me.id);
@@ -2516,10 +3027,10 @@ function renderFriends(){
   loadSocial();
   const inc=incoming().length;
   let h=`<div class="fhead"><span>${avHTML(myProfile,34)}</span><span class="fh-t"><b>@${esc(myProfile.username)}</b><span class="muted">Share your username so friends can add you</span></span><button class="btn sm ghost" id="fr-refresh" aria-label="Refresh">${social.loading?"…":"↻"}</button></div>
-    <div class="subtabs" role="tablist">${[["feed","Feed"],["friends","Friends"],["groups","Groups"]].map(([k,n])=>`<button role="tab" data-ft="${k}" id="ft-${k}" aria-selected="${friendTab===k}">${n}${k==="friends"&&inc?` <span class="nbadge">${inc}</span>`:""}</button>`).join("")}</div>`;
+    <div class="subtabs" role="tablist">${[["feed","Feed"],["chats","Chats"],["friends","Friends"],["groups","Groups"]].map(([k,n])=>`<button role="tab" data-ft="${k}" id="ft-${k}" aria-selected="${friendTab===k}">${n}${k==="friends"&&inc?` <span class="nbadge">${inc}</span>`:""}${k==="chats"?` <span class="nbadge"${unreadCount()?"":" hidden"}>${unreadCount()}</span>`:""}</button>`).join("")}</div>`;
   if(social.err)h+=`<p class="formerr">${esc(social.err)}</p>`;
   if(!social.loaded){h+=`<div class="empty"><b>Loading…</b></div>`;el.innerHTML=h;return}
-  h+=friendTab==="feed"?feedHTML():friendTab==="friends"?friendsHTML():groupsHTML();
+  h+=friendTab==="feed"?feedHTML():friendTab==="chats"?chatsHTML():friendTab==="friends"?friendsHTML():groupsHTML();
   el.innerHTML=h;
 }
 function feedHTML(){
@@ -2531,6 +3042,7 @@ function feedHTML(){
     else if(a.kind==="rank"){body=`${nm} reached <b style="color:var(${tierVar(d.step)})">${stepName(d.step)}</b> on ${esc(d.x)}`;side=emblem(d.step,26)}
     else if(a.kind==="level"){body=`${nm} reached <b>level ${d.level}</b> · ${esc(d.title||"")}`}
     else if(a.kind==="medal"){body=`${nm} unlocked the <b>${esc(d.name)}</b> medal`}
+    else if(a.kind==="chest"){body=`${nm} found <b style="color:var(${RAR[d.r||0].v})">${esc(d.name)}</b> in a ${esc(d.chest||"chest")}`}
     else if(a.kind==="pet"&&PETS[d.id]){body=`${nm}${a.user_id===me.id?"r":"'s"} ${esc(PETS[d.id].names[d.from])} evolved into <b>${esc(PETS[d.id].names[d.to])}</b>`;side=`<span class="bob">${sprite(d.id,d.to,34)}</span>`}
     else body=`${nm} was active`;
     return `<button class="fitem" data-user="${a.user_id}">${avHTML(p,38)}<span class="ftxt"><span>${body}</span>${a.kind==="rank"||a.kind==="pet"?"":side}<span class="ftime">${ago(a.created_at)}</span></span>${a.kind==="rank"||a.kind==="pet"?side:""}</button>`}).join("")}</div>`;
@@ -2570,6 +3082,7 @@ function groupsHTML(){
 }
 $("#v-friends").addEventListener("click",async e=>{
   const t=e.target.closest("[data-ft]");if(t){friendTab=t.dataset.ft;renderFriends();return}
+  const ck=e.target.closest("[data-chat]");if(ck){openChat(ck.dataset.chat);return}
   if(e.target.closest("#fr-refresh")){loadSocial(true);renderFriends();return}
   if(e.target.closest("#fr-pick")){openPickUsername();return}
   if(e.target.closest("#fs-clear")){social.search=null;renderFriends();return}
@@ -2609,12 +3122,13 @@ function openPerson(id){
       ${st.lifts&&st.lifts.length?`<h3>Top lifts</h3><div class="hist">${st.lifts.map(l=>`<div class="hrow" style="grid-template-columns:minmax(0,1fr) auto"><span class="s"><b>${esc(l.n)}</b><br><span class="muted">${l.k==="reps"?`${l.best} reps best`:`Est. max ${kg(l.best)} kg`}</span></span><span class="rank" style="--tier:var(${tierVar(l.step)})">${stepName(l.step)}</span></div>`).join("")}</div>`:""}
       ${st.pet&&PETS[st.pet.id]?`<div class="petcard panel" style="box-shadow:none;background:var(--surface-2)"><div class="pet-l"><span class="eyebrow">Pet</span><b>${esc(PETS[st.pet.id].names[st.pet.st])} · Lv ${st.pet.lv}</b></div><span class="bob">${sprite(st.pet.id,st.pet.st,64)}</span></div>`:""}`
       :`<p class="muted">Add @${esc(p.username)} as a friend to see their workouts and ranks.</p>`}
-    ${isMe?"":`<div class="btnrow">${!r?`<button class="btn" data-addf2="${id}">Add friend</button>`:r.status==="accepted"?`<button class="btn ghost" id="pp-remove">Remove friend</button>`:r.requester===me.id?`<span class="muted">Friend request sent</span>`:`<button class="btn" data-accept2="${r.id}">Accept friend request</button>`}</div>`}`);
+    ${isMe?"":`<div class="btnrow">${!r?`<button class="btn" data-addf2="${id}">Add friend</button>`:r.status==="accepted"?`<button class="btn" id="pp-msg">Message</button><button class="btn ghost" id="pp-remove">Remove friend</button>`:r.requester===me.id?`<span class="muted">Friend request sent</span>`:`<button class="btn" data-accept2="${r.id}">Accept friend request</button>`}</div>`}`);
   m.querySelector("#mh-back").onclick=closeModal;
   m.querySelector("[data-addf2]")?.addEventListener("click",async()=>{const {error}=await sb.from("friendships").insert({requester:me.id,addressee:id});
     if(error)toast("!","Couldn't send the request",sbErr(error),"");else toast("✓","Request sent","","");closeModal();await loadSocial(true)});
   m.querySelector("[data-accept2]")?.addEventListener("click",async()=>{const {error}=await sb.from("friendships").update({status:"accepted"}).eq("id",r.id);
     if(error)toast("!","Couldn't accept",sbErr(error),"");else toast("✓","Friend added","","");closeModal();await loadSocial(true)});
+  m.querySelector("#pp-msg")?.addEventListener("click",()=>openChat("dm:"+id));
   m.querySelector("#pp-remove")?.addEventListener("click",()=>confirmBox(`Remove @${p.username} as a friend? You'll stop seeing each other's progress.`,"Remove friend",async()=>{
     const {error}=await sb.from("friendships").delete().eq("id",r.id);closeModal();if(error)toast("!","Couldn't remove",sbErr(error),"");else toast("✓","Friend removed","","");await loadSocial(true)}));
 }
@@ -2638,6 +3152,7 @@ function openGroup(gid){
   const w=groupWeek(gid),gl=levelOf(w.xp),key=gid+w.ws,claimed=state.gclaims&&state.gclaims[key];
   const rows=[...w.rows].sort((a,b)=>b.wk.xp-a.wk.xp||b.wk.workouts-a.wk.workouts);
   const m=openModal(`${mhead("Group")}<div class="gdh"><span class="gc-badge big">${esc(g.name.charAt(0).toUpperCase())}<i>${gl.level}</i></span><div><h2>${esc(g.name)}</h2><span class="muted">${w.ids.length} member${w.ids.length===1?"":"s"} · Group level ${gl.level}</span></div></div>
+    <button class="btn" id="g-chat">Open group chat${isUnread("g:"+gid)?' <span class="nbadge">new</span>':""}</button>
     <div class="codebox"><span><span class="eyebrow">Invite code</span><b class="gcode">${esc(g.code)}</b></span><button class="btn sm ghost" id="g-copy">Copy</button></div>
     <div class="panel" style="box-shadow:none;background:var(--surface-2)"><span class="eyebrow">This week's goal</span><b style="font-size:1.2rem">${w.done} / ${w.goal} workouts</b><span class="bar"><i style="width:${Math.min(100,w.done/w.goal*100).toFixed(0)}%"></i></span>
       <span class="muted" style="font-size:.85rem">${w.sets} sets · ${(w.volume/1000).toFixed(1)} tonnes together · 4 workouts per member</span>
@@ -2646,6 +3161,7 @@ function openGroup(gid){
     <h3>This week's leaderboard</h3><div class="lb">${rows.map((r,i)=>{const p=social.profiles[r.id];return p?`<button class="lbrow" data-user2="${r.id}"><b class="lbn">${i+1}</b>${avHTML(p,34)}<span class="prow-t"><b>${r.id===me.id?"You":"@"+esc(p.username)}</b><span class="muted">${r.wk.workouts} workouts · ${r.wk.sets} sets</span></span><b class="num">${fmtNum(r.wk.xp)} XP</b></button>`:""}).join("")}</div>
     <button class="link" id="g-leave" style="align-self:center">Leave group</button>`);
   m.querySelector("#mh-back").onclick=closeModal;
+  m.querySelector("#g-chat").onclick=()=>openChat("g:"+gid);
   m.querySelector("#g-copy").onclick=async()=>{try{await navigator.clipboard.writeText(g.code);toast("✓","Code copied",g.code,"")}catch(e){toast("!","Copy didn't work",`The code is ${g.code}.`,"")}};
   m.querySelector("#g-claim")?.addEventListener("click",()=>{state.gclaims=state.gclaims||{};state.gclaims[key]=1;state.gemsEarned=(state.gemsEarned||0)+50;save();refresh();openGroup(gid);toast("◆","Group goal reward",g.name,"+50","gems")});
   m.querySelectorAll("[data-user2]").forEach(b=>b.onclick=()=>openPerson(b.dataset.user2));
@@ -2655,6 +3171,220 @@ function openGroup(gid){
 }
 
 
+/* ---------- Chat with friends and groups ---------- */
+// Conversations are "dm:<friend id>" or "g:<group id>". Read position is the last message id seen, kept on this phone.
+const chat={open:null,msgs:{},last:{},maxId:0,ready:false,chan:null,seen:new Set(),tick:0};
+const readMap=()=>lsGet("vtppl-read")||{};
+const convOf=m=>m.group_id?"g:"+m.group_id:"dm:"+(m.sender===me.id?m.to_user:m.sender);
+const convOK=k=>k.startsWith("dm:")?friendIds().includes(k.slice(3)):social.groups.some(g=>"g:"+g.id===k);
+const pushTag=k=>k.startsWith("dm:")?"dm-"+k.slice(3):"grp-"+k.slice(2);
+const isUnread=(k,r=readMap())=>{const m=chat.last[k];return !!m&&m.sender!==me.id&&m.id>(r[k]||0)};
+const unreadCount=()=>{if(!me||!chat.ready)return 0;const r=readMap();return Object.keys(chat.last).filter(k=>convOK(k)&&isUnread(k,r)).length};
+function markRead(k){const m=chat.last[k];if(!m)return;const r=readMap();if((r[k]||0)<m.id){r[k]=m.id;lsSet("vtppl-read",r)}
+  if(sb&&me)sb.from("push_queue").delete().eq("user_id",me.id).eq("tag",pushTag(k)).then(()=>{},()=>{});updateBadges()}
+function takeMsgs(rows){
+  for(const m of rows){if(chat.seen.has(m.id))continue;chat.seen.add(m.id);const k=convOf(m);
+    if(!chat.last[k]||chat.last[k].id<m.id)chat.last[k]=m;if(m.id>chat.maxId)chat.maxId=m.id}
+}
+function onMsg(m){
+  if(!m||!me||chat.seen.has(m.id))return;
+  takeMsgs([m]);const k=convOf(m),list=chat.msgs[k];
+  if(list){const t=list.findIndex(x=>x.temp&&x.sender===m.sender&&x.body===m.body);if(t>=0)list.splice(t,1);if(!list.some(x=>x.id===m.id))list.push(m)}
+  if(chat.open===k&&!document.hidden){markRead(k);renderChatMsgs(true)}
+  else if(m.sender!==me.id){
+    // A message from a new friend or group we don't know about yet: refresh the friends list first.
+    if(convOK(k))msgToast(m);else loadSocial(true).then(()=>{if(convOK(k))msgToast(m)});
+  }
+  updateBadges();if(view==="friends"&&friendTab==="chats"&&!chat.open)renderFriends();
+}
+function msgToast(m){const p=social.profiles[m.sender],g=m.group_id&&social.groups.find(x=>x.id===m.group_id);
+  toast("✉",g?g.name:"@"+(p?.username||"friend"),(g?"@"+(p?.username||"")+": ":"")+m.body.slice(0,80),"");updateBadges()}
+function startLive(){
+  if(!sb||!me||chat.chan)return;
+  try{chat.chan=sb.channel("msgs-"+me.id).on("postgres_changes",{event:"INSERT",schema:"public",table:"messages"},p=>onMsg(p.new)).subscribe()}catch(e){}
+}
+function stopLive(){try{if(chat.chan)sb.removeChannel(chat.chan)}catch(e){}chat.chan=null;Object.assign(chat,{open:null,msgs:{},last:{},maxId:0,ready:false,seen:new Set()});closeChatView()}
+// Live updates arrive instantly when available; this check every few seconds is the backup.
+async function pollMsgs(){
+  if(!sb||!me||!chat.ready||document.hidden)return;
+  chat.tick++;if(!chat.open&&chat.tick%5)return;
+  const {data,error}=await sb.from("messages").select("*").gt("id",chat.maxId).order("id").limit(100);
+  if(!error&&data)data.forEach(onMsg);
+}
+setInterval(pollMsgs,4000);
+function updateBadges(){
+  const tb=$("#tb-friends");if(!tb)return;const n=me&&social.loaded?incoming().length+unreadCount():0;tb.hidden=!n;tb.textContent=n;
+  const cb=document.querySelector("#ft-chats .nbadge"),u=unreadCount();if(cb){cb.hidden=!u;cb.textContent=u}
+}
+function chatsHTML(){
+  const r=readMap(),rows=friendIds().map(id=>({k:"dm:"+id,p:social.profiles[id]})).filter(x=>x.p).map(x=>({...x,name:"@"+x.p.username,av:avHTML(x.p,46)}))
+    .concat(social.groups.map(g=>({k:"g:"+g.id,name:g.name,av:`<span class="gc-badge">${esc(g.name.charAt(0).toUpperCase())}</span>`,group:1})));
+  if(!rows.length)return `<div class="empty"><b>No chats yet</b><span>Add a friend or join a group, then message them here.</span><button class="btn sm" data-ft="friends" style="align-self:center">Find friends</button></div>`;
+  rows.forEach(x=>x.m=chat.last[x.k]);
+  rows.sort((a,b)=>(b.m?.id||0)-(a.m?.id||0)||a.name.localeCompare(b.name));
+  return `<div class="panel chats">${rows.map(x=>{const m=x.m,un=isUnread(x.k,r),who=m?(m.sender===me.id?"You: ":x.group?"@"+(social.profiles[m.sender]?.username||"someone")+": ":""):"";
+    return `<button class="crow${un?" un":""}" data-chat="${x.k}">${x.av}<span class="crow-t"><b>${esc(x.name)}</b><span class="muted">${m?esc(who+m.body):x.group?"Group chat":"Say hello"}</span></span><span class="crow-r">${m?`<small class="muted">${ago(m.created_at)}</small>`:""}${un?'<i class="udot" aria-label="Unread"></i>':""}</span></button>`}).join("")}</div>`;
+}
+function chatHead(k){
+  if(k.startsWith("dm:")){const p=social.profiles[k.slice(3)];return `${avHTML(p,36)}<span class="prow-t"><b>@${esc(p?.username||"")}</b><span class="muted">${statusLine(social.stats[k.slice(3)])}</span></span>`}
+  const g=social.groups.find(x=>"g:"+x.id===k),n=(social.members[g?.id]||[]).length;
+  return `<span class="gc-badge">${esc((g?.name||"?").charAt(0).toUpperCase())}</span><span class="prow-t"><b>${esc(g?.name||"Group")}</b><span class="muted">${n} member${n===1?"":"s"}</span></span>`;
+}
+async function openChat(k){
+  if(!me||!convOK(k)){toast("!","Chat not available",k.startsWith("dm:")?"You can only message friends.":"You're not in that group.","");return}
+  closeModal();chat.open=k;const el=$("#chat");el.hidden=false;document.body.classList.add("chatting");
+  $("#chat-who").innerHTML=chatHead(k);$("#chat-list").innerHTML=chat.msgs[k]?"":`<div class="empty"><b>Loading…</b></div>`;fitChat();
+  if(chat.msgs[k])renderChatMsgs(true);
+  const id=k.slice(k.indexOf(":")+1);
+  let q=sb.from("messages").select("*");q=k.startsWith("dm:")?q.in("sender",[me.id,id]).in("to_user",[me.id,id]):q.eq("group_id",id);
+  const {data,error}=await q.order("id",{ascending:false}).limit(100);
+  if(chat.open!==k)return;
+  if(error){$("#chat-list").innerHTML=`<p class="formerr">${esc(sbErr(error))}</p>`;return}
+  const temps=(chat.msgs[k]||[]).filter(x=>x.temp);chat.msgs[k]=data.reverse().concat(temps);takeMsgs(data);markRead(k);renderChatMsgs(true);
+}
+function closeChatView(){const el=$("#chat");if(!el)return;el.hidden=true;document.body.classList.remove("chatting");chat.open=null;const t=$("#chat-txt");if(t)t.blur()}
+const dayLabel=d=>{const t=today();return d===t?"Today":d===addDays(t,-1)?"Yesterday":fmtD(d)};
+function renderChatMsgs(toBottom){
+  const k=chat.open,box=$("#chat-list");if(!k||!box)return;const list=chat.msgs[k]||[],grp=k.startsWith("g:");
+  const near=box.scrollHeight-box.scrollTop-box.clientHeight<120;
+  if(!list.length){box.innerHTML=`<div class="empty"><b>No messages yet</b><span>${grp?"Say hi to the group.":"Say hi. Only you two can see this chat."}</span></div>`;return}
+  let h="",lastDay="",prev=null;
+  list.forEach((m,i)=>{const mine=m.sender===me.id,loc=new Date(m.created_at),dl=dayLabel(iso(loc));
+    if(dl!==lastDay){h+=`<div class="cday">${dl}</div>`;lastDay=dl;prev=null}
+    const next=list[i+1],first=!prev||prev.sender!==m.sender,lastRun=!next||next.sender!==m.sender||dayLabel(iso(new Date(next.created_at)))!==dl;
+    const p=social.profiles[m.sender];
+    h+=`<div class="cmsg${mine?" me":""}${first?" first":""}">${grp&&!mine?`<span class="cav">${lastRun?avHTML(p,26):""}</span>`:""}<div class="cbw">${grp&&!mine&&first?`<small class="cname">@${esc(p?.username||"someone")}</small>`:""}
+      <button class="bub${m.temp?" pend":""}${m.failed?" fail":""}" data-mid="${m.id}">${esc(m.body)}</button>
+      ${lastRun?`<small class="ctime">${m.failed?"Not sent · tap to retry":m.temp?"Sending…":loc.toTimeString().slice(0,5)}</small>`:""}</div></div>`;prev=m});
+  box.innerHTML=h;if(toBottom||near)box.scrollTop=box.scrollHeight;
+}
+async function sendChat(body,retry){
+  const k=chat.open;if(!k||!sb)return;body=(body||"").trim();if(!body)return;
+  if(body.length>500){toast("!","Message too long","Keep it under 500 characters.","");return}
+  const id=k.slice(k.indexOf(":")+1),row=k.startsWith("dm:")?{to_user:id,body}:{group_id:id,body};
+  const temp=retry||{id:"t"+Date.now()+Math.random().toString(36).slice(2,5),sender:me.id,...row,created_at:new Date().toISOString(),temp:1};
+  temp.failed=0;if(!retry)(chat.msgs[k]=chat.msgs[k]||[]).push(temp);renderChatMsgs(true);
+  const {data,error}=await sb.from("messages").insert(row).select().single();
+  if(error){temp.failed=1;renderChatMsgs();toast("!","Message not sent",sbErr(error),"");return}
+  const list=chat.msgs[k]||[],i=list.indexOf(temp);if(i>=0)list.splice(i,1);onMsg(data);renderChatMsgs(true);
+}
+function fitChat(){const el=$("#chat"),vv=window.visualViewport;if(!el||el.hidden||!vv)return;el.style.height=vv.height+"px";el.style.top=vv.offsetTop+"px"}
+if(window.visualViewport){visualViewport.addEventListener("resize",fitChat);visualViewport.addEventListener("scroll",fitChat)}
+(()=>{const el=document.createElement("div");el.className="chat";el.id="chat";el.hidden=true;el.setAttribute("role","dialog");el.setAttribute("aria-label","Chat");
+  el.innerHTML=`<div class="chat-h"><button class="mh-b" id="chat-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Back</button><button class="chat-who" id="chat-who"></button></div>
+    <div class="chat-list" id="chat-list"></div>
+    <form class="chat-in" id="chat-form"><textarea id="chat-txt" rows="1" maxlength="500" placeholder="Message" aria-label="Message"></textarea><button class="btn sm" type="submit" id="chat-send">Send</button></form>`;
+  document.body.appendChild(el);
+  const tx=el.querySelector("#chat-txt"),grow=()=>{tx.style.height="auto";tx.style.height=Math.min(120,tx.scrollHeight)+"px"};
+  tx.addEventListener("input",grow);
+  tx.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing&&matchMedia("(hover:hover)").matches){e.preventDefault();el.querySelector("#chat-form").requestSubmit()}});
+  el.querySelector("#chat-form").addEventListener("submit",e=>{e.preventDefault();const v=tx.value;tx.value="";grow();sendChat(v);tx.focus()});
+  el.querySelector("#chat-back").addEventListener("click",()=>{closeChatView();if(view==="friends")renderFriends()});
+  el.querySelector("#chat-who").addEventListener("click",()=>{const k=chat.open;if(!k)return;if(k.startsWith("dm:"))openPerson(k.slice(3));else openGroup(k.slice(2))});
+  el.querySelector("#chat-list").addEventListener("click",e=>{const b=e.target.closest("[data-mid]");if(!b)return;const k=chat.open,m=(chat.msgs[k]||[]).find(x=>String(x.id)===b.dataset.mid);if(!m||m.sender!==me.id)return;
+    if(m.failed){sendChat(m.body,m);return}if(m.temp)return;
+    confirmBox("Unsend this message? It's removed for everyone in the chat.","Unsend",async()=>{const {error}=await sb.from("messages").delete().eq("id",m.id);closeModal();
+      if(error){toast("!","Couldn't unsend",sbErr(error),"");return}chat.msgs[k]=chat.msgs[k].filter(x=>x!==m);
+      if(chat.last[k]===m){const l=chat.msgs[k];if(l.length)chat.last[k]=l[l.length-1];else delete chat.last[k]}renderChatMsgs()})});
+})();
+// Opening the app from a notification: "#chat=dm:<id>", "#friends" or "#train".
+let pendingRoute=null;
+function routeTo(url){
+  if(!url)return;try{if(location.hash&&/^#(chat=|friends|train)/.test(location.hash))history.replaceState(null,"",location.pathname+location.search)}catch(e){}
+  if(url.startsWith("#chat=")){const k=decodeURIComponent(url.slice(6));friendTab="chats";go("friends");if(me&&social.loaded)openChat(k);else pendingRoute=k;return}
+  if(url==="#friends"){friendTab="friends";go("friends");return}
+  if(url==="#train")go("train");
+}
+if("serviceWorker" in navigator)navigator.serviceWorker.addEventListener("message",e=>{if(e.data&&e.data.type==="open")routeTo(e.data.url)});
+
+/* ---------- Notifications ---------- */
+const VAPID_PUBLIC="BGtBJgj1zLZXGCWnsNOHbq3C-Pr_zD62IJGM_TWzPf2eUa6OIbQ61qp305VFKbXXvTXUCb-LtcsvgqbXZuELwMk";
+const NDEF={remind:true,remindAt:"18:00",rest:true,streak:true,streakAt:"20:00",social:true};
+const nset=()=>({...NDEF,...(state.notif||{})});
+const IOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const pushOK=()=>CLOUD_HOST&&"serviceWorker" in navigator&&"PushManager" in window&&"Notification" in window;
+const push={sub:null,status:"checking",busy:false,timer:null};
+const b64uBytes=s=>{const b=atob(s.replace(/-/g,"+").replace(/_/g,"/")+"===".slice((s.length+3)%4)),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a};
+async function pushRefresh(){
+  if(!pushOK()){push.status=CLOUD_HOST?"unsupported":"preview";return}
+  if(IOS&&!STANDALONE){push.status="install";return}
+  if(Notification.permission==="denied"){push.status="denied";return}
+  try{const reg=await navigator.serviceWorker.getRegistration();push.sub=reg?await reg.pushManager.getSubscription():null}catch(e){push.sub=null}
+  push.status=push.sub&&Notification.permission==="granted"?"on":"off";
+}
+const prefsOut=()=>{const n=nset();return {remind:n.remind,rest:n.rest,streak:n.streak,social:n.social,test:true}};
+async function savePushSub(){
+  if(!push.sub||!sb||!me)return;const j=push.sub.toJSON();
+  const {error}=await sb.rpc("save_push_sub",{p_endpoint:j.endpoint,p_p256dh:j.keys.p256dh,p_auth:j.keys.auth,p_prefs:prefsOut()});if(error)throw error;
+}
+async function enablePush(){
+  if(!me){openAuth("signin");return}
+  if(push.busy)return;push.busy=true;
+  try{
+    const perm=await Notification.requestPermission();
+    if(perm!=="granted"){await pushRefresh();toast("!","Notifications not allowed",perm==="denied"?"You can allow them in your phone's Settings.":"Tap Allow when asked.","");return}
+    const reg=await navigator.serviceWorker.ready;
+    push.sub=await reg.pushManager.getSubscription()||await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64uBytes(VAPID_PUBLIC)});
+    await savePushSub();push.status="on";pushSchedule(true);toast("🔔","Notifications on","You'll get the alerts you pick below.","");
+  }catch(e){toast("!","Couldn't turn on notifications",sbErr(e),"")}
+  finally{push.busy=false;if(view==="profile")renderProfile()}
+}
+async function disablePush(){
+  try{if(push.sub){if(sb&&me)await sb.from("push_subs").delete().eq("endpoint",push.sub.endpoint);await push.sub.unsubscribe()}}catch(e){}
+  push.sub=null;push.status="off";if(view==="profile")renderProfile();toast("✓","Notifications off on this phone","","");
+}
+function pushSchedule(now){clearTimeout(push.timer);push.timer=setTimeout(pushScheduleNow,now?50:2000)}
+// Reminders for the next 7 days are queued from this phone, so they arrive even if the app stays closed.
+async function pushScheduleNow(){
+  if(!sb||!me||push.status!=="on")return;
+  const n=nset(),c=compute(),now=Date.now(),rows=[],fr=inv().freeze||0;
+  const at=(date,hm)=>{const [h,m]=String(hm||"18:00").split(":").map(Number),d=parseD(date);d.setHours(h||0,m||0,0,0);return d};
+  const trained=d=>Object.values(state.sessions).some(s=>s.date===d&&s.finished);
+  for(let i=0;i<7;i++){const d=addDays(today(),i),di=(parseD(d).getDay()+6)%7,p=P(di);
+    if(n.remind&&p.type!=="rest"&&!trained(d)){const t=at(d,n.remindAt);if(t>now)rows.push({user_id:me.id,kind:"remind",tag:"remind-"+d,title:`${p.name||LABEL[p.type]} day`,body:`Time to train. ${tpl(di).length} exercises are lined up${c.dstreak?` and your streak is on ${c.dstreak} days`:""}.`,url:"#train",send_at:t.toISOString()})}
+    if(n.streak&&c.dstreak>0&&parseD(d).getDay()!==0&&!trained(d)){const t=at(d,n.streakAt);if(t>now)rows.push({user_id:me.id,kind:"streak",tag:"streak-"+d,
+      title:i===0?`Your ${c.dstreak}-day streak is on the line`:"Don't break your streak",body:fr?`No workout logged today. A streak freeze will cover it if you skip (${fr} left).`:"No workout logged today. Train before midnight to keep it going.",url:"#train",send_at:t.toISOString()})}
+  }
+  const del=await sb.from("push_queue").delete().eq("user_id",me.id).in("kind",["remind","streak"]);
+  if(!del.error&&rows.length)await sb.from("push_queue").insert(rows);
+}
+function pushRest(sec,x){
+  if(!sb||!me||push.status!=="on"||!nset().rest)return;
+  sb.from("push_queue").upsert({user_id:me.id,kind:"rest",tag:"rest",title:"Rest's up",body:x?`Next set of ${exName(x)}.`:"Time for your next set.",url:"#train",send_at:new Date(Date.now()+sec*1000).toISOString()},{onConflict:"user_id,tag"}).then(()=>{},()=>{});
+}
+function pushRestCancel(){if(sb&&me&&push.status==="on")sb.from("push_queue").delete().eq("user_id",me.id).eq("tag","rest").then(()=>{},()=>{})}
+async function pushTest(){
+  const {error}=await sb.from("push_queue").upsert({user_id:me.id,kind:"test",tag:"test",title:"Notifications work",body:"This is what your reminders will look like.",url:"",send_at:new Date().toISOString()},{onConflict:"user_id,tag"});
+  toast(error?"!":"🔔",error?"Couldn't send a test":"Test sent",error?sbErr(error):"It should arrive within about 10 seconds. Lock your phone to see it.","");
+}
+function notifPanel(){
+  if(push.status==="preview")return "";
+  const n=nset(),st=push.status;let body="";
+  if(st==="checking")body=`<p class="muted">Checking…</p>`;
+  else if(st==="unsupported")body=`<p class="muted" style="font-size:.9rem">This browser can't show notifications. On iPhone, use the home screen app.</p>`;
+  else if(st==="install")body=`<p class="muted" style="font-size:.9rem">On iPhone, notifications only work in the home screen app. In Safari tap <b>Share → Add to Home Screen</b>, then open V-Taper from your home screen.</p>`;
+  else if(!me)body=`<p class="muted" style="font-size:.9rem">Sign in first so reminders and messages know where to find you.</p><div class="btnrow"><button class="btn sm" data-auth="signin">Sign in</button></div>`;
+  else if(st==="denied")body=`<p class="muted" style="font-size:.9rem">Notifications are blocked for V-Taper. On iPhone go to <b>Settings → Notifications → V-Taper</b> and turn on Allow Notifications, then come back.</p>`;
+  else if(st==="off")body=`<p class="muted" style="font-size:.9rem">Workout reminders, rest timer alerts, streak warnings and messages, even when the app is closed.</p><button class="btn sm" id="np-on" style="align-self:flex-start">${push.busy?"Turning on…":"Turn on notifications"}</button>`;
+  else body=`<label class="switch"><input type="checkbox" data-np="remind" ${n.remind?"checked":""}><span><b>Workout reminder</b><span class="muted">On training days you haven't trained yet</span></span><input class="tm" type="time" data-npt="remindAt" value="${esc(n.remindAt)}" aria-label="Reminder time"></label>
+    <label class="switch"><input type="checkbox" data-np="rest" ${n.rest?"checked":""}><span><b>Rest timer finished</b><span class="muted">Even if you've switched apps</span></span></label>
+    <label class="switch"><input type="checkbox" data-np="streak" ${n.streak?"checked":""}><span><b>Streak about to break</b><span class="muted">If you haven't logged a workout that day</span></span><input class="tm" type="time" data-npt="streakAt" value="${esc(n.streakAt)}" aria-label="Streak warning time"></label>
+    <label class="switch"><input type="checkbox" data-np="social" ${n.social?"checked":""}><span><b>Messages and friend requests</b><span class="muted">From friends and your groups</span></span></label>
+    <div class="btnrow"><button class="btn sm ghost" id="np-test">Send a test</button><button class="btn sm ghost" id="np-off">Turn off on this phone</button></div>`;
+  return `<div class="panel notif"><h3>Notifications${st==="on"?' <span class="pill on">On</span>':""}</h3>${body}</div>`;
+}
+document.addEventListener("click",e=>{
+  if(e.target.closest("#np-on")){enablePush();return}
+  if(e.target.closest("#np-off")){confirmBox("Turn off notifications on this phone? You can turn them back on any time.","Turn off",()=>{closeModal();disablePush()});return}
+  if(e.target.closest("#np-test")){pushTest();return}
+});
+document.addEventListener("change",async e=>{
+  const t=e.target.closest("[data-np],[data-npt]");if(!t)return;
+  state.notif={...nset(),...(t.dataset.np?{[t.dataset.np]:t.checked}:{[t.dataset.npt]:t.value||NDEF[t.dataset.npt]})};save();
+  try{await savePushSub()}catch(err){toast("!","Couldn't save that",sbErr(err),"")}
+  if(t.dataset.np==="rest"&&!t.checked)pushRestCancel();pushSchedule(true);
+});
+
 /* ---------- Navigation ---------- */
 $("#days").addEventListener("click",e=>{const b=e.target.closest(".day");if(!b)return;current=+b.dataset.i;refresh();window.scrollTo(0,0)});
 $("#lvlpill").addEventListener("click",()=>go("profile"));
@@ -2662,20 +3392,27 @@ $("#ctr-gems").addEventListener("click",()=>go("shop"));
 document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>go(t.dataset.v)));
 function go(vw){view=vw;document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",x.dataset.v===vw));
   ["train","progress","shop","friends","profile","plan"].forEach(n=>$("#v-"+n).hidden=n!==vw);
-  if(state.visits.d!==today())state.visits={d:today()};state.visits[vw]=1;refresh();window.scrollTo(0,0)}
+  if(state.visits.d!==today())state.visits={d:today()};state.visits[vw]=1;refresh();window.scrollTo(0,0);
+  if(vw==="friends"&&me&&myProfile&&Date.now()-social.at>3000)loadSocial(true)}
 document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{
   document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-selected",x===b));
   ["cardio","rules","science"].forEach(n=>$("#p-"+n).hidden=n!==b.dataset.p)}));
-function refresh(){let c=compute();if(checkChallenges(c))c=compute();applyTheme();renderHeader(c);renderPlanBox();if(view==="train"){renderTrain();welcome();chalCard(c)}if(view==="progress")renderProgress();if(view==="shop")renderShop(c);if(view==="friends")renderFriends();{const tb=$("#tb-friends"),n=me&&social.loaded?incoming().length:0;tb.hidden=!n;tb.textContent=n}if(view==="profile")renderProfile()}
+function refresh(){let c=compute();if(checkChallenges(c))c=compute();applyTheme();renderHeader(c);renderPlanBox();if(view==="train"){renderTrain();welcome();chalCard(c)}if(view==="progress")renderProgress();if(view==="shop")renderShop(c);if(view==="friends"&&!chat.open)renderFriends();updateBadges();if(view==="profile")renderProfile()}
 // No zooming: block pinch and double-tap zoom so the layout stays put (text boxes are 16px so iPhone doesn't zoom on focus).
 ["gesturestart","gesturechange","gestureend"].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));
 document.addEventListener("touchmove",e=>{if(e.touches.length>1||(e.scale!==undefined&&e.scale!==1))e.preventDefault()},{passive:false});
 cloudInit();
 rotateCheck();
 founderCheck();
+useFreezes();
 save();
 commit(()=>{},{quiet:true});
 refresh();
+pushRefresh().then(()=>{if(view==="profile")renderProfile()});
+if(/^#(chat=|friends|train)/.test(location.hash))routeTo(location.hash);
+let lastDay=today();
+document.addEventListener("visibilitychange",()=>{if(document.hidden)return;pollMsgs();
+  if(today()!==lastDay){lastDay=today();useFreezes();refresh();pushSchedule()}});
 </script>
 <script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))}</script>
 </body>
