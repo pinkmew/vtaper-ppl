@@ -2232,7 +2232,7 @@ function openRedeem(){
     go.disabled=true;go.textContent="Checking…";err.hidden=true;
     const {data,error}=await sb.rpc("redeem_code",{p_code:v});
     go.disabled=false;go.textContent="Redeem";
-    if(error||!data||data.error){err.textContent=error?sbErr(error):data?.error||"Something went wrong.";err.hidden=false;return}
+    if(error||!data||data.error){err.textContent=error?(/could not find the function|schema cache|PGRST202/i.test(error.message+error.code)?"Codes aren't switched on yet. The app owner needs to finish the setup in Supabase.":sbErr(error)):data?.error||"Something went wrong.";err.hidden=false;return}
     const list=applyReward(data.reward||{});(state.codes=state.codes||[]).push({label:data.label||"",at:today()});
     save();refresh();pushNow();
     if(data.left!=null&&data.left>=0)toast("🎟",data.label||"Code redeemed",data.left===0?"You were the last one to claim it.":`${data.left} left for other people.`,"");
