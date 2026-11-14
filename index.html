@@ -221,7 +221,7 @@ textarea{width:100%;min-height:90px;font:14px ui-monospace,Menlo,monospace;paddi
 /* Tab bar, rest timer, toasts, modal */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);
   padding:8px max(16px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
-nav.tabs .in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+nav.tabs .in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
 .tab{border:0;background:none;color:var(--muted);font:700 .76rem var(--body);letter-spacing:.06em;text-transform:uppercase;padding:10px 0;border-radius:10px;cursor:pointer}
 .tab[aria-selected="true"]{color:var(--fg);background:var(--surface-2)}
 .rest{position:fixed;z-index:7;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));
@@ -466,6 +466,68 @@ label.btn{display:inline-block;cursor:pointer}
 .weekbar button{border:0;background:var(--xp);color:var(--ink);font-weight:800;font-size:.85rem;border-radius:999px;padding:7px 14px;cursor:pointer;flex:0 0 auto}
 .menu button:disabled{opacity:1}
 
+
+/* ---- v7: gems, shop, challenges, photos ---- */
+button.ctr{border:0;background:none;padding:0;cursor:pointer;font-family:var(--body)}
+.gem-i{width:1em;height:1em;fill:var(--xp);vertical-align:-.12em;flex:0 0 auto}
+.tab{font-size:.66rem}
+.gembox{flex-direction:row;align-items:center;justify-content:space-between;gap:14px}
+.gembox p{flex:1;min-width:0;max-width:220px}
+.gemn{display:flex;align-items:center;gap:6px;font-size:1.9rem;font-weight:900;font-variant-numeric:tabular-nums}
+.shopgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.item{border:0;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);border-radius:16px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;color:var(--fg);font-family:var(--body);min-width:0}
+.item.eq{box-shadow:inset 0 0 0 2px var(--xp)}
+.item b{font-size:.95rem;text-align:center}
+.pv{height:64px;display:grid;place-items:center}
+.pv.big{height:auto;padding:6px 0}
+.price{display:inline-flex;align-items:center;gap:4px;font-weight:800;font-variant-numeric:tabular-nums;background:var(--surface-2);border-radius:999px;padding:4px 12px}
+.price.short{opacity:.55}
+.buy{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.sw-bn{width:112px;height:54px;border-radius:12px;background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line)}
+.pv.big .sw-bn{width:220px;height:96px}
+.sw-th{width:112px;height:54px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px}
+.sw-th i{width:22px;height:22px;border-radius:50%}
+.pv.big .sw-th{width:220px;height:96px}
+.sw-ti{font-weight:800;color:var(--xp);font-size:1rem;text-align:center;padding:0 4px}
+/* picture frames */
+.avw{display:inline-grid;place-items:center;flex:0 0 auto;border-radius:50%;padding:calc(var(--s)*.075);background:var(--xp);position:relative}
+.avw .avatar{box-shadow:0 0 0 2px var(--surface)}
+.fr-steel{background:conic-gradient(#eef3f8,#8b98a6,#eef3f8,#8b98a6,#eef3f8)}
+.fr-ember{background:linear-gradient(135deg,#ffb23c,#ff4d2e)}
+.fr-aqua{background:linear-gradient(135deg,#43d8c9,#3a7bff)}
+.fr-toxic{background:linear-gradient(135deg,#c6ff3d,#18c964)}
+.fr-royal{background:conic-gradient(#b48cff,#ffd24a,#b48cff,#ffd24a,#b48cff)}
+.fr-prism{background:conic-gradient(#ff5d52,#ffd24a,#6fd44a,#35b6ff,#b48cff,#ff5d52)}
+.fr-champion{background:conic-gradient(#dc7ff5,#7ea4ff,#43d8c9,#dc7ff5);box-shadow:0 0 calc(var(--s)*.22) rgba(220,127,245,.55)}
+.fr-founder{background:conic-gradient(#fff3cf,#f6a51e,#fff3cf,#c9820a,#fff3cf,#f6a51e,#fff3cf);box-shadow:0 0 calc(var(--s)*.18) rgba(246,165,30,.5)}
+.fr-founder::after{content:"★";position:absolute;bottom:calc(var(--s)*-.06);right:calc(var(--s)*-.02);width:calc(var(--s)*.36);height:calc(var(--s)*.36);border-radius:50%;background:#f6a51e;color:#1b1206;display:grid;place-items:center;font-size:calc(var(--s)*.22);box-shadow:0 0 0 2px var(--surface)}
+/* banners */
+.bn-sunset{background:linear-gradient(rgba(0,0,0,.28),rgba(0,0,0,.28)),linear-gradient(120deg,#5a1f12,#8a3b12 55%,#b0661a)}
+.bn-ocean{background:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.25)),linear-gradient(120deg,#0d2a47,#12506b 60%,#1b7f86)}
+.bn-carbon{background:repeating-linear-gradient(45deg,#1c1c1f 0 8px,#26262b 8px 16px)}
+.bn-aurora{background:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.25)),linear-gradient(120deg,#1b3a2f,#274a7a 50%,#5a2a7a)}
+.bn-plates{background:linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,.3)),linear-gradient(90deg,#6b241d 0 33.3%,#1d3f6b 33.3% 66.6%,#44306b 66.6%)}
+.bn-goldfoil{background:linear-gradient(rgba(0,0,0,.42),rgba(0,0,0,.42)),linear-gradient(120deg,#5c430c,#a87b17 45%,#e2b84a 55%,#7a5a10)}
+.prof[class*="bn-"] .muted{color:#e9dcc8}
+.prof[class*="bn-"] h2{color:#fff}
+/* challenges */
+.chal-h{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.chrow{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:10px;align-items:center;padding-block:8px;border-top:1px solid var(--line)}
+.chk{font-style:normal;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:.85rem;box-shadow:inset 0 0 0 2px var(--line)}
+.chrow.done .chk{background:var(--xp);color:var(--ink);box-shadow:none}
+.chrow.done>span:nth-child(2){color:var(--muted);text-decoration:line-through}
+.chg{display:inline-flex;align-items:center;gap:3px;font-weight:800;font-variant-numeric:tabular-nums}
+.chrow.done .chg{opacity:.45}
+/* calendar review and photos */
+.calhead{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:center}
+.calnav{border:0;background:var(--surface-2);color:var(--fg);width:40px;height:40px;border-radius:12px;font-size:1.4rem;font-weight:800;cursor:pointer}
+.calnav:disabled{opacity:.3;cursor:default}
+button.cd{border:0;cursor:pointer;font-family:var(--body);position:relative;padding:0}
+.phdot{position:absolute;right:5px;top:5px;width:7px;height:7px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 1.5px var(--xp-hi)}
+.dayblock{display:flex;flex-direction:column;gap:10px;padding-top:12px;border-top:1px solid var(--line)}
+.wphoto{width:100%;border-radius:14px;display:block}
+.phslot:empty{display:none}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -477,7 +539,7 @@ label.btn{display:inline-block;cursor:pointer}
       <button class="lvl" id="lvlpill" aria-label="Open profile"></button>
       <div class="ctrs">
         <span class="ctr" id="ctr-streak" title="Training days in a row"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c1 4 5 5.5 5 10.5A5.5 5.5 0 0 1 6.5 13c0-2 1-3.2 2-4 .2 1.6 1 2.4 1.8 2.6C10 8.500 10.500 5 12 2z"/></svg><b id="c-streak">0</b><span class="sr">day streak</span></span>
-        <span class="ctr on" title="Medals earned"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8.5 5v10L12 22l-8.500-5V7z"/></svg><b id="c-medals">0</b><span class="sr">medals</span></span>
+        <button class="ctr on" id="ctr-gems" title="Gems. Tap to open the shop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10l5 6-10 12L2 9z"/></svg><b id="c-gems">0</b><span class="sr">gems</span></button>
       </div>
     </div>
     <div class="days" id="days" role="group" aria-label="Choose a day"></div>
@@ -486,7 +548,9 @@ label.btn{display:inline-block;cursor:pointer}
   <main>
     <section id="v-train" class="view"></section>
     <section id="v-progress" class="view" hidden></section>
+    <section id="v-shop" class="view" hidden></section>
     <section id="v-profile" class="view" hidden></section>
+    <input type="file" accept="image/*" id="ph-in" class="sr" aria-label="Choose a workout photo">
 
     <section id="v-plan" class="view" hidden>
       <div class="panel" id="planbox"></div>
@@ -615,6 +679,7 @@ label.btn{display:inline-block;cursor:pointer}
   <div class="in" role="tablist">
     <button class="tab" role="tab" id="t-train" data-v="train" aria-selected="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10v4M6 7v10M18 7v10M21 10v4M6 12h12"/></svg>Workout</button>
     <button class="tab" role="tab" id="t-progress" data-v="progress" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.500 8-8 9-4.500-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Ranks</button>
+    <button class="tab" role="tab" id="t-shop" data-v="shop" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16l-1.2 11H5.2z"/><path d="M8 9V7a4 4 0 0 1 8 0v2"/></svg>Shop</button>
     <button class="tab" role="tab" id="t-profile" data-v="profile" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.500 4-6 8-6s7 1.500 8 6"/></svg>Profile</button>
     <button class="tab" role="tab" id="t-plan" data-v="plan" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>Plan</button>
   </div>
@@ -738,7 +803,7 @@ const clone=o=>JSON.parse(JSON.stringify(o));
 
 /* ---------- State ---------- */
 const KEY="vtppl-state-v1";
-const blank=()=>({v:2,name:"Lifter",avatar:"",sessions:{},bw:{},earned:{},tpl:{},custom:{},days:{},planName:"",plans:[],active:"",rotate:false,rotWeek:"",editBack:""});
+const blank=()=>({v:2,name:"Lifter",avatar:"",sessions:{},bw:{},earned:{},tpl:{},custom:{},days:{},planName:"",plans:[],active:"",rotate:false,rotWeek:"",editBack:"",spent:0,gemsEarned:0,owned:{},equip:{frame:"",banner:"",theme:"",title:""},chal:{},visits:{},founder:false});
 const defaultTpl=d=>PLAN[d].ex.map((e,j)=>({u:`d${d}-${j}`,id:e[0],sets:e[2],reps:e[3],note:e[4]}));
 function migrate(s){
   if(!s||!s.sessions)return null;
@@ -967,13 +1032,13 @@ function commit(mut,opts={}){
     });
     newRanks.forEach(r=>toast("▲",`Rank up · ${stepName(r.to)}`,exName(r.x),"+40"));
     newBadges.forEach(b=>toast(b.glyph,`Medal unlocked · ${b.name}`,b.hint||"",`+${b.xp}`));
-    if(after.level>before.level&&!opts.noLevelModal)toast(String(after.level),`Level up · Level ${after.level}`,`${after.title}. ${fmtNum(after.need-after.into)} XP to the next level.`,"");
+    if(after.level>before.level&&!opts.noLevelModal)toast(String(after.level),`Level up · Level ${after.level}`,`${after.title}. +${(after.level-before.level)*25} gems.`,"");
   }
   return {before,after,newBadges,newRanks};
 }
-function toast(ico,title,sub,xp){
+function toast(ico,title,sub,xp,unit="XP"){
   const el=document.createElement("div");el.className="toast";
-  el.innerHTML=`<div class="ico">${esc(ico)}</div><div class="tx"><b>${esc(title)}</b>${sub?esc(sub):""}</div>${xp?`<div class="xpv">${esc(xp)} XP</div>`:""}`;
+  el.innerHTML=`<div class="ico">${esc(ico)}</div><div class="tx"><b>${esc(title)}</b>${sub?esc(sub):""}</div>${xp?`<div class="xpv">${esc(xp)} ${unit}</div>`:""}`;
   const T=$("#toasts");T.appendChild(el);while(T.children.length>3)T.firstElementChild.remove();setTimeout(()=>el.remove(),3200);
 }
 function openModal(html){const m=$("#modal");m.innerHTML=`<div class="sheet" role="dialog" aria-modal="true">${html}</div>`;m.hidden=false;
@@ -994,7 +1059,7 @@ $("#restskip").addEventListener("click",stopRest);
 function renderHeader(c){
   $("#lvlpill").innerHTML=`${state.avatar?`<img class="lvl-n" src="${state.avatar}" alt="">`:`<span class="lvl-n">${c.level}</span>`}<span class="lvl-r"><span class="lvl-top">Lv.${c.level} <span class="muted">${esc(c.title)}</span></span><span class="bar"><i style="width:${(c.into/c.need*100).toFixed(1)}%"></i></span></span>`;
   $("#c-streak").textContent=c.dstreak;$("#ctr-streak").classList.toggle("on",c.dstreak>0);
-  $("#c-medals").textContent=Object.keys(state.earned).length;
+  $("#c-gems").textContent=fmtNum(gems(c));
   const ws=weekStart(today());
   const doneDays=new Set(sortedSessions().filter(s=>s.finished&&weekStart(s.date)===ws).map(s=>s.day));
   $("#days").innerHTML=[0,1,2,3,4,5,6].map(P).map((p,i)=>`<button class="day" id="day-${i}" style="--c:var(--${p.type})" aria-pressed="${i===current}" data-i="${i}"><b>${p.d}</b><span>${esc(p.tag||LABEL[p.type])}</span><i></i>${doneDays.has(i)?'<span class="done" aria-label="Done this week">✓</span>':""}</button>`).join("");
@@ -1140,7 +1205,7 @@ vt.addEventListener("click",e=>{
     case "backtpl":{const s=getSess(false);s.mod=false;syncSess(s);
       for(const k of Object.keys(s.sets)){const u=k.split("|")[0];if(!s.ex.some(sl=>sl.u===u)&&!s.sets[k].done)delete s.sets[k]}
       save();toast("✓","Back to your regular plan","Anything you already logged today is kept.","");refresh();break}
-    case "finish":{const key=sessKey(today(),current);const res=commit(()=>{const s=getSess(true);s.finished=true;s.at=new Date().toTimeString().slice(0,5)},{noLevelModal:true});showSummary(key,res);stopRest();refresh();break}
+    case "finish":{const key=sessKey(today(),current);const res=commit(()=>{const s=getSess(true);s.finished=true;s.name=P(current).name;s.at=new Date().toTimeString().slice(0,5)},{noLevelModal:true});showSummary(key,res);stopRest();refresh();break}
     case "summary":showSummary(sessKey(today(),current));break;
     case "clearday":{const m=openModal(`<h2>Clear today's log?</h2><p>This removes every set and change you made for ${esc(P(current).d)} today. Other days stay as they are.</p>
       <div class="btnrow"><button class="btn danger" id="mclear">Clear log</button><button class="btn ghost" data-close>Cancel</button></div>`);
@@ -1429,18 +1494,22 @@ $("#v-progress").addEventListener("click",e=>{
 $("#v-progress").addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.matches(".mus")){e.preventDefault();e.target.dispatchEvent(new MouseEvent("click",{bubbles:true}))}});
 
 /* ---------- Profile view ---------- */
-let showReset=false;const CATS=["Workouts","Streaks","Records","Lifts","Ranks","Body","Extras"];
+let showReset=false,calOff=0;const CATS=["Workouts","Streaks","Records","Lifts","Ranks","Body","Extras"];
 function renderProfile(){
   const c=compute(),el=$("#v-profile"),bs=bwStats(),ms=muscleStats(c),os=overallStep(ms);
-  let html=`<div class="panel prof">${avatarHTML(64)}<div class="prof-l"><h2 id="pname">${esc(state.name||"Lifter")}</h2><span class="ptitle">${esc(c.title)} · Level ${c.level}</span>
+  let html=`<div class="panel prof${state.equip.banner?" bn-"+state.equip.banner:""}">${avatarHTML(64)}<div class="prof-l"><h2 id="pname">${esc(state.name||"Lifter")}</h2><span class="ptitle">${esc(titleName()||c.title)} · Level ${c.level}</span>
       <span class="muted num">${fmtNum(c.into)} / ${fmtNum(c.need)} XP · ${fmtNum(c.xp)} total</span><span class="bar"><i style="width:${(c.into/c.need*100).toFixed(1)}%"></i></span>
       <button class="btn sm ghost" id="editname" style="align-self:flex-start;margin-top:4px">Edit profile</button></div>
     <div class="prof-r">${emblem(os,72)}<span class="eyebrow">${os==null?"Unranked":stepName(os)}</span></div></div>
     <p class="note">10 XP a set · 50 XP a PR · 40 XP a rank up · 100 XP a finished workout · medal bonuses</p>`;
-  // Month calendar
-  const now=parseD(today()),y=now.getFullYear(),mo=now.getMonth(),first=new Date(y,mo,1),n=new Date(y,mo+1,0).getDate(),lead=(first.getDay()+6)%7;
-  html+=`<div class="panel"><div style="display:flex;justify-content:space-between;align-items:baseline"><h3>${first.toLocaleDateString("en-GB",{month:"long"})}</h3><span class="muted num">${[...c.dates].filter(d=>d.startsWith(today().slice(0,7))).length} workouts</span></div>
-    <div class="cal">${["Mo","Tu","We","Th","Fr","Sa","Su"].map(d=>`<small>${d}</small>`).join("")}${"<span></span>".repeat(lead)}${Array.from({length:n},(_,i)=>{const d=iso(new Date(y,mo,i+1));return `<span class="cd${c.dates.has(d)?" on":""}${d===today()?" today":""}">${i+1}</span>`}).join("")}</div></div>`;
+  // Month calendar: tap a trained day to review it
+  const base=parseD(today()),first=new Date(base.getFullYear(),base.getMonth()+calOff,1),y=first.getFullYear(),mo=first.getMonth(),n=new Date(y,mo+1,0).getDate(),lead=(first.getDay()+6)%7;
+  const byDate={};for(const se of sortedSessions())if(doneSets(se).length)(byDate[se.date]=byDate[se.date]||[]).push(se);
+  const ym=iso(first).slice(0,7),inMonth=Object.keys(byDate).filter(d=>d.startsWith(ym));
+  html+=`<div class="panel"><div class="calhead"><button class="calnav" id="cal-prev" aria-label="Previous month">‹</button><div><h3>${first.toLocaleDateString("en-GB",{month:"long",year:"numeric"})}</h3><span class="muted num">${inMonth.length} workout${inMonth.length===1?"":"s"}</span></div><button class="calnav" id="cal-next" aria-label="Next month" ${calOff>=0?"disabled":""}>›</button></div>
+    <div class="cal">${["Mo","Tu","We","Th","Fr","Sa","Su"].map(d=>`<small>${d}</small>`).join("")}${"<span></span>".repeat(lead)}${Array.from({length:n},(_,i)=>{const d=iso(new Date(y,mo,i+1)),ss=byDate[d];
+      return ss?`<button class="cd on${d===today()?" today":""}" data-day="${d}" aria-label="Review ${fmtD(d)}">${i+1}${ss.some(x=>x.photo)?'<i class="phdot"></i>':""}</button>`:`<span class="cd${d===today()?" today":""}">${i+1}</span>`}).join("")}</div>
+    <p class="muted" style="font-size:.82rem">Tap a highlighted day to review the workout. A dot means it has a photo.</p></div>`;
   // Medals
   const earned=BADGES.filter(b=>state.earned[b.id]).length;
   html+=`<div class="panel"><div style="display:flex;justify-content:space-between;align-items:baseline"><h3>Medals</h3><span class="muted num">${earned} / ${BADGES.length}</span></div>
@@ -1465,7 +1534,7 @@ function renderProfile(){
     html+=`<div class="bwlist">${days.slice(-5).reverse().map(d=>`<div class="bwrow"><span>${fmtD(d)}</span><span><b>${state.bw[d].toFixed(1)} kg</b> <button class="x-btn" data-del="${d}" aria-label="Delete ${fmtD(d)} weigh-in">Delete</button></span></div>`).join("")}</div>`;
   }
   html+=`</div>`;
-  html+=`<div class="panel"><h3>Backup</h3><p class="muted" style="font-size:.9rem">Your logs live on this phone only. Copy a backup now and then and paste it into Notes.</p>
+  html+=`<div class="panel"><h3>Backup</h3><p class="muted" style="font-size:.9rem">Your logs live on this phone only. Copy a backup now and then and paste it into Notes. Workout photos aren't included in the backup.</p>
     <div class="btnrow"><button class="btn sm ghost" id="copybk">Copy backup</button><button class="btn sm ghost" id="showrestore">Restore from backup</button></div>
     <div id="restorebox" hidden style="display:flex;flex-direction:column;gap:8px"><textarea id="restoretx" placeholder="Paste your backup here"></textarea><button class="btn sm" id="dorestore">Restore</button></div>
     ${showReset?`<p>Delete every workout, weigh-in, medal, plan change and XP?</p><div class="btnrow"><button class="btn sm danger" id="doreset">Delete everything</button><button class="btn sm ghost" id="noreset">Cancel</button></div>`:`<button class="link" id="askreset">Reset all data</button>`}</div>`;
@@ -1480,6 +1549,9 @@ $("#v-profile").addEventListener("click",async e=>{
   const id=e.target.id;
   if(e.target.dataset.del){const d=e.target.dataset.del;commit(()=>{delete state.bw[d]},{quiet:true});refresh();return}
   if(id==="editname"){openProfileEdit();return}
+  if(id==="cal-prev"){calOff--;renderProfile();return}
+  if(id==="cal-next"){if(calOff<0)calOff++;renderProfile();return}
+  const dy=e.target.closest("[data-day]");if(dy){openDay(dy.dataset.day);return}
   if(id==="copybk"){const txt=JSON.stringify(state);
     try{await navigator.clipboard.writeText(txt);toast("✓","Backup copied","Paste it into Notes to keep it safe.","")}
     catch(err){$("#restorebox").hidden=false;$("#restoretx").value=txt;$("#restoretx").select();toast("!","Copy didn't work","The backup is selected below. Copy it from there.","")}}
@@ -1541,6 +1613,7 @@ function showSummary(key,res){
     ${rus.length?`<div class="panel" style="padding:12px"><span class="eyebrow">Rank ups</span>${rus.map(r=>`<div class="rurow">${emblem(r.to,30)}<span><b>${stepName(r.to)}</b><br><span class="muted">${esc(exName(r.x))}</span></span></div>`).join("")}</div>`:""}
     ${prs.length?`<div class="panel" style="padding:12px"><span class="eyebrow">Personal records</span>${prs.map(r=>`<p>${esc(exName(r.x))}</p>`).join("")}</div>`:(rus.length?"":`<p class="muted">No PRs today. Matching your numbers on a cut still counts as progress.</p>`)}
     <div style="display:flex;flex-direction:column;gap:6px"><span class="muted num">Level ${c.level} · ${fmtNum(c.into)} / ${fmtNum(c.need)} XP</span><span class="bar"><i style="width:${(c.into/c.need*100).toFixed(1)}%"></i></span></div>
+    <label class="btn ghost phbtn" for="ph-in" data-phkey="${key}">${s.photo?"Photo added ✓ · change it":"Add a workout photo"}</label>
     <button class="btn" data-close>Done</button>`);
 }
 
@@ -1661,7 +1734,7 @@ $("#v-plan").addEventListener("change",e=>{if(e.target.id==="pb-rot"){state.rota
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){rotateCheck();if($("#modal").hidden)refresh()}});
 
 /* ---------- Profile editing ---------- */
-const avatarHTML=(size)=>state.avatar?`<img class="avatar" style="width:${size}px;height:${size}px" src="${state.avatar}" alt="Profile picture">`:`<span class="avatar" style="width:${size}px;height:${size}px;font-size:${size*.42}px" aria-hidden="true">${esc((state.name||"L").trim().charAt(0).toUpperCase()||"L")}</span>`;
+const avatarHTML=(size,frame=state.equip.frame)=>`<span class="avw${frame?" fr-"+frame:""}" style="--s:${size}px">${state.avatar?`<img class="avatar" style="width:${size}px;height:${size}px" src="${state.avatar}" alt="Profile picture">`:`<span class="avatar" style="width:${size}px;height:${size}px;font-size:${size*.42}px" aria-hidden="true">${esc((state.name||"L").trim().charAt(0).toUpperCase()||"L")}</span>`}</span>`;
 function openProfileEdit(){
   let pic=state.avatar||"";
   const m=openModal(`${mhead("Profile","Save")}<h2>Edit profile</h2>
@@ -1684,17 +1757,172 @@ function openProfileEdit(){
   m.querySelector("#pe-save").onclick=doSave;m.querySelector("#mh-save").onclick=doSave;m.querySelector("#mh-back").onclick=closeModal;
 }
 
+/* ---------- Gems, shop items ---------- */
+const gems=c=>200+(c.level-1)*25+(state.gemsEarned||0)-(state.spent||0);
+const SHOP={
+ frame:{label:"Picture frames",blurb:"A ring around your profile picture.",items:[
+  {id:"",name:"Classic",price:0},{id:"steel",name:"Steel",price:150},{id:"ember",name:"Ember",price:250},{id:"aqua",name:"Aqua",price:250},
+  {id:"toxic",name:"Toxic",price:350},{id:"royal",name:"Royal",price:450},{id:"prism",name:"Prism",price:650},{id:"champion",name:"Champion",price:900},
+  {id:"founder",name:"Founder",price:0,exclusive:true}]},
+ banner:{label:"Profile banners",blurb:"A background for your profile card.",items:[
+  {id:"",name:"None",price:0},{id:"sunset",name:"Sunset",price:100},{id:"ocean",name:"Deep sea",price:150},{id:"carbon",name:"Carbon",price:200},
+  {id:"aurora",name:"Aurora",price:300},{id:"plates",name:"Plates",price:350},{id:"goldfoil",name:"Gold foil",price:550}]},
+ theme:{label:"App themes",blurb:"Recolour the whole app.",items:[
+  {id:"",name:"Ember",price:0},{id:"ocean",name:"Ocean",price:300},{id:"forest",name:"Forest",price:300},{id:"crimson",name:"Crimson",price:400},
+  {id:"royal",name:"Royal",price:500},{id:"midnight",name:"Midnight",price:600},{id:"goldrush",name:"Gold rush",price:800}]},
+ title:{label:"Titles",blurb:"Shown under your username instead of your level title.",items:[
+  {id:"",name:"Level title",price:0},{id:"gymrat",name:"Gym Rat",price:75},{id:"platechaser",name:"Plate Chaser",price:100},{id:"repmachine",name:"Rep Machine",price:100},
+  {id:"legday",name:"Leg Day Survivor",price:150},{id:"ironaddict",name:"Iron Addict",price:200},{id:"neverskips",name:"Never Skips",price:250}]}
+};
+const THEMES={
+ ocean:{bg:"#0a1218",surface:"#111d27","surface-2":"#1b2c3a",line:"#2a4254",fg:"#e8f4ff",muted:"#8fa9bd",xp:"#35b6ff","xp-hi":"#9ddcff","xp-soft":"#0c2b40",ink:"#04131d"},
+ forest:{bg:"#0c130d",surface:"#142016","surface-2":"#1f3022",line:"#30472f",fg:"#edf7e6",muted:"#9bb092",xp:"#6fd44a","xp-hi":"#b6f09c","xp-soft":"#18330f",ink:"#0a1a05"},
+ crimson:{bg:"#170c0c",surface:"#241313","surface-2":"#361d1c",line:"#522a28",fg:"#ffeceb",muted:"#c49c98",xp:"#ff5d52","xp-hi":"#ffb0a9","xp-soft":"#451512",ink:"#230504"},
+ royal:{bg:"#120e1a",surface:"#1c1528","surface-2":"#2a2040",line:"#40325e",fg:"#f3ecff",muted:"#a99cc4",xp:"#b48cff","xp-hi":"#dcc8ff","xp-soft":"#2a1a4a",ink:"#12082a"},
+ midnight:{bg:"#0b0c0f",surface:"#15171c","surface-2":"#22252d",line:"#353945",fg:"#f2f4f8",muted:"#9aa1b0",xp:"#e8eaf0","xp-hi":"#ffffff","xp-soft":"#2a2d36",ink:"#0b0c0f"},
+ goldrush:{bg:"#14110a",surface:"#201a0d","surface-2":"#322813",line:"#4d3d1a",fg:"#fff6da",muted:"#bfae82",xp:"#ffd24a","xp-hi":"#fff0b8","xp-soft":"#3d300a",ink:"#1c1503"}
+};
+const TVARS=["bg","surface","surface-2","line","fg","muted","xp","xp-hi","xp-soft","ink"];
+let themeOn=null;
+function applyTheme(id=state.equip.theme){
+  if(themeOn===id)return;themeOn=id;const t=THEMES[id],st=document.documentElement.style;
+  TVARS.forEach(v=>t?st.setProperty("--"+v,t[v]):st.removeProperty("--"+v));
+}
+const owns=(kind,id)=>!id||!!state.owned[kind+":"+id]||(kind==="frame"&&id==="founder"&&state.founder);
+const titleName=()=>{const t=SHOP.title.items.find(i=>i.id===state.equip.title);return t&&t.id?t.name:""};
+function founderCheck(){
+  // Everyone who opens the app before its first birthday (8 Nov 2027) keeps the Founder frame for good.
+  if(!state.founder&&today()<"2027-11-08"){state.founder=true;if(!state.equip.frame)state.equip.frame="founder";
+    setTimeout(()=>toast("★","Founder frame unlocked","An exclusive frame for early users. It can't be bought.",""),600)}
+}
+const GEM=`<svg class="gem-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10l5 6-10 12L2 9z"/></svg>`;
+function preview(kind,it){
+  if(kind==="frame")return avatarHTML(54,it.id);
+  if(kind==="banner")return `<span class="sw-bn${it.id?" bn-"+it.id:""}"></span>`;
+  if(kind==="theme"){const t=THEMES[it.id]||{bg:"#15100a",surface:"#221910",xp:"#f6a51e",fg:"#fff4e2"};
+    return `<span class="sw-th" style="background:${t.bg};box-shadow:inset 0 0 0 1.5px ${t.xp}"><i style="background:${t.surface}"></i><i style="background:${t.xp}"></i><i style="background:${t.fg}"></i></span>`}
+  return `<span class="sw-ti">${esc(it.name)}</span>`;
+}
+function renderShop(c){
+  const g=gems(c);
+  let h=`<div class="panel gembox"><div><span class="eyebrow">Your gems</span><div class="gemn">${GEM}<b>${fmtNum(g)}</b></div></div>
+    <p class="muted" style="font-size:.85rem">Earn 10 for each daily challenge, 20 more for all three, and 25 every level up.</p></div>`;
+  for(const kind of Object.keys(SHOP)){const S=SHOP[kind];
+    h+=`<h3 class="sect">${S.label}</h3><p class="note" style="margin-top:-8px">${S.blurb}</p><div class="shopgrid">${S.items.filter(it=>!it.exclusive||owns(kind,it.id)).map(it=>{
+      const own=owns(kind,it.id),eq=(state.equip[kind]||"")===it.id;
+      return `<button class="item${eq?" eq":""}" data-kind="${kind}" data-item="${it.id}"><span class="pv">${preview(kind,it)}</span>${kind==="title"?"":`<b>${esc(it.name)}</b>`}
+        ${eq?`<span class="pill on">Equipped</span>`:own?`<span class="pill">${it.exclusive?"Exclusive · equip":"Owned · equip"}</span>`:`<span class="price${g<it.price?" short":""}">${GEM}${it.price}</span>`}</button>`}).join("")}</div>`}
+  $("#v-shop").innerHTML=h;
+}
+$("#v-shop").addEventListener("click",e=>{
+  const b=e.target.closest(".item");if(!b)return;
+  const kind=b.dataset.kind,it=SHOP[kind].items.find(i=>i.id===b.dataset.item),c=compute(),g=gems(c);
+  if(owns(kind,it.id)){
+    if((state.equip[kind]||"")===it.id)return;
+    state.equip[kind]=it.id;save();refresh();toast("✓",`${it.name} equipped`,SHOP[kind].label,"");return}
+  const short=it.price-g;
+  const m=openModal(`${mhead("Shop")}<div class="buy"><span class="pv big">${kind==="frame"?avatarHTML(96,it.id):preview(kind,it)}</span><h2>${esc(it.name)}</h2><span class="muted">${SHOP[kind].label}</span>
+      <div class="gemn">${GEM}<b>${it.price}</b></div></div>
+    <p class="muted" style="text-align:center">You have ${fmtNum(g)} gems.${short>0?` You need ${short} more.`:` You'll have ${fmtNum(g-it.price)} left.`}</p>
+    ${kind==="theme"?`<button class="btn ghost" id="buy-try">Preview this theme</button>`:""}
+    <button class="btn" id="buy-go" ${short>0?"disabled":""}>${short>0?`Need ${short} more gems`:`Buy for ${it.price} gems`}</button>`);
+  const back=()=>{applyTheme();closeModal()};
+  m.querySelector("#mh-back").onclick=back;
+  m.querySelector("#buy-try")?.addEventListener("click",()=>{applyTheme(it.id);toast("◐","Previewing "+it.name,"Go back to return to your theme.","")});
+  m.querySelector("#buy-go").onclick=()=>{state.spent=(state.spent||0)+it.price;state.owned[kind+":"+it.id]=1;state.equip[kind]=it.id;const ok=save();closeModal();refresh();
+    toast(ok?"✓":"!",ok?`${it.name} unlocked`:"Couldn't save",ok?"It's equipped now.":"","")};
+});
+
+/* ---------- Daily challenges ---------- */
+const CH={
+ finish:{t:"Finish today's workout",ok:x=>x.finished},
+ sets15:{t:"Log 15 sets",ok:x=>x.sets>=15,p:x=>`${Math.min(x.sets,15)}/15`},
+ vol3:{t:"Lift 3 tonnes in total",ok:x=>x.vol>=3000,p:x=>`${(Math.min(x.vol,3000)/1000).toFixed(1)}/3t`},
+ warm:{t:"Log a warm-up set",ok:x=>x.warm>=1},
+ drop:{t:"Finish with a drop set",ok:x=>x.drops>=1},
+ pr:{t:"Set a personal record",ok:x=>x.prs>=1},
+ bw:{t:"Log your bodyweight",ok:x=>x.bw},
+ photo:{t:"Add a workout photo",ok:x=>x.photo},
+ ranks:{t:"Check your bodygraph on the Ranks tab",ok:x=>x.v.progress},
+ month:{t:"Review your month on the Profile tab",ok:x=>x.v.profile}
+};
+function todaysChallenges(){
+  const d=today(),dayIdx=(parseD(d).getDay()+6)%7,pd=P(dayIdx);
+  if(pd.type==="rest"&&!tpl(dayIdx).length)return ["bw","ranks","month"];
+  let h=0;for(const ch of d)h=(h*31+ch.charCodeAt(0))>>>0;
+  const pool=["sets15","vol3","warm","drop","pr","bw","photo","ranks"],a=pool.splice(h%pool.length,1)[0],b=pool[(h>>>3)%pool.length];
+  return ["finish",a,b];
+}
+function dayCtx(c){
+  const d=today(),ss=Object.values(state.sessions).filter(s=>s.date===d),all=ss.flatMap(s=>doneSets(s));
+  return {sets:all.filter(s=>s.t!=="w").length,warm:all.filter(s=>s.t==="w").length,drops:all.filter(s=>s.t==="d").length,
+    vol:ss.reduce((a,s)=>a+doneSets(s).filter(x=>x.t!=="w").reduce((p,x)=>p+volOf(x.x,x,d),0),0),finished:ss.some(s=>s.finished),
+    prs:c.prs.filter(p=>p.date===d).length,bw:state.bw[d]!=null,photo:ss.some(s=>s.photo),v:state.visits.d===d?state.visits:{}};
+}
+function checkChallenges(c){
+  const d=today(),ids=todaysChallenges(),x=dayCtx(c),rec=state.chal[d]||(state.chal[d]={done:{}});let changed=false;
+  for(const id of ids)if(!rec.done[id]&&CH[id].ok(x)){rec.done[id]=1;state.gemsEarned=(state.gemsEarned||0)+10;changed=true;toast("◆","Challenge complete",CH[id].t,"+10","gems")}
+  if(!rec.bonus&&ids.every(id=>rec.done[id])){rec.bonus=1;state.gemsEarned+=20;changed=true;toast("◆","All three done","Daily bonus earned.","+20","gems")}
+  for(const k of Object.keys(state.chal))if(k<addDays(d,-14))delete state.chal[k];
+  if(changed)save();return changed;
+}
+function chalCard(c){
+  const ids=todaysChallenges(),rec=state.chal[today()]||{done:{}},x=dayCtx(c),n=ids.filter(i=>rec.done[i]).length;
+  const el=document.createElement("div");el.className="panel chal";
+  el.innerHTML=`<div class="chal-h"><h3>Daily challenges</h3><span class="pill${n===3?" on":""}">${n}/3${n===3?" · bonus earned":""}</span></div>
+    ${ids.map(id=>{const done=!!rec.done[id],ch=CH[id];return `<div class="chrow${done?" done":""}"><i class="chk">${done?"✓":""}</i><span>${ch.t}${!done&&ch.p?` <span class="muted num">${ch.p(x)}</span>`:""}</span><span class="chg">${GEM}10</span></div>`}).join("")}
+    <p class="muted" style="font-size:.8rem">Finish all three for 20 bonus gems. New challenges every day.</p>`;
+  const v=$("#v-train"),hero=v.querySelector(".hero");hero?hero.after(el):v.prepend(el);
+}
+
+/* ---------- Workout photos and day review ---------- */
+const PH={p:null,
+  open(){return this.p||(this.p=new Promise((res,rej)=>{try{const r=indexedDB.open("vtppl-photos",1);r.onupgradeneeded=()=>r.result.createObjectStore("photos");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}}))},
+  async tx(mode,fn){const d=await this.open();return new Promise((res,rej)=>{const t=d.transaction("photos",mode),rq=fn(t.objectStore("photos"));t.oncomplete=()=>res(rq&&rq.result);t.onerror=()=>rej(t.error)})},
+  put(k,v){return this.tx("readwrite",s=>s.put(v,k))},get(k){return this.tx("readonly",s=>s.get(k))},del(k){return this.tx("readwrite",s=>s.delete(k))}};
+let phKey=null,phAfter=null;
+document.addEventListener("click",e=>{const l=e.target.closest("label[data-phkey]");if(l){phKey=l.dataset.phkey;phAfter=l.dataset.after||""}});
+$("#ph-in").addEventListener("change",e=>{
+  const f=e.target.files&&e.target.files[0],key=phKey;e.target.value="";if(!f||!key||!state.sessions[key])return;
+  const url=URL.createObjectURL(f),img=new Image();
+  img.onload=async()=>{const M=1080,k=Math.min(1,M/Math.max(img.width,img.height)),cv=document.createElement("canvas");cv.width=Math.round(img.width*k);cv.height=Math.round(img.height*k);
+    cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height);URL.revokeObjectURL(url);
+    try{await PH.put(key,cv.toDataURL("image/jpeg",.78));state.sessions[key].photo=1;save();toast("✓","Photo saved","Find it on your Profile calendar.","");
+      const date=state.sessions[key].date;refresh();if(phAfter==="day")openDay(date);else{const b=document.querySelector(".phbtn");if(b)b.textContent="Photo added ✓ · change it"}}
+    catch(err){toast("!","Couldn't save the photo","This phone's storage may be full or private browsing is on.","")}};
+  img.onerror=()=>{URL.revokeObjectURL(url);toast("!","That photo didn't work","Try a different picture.","")};img.src=url});
+function openDay(date){
+  const c=compute(),ss=sortedSessions().filter(s=>s.date===date&&doneSets(s).length);if(!ss.length)return;
+  const m=openModal(`${mhead("Workout review")}<h2>${parseD(date).toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"})}</h2>
+    ${ss.map(s=>{const sets=doneSets(s).filter(x=>x.t!=="w"),vol=sets.reduce((a,x)=>a+volOf(x.x,x,s.date),0),prs=c.prs.filter(p=>p.k===s.k),rus=c.rankUps.filter(r=>r.k===s.k),byX={};
+      doneSets(s).forEach(x=>(byX[x.x]=byX[x.x]||[]).push(x));
+      return `<div class="dayblock"><div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline"><b style="font-size:1.1rem">${esc(s.name||P(s.day).name)}</b><span class="muted">${s.finished?(s.at?"Finished "+s.at:"Finished"):"Not finished"}</span></div>
+        <div class="sumgrid"><div><b>${sets.length}</b><span>Sets</span></div><div><b>${fmtNum(vol)}</b><span>kg moved</span></div><div><b>${prs.length}</b><span>PRs</span></div></div>
+        <div class="phslot" data-ph="${s.k}">${s.photo?`<span class="muted">Loading photo…</span>`:""}</div>
+        <div class="btnrow"><label class="btn sm ghost" for="ph-in" data-phkey="${s.k}" data-after="day">${s.photo?"Change photo":"Add a photo"}</label>${s.photo?`<button class="btn sm ghost" data-rmph="${s.k}">Remove photo</button>`:""}</div>
+        ${rus.length?`<p><b>Rank ups:</b> ${rus.map(r=>`${esc(exName(r.x))} (${stepName(r.to)})`).join(", ")}</p>`:""}
+        <div class="hist">${Object.entries(byX).map(([x,list])=>{const k=EX[x]?.kind;return `<div class="hrow" style="grid-template-columns:minmax(0,1fr) auto"><span class="s"><b>${esc(exName(x))}</b>${prs.some(p=>p.x===x)?'<span class="prflag">PR</span>':""}<br><span class="muted">${k==="none"?list.length+" done":list.map(v=>(v.t==="w"?"W ":v.t==="d"?"D ":"")+(k==="reps"?v.r:`${k==="bw"?"+":""}${kg(v.w||0)}×${v.r}`)).join(", ")}</span></span></div>`}).join("")}</div></div>`}).join("")}`);
+  m.querySelector("#mh-back").onclick=closeModal;
+  m.querySelectorAll("[data-ph]").forEach(async el=>{const k=el.dataset.ph;if(!state.sessions[k]?.photo)return;
+    try{const src=await PH.get(k);el.innerHTML=src?`<img class="wphoto" src="${src}" alt="Workout photo from ${fmtD(date)}">`:`<span class="muted">The photo is no longer on this phone.</span>`}catch(e){el.innerHTML=`<span class="muted">Couldn't load the photo.</span>`}});
+  m.addEventListener("click",async e=>{const b=e.target.closest("[data-rmph]");if(!b)return;const k=b.dataset.rmph;
+    try{await PH.del(k)}catch(err){}delete state.sessions[k].photo;save();toast("✓","Photo removed","","");refresh();openDay(date)});
+}
+
 /* ---------- Navigation ---------- */
 $("#days").addEventListener("click",e=>{const b=e.target.closest(".day");if(!b)return;current=+b.dataset.i;refresh();window.scrollTo(0,0)});
 $("#lvlpill").addEventListener("click",()=>go("profile"));
+$("#ctr-gems").addEventListener("click",()=>go("shop"));
 document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>go(t.dataset.v)));
 function go(vw){view=vw;document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",x.dataset.v===vw));
-  ["train","progress","profile","plan"].forEach(n=>$("#v-"+n).hidden=n!==vw);refresh();window.scrollTo(0,0)}
+  ["train","progress","shop","profile","plan"].forEach(n=>$("#v-"+n).hidden=n!==vw);
+  if(state.visits.d!==today())state.visits={d:today()};state.visits[vw]=1;refresh();window.scrollTo(0,0)}
 document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{
   document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-selected",x===b));
   ["cardio","rules","science"].forEach(n=>$("#p-"+n).hidden=n!==b.dataset.p)}));
-function refresh(){const c=compute();renderHeader(c);renderPlanBox();if(view==="train"){renderTrain();welcome()}if(view==="progress")renderProgress();if(view==="profile")renderProfile()}
+function refresh(){let c=compute();if(checkChallenges(c))c=compute();applyTheme();renderHeader(c);renderPlanBox();if(view==="train"){renderTrain();welcome();chalCard(c)}if(view==="progress")renderProgress();if(view==="shop")renderShop(c);if(view==="profile")renderProfile()}
 rotateCheck();
+founderCheck();
 save();
 commit(()=>{},{quiet:true});
 refresh();
