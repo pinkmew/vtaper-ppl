@@ -648,7 +648,9 @@ button.cd{border:0;cursor:pointer;font-family:var(--body);position:relative;padd
 .lbn{width:22px;text-align:center;color:var(--muted);font-variant-numeric:tabular-nums}
 .lbrow:first-child .lbn{color:var(--xp)}
 .stats.s2{grid-template-columns:repeat(2,minmax(0,1fr))}
-html{min-height:100%;touch-action:manipulation;-webkit-text-size-adjust:100%}
+html{min-height:100%;-webkit-text-size-adjust:100%}
+/* Allow scrolling only: no pinch or double-tap zoom. Set on every element because scrolling panels reset it. */
+*{touch-action:pan-x pan-y}
 body{min-height:100vh;min-height:calc(100vh - env(safe-area-inset-top,0px))}
 .txt.locked{opacity:.6}
 .steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px}
