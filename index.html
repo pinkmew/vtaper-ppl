@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="V-Taper">
@@ -199,7 +199,7 @@ select{width:100%;font:600 16px var(--body);padding:10px 12px;border-radius:10px
 .badge .bp{font-size:.7rem;color:var(--muted);line-height:1.2}
 .badge.locked .hex b{color:var(--muted)}
 .badge.locked .bn{color:var(--muted)}
-textarea{width:100%;min-height:90px;font:14px ui-monospace,Menlo,monospace;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);color:var(--fg)}
+textarea{width:100%;min-height:90px;font:16px ui-monospace,Menlo,monospace;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);color:var(--fg)}
 .btnrow{display:flex;gap:8px;flex-wrap:wrap}
 
 /* Plan */
@@ -648,7 +648,7 @@ button.cd{border:0;cursor:pointer;font-family:var(--body);position:relative;padd
 .lbn{width:22px;text-align:center;color:var(--muted);font-variant-numeric:tabular-nums}
 .lbrow:first-child .lbn{color:var(--xp)}
 .stats.s2{grid-template-columns:repeat(2,minmax(0,1fr))}
-html{min-height:100%}
+html{min-height:100%;touch-action:manipulation;-webkit-text-size-adjust:100%}
 body{min-height:100vh;min-height:calc(100vh - env(safe-area-inset-top,0px))}
 .txt.locked{opacity:.6}
 .steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px}
@@ -2665,6 +2665,9 @@ document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",(
   document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-selected",x===b));
   ["cardio","rules","science"].forEach(n=>$("#p-"+n).hidden=n!==b.dataset.p)}));
 function refresh(){let c=compute();if(checkChallenges(c))c=compute();applyTheme();renderHeader(c);renderPlanBox();if(view==="train"){renderTrain();welcome();chalCard(c)}if(view==="progress")renderProgress();if(view==="shop")renderShop(c);if(view==="friends")renderFriends();{const tb=$("#tb-friends"),n=me&&social.loaded?incoming().length:0;tb.hidden=!n;tb.textContent=n}if(view==="profile")renderProfile()}
+// No zooming: block pinch and double-tap zoom so the layout stays put (text boxes are 16px so iPhone doesn't zoom on focus).
+["gesturestart","gesturechange","gestureend"].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));
+document.addEventListener("touchmove",e=>{if(e.touches.length>1||(e.scale!==undefined&&e.scale!==1))e.preventDefault()},{passive:false});
 cloudInit();
 rotateCheck();
 founderCheck();
