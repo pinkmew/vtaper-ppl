@@ -648,6 +648,9 @@ button.cd{border:0;cursor:pointer;font-family:var(--body);position:relative;padd
 .lbn{width:22px;text-align:center;color:var(--muted);font-variant-numeric:tabular-nums}
 .lbrow:first-child .lbn{color:var(--xp)}
 .stats.s2{grid-template-columns:repeat(2,minmax(0,1fr))}
+html{min-height:100%}
+body{min-height:100vh;min-height:calc(100vh - env(safe-area-inset-top,0px))}
+.txt.locked{opacity:.6}
 .steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px}
 
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -1875,7 +1878,7 @@ function openProfileEdit(){
   const m=openModal(`${mhead("Profile","Save")}<h2>Edit profile</h2>
     <div class="pe-pic"><span id="pe-prev"></span><div class="btnrow"><label class="btn sm ghost" for="pe-file">Choose photo</label><button class="btn sm ghost" id="pe-rm">Remove photo</button></div>
       <input type="file" id="pe-file" accept="image/*" class="sr"></div>
-    <label style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">Username</span><input class="txt" id="pe-name" maxlength="20" value="${esc(myProfile?myProfile.username:(state.name||""))}" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Pick a username">${myProfile?`<small class="muted">Friends find you by this. 3–20 letters, numbers or underscores.</small>`:""}</label>
+    <label style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">Username</span><input class="txt" id="pe-name" maxlength="20" value="${esc(myProfile?myProfile.username:(state.name||""))}" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Pick a username">${myProfile?(nextNameChange()?`<small class="muted">You can change your username once a week. Next change: <b>${fmtD(iso(nextNameChange()))}</b>.</small>`:`<small class="muted">Friends find you by this. 3–20 letters, numbers or underscores. You can change it once a week.</small>`):""}</label>
     <p id="pe-err" class="formerr" hidden></p>
     <button class="btn" id="pe-save">Save profile</button>`);
   const prev=()=>{m.querySelector("#pe-prev").innerHTML=pic?`<img class="avatar" style="width:96px;height:96px" src="${pic}" alt="Profile picture preview">`:`<span class="avatar" style="width:96px;height:96px;font-size:40px">${esc((m.querySelector("#pe-name").value||"L").trim().charAt(0).toUpperCase()||"L")}</span>`;m.querySelector("#pe-rm").hidden=!pic};
@@ -1888,9 +1891,13 @@ function openProfileEdit(){
     img.onload=()=>{const S=192,cv=document.createElement("canvas");cv.width=cv.height=S;const side=Math.min(img.width,img.height);
       cv.getContext("2d").drawImage(img,(img.width-side)/2,(img.height-side)/2,side,side,0,0,S,S);pic=cv.toDataURL("image/jpeg",.82);URL.revokeObjectURL(url);prev()};
     img.onerror=()=>{URL.revokeObjectURL(url);toast("!","That photo didn't work","Try a different picture.","")};img.src=url});
-  if(myProfile)m.querySelector("#pe-name").addEventListener("input",e=>{const c=cleanName(e.target.value);if(c!==e.target.value)e.target.value=c});
+  if(myProfile){const ni=m.querySelector("#pe-name");if(nextNameChange()){ni.readOnly=true;ni.classList.add("locked")}
+    ni.addEventListener("input",e=>{const c=cleanName(e.target.value);if(c!==e.target.value)e.target.value=c});}
   const doSave=async()=>{let nm=m.querySelector("#pe-name").value.trim();if(!nm){m.querySelector("#pe-name").focus();toast("!","Pick a username","It can't be empty.","");return}
-    if(myProfile){const r=await changeUsername(nm);if(!r.ok){const e=m.querySelector("#pe-err");e.textContent=r.msg;e.hidden=false;return}nm=myProfile.username}
+    if(myProfile&&cleanName(nm)!==myProfile.username){
+      const r=await changeUsername(nm);if(!r.ok){const e=m.querySelector("#pe-err");e.textContent=r.msg;e.hidden=false;return}
+      if(r.changed)setTimeout(()=>toast("✓",`You're now @${myProfile.username}`,"Your next username change is available in 7 days.",""),350)}
+    if(myProfile)nm=myProfile.username
     state.name=nm;state.avatar=pic;const ok=save();closeModal();refresh();toast(ok?"✓":"!",ok?"Profile saved":"Couldn't save",ok?"":"The photo may be too large for this phone's storage.","")};
   m.querySelector("#pe-save").onclick=doSave;m.querySelector("#mh-save").onclick=doSave;m.querySelector("#mh-back").onclick=closeModal;
 }
@@ -2426,12 +2433,15 @@ function openNewPassword(){
     if(error){e.textContent=sbErr(error);e.hidden=false;return}
     closeModal();toast("✓","Password updated","You're signed in.","")};
 }
+// When a username can next be changed (the database enforces this too), or null if it can change now.
+function nextNameChange(){const t=myProfile&&myProfile.username_changed_at;if(!t)return null;const n=new Date(Date.parse(t)+7*864e5);return n>new Date()?n:null}
 async function changeUsername(u){
   u=cleanName(u);if(!USERRE.test(u))return {ok:false,msg:"Use 3–20 letters, numbers or underscores."};
   if(u===myProfile.username)return {ok:true};
-  const {error}=await sb.from("profiles").update({username:u}).eq("id",me.id);
+  const nx=nextNameChange();if(nx)return {ok:false,msg:`You can change your username once a week. Your next change is available on ${fmtD(iso(nx))}.`};
+  const {data,error}=await sb.from("profiles").update({username:u}).eq("id",me.id).select().single();
   if(error)return {ok:false,msg:error.code==="23505"?"That username is taken.":sbErr(error)};
-  myProfile.username=u;return {ok:true};
+  myProfile=data;return {ok:true,changed:true};
 }
 function accountPanel(){
   if(!CLOUD_HOST)return `<div class="panel"><h3>Account</h3><p class="muted" style="font-size:.9rem">Accounts and friends work in the home screen app at pinkmew.github.io/vtaper-ppl.</p></div>`;
