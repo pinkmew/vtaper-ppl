@@ -408,7 +408,7 @@ body{padding-bottom:calc(160px + env(safe-area-inset-bottom,0px))}
 .avgcard{background:var(--surface);border-radius:18px;box-shadow:inset 0 0 0 1px var(--line);padding:14px;display:flex;flex-direction:column;gap:2px;min-width:0}
 .avgcard b{font-size:1.1rem;font-weight:800}
 .avgcard svg{align-self:center;margin-top:10px}
-.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;background:var(--surface-2);border-radius:14px;padding:10px 6px}
+.wkrow{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;background:var(--surface-2);border-radius:14px;padding:10px 6px}
 .wkd{display:flex;flex-direction:column;align-items:center;gap:5px}
 .wkd small{color:var(--muted);font-weight:700;font-size:.78rem}
 .wkd i{font-style:normal;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:.85rem;color:var(--muted);box-shadow:inset 0 0 0 1.5px var(--line)}
@@ -434,6 +434,37 @@ body{padding-bottom:calc(160px + env(safe-area-inset-bottom,0px))}
 .cd.on{background:var(--xp);color:var(--ink)}
 .cd.today{box-shadow:inset 0 0 0 2px var(--xp-hi)}
 .badges{margin-bottom:6px}
+
+
+/* ---- v6: plans, back/save headers, profile picture ---- */
+.mhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-6px -6px 0}
+.mh-b{border:0;background:none;color:var(--fg);font-weight:700;font-size:1rem;display:inline-flex;align-items:center;gap:2px;padding:8px 8px 8px 2px;cursor:pointer}
+.mh-b svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.mh-s{border:0;background:var(--xp);color:var(--ink);font-weight:800;font-size:.95rem;border-radius:999px;padding:8px 16px;cursor:pointer}
+.mh-sp{width:64px}
+.mhead .eyebrow{text-align:center;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.avatar{flex:0 0 auto;border-radius:50%;object-fit:cover;background:var(--xp);color:var(--ink);display:inline-grid;place-items:center;font-weight:900;box-shadow:0 0 0 2.5px var(--xp)}
+img.lvl-n{object-fit:cover;padding:0}
+.pe-pic{display:flex;flex-direction:column;align-items:center;gap:12px}
+.pe-pic .btnrow{justify-content:center}
+label.btn{display:inline-block;cursor:pointer}
+.plist{display:flex;flex-direction:column;gap:8px}
+.plrow{background:var(--surface-2);border-radius:14px;padding:12px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 10px;align-items:center}
+.plrow.on{box-shadow:inset 0 0 0 1.5px var(--xp)}
+.pl-t{display:flex;flex-direction:column;min-width:0}
+.pl-t b{font-size:1.05rem;overflow-wrap:anywhere}
+.pl-t span{font-size:.85rem}
+.pl-a{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}
+.pill{font-size:.72rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--surface);color:var(--muted);white-space:nowrap}
+.pill.on{background:var(--xp);color:var(--ink)}
+.switch{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.switch input{width:22px;height:22px;accent-color:var(--xp);flex:0 0 auto;margin-top:2px}
+.switch span{display:flex;flex-direction:column;min-width:0}
+.switch span span{font-size:.85rem}
+.weekbar{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--surface);border-radius:14px;padding:8px 8px 8px 14px;box-shadow:inset 0 0 0 1px var(--line);font-size:.92rem}
+.weekbar span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.weekbar button{border:0;background:var(--xp);color:var(--ink);font-weight:800;font-size:.85rem;border-radius:999px;padding:7px 14px;cursor:pointer;flex:0 0 auto}
+.menu button:disabled{opacity:1}
 
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -707,7 +738,7 @@ const clone=o=>JSON.parse(JSON.stringify(o));
 
 /* ---------- State ---------- */
 const KEY="vtppl-state-v1";
-const blank=()=>({v:2,name:"Lifter",sessions:{},bw:{},earned:{},tpl:{},custom:{},days:{},planName:""});
+const blank=()=>({v:2,name:"Lifter",avatar:"",sessions:{},bw:{},earned:{},tpl:{},custom:{},days:{},planName:"",plans:[],active:"",rotate:false,rotWeek:"",editBack:""});
 const defaultTpl=d=>PLAN[d].ex.map((e,j)=>({u:`d${d}-${j}`,id:e[0],sets:e[2],reps:e[3],note:e[4]}));
 function migrate(s){
   if(!s||!s.sessions)return null;
@@ -720,8 +751,16 @@ function migrate(s){
   }
   return s.v===2?Object.assign(blank(),s):null;
 }
-let state=(()=>{try{const s=migrate(JSON.parse(localStorage.getItem(KEY)));if(s)return s}catch(e){}return blank()})();
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}};
+function ensurePlans(s){
+  if(!s.plans||!s.plans.length){const custom=s.days&&Object.keys(s.days).length;
+    s.plans=[{id:"p1",name:s.planName||(custom?"My plan":"V-Taper PPL"),builtin:!custom,days:s.days||{},tpl:s.tpl||{}}];s.active="p1"}
+  let ap=s.plans.find(p=>p.id===s.active);if(!ap){ap=s.plans[0];s.active=ap.id}
+  s.days=ap.days||(ap.days={});s.tpl=ap.tpl||(ap.tpl={});s.planName=ap.name;return s;
+}
+let state=ensurePlans((()=>{try{const s=migrate(JSON.parse(localStorage.getItem(KEY)));if(s)return s}catch(e){}return blank()})());
+const activePlan=()=>state.plans.find(p=>p.id===state.active);
+const save=()=>{const ap=activePlan();if(ap){ap.days=state.days;ap.tpl=state.tpl;state.planName=ap.name}
+  try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){return false}};
 let current=(new Date().getDay()+6)%7, view="train";
 
 /* ---------- Exercise catalogue ---------- */
@@ -775,6 +814,7 @@ function volOf(x,set,date){const k=EX[x]?.kind;if(k==="load")return (set.w||0)*(
 
 /* ---------- Derived stats ---------- */
 function compute(){
+  const TDAYS=Math.max(1,[0,1,2,3,4,5,6].filter(d=>P(d).type!=="rest").length),WT=Math.min(5,TDAYS);
   const best={},first={},hist={},prs=[],Lb={},stepB={},rankUps=[];let sets=0,finished=0,volume=0,warm=0,drops=0;const weeks={},dates=new Set(),times=[];
   for(const s of sortedSessions()){
     const sb={},rows={};
@@ -798,16 +838,16 @@ function compute(){
     if(s.finished){finished++;dates.add(s.date);if(s.at)times.push(s.at);const w=weekStart(s.date);(weeks[w]=weeks[w]||new Set()).add(s.day)}
   }
   let streak=0,w=weekStart(today());
-  if(!(weeks[w]&&weeks[w].size>=5))w=addDays(w,-7);
-  while(weeks[w]&&weeks[w].size>=5){streak++;w=addDays(w,-7)}
+  if(!(weeks[w]&&weeks[w].size>=WT))w=addDays(w,-7);
+  while(weeks[w]&&weeks[w].size>=WT){streak++;w=addDays(w,-7)}
   let bestStreak=0,run=0,prev=null;
-  for(const k of Object.keys(weeks).sort()){if(weeks[k].size>=5){run=(prev&&addDays(prev,7)===k)?run+1:1;bestStreak=Math.max(bestStreak,run);prev=k}else{run=0;prev=k}}
+  for(const k of Object.keys(weeks).sort()){if(weeks[k].size>=WT){run=(prev&&addDays(prev,7)===k)?run+1:1;bestStreak=Math.max(bestStreak,run);prev=k}else{run=0;prev=k}}
   // Day streak: training days in a row. A Sunday off doesn't break it.
   let dstreak=0,d=today();if(!dates.has(d))d=addDays(d,-1);
   for(let i=0;i<500;i++){if(dates.has(d))dstreak++;else if(parseD(d).getDay()!==0)break;d=addDays(d,-1)}
-  const perfect=Object.values(weeks).some(s=>s.size>=6);
+  const perfect=Object.values(weeks).some(s=>s.size>=TDAYS);
   const tierOf=x=>first[x]==null?null:{step:stepB[x],i:Math.floor(stepB[x]/3),L:Lb[x]??null,g:best[x]/first[x]-1};
-  const ctx={best,first,hist,prs,sets,finished,volume,warm,drops,streak,bestStreak,dstreak,perfect,tierOf,stepB,rankUps,dates,times};
+  const ctx={TDAYS,WT,best,first,hist,prs,sets,finished,volume,warm,drops,streak,bestStreak,dstreak,perfect,tierOf,stepB,rankUps,dates,times};
   const badgeXP=Object.keys(state.earned).reduce((a,id)=>a+(BADGES.find(b=>b.id===id)?.xp||0),0);
   const xp=sets*10+prs.length*50+finished*100+rankUps.length*40+badgeXP;
   return {...ctx,xp,...levelOf(xp)};
@@ -865,10 +905,10 @@ const BADGES=[
  {cat:"Streaks",id:"d3",name:"Warming up",glyph:"3D",xp:25,t:c=>[c.dstreak,3],hint:"3 training days in a row"},
  {cat:"Streaks",id:"d6",name:"Full send",glyph:"6D",xp:75,t:c=>[c.dstreak,6],hint:"6 training days in a row"},
  {cat:"Streaks",id:"d18",name:"On fire",glyph:"18D",xp:200,t:c=>[c.dstreak,18],hint:"18 training days in a row"},
- {cat:"Streaks",id:"week6",name:"Perfect week",glyph:"6/6",xp:150,t:c=>[c.perfect?1:0,1],hint:"All 6 workouts in one week"},
- {cat:"Streaks",id:"st4",name:"Locked in",glyph:"4W",xp:250,t:c=>[c.bestStreak,4],hint:"4 weeks in a row of 5+ workouts"},
- {cat:"Streaks",id:"st8",name:"Unbreakable",glyph:"8W",xp:500,t:c=>[c.bestStreak,8],hint:"8 weeks in a row of 5+ workouts"},
- {cat:"Streaks",id:"st12",name:"Quarter year",glyph:"12W",xp:750,t:c=>[c.bestStreak,12],hint:"12 weeks in a row of 5+ workouts"},
+ {cat:"Streaks",id:"week6",name:"Perfect week",glyph:"6/6",xp:150,t:c=>[c.perfect?1:0,1],hint:"Every planned workout in one week"},
+ {cat:"Streaks",id:"st4",name:"Locked in",glyph:"4W",xp:250,t:c=>[c.bestStreak,4],hint:"4 weeks in a row hitting your weekly target"},
+ {cat:"Streaks",id:"st8",name:"Unbreakable",glyph:"8W",xp:500,t:c=>[c.bestStreak,8],hint:"8 weeks in a row hitting your weekly target"},
+ {cat:"Streaks",id:"st12",name:"Quarter year",glyph:"12W",xp:750,t:c=>[c.bestStreak,12],hint:"12 weeks in a row hitting your weekly target"},
  {cat:"Streaks",id:"early",name:"Early bird",glyph:"AM",xp:50,t:c=>[c.times.some(t=>t<"08:00")?1:0,1],hint:"Finish a workout before 8am"},
  {cat:"Streaks",id:"late",name:"Night shift",glyph:"PM",xp:50,t:c=>[c.times.some(t=>t>="21:00")?1:0,1],hint:"Finish a workout after 9pm"},
  {cat:"Records",id:"pr1",name:"First PR",glyph:"PR",xp:25,t:c=>[c.prs.length,1]},
@@ -952,7 +992,7 @@ $("#restskip").addEventListener("click",stopRest);
 
 /* ---------- Header ---------- */
 function renderHeader(c){
-  $("#lvlpill").innerHTML=`<span class="lvl-n">${c.level}</span><span class="lvl-r"><span class="lvl-top">Lv.${c.level} <span class="muted">${esc(c.title)}</span></span><span class="bar"><i style="width:${(c.into/c.need*100).toFixed(1)}%"></i></span></span>`;
+  $("#lvlpill").innerHTML=`${state.avatar?`<img class="lvl-n" src="${state.avatar}" alt="">`:`<span class="lvl-n">${c.level}</span>`}<span class="lvl-r"><span class="lvl-top">Lv.${c.level} <span class="muted">${esc(c.title)}</span></span><span class="bar"><i style="width:${(c.into/c.need*100).toFixed(1)}%"></i></span></span>`;
   $("#c-streak").textContent=c.dstreak;$("#ctr-streak").classList.toggle("on",c.dstreak>0);
   $("#c-medals").textContent=Object.keys(state.earned).length;
   const ws=weekStart(today());
@@ -997,12 +1037,13 @@ function renderTrain(){
       <ul style="margin:4px 0 0;padding-left:20px"><li>Relaxed walk toward 8–10k steps</li><li>Couch stretch, 60–90 seconds per side</li><li>Log your bodyweight on the Profile tab</li></ul></div>
       ${weekCard(c)}<button class="addex" id="addex">+ Train anyway: add an exercise</button>`;return;
   }
+  if(state.plans.length>1)html+=`<div class="weekbar"><span>This week · <b>${esc(state.planName)}</b></span><button id="swplan">Switch plan</button></div>`;
   html+=`<div class="hero" style="${st}">
     <span class="tag">${p.d} · ${esc(p.tag||LABEL[p.type])} · ${fmtD(today())}</span><h2>${rest?"Extra session":p.name}</h2><p>${rest?"Logged on your rest day":p.focus}</p>
     <div class="meta"><span><strong>${slots.length}</strong> exercises</span><span><strong>${tot}</strong> sets</span>${p.time&&!sess.mod?`<span><strong>${p.time}</strong></span>`:""}</div>
     <span class="bar"><i style="width:${tot?done/tot*100:0}%"></i></span>
     <p class="muted"><span class="num">${done} of ${tot}</span> sets · <span class="num">+${sessXP}</span> XP${sessPRs?` · ${sessPRs} PR${sessPRs>1?"s":""}`:""}${sessRU?` · ${sessRU} rank up${sessRU>1?"s":""}`:""}</p>
-    ${rest?"":`<div class="hero-actions"><button id="edittpl">Edit regular ${esc(p.d)} plan${tplEdited(current)?" · edited":""}</button></div>`}
+    ${rest?"":`<div class="hero-actions"><button id="edittpl">Edit ${DAYNAMES[current]}'s plan</button></div>`}
   </div>`;
   if(sess.mod)html+=`<div class="changed"><p><b>Changed for today.</b> Your regular ${esc(p.d)} plan is untouched and comes back next week.</p>
     <div class="btnrow"><button class="btn sm ghost" id="savetpl">Save as my regular ${esc(p.d)} plan</button><button class="btn sm ghost" id="backtpl">Back to regular plan</button></div></div>`;
@@ -1055,7 +1096,7 @@ function welcome(){
 function weekCard(c){
   const ws=weekStart(today()),fin=sortedSessions().filter(s=>s.finished&&weekStart(s.date)===ws).length;
   return `<div class="panel"><span class="eyebrow">This week</span>
-    <p><b class="num">${fin} of 6</b> workouts done. ${c.streak?`Streak: <b>${c.streak} week${c.streak>1?"s":""}</b> of 5+ workouts.`:"Hit 5+ workouts a week to build a streak."}</p></div>`;
+    <p><b class="num">${fin} of ${c.TDAYS}</b> workouts done. ${c.streak?`Streak: <b>${c.streak} week${c.streak>1?"s":""}</b> hitting your weekly target.`:`Do ${c.WT}+ workouts a week to build a streak.`}</p></div>`;
 }
 function setVal(k,x,f,val){const s=getSess(true);const v=s.sets[k]||(s.sets[k]={x});v.x=x;const t=keyType(k);if(t)v.t=t;v[f]=val}
 
@@ -1090,6 +1131,7 @@ vt.addEventListener("click",e=>{
   if(b.dataset.rmx){const typ=b.dataset.rmx,u=b.dataset.u;
     commit(()=>{const s=getSess(true),ex=s.extra[u];ex[typ]--;delete s.sets[`${u}|${typ}${ex[typ]}`]},{quiet:true});refresh();return}
   switch(b.id){
+    case "swplan":openSwitch();break;
     case "wl-create":openCreatePlan();break;
     case "wl-keep":state.welcomed=true;save();refresh();break;
     case "addex":openPicker({mode:"add"});break;
@@ -1146,15 +1188,15 @@ function setsEditor(sl,done){
     <div class="btnrow"><button class="btn" id="sok">Save</button><button class="btn ghost" data-close>Cancel</button></div>`);
   const upd=d=>{sets=Math.max(1,Math.min(10,sets+d));m.querySelector("#sv").textContent=sets};
   m.querySelector("#sd").onclick=()=>upd(-1);m.querySelector("#si").onclick=()=>upd(1);
-  m.querySelector("#sok").onclick=()=>{const r=m.querySelector("#rv").value.trim().replace(/-/g,"–")||sl.reps;done(sets,r)};
+  m.querySelector("#sok").onclick=()=>{const r=m.querySelector("#rv").value.trim().replace(/-/g,"–")||sl.reps;done(sets,r);toast("✓","Saved","Sets and reps updated for today.","")};
 }
 
 /* Exercise picker: mode add | swap | tpl-add | tpl-swap */
 function openPicker(ctx){
-  const swapFrom=ctx.mode.endsWith("swap")?(ctx.mode==="swap"?slotsNow():tplDraft(ctx.day)).find(q=>q.u===ctx.u)?.id:null;
+  const swapFrom=ctx.mode.endsWith("swap")?(ctx.mode==="swap"?slotsNow():draft.list).find(q=>q.u===ctx.u)?.id:null;
   const fm=swapFrom?EX[swapFrom]?.muscle:null;
   const title=ctx.mode==="add"?"Add for today":ctx.mode==="swap"?`Swap ${exName(swapFrom)}`:ctx.mode==="tpl-add"?`Add to ${P(ctx.day).d} plan`:`Swap in ${P(ctx.day).d} plan`;
-  const m=openModal(`<div><span class="eyebrow">${ctx.mode.startsWith("tpl")?"Regular plan":"Today only"}</span><h2>${esc(title)}</h2></div>
+  const m=openModal(`${mhead(ctx.mode.startsWith("tpl")?"Regular plan":"Today only")}<h2>${esc(title)}</h2>
     <input class="txt" id="pk-q" type="search" placeholder="Search exercises" autocomplete="off" aria-label="Search exercises">
     <div class="pk-list" id="pk-list"></div>
     <details id="pk-new"><summary style="cursor:pointer;font-weight:700">Create your own exercise</summary>
@@ -1163,8 +1205,8 @@ function openPicker(ctx){
         <label>Muscle<select id="cx-m">${MUSCLES.map(([k,n])=>`<option value="${k}"${k===fm?" selected":""}>${n}</option>`).join("")}</select></label>
         <label>Logging<select id="cx-k">${Object.entries(KINDNAME).map(([k,n])=>`<option value="${k}">${n}</option>`).join("")}</select></label>
       </div>
-      <button class="btn sm" id="cx-save" style="margin-top:10px">Create and add</button></details>
-    <button class="btn ghost" data-close>Cancel</button>`);
+      <button class="btn sm" id="cx-save" style="margin-top:10px">Create and add</button></details>`);
+  m.querySelector("#mh-back").onclick=()=>ctx.mode.startsWith("tpl")?openTplEditor(ctx.day):closeModal();
   const draw=q=>{
     q=(q||"").toLowerCase().trim();
     const all=Object.values(EX).filter(x=>x.id!==swapFrom&&(!q||x.name.toLowerCase().includes(q)||(MNAME[x.muscle]||"").toLowerCase().includes(q)));
@@ -1190,47 +1232,56 @@ function applyPick(ctx,id){
       else{const i=s.ex.findIndex(q=>q.u===ctx.u);const old=s.ex[i];slot.sets=old.sets;if(EX[old.id]?.kind===EX[id]?.kind)slot.reps=old.reps;s.ex[i]=slot;dropSlotSets(s,ctx.u)}},{quiet:true});
     closeModal();refresh();toast("✓",ctx.mode==="add"?`Added ${exName(id)}`:`Swapped in ${exName(id)}`,"For today only.","");
   }else{
-    const list=tplDraft(ctx.day);
+    const list=draft.list;draft.dirty=true;
     if(ctx.mode==="tpl-add")list.push(slot);
     else{const i=list.findIndex(q=>q.u===ctx.u);slot.sets=list[i].sets;if(EX[list[i].id]?.kind===EX[id]?.kind)slot.reps=list[i].reps;list[i]=slot}
-    state.tpl[ctx.day]=list;save();openTplEditor(ctx.day);
+    openTplEditor(ctx.day);
   }
 }
 const tplDraft=d=>clone(tpl(d));
-let tplFromWeek=false;
+const mhead=(label,saveLabel)=>`<div class="mhead"><button class="mh-b" id="mh-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Back</button><span class="eyebrow">${esc(label)}</span>${saveLabel?`<button class="mh-s" id="mh-save">${esc(saveLabel)}</button>`:`<span class="mh-sp"></span>`}</div>`;
+let tplFromWeek=false,draft=null;
 function openTplEditor(d,fromWeek){
   if(fromWeek!==undefined)tplFromWeek=fromWeek;
-  const list=tpl(d),pd=P(d);
-  const m=openModal(`<div><span class="eyebrow">Regular plan</span><h2>Every ${esc(P(d).d)} · ${esc(P(d).name)}</h2></div>
-    <p class="muted" style="font-size:.88rem">Changes apply from now on. Past workouts and your lift history stay as they are.</p>
+  if(!draft||draft.d!==d){const pd=P(d);draft={d,list:clone(tpl(d)),name:pd.name,tag:pd.tag||LABEL[pd.type],type:pd.type,dirty:false}}
+  const list=draft.list,pd=P(d),builtin=activePlan()?.builtin;
+  const m=openModal(`${mhead(state.planName||"Your plan","Save")}<h2>${DAYNAMES[d]}</h2>
     <div class="formgrid">
-      <label class="full">Workout name<input class="txt" id="tp-name" maxlength="24" value="${esc(pd.name)}" autocomplete="off"></label>
-      <label>Short label<input class="txt" id="tp-tag" maxlength="6" value="${esc(pd.tag||LABEL[pd.type])}" autocomplete="off"></label>
-      <label>Colour<select id="tp-type"><option value="push"${pd.type==="push"?" selected":""}>Red</option><option value="pull"${pd.type==="pull"?" selected":""}>Blue</option><option value="legs"${pd.type==="legs"?" selected":""}>Violet</option><option value="rest"${pd.type==="rest"?" selected":""}>Rest day (grey)</option></select></label>
+      <label class="full">Workout name<input class="txt" id="tp-name" maxlength="24" value="${esc(draft.name)}" autocomplete="off"></label>
+      <label>Short label<input class="txt" id="tp-tag" maxlength="6" value="${esc(draft.tag)}" autocomplete="off"></label>
+      <label>Colour<select id="tp-type"><option value="push"${draft.type==="push"?" selected":""}>Red</option><option value="pull"${draft.type==="pull"?" selected":""}>Blue</option><option value="legs"${draft.type==="legs"?" selected":""}>Violet</option><option value="rest"${draft.type==="rest"?" selected":""}>Rest day (grey)</option></select></label>
     </div>
+    <span class="eyebrow">Exercises · ${list.length}</span>
     <div id="tp-list">${list.map((sl,j)=>`<div class="trow" data-u="${sl.u}"><span class="tn">${esc(exName(sl.id))}</span>
       <span class="tctl"><input type="number" inputmode="numeric" min="1" max="10" value="${sl.sets}" data-f="sets" aria-label="Sets"><span class="muted">×</span><input class="reps" value="${esc(sl.reps)}" data-f="reps" aria-label="Reps" autocomplete="off"></span>
-      <span class="tbtns"><button data-a="up" ${j===0?"disabled":""}>Up</button><button data-a="down" ${j===list.length-1?"disabled":""}>Down</button><button data-a="swap">Swap</button><button data-a="del" class="danger">Remove</button></span></div>`).join("")||`<p class="muted">No exercises yet.</p>`}</div>
+      <span class="tbtns"><button data-a="up" ${j===0?"disabled":""}>Up</button><button data-a="down" ${j===list.length-1?"disabled":""}>Down</button><button data-a="swap">Swap</button><button data-a="del" class="danger">Remove</button></span></div>`).join("")||`<p class="muted">No exercises yet. Add one below, or leave it empty for a rest day.</p>`}</div>
     <button class="addex" id="tp-add">+ Add an exercise</button>
-    <div class="btnrow"><button class="btn" data-close id="tp-done">Done</button>${tplEdited(d)||(state.days&&state.days[d])?`<button class="btn ghost" id="tp-reset">Reset to original plan</button>`:""}</div>`);
+    <button class="btn" id="tp-save">Save ${esc(pd.d)}</button>
+    ${builtin&&(tplEdited(d)||(state.days&&state.days[d]))?`<button class="link" id="tp-reset">Reset ${esc(pd.d)} to the original plan</button>`:""}`);
+  const leave=()=>{draft=null;refresh();tplFromWeek?openWeek():closeModal()};
+  const doSave=()=>{
+    const nm=draft.name.trim(),tg=draft.tag.trim(),type=draft.type,old=state.days&&state.days[d];
+    state.tpl[d]=draft.list;state.days=state.days||{};
+    state.days[d]={name:nm||(type==="rest"?"Rest":"Workout"),tag:tg||(type==="rest"?"Rest":LABEL[type]),type,focus:nm===pd.name?(pd.focus||""):"",time:old?old.time||"":(nm===pd.name?pd.time:"")};
+    const ok=save();toast(ok?"✓":"!",ok?"Saved successfully":"Couldn't save",ok?`${DAYNAMES[d]} is updated.`:"Your phone's storage for this app is full.","");leave()};
+  m.querySelector("#mh-save").onclick=doSave;m.querySelector("#tp-save").onclick=doSave;
+  m.querySelector("#mh-back").onclick=()=>{
+    if(!draft.dirty){leave();return}
+    const c=openModal(`<h2>Discard changes?</h2><p>You have unsaved changes to ${DAYNAMES[d]}.</p><div class="btnrow"><button class="btn" id="dc-save">Save changes</button><button class="btn ghost" id="dc-keep">Keep editing</button><button class="btn danger" id="dc-drop">Discard</button></div>`);
+    c.querySelector("#dc-save").onclick=doSave;c.querySelector("#dc-keep").onclick=()=>openTplEditor(d);c.querySelector("#dc-drop").onclick=leave};
+  [["#tp-name","name"],["#tp-tag","tag"],["#tp-type","type"]].forEach(([q,f])=>m.querySelector(q).addEventListener("input",e=>{draft[f]=e.target.value;draft.dirty=true}));
   const L=m.querySelector("#tp-list");
-  L.addEventListener("change",e=>{const i=e.target,u=i.closest(".trow").dataset.u,l=tplDraft(d),sl=l.find(q=>q.u===u);
-    if(i.dataset.f==="sets")sl.sets=Math.max(1,Math.min(10,parseInt(i.value)||sl.sets));else sl.reps=i.value.trim().replace(/-/g,"–")||sl.reps;
-    state.tpl[d]=l;save()});
-  L.addEventListener("click",e=>{const b=e.target.closest("button[data-a]");if(!b)return;const u=b.closest(".trow").dataset.u,l=tplDraft(d),i=l.findIndex(q=>q.u===u);
+  L.addEventListener("change",e=>{const i=e.target,row=i.closest(".trow");if(!row)return;const sl=draft.list.find(q=>q.u===row.dataset.u);
+    if(i.dataset.f==="sets")sl.sets=Math.max(1,Math.min(10,parseInt(i.value)||sl.sets));else sl.reps=i.value.trim().replace(/-/g,"–")||sl.reps;draft.dirty=true});
+  L.addEventListener("click",e=>{const b=e.target.closest("button[data-a]");if(!b)return;const u=b.closest(".trow").dataset.u,l=draft.list,i=l.findIndex(q=>q.u===u);
     if(b.dataset.a==="swap"){openPicker({mode:"tpl-swap",day:d,u});return}
     if(b.dataset.a==="up")[l[i-1],l[i]]=[l[i],l[i-1]];
     if(b.dataset.a==="down")[l[i+1],l[i]]=[l[i],l[i+1]];
     if(b.dataset.a==="del")l.splice(i,1);
-    state.tpl[d]=l;save();openTplEditor(d)});
+    draft.dirty=true;openTplEditor(d)});
   m.querySelector("#tp-add").onclick=()=>openPicker({mode:"tpl-add",day:d});
-  const saveDay=()=>{const type=m.querySelector("#tp-type").value,nm=m.querySelector("#tp-name").value.trim(),tg=m.querySelector("#tp-tag").value.trim();
-    state.days=state.days||{};state.days[d]={name:nm||(type==="rest"?"Rest":"Workout"),tag:tg||(type==="rest"?"Rest":LABEL[type]),type,focus:(state.days[d]&&state.days[d].focus)!=null?state.days[d].focus:(P(d).name===nm?P(d).focus:""),time:(state.days[d]&&state.days[d].time)!=null?state.days[d].time:P(d).time};save()};
-  ["#tp-name","#tp-tag","#tp-type"].forEach(q=>m.querySelector(q).addEventListener("change",saveDay));
-  m.querySelector("#tp-done").addEventListener("click",()=>{refresh();if(tplFromWeek)openWeek()});
-  m.querySelector("#tp-reset")?.addEventListener("click",()=>{delete state.tpl[d];if(state.days)delete state.days[d];save();openTplEditor(d);toast("✓",`${P(d).d} plan reset`,"Back to the original exercises.","")});
+  m.querySelector("#tp-reset")?.addEventListener("click",()=>{delete state.tpl[d];if(state.days)delete state.days[d];save();draft=null;openTplEditor(d);toast("✓",`${P(d).d} reset`,"Back to the original exercises.","")});
 }
-
 
 /* ---------- Charts ---------- */
 function lineChart(id,pts,opts={}){
@@ -1356,7 +1407,7 @@ function analysisTab(c,ms){
   let h=`<h3 class="sect">Average ranks</h3><div class="avgrow">${card("Weights",wl)}${card("Bodyweight lifts",cal)}</div>`;
   const ws=weekStart(today());
   h+=`<h3 class="sect">Statistics</h3><div class="panel"><div style="display:flex;justify-content:space-between;align-items:baseline"><b>Rank ups</b><b class="num" style="color:var(--xp);font-size:1.3rem">${c.rankUps.length}</b></div>
-    <div class="wk">${["Mo","Tu","We","Th","Fr","Sa","Su"].map((d,i)=>{const dt=addDays(ws,i),n=c.rankUps.filter(r=>r.date===dt).length;return `<span class="wkd${dt===today()?" today":""}"><small>${d}</small><i class="${n?"on":""}">${n}</i></span>`}).join("")}</div></div>
+    <div class="wkrow">${["Mo","Tu","We","Th","Fr","Sa","Su"].map((d,i)=>{const dt=addDays(ws,i),n=c.rankUps.filter(r=>r.date===dt).length;return `<span class="wkd${dt===today()?" today":""}"><small>${d}</small><i class="${n?"on":""}">${n}</i></span>`}).join("")}</div></div>
     <div class="stats">
     <div class="stat"><b>${c.finished}</b><span>Workouts</span></div><div class="stat"><b>${c.prs.length}</b><span>PRs</span></div>
     <div class="stat"><b>${(c.volume/1000).toFixed(1)}t</b><span>Lifted</span></div><div class="stat"><b>${c.streak}</b><span>Wk streak</span></div></div>`;
@@ -1381,9 +1432,9 @@ $("#v-progress").addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" "
 let showReset=false;const CATS=["Workouts","Streaks","Records","Lifts","Ranks","Body","Extras"];
 function renderProfile(){
   const c=compute(),el=$("#v-profile"),bs=bwStats(),ms=muscleStats(c),os=overallStep(ms);
-  let html=`<div class="panel prof"><div class="prof-l"><h2 id="pname">${esc(state.name||"Lifter")}</h2><span class="ptitle">${esc(c.title)} · Level ${c.level}</span>
+  let html=`<div class="panel prof">${avatarHTML(64)}<div class="prof-l"><h2 id="pname">${esc(state.name||"Lifter")}</h2><span class="ptitle">${esc(c.title)} · Level ${c.level}</span>
       <span class="muted num">${fmtNum(c.into)} / ${fmtNum(c.need)} XP · ${fmtNum(c.xp)} total</span><span class="bar"><i style="width:${(c.into/c.need*100).toFixed(1)}%"></i></span>
-      <button class="link" id="editname">Edit name</button></div>
+      <button class="btn sm ghost" id="editname" style="align-self:flex-start;margin-top:4px">Edit profile</button></div>
     <div class="prof-r">${emblem(os,72)}<span class="eyebrow">${os==null?"Unranked":stepName(os)}</span></div></div>
     <p class="note">10 XP a set · 50 XP a PR · 40 XP a rank up · 100 XP a finished workout · medal bonuses</p>`;
   // Month calendar
@@ -1423,23 +1474,21 @@ function renderProfile(){
 $("#v-profile").addEventListener("submit",e=>{
   if(e.target.id!=="bwform")return;e.preventDefault();
   const v=parseFloat($("#bwin").value);if(!(v>=30&&v<=250)){toast("!","Enter your weight in kg","For example 76.4","");return}
-  commit(()=>{state.bw[today()]=Math.round(v*10)/10});refresh();
+  commit(()=>{state.bw[today()]=Math.round(v*10)/10});refresh();toast("✓","Weight saved",`${(Math.round(v*10)/10).toFixed(1)} kg logged for today.`,"");
 });
 $("#v-profile").addEventListener("click",async e=>{
   const id=e.target.id;
   if(e.target.dataset.del){const d=e.target.dataset.del;commit(()=>{delete state.bw[d]},{quiet:true});refresh();return}
-  if(id==="editname"){const m=openModal(`<h2>Your name</h2><input class="txt" id="nm" maxlength="24" value="${esc(state.name||"")}" autocomplete="off" aria-label="Name">
-    <div class="btnrow"><button class="btn" id="nmok">Save</button><button class="btn ghost" data-close>Cancel</button></div>`);
-    m.querySelector("#nmok").onclick=()=>{state.name=m.querySelector("#nm").value.trim()||"Lifter";save();closeModal();refresh()}}
+  if(id==="editname"){openProfileEdit();return}
   if(id==="copybk"){const txt=JSON.stringify(state);
     try{await navigator.clipboard.writeText(txt);toast("✓","Backup copied","Paste it into Notes to keep it safe.","")}
     catch(err){$("#restorebox").hidden=false;$("#restoretx").value=txt;$("#restoretx").select();toast("!","Copy didn't work","The backup is selected below. Copy it from there.","")}}
   if(id==="showrestore"){$("#restorebox").hidden=false;$("#restoretx").value="";$("#restoretx").focus()}
-  if(id==="dorestore"){try{const s=migrate(JSON.parse($("#restoretx").value));if(!s)throw 0;state=s;buildEX();save();toast("✓","Backup restored","","");refresh()}
+  if(id==="dorestore"){try{const s=migrate(JSON.parse($("#restoretx").value));if(!s)throw 0;state=ensurePlans(s);buildEX();save();toast("✓","Backup restored","","");refresh()}
     catch(err){toast("!","That backup didn't work","Paste the full text you copied, starting with {.","")}}
   if(id==="askreset"){showReset=true;renderProfile()}
   if(id==="noreset"){showReset=false;renderProfile()}
-  if(id==="doreset"){state=blank();buildEX();save();showReset=false;toast("✓","All data deleted","","");refresh()}
+  if(id==="doreset"){state=ensurePlans(blank());buildEX();save();showReset=false;toast("✓","All data deleted","","");refresh()}
 });
 
 /* ---------- Rank standards ---------- */
@@ -1525,44 +1574,115 @@ const PRESETS=[
  {id:"bro5",name:"Body-part split · 5 days",desc:"Chest, back, shoulders, legs, arms. One muscle group a day.",days:[R("Chest","Chest","push","Chest",X.chest),R("Back","Back","pull","Lats, upper back",X.back),R("Shoulders","Delts","push","Shoulders",X.shoulders),R("Legs","Legs","legs","Quads, hamstrings, calves",X.legs),R("Arms","Arms","pull","Biceps, triceps",X.arms),REST,REST]},
  {id:"default",name:"V-Taper PPL · 6 days",desc:"The plan the app came with: push, pull, legs twice a week.",days:null}
 ];
-function applyPreset(id){
-  const pr=PRESETS.find(q=>q.id===id);
-  if(!pr.days){state.days={};state.tpl={};state.planName=""}
-  else{state.days={};state.tpl={};state.planName=pr.id==="blank"?"My plan":pr.name;
-    pr.days.forEach((dy,d)=>{state.days[d]={name:dy.name,tag:dy.tag,type:dy.type,focus:dy.focus,time:""};
-      state.tpl[d]=dy.ex.map(([x,sets,reps])=>({u:uid(),id:x,sets,reps,note:""}))})}
-  // today's untouched session follows the new plan; anything already logged today is kept
-  for(const k in state.sessions){const se=state.sessions[k];if(se.date===today()&&!doneSets(se).length)delete state.sessions[k]}
-  state.welcomed=true;save();
+const planDays=pl=>[0,1,2,3,4,5,6].filter(d=>((pl.days&&pl.days[d]&&pl.days[d].type)||PLAN[d].type)!=="rest").length;
+function loadPlan(id){ // make a saved plan the live one
+  save();const t=state.plans.find(p=>p.id===id);if(!t)return;
+  state.active=id;state.days=t.days||(t.days={});state.tpl=t.tpl||(t.tpl={});state.planName=t.name;
 }
+function usePlan(id){ // switch this week's plan
+  loadPlan(id);
+  for(const k in state.sessions){const se=state.sessions[k];if(se.date===today()&&!doneSets(se).length)delete state.sessions[k]}
+  state.rotWeek=weekStart(today());state.editBack="";save();
+}
+function addPlan(presetId,name){
+  const pr=PRESETS.find(q=>q.id===presetId),np={id:uid(),name:name||pr.name,builtin:!pr.days,days:{},tpl:{}};
+  if(pr.days)pr.days.forEach((dy,d)=>{np.days[d]={name:dy.name,tag:dy.tag,type:dy.type,focus:dy.focus,time:""};
+    np.tpl[d]=dy.ex.map(([x,sets,reps])=>({u:uid(),id:x,sets,reps,note:""}))});
+  save();
+  // a brand-new user replacing the untouched built-in plan shouldn't keep it as a second plan
+  const only=state.plans.length===1&&state.plans[0];
+  if(only&&only.builtin&&pr.days&&!Object.keys(only.days||{}).length&&!Object.keys(only.tpl||{}).length&&!Object.keys(state.sessions).length)state.plans=[];
+  state.plans.push(np);state.welcomed=true;
+  if(state.plans.length===1){state.active=np.id;state.days=np.days;state.tpl=np.tpl;state.planName=np.name;state.rotWeek=weekStart(today());save()}else usePlan(np.id);
+}
+function rotateCheck(){
+  if(state.editBack){loadPlan(state.editBack);state.editBack="";save()}
+  if(!state.rotate||state.plans.length<2)return;
+  const w=weekStart(today());if(!state.rotWeek){state.rotWeek=w;save();return}
+  if(w>state.rotWeek){const n=Math.round((parseD(w)-parseD(state.rotWeek))/6048e5),i=state.plans.findIndex(p=>p.id===state.active);
+    usePlan(state.plans[(i+n)%state.plans.length].id);toast("↻",`New week · ${state.planName}`,"Your plans switched automatically.","")}
+}
+const nextPlan=()=>{const i=state.plans.findIndex(p=>p.id===state.active);return state.plans[(i+1)%state.plans.length]};
 function openCreatePlan(){
-  const m=openModal(`<div><span class="eyebrow">Your plan</span><h2>Create a plan</h2></div>
-    <p class="muted" style="font-size:.9rem">Pick a starting point. You can rename days and add, swap or remove any exercise afterwards. Your logged workouts, ranks and medals are kept.</p>
-    <div class="menu">${PRESETS.map(pr=>`<button data-preset="${pr.id}"><span style="display:block">${esc(pr.name)}</span><span class="muted" style="font-weight:500;font-size:.85rem">${esc(pr.desc)}</span></button>`).join("")}</div>
-    <button class="btn ghost" data-close>Cancel</button>`);
+  const m=openModal(`${mhead("New plan")}<h2>Create a plan</h2>
+    <p class="muted" style="font-size:.9rem">Pick a starting point. It's added next to your other plans, and you can change every day afterwards.</p>
+    <div class="menu">${PRESETS.map(pr=>`<button data-preset="${pr.id}"><span style="display:block">${esc(pr.name)}</span><span class="muted" style="font-weight:500;font-size:.85rem">${esc(pr.desc)}</span></button>`).join("")}</div>`);
+  m.querySelector("#mh-back").onclick=closeModal;
   m.querySelector(".menu").addEventListener("click",e=>{const b=e.target.closest("[data-preset]");if(!b)return;
-    const pr=PRESETS.find(q=>q.id===b.dataset.preset);
-    const m2=openModal(`<h2>Use ${esc(pr.name)}?</h2><p>This replaces your current weekly plan and any plan edits. Logged workouts, ranks, medals and custom exercises stay.</p>
-      <div class="btnrow"><button class="btn" id="pp-go">Use this plan</button><button class="btn ghost" id="pp-back">Back</button></div>`);
-    m2.querySelector("#pp-back").onclick=openCreatePlan;
-    m2.querySelector("#pp-go").onclick=()=>{applyPreset(pr.id);refresh();openWeek();toast("✓","Plan created",pr.id==="blank"?"Tap a day to add exercises.":"Tap any day to change it.","")}});
+    const pr=PRESETS.find(q=>q.id===b.dataset.preset),dn=pr.id==="blank"?"My plan":pr.name.split(" · ")[0];
+    const m2=openModal(`${mhead("New plan","Save")}<h2>Name your plan</h2>
+      <label style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">Plan name</span><input class="txt" id="pn" maxlength="28" value="${esc(dn)}" autocomplete="off"></label>
+      <p class="muted" style="font-size:.9rem">Based on: ${esc(pr.name)}. It becomes this week's plan. Your logged workouts, ranks and medals are kept.</p>
+      <button class="btn" id="pn-go">Create plan</button>`);
+    m2.querySelector("#mh-back").onclick=openCreatePlan;
+    const go=()=>{addPlan(pr.id,m2.querySelector("#pn").value.trim()||dn);refresh();tplFromWeek=true;openWeek();toast("✓","Plan created",`${state.planName} is set for this week.`,"")};
+    m2.querySelector("#pn-go").onclick=go;m2.querySelector("#mh-save").onclick=go});
 }
 function openWeek(){
-  const m=openModal(`<div><span class="eyebrow">${esc(state.planName||"V-Taper PPL")}</span><h2>Your week</h2></div>
+  const m=openModal(`${mhead(state.editBack?"Editing a saved plan":"This week's plan","Save")}
+    <label style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">Plan name</span><input class="txt" id="wk-name" maxlength="28" value="${esc(state.planName)}" autocomplete="off"></label>
     <p class="muted" style="font-size:.9rem">Tap a day to rename it, change its colour or edit its exercises.</p>
-    <div class="menu">${[0,1,2,3,4,5,6].map(d=>{const pd=P(d),n=tpl(d).length;return `<button data-wd="${d}" style="display:flex;justify-content:space-between;gap:10px;align-items:baseline"><span><span class="muted" style="display:inline-block;width:2.6rem">${pd.d}</span>${esc(pd.name)}</span><span class="muted" style="font-weight:600;font-size:.85rem;white-space:nowrap">${pd.type==="rest"&&!n?"Rest":n+" exercise"+(n===1?"":"s")}</span></button>`}).join("")}</div>
-    <div class="btnrow"><button class="btn" data-close id="wk-done">Done</button><button class="btn ghost" id="wk-new">Start a different plan</button></div>`);
-  m.querySelector(".menu").addEventListener("click",e=>{const b=e.target.closest("[data-wd]");if(b)openTplEditor(+b.dataset.wd,true)});
-  m.querySelector("#wk-new").onclick=openCreatePlan;
-  m.querySelector("#wk-done").addEventListener("click",()=>{tplFromWeek=false;refresh()});
+    <div class="menu">${[0,1,2,3,4,5,6].map(d=>{const pd=P(d),n=tpl(d).length;return `<button data-wd="${d}" style="display:flex;justify-content:space-between;gap:10px;align-items:baseline"><span><span class="muted" style="display:inline-block;width:2.6rem">${pd.d}</span>${esc(pd.name)}</span><span class="muted" style="font-weight:600;font-size:.85rem;white-space:nowrap">${pd.type==="rest"&&!n?"Rest":n+" exercise"+(n===1?"":"s")} ›</span></button>`}).join("")}</div>
+    <button class="btn" id="wk-save">Save plan</button>`);
+  const saveName=()=>{const ap=activePlan(),nm=m.querySelector("#wk-name").value.trim();if(nm&&nm!==ap.name){ap.name=nm;state.planName=nm}};
+  const leave=()=>{tplFromWeek=false;if(state.editBack){loadPlan(state.editBack);state.editBack="";save()}closeModal();refresh()};
+  m.querySelector(".menu").addEventListener("click",e=>{const b=e.target.closest("[data-wd]");if(b){saveName();save();openTplEditor(+b.dataset.wd,true)}});
+  const doSave=()=>{saveName();const nm=state.planName,ok=save();leave();toast(ok?"✓":"!",ok?"Saved successfully":"Couldn't save",ok?`${nm} is up to date.`:"Your phone's storage for this app is full.","")};
+  m.querySelector("#wk-save").onclick=doSave;m.querySelector("#mh-save").onclick=doSave;
+  m.querySelector("#mh-back").onclick=leave;
+}
+function openSwitch(){
+  const m=openModal(`${mhead("This week")}<h2>Switch plan</h2><p class="muted" style="font-size:.9rem">Choose which plan you're following this week. Anything already logged is kept.</p>
+    <div class="menu">${state.plans.map(pl=>`<button data-use="${pl.id}" ${pl.id===state.active?"disabled":""} style="display:flex;justify-content:space-between;gap:10px;align-items:center"><span>${esc(pl.name)}<span class="muted" style="display:block;font-weight:500;font-size:.85rem">${planDays(pl)} training days</span></span>${pl.id===state.active?`<span class="pill on">This week</span>`:`<span class="pill">Use</span>`}</button>`).join("")}</div>`);
+  m.querySelector("#mh-back").onclick=closeModal;
+  m.querySelector(".menu").addEventListener("click",e=>{const b=e.target.closest("[data-use]");if(!b||b.disabled)return;usePlan(b.dataset.use);closeModal();refresh();toast("✓",`Switched to ${state.planName}`,"This is now your plan for the week.","")});
 }
 function renderPlanBox(){
-  const custom=state.days&&Object.keys(state.days).length;
-  $("#planbox").innerHTML=`<span class="eyebrow">Your plan</span><h2>${esc(state.planName||(custom?"My plan":"V-Taper PPL"))}</h2>
-    <p class="muted">${[0,1,2,3,4,5,6].map(d=>P(d)).filter(pd=>pd.type!=="rest").length} training days a week. Build your own split or change any day.</p>
-    <div class="btnrow"><button class="btn sm" id="pb-create">Create a plan</button><button class="btn sm ghost" id="pb-week">Edit my week</button></div>`;
+  const multi=state.plans.length>1,nx=nextPlan();
+  $("#planbox").innerHTML=`<span class="eyebrow">Your plans</span>
+    <div class="plist">${state.plans.map(pl=>{const on=pl.id===state.active;return `<div class="plrow${on?" on":""}"><div class="pl-t"><b>${esc(pl.name)}</b><span class="muted">${planDays(pl)} training days a week</span></div>
+      ${on?`<span class="pill on">This week</span>`:(multi&&state.rotate&&pl.id===nx.id?`<span class="pill">Next week</span>`:"")}
+      <div class="pl-a">${on?"":`<button class="btn sm" data-use="${pl.id}">Use this week</button>`}<button class="btn sm ghost" data-editp="${pl.id}">Edit</button>${multi?`<button class="btn sm ghost" data-delp="${pl.id}">Delete</button>`:""}</div></div>`}).join("")}</div>
+    <button class="addex" id="pb-create">+ Create a new plan</button>
+    ${multi?`<label class="switch"><input type="checkbox" id="pb-rot" ${state.rotate?"checked":""}><span><b>Switch plans automatically each week</b><span class="muted">${state.rotate?`Next Monday: ${esc(nx.name)}`:"Rotates through your plans every Monday."}</span></span></label>`
+      :`<p class="muted" style="font-size:.88rem">Alternate between splits? Create a second plan, then switch between them each week.</p>`}`;
 }
-$("#v-plan").addEventListener("click",e=>{if(e.target.id==="pb-create")openCreatePlan();if(e.target.id==="pb-week"){tplFromWeek=true;openWeek()}});
+$("#v-plan").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;
+  if(b.id==="pb-create")openCreatePlan();
+  if(b.dataset.use){usePlan(b.dataset.use);refresh();toast("✓",`Switched to ${state.planName}`,"This is now your plan for the week.","")}
+  if(b.dataset.editp){const id=b.dataset.editp;if(id!==state.active){const prev=state.active;loadPlan(id);state.editBack=prev;save()}tplFromWeek=true;openWeek()}
+  if(b.dataset.delp){const pl=state.plans.find(p=>p.id===b.dataset.delp);
+    confirmBox(`Delete the plan "${pl.name}"? Workouts you logged with it stay in your history.`,"Delete plan",()=>{
+      if(pl.id===state.active)usePlan(state.plans.find(p=>p.id!==pl.id).id);
+      state.plans=state.plans.filter(p=>p.id!==pl.id);save();closeModal();refresh();toast("✓","Plan deleted","","")})}
+});
+$("#v-plan").addEventListener("change",e=>{if(e.target.id==="pb-rot"){state.rotate=e.target.checked;state.rotWeek=weekStart(today());save();refresh();toast("✓",state.rotate?"Automatic switching on":"Automatic switching off",state.rotate?`Next Monday: ${nextPlan().name}`:"You choose your plan each week.","")}});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden){rotateCheck();if($("#modal").hidden)refresh()}});
+
+/* ---------- Profile editing ---------- */
+const avatarHTML=(size)=>state.avatar?`<img class="avatar" style="width:${size}px;height:${size}px" src="${state.avatar}" alt="Profile picture">`:`<span class="avatar" style="width:${size}px;height:${size}px;font-size:${size*.42}px" aria-hidden="true">${esc((state.name||"L").trim().charAt(0).toUpperCase()||"L")}</span>`;
+function openProfileEdit(){
+  let pic=state.avatar||"";
+  const m=openModal(`${mhead("Profile","Save")}<h2>Edit profile</h2>
+    <div class="pe-pic"><span id="pe-prev"></span><div class="btnrow"><label class="btn sm ghost" for="pe-file">Choose photo</label><button class="btn sm ghost" id="pe-rm">Remove photo</button></div>
+      <input type="file" id="pe-file" accept="image/*" class="sr"></div>
+    <label style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">Username</span><input class="txt" id="pe-name" maxlength="20" value="${esc(state.name||"")}" autocomplete="off" placeholder="Pick a username"></label>
+    <button class="btn" id="pe-save">Save profile</button>`);
+  const prev=()=>{m.querySelector("#pe-prev").innerHTML=pic?`<img class="avatar" style="width:96px;height:96px" src="${pic}" alt="Profile picture preview">`:`<span class="avatar" style="width:96px;height:96px;font-size:40px">${esc((m.querySelector("#pe-name").value||"L").trim().charAt(0).toUpperCase()||"L")}</span>`;m.querySelector("#pe-rm").hidden=!pic};
+  prev();
+  m.querySelector("#pe-name").addEventListener("input",()=>{if(!pic)prev()});
+  m.querySelector("#pe-rm").onclick=()=>{pic="";prev()};
+  m.querySelector("#pe-file").addEventListener("change",e=>{
+    const f=e.target.files&&e.target.files[0];if(!f)return;
+    const url=URL.createObjectURL(f),img=new Image();
+    img.onload=()=>{const S=192,cv=document.createElement("canvas");cv.width=cv.height=S;const side=Math.min(img.width,img.height);
+      cv.getContext("2d").drawImage(img,(img.width-side)/2,(img.height-side)/2,side,side,0,0,S,S);pic=cv.toDataURL("image/jpeg",.82);URL.revokeObjectURL(url);prev()};
+    img.onerror=()=>{URL.revokeObjectURL(url);toast("!","That photo didn't work","Try a different picture.","")};img.src=url});
+  const doSave=()=>{const nm=m.querySelector("#pe-name").value.trim();if(!nm){m.querySelector("#pe-name").focus();toast("!","Pick a username","It can't be empty.","");return}
+    state.name=nm;state.avatar=pic;const ok=save();closeModal();refresh();toast(ok?"✓":"!",ok?"Profile saved":"Couldn't save",ok?"":"The photo may be too large for this phone's storage.","")};
+  m.querySelector("#pe-save").onclick=doSave;m.querySelector("#mh-save").onclick=doSave;m.querySelector("#mh-back").onclick=closeModal;
+}
 
 /* ---------- Navigation ---------- */
 $("#days").addEventListener("click",e=>{const b=e.target.closest(".day");if(!b)return;current=+b.dataset.i;refresh();window.scrollTo(0,0)});
@@ -1574,6 +1694,7 @@ document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",(
   document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-selected",x===b));
   ["cardio","rules","science"].forEach(n=>$("#p-"+n).hidden=n!==b.dataset.p)}));
 function refresh(){const c=compute();renderHeader(c);renderPlanBox();if(view==="train"){renderTrain();welcome()}if(view==="progress")renderProgress();if(view==="profile")renderProfile()}
+rotateCheck();
 save();
 commit(()=>{},{quiet:true});
 refresh();
