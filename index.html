@@ -458,6 +458,7 @@ body{padding-bottom:calc(160px + env(safe-area-inset-bottom,0px))}
     <section id="v-profile" class="view" hidden></section>
 
     <section id="v-plan" class="view" hidden>
+      <div class="panel" id="planbox"></div>
       <div class="seg" role="tablist" aria-label="Plan sections">
         <button role="tab" id="seg-cardio" data-p="cardio" aria-selected="true">Cardio</button>
         <button role="tab" id="seg-rules" data-p="rules" aria-selected="false">Rules</button>
@@ -644,7 +645,7 @@ const PLAN=[
   ["stretch","Couch stretch + 90/90 hip stretch",2,"60–90s/side","Do the couch stretch daily if you can.",[],"none"]]},
  {d:"Sun",type:"rest",name:"Rest",focus:"Recover",time:"",ex:[]}
 ];
-const MUSCLES=[["chest","Chest"],["shoulders","Shoulders"],["reardelts","Rear delts"],["biceps","Biceps"],["triceps","Triceps"],["lats","Lats"],["upperback","Upper back"],["lowerback","Lower back"],["core","Core"],["quads","Quads"],["hamstrings","Hamstrings"],["glutes","Glutes"],["hips","Outer hips"],["calves","Calves"]];
+const MUSCLES=[["chest","Chest"],["shoulders","Shoulders"],["reardelts","Rear delts"],["biceps","Biceps"],["triceps","Triceps"],["lats","Lats"],["upperback","Upper back"],["lowerback","Lower back"],["core","Core"],["quads","Quads"],["hamstrings","Hamstrings"],["glutes","Glutes"],["hips","Outer hips"],["calves","Calves"],["forearms","Forearms"],["cardio","Cardio"]];
 const MNAME=Object.fromEntries(MUSCLES);
 const MUSCLE_OF={"inc-db-press":"chest",bench:"chest","cable-fly":"chest","inc-smith":"chest","pec-deck":"chest",pushups:"chest",
  "smith-ohp":"shoulders","cable-lat":"shoulders","db-lat":"shoulders","lat-raise":"shoulders","rear-delt":"reardelts","face-pull":"reardelts",
@@ -655,6 +656,21 @@ const MUSCLE_OF={"inc-db-press":"chest",bench:"chest","cable-fly":"chest","inc-s
  "hip-thrust":"glutes",abductor:"hips",calf:"calves",core:"core",stretch:"hips"};
 // Extra exercises for swaps: [id, name, kind, muscle]
 const LIB=[
+ ["bb-inc-bench","Incline barbell bench press","load","chest"],["dec-bench","Decline bench press","load","chest"],["smith-bench","Smith machine bench press","load","chest"],["inc-machine-press","Incline machine press","load","chest"],["dec-db-press","Decline DB press","load","chest"],["db-fly","DB fly","load","chest"],["inc-db-fly","Incline DB fly","load","chest"],["high-cable-fly","High-to-low cable fly","load","chest"],["machine-fly","Machine fly","load","chest"],["w-pushup","Push-ups","reps","chest"],["dec-pushup","Decline push-ups","reps","chest"],
+ ["ohp","Barbell overhead press","load","shoulders"],["arnold","Arnold press","load","shoulders"],["landmine-press","Landmine press","load","shoulders"],["front-raise","DB front raise","load","shoulders"],["cable-front-raise","Cable front raise","load","shoulders"],["upright-row","Upright row","load","shoulders"],["cable-y","Cable Y-raise","load","shoulders"],["pike-pushup","Pike push-ups","reps","shoulders"],
+ ["cable-rear-fly","Rear delt cable fly","load","reardelts"],["db-rear-fly","Bent-over DB reverse fly","load","reardelts"],
+ ["kickback","Triceps kickback","load","triceps"],["ez-oh-ext","EZ-bar overhead extension","load","triceps"],["tri-dip-machine","Triceps dip machine","load","triceps"],["bench-dips","Bench dips","reps","triceps"],["diamond","Diamond push-ups","reps","triceps"],["bar-pushdown","Straight-bar pushdown","load","triceps"],["jm-press","JM press","load","triceps"],
+ ["bb-curl","Barbell curl","load","biceps"],["conc-curl","Concentration curl","load","biceps"],["spider","Spider curl","load","biceps"],["machine-curl","Machine curl","load","biceps"],["rope-hammer","Cable rope hammer curl","load","biceps"],["zottman","Zottman curl","load","biceps"],["drag-curl","Drag curl","load","biceps"],
+ ["reverse-curl","Reverse curl","load","forearms"],["wrist-curl","Wrist curl","load","forearms"],["rev-wrist-curl","Reverse wrist curl","load","forearms"],["farmer","Farmer's carry","none","forearms"],["dead-hang","Dead hang","none","forearms"],
+ ["chinup","Chin-ups","bw","lats"],["neutral-pullup","Neutral-grip pull-ups","bw","lats"],["wide-pulldown","Wide-grip lat pulldown","load","lats"],["db-pullover","DB pullover","load","lats"],["machine-pulldown","Machine pulldown","load","lats"],
+ ["pendlay","Pendlay row","load","upperback"],["seal-row","Seal row","load","upperback"],["meadows","Meadows row","load","upperback"],["inverted-row","Inverted row","reps","upperback"],["bb-shrug","Barbell shrug","load","upperback"],["cable-shrug","Cable shrug","load","upperback"],["high-row","Machine high row","load","upperback"],
+ ["deadlift","Deadlift","load","lowerback"],["rack-pull","Rack pull","load","lowerback"],["good-morning","Good morning","load","lowerback"],["reverse-hyper","Reverse hyperextension","load","lowerback"],["superman","Superman hold","none","lowerback"],
+ ["front-squat","Front squat","load","quads"],["box-squat","Box squat","load","quads"],["belt-squat","Belt squat","load","quads"],["v-squat","V-squat machine","load","quads"],["sl-leg-press","Single-leg press","load","quads"],["split-squat","Split squat","load","quads"],["rev-lunge","Reverse lunge","load","quads"],["step-up","Step-up","load","quads"],["sl-leg-ext","Single-leg extension","load","quads"],["sissy","Sissy squat","reps","quads"],["bw-squat","Bodyweight squat","reps","quads"],["trapbar","Trap-bar deadlift","load","quads"],
+ ["sldl","Stiff-leg deadlift","load","hamstrings"],["db-rdl","DB Romanian deadlift","load","hamstrings"],["sl-curl","Single-leg curl","load","hamstrings"],["nordic","Nordic curl","reps","hamstrings"],["ghr","Glute-ham raise","reps","hamstrings"],
+ ["sumo","Sumo deadlift","load","glutes"],["bb-bridge","Barbell glute bridge","load","glutes"],["pull-through","Cable pull-through","load","glutes"],["kb-swing","Kettlebell swing","load","glutes"],["sl-thrust","Single-leg hip thrust","reps","glutes"],["cable-abduction","Cable hip abduction","load","hips"],
+ ["sl-calf","Single-leg calf raise","reps","calves"],["smith-calf","Smith machine calf raise","load","calves"],["tib-raise","Tibialis raise","reps","calves"],["donkey-calf","Donkey calf raise","load","calves"],
+ ["ab-wheel","Ab wheel rollout","reps","core"],["crunch","Crunch","reps","core"],["situp","Sit-up","reps","core"],["dec-situp","Decline sit-up","reps","core"],["leg-raise","Lying leg raise","reps","core"],["hanging-leg-raise","Hanging leg raise","reps","core"],["russian-twist","Russian twist","reps","core"],["machine-crunch","Machine crunch","load","core"],["woodchop","Cable woodchop","load","core"],["pallof","Pallof press","load","core"],["side-plank","Side plank","none","core"],["v-up","V-up","reps","core"],
+ ["treadmill","Treadmill","none","cardio"],["incline-walk","Incline walk","none","cardio"],["bike","Exercise bike","none","cardio"],["rower","Rowing machine","none","cardio"],["stairs","Stair climber","none","cardio"],["elliptical","Cross trainer","none","cardio"],["sprints","Sprints","none","cardio"],["skipping","Skipping","none","cardio"],["stretching","Stretching","none","cardio"],
  ["db-bench","DB bench press","load","chest"],["machine-press","Machine chest press","load","chest"],["dips","Dips","bw","chest"],["cable-cross","Low-to-high cable fly","load","chest"],
  ["db-ohp","Seated DB shoulder press","load","shoulders"],["machine-ohp","Machine shoulder press","load","shoulders"],["machine-lat","Machine lateral raise","load","shoulders"],["reverse-pec","Reverse pec deck","load","reardelts"],
  ["skull","Skull crusher","load","triceps"],["cg-bench","Close-grip bench press","load","triceps"],["sa-pushdown","Single-arm cable pushdown","load","triceps"],
@@ -691,7 +707,7 @@ const clone=o=>JSON.parse(JSON.stringify(o));
 
 /* ---------- State ---------- */
 const KEY="vtppl-state-v1";
-const blank=()=>({v:2,name:"Alexi",sessions:{},bw:{},earned:{},tpl:{},custom:{}});
+const blank=()=>({v:2,name:"Lifter",sessions:{},bw:{},earned:{},tpl:{},custom:{},days:{},planName:""});
 const defaultTpl=d=>PLAN[d].ex.map((e,j)=>({u:`d${d}-${j}`,id:e[0],sets:e[2],reps:e[3],note:e[4]}));
 function migrate(s){
   if(!s||!s.sessions)return null;
@@ -724,6 +740,8 @@ function defaultsFor(id){
 }
 
 /* ---------- Templates and sessions ---------- */
+const P=d=>({...PLAN[d],...((state.days&&state.days[d])||{})});
+const DAYNAMES=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 const tpl=d=>state.tpl[d]?state.tpl[d]:defaultTpl(d);
 const tplEdited=d=>!!state.tpl[d];
 const sessKey=(date,day)=>date+"|"+day;
@@ -939,7 +957,7 @@ function renderHeader(c){
   $("#c-medals").textContent=Object.keys(state.earned).length;
   const ws=weekStart(today());
   const doneDays=new Set(sortedSessions().filter(s=>s.finished&&weekStart(s.date)===ws).map(s=>s.day));
-  $("#days").innerHTML=PLAN.map((p,i)=>`<button class="day" id="day-${i}" style="--c:var(--${p.type})" aria-pressed="${i===current}" data-i="${i}"><b>${p.d}</b><span>${LABEL[p.type]}</span><i></i>${doneDays.has(i)?'<span class="done" aria-label="Done this week">✓</span>':""}</button>`).join("");
+  $("#days").innerHTML=[0,1,2,3,4,5,6].map(P).map((p,i)=>`<button class="day" id="day-${i}" style="--c:var(--${p.type})" aria-pressed="${i===current}" data-i="${i}"><b>${p.d}</b><span>${esc(p.tag||LABEL[p.type])}</span><i></i>${doneDays.has(i)?'<span class="done" aria-label="Done this week">✓</span>':""}</button>`).join("");
   $("#days").hidden=view!=="train";
 }
 
@@ -966,7 +984,7 @@ const DOTS=`<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r
 const keyType=k=>{const c=k.split("|")[1][0];return c==="w"?"w":c==="d"?"d":""};
 const extraOf=(s,u)=>(s&&s.extra&&s.extra[u])||{w:0,d:0};
 function renderTrain(){
-  const c=compute(),p=PLAN[current],st=`--c:var(--${p.type});--soft:var(--${p.type}-soft)`,el=$("#v-train");
+  const c=compute(),p=P(current),st=`--c:var(--${p.type});--soft:var(--${p.type}-soft)`,el=$("#v-train");
   const key=sessKey(today(),current),sess=getSess(false)||{sets:{},mod:false},slots=slotsNow();
   const rest=p.type==="rest";
   let tot=0,done=0;slots.forEach(sl=>{for(let s=0;s<sl.sets;s++){tot++;if(sess.sets[setKey(sl.u,s)]?.done)done++}});
@@ -974,13 +992,13 @@ function renderTrain(){
   const sessPRs=c.prs.filter(x=>x.k===key).length,sessRU=c.rankUps.filter(x=>x.k===key).length,sessXP=xpSets*10+sessPRs*50+sessRU*40+(sess.finished?100:0);
   let html="";
   if(rest&&!slots.length){
-    el.innerHTML=`<div class="hero" style="${st}"><span class="tag">Sunday</span><h2>Rest day</h2>
+    el.innerHTML=`<div class="hero" style="${st}"><span class="tag">${DAYNAMES[current]}</span><h2>Rest day</h2>
       <p>Walk, stretch and eat your protein. Muscle gets built while you recover.</p>
       <ul style="margin:4px 0 0;padding-left:20px"><li>Relaxed walk toward 8–10k steps</li><li>Couch stretch, 60–90 seconds per side</li><li>Log your bodyweight on the Profile tab</li></ul></div>
       ${weekCard(c)}<button class="addex" id="addex">+ Train anyway: add an exercise</button>`;return;
   }
   html+=`<div class="hero" style="${st}">
-    <span class="tag">${p.d} · ${LABEL[p.type]} · ${fmtD(today())}</span><h2>${rest?"Extra session":p.name}</h2><p>${rest?"Logged on your rest day":p.focus}</p>
+    <span class="tag">${p.d} · ${esc(p.tag||LABEL[p.type])} · ${fmtD(today())}</span><h2>${rest?"Extra session":p.name}</h2><p>${rest?"Logged on your rest day":p.focus}</p>
     <div class="meta"><span><strong>${slots.length}</strong> exercises</span><span><strong>${tot}</strong> sets</span>${p.time&&!sess.mod?`<span><strong>${p.time}</strong></span>`:""}</div>
     <span class="bar"><i style="width:${tot?done/tot*100:0}%"></i></span>
     <p class="muted"><span class="num">${done} of ${tot}</span> sets · <span class="num">+${sessXP}</span> XP${sessPRs?` · ${sessPRs} PR${sessPRs>1?"s":""}`:""}${sessRU?` · ${sessRU} rank up${sessRU>1?"s":""}`:""}</p>
@@ -1028,6 +1046,12 @@ function renderTrain(){
   if(state.sessions[key])html+=`<button class="link" id="clearday">Clear today's log</button>`;
   el.innerHTML=html;
 }
+function welcome(){
+  if(state.welcomed||Object.keys(state.sessions).length||(state.days&&Object.keys(state.days).length))return;
+  const d=document.createElement("div");d.className="changed";
+  d.innerHTML=`<p><b>New here?</b> This is the built-in 6-day plan. You can build your own split instead.</p><div class="btnrow"><button class="btn sm" id="wl-create">Create my own plan</button><button class="btn sm ghost" id="wl-keep">Keep this plan</button></div>`;
+  $("#v-train").prepend(d);
+}
 function weekCard(c){
   const ws=weekStart(today()),fin=sortedSessions().filter(s=>s.finished&&weekStart(s.date)===ws).length;
   return `<div class="panel"><span class="eyebrow">This week</span>
@@ -1066,15 +1090,17 @@ vt.addEventListener("click",e=>{
   if(b.dataset.rmx){const typ=b.dataset.rmx,u=b.dataset.u;
     commit(()=>{const s=getSess(true),ex=s.extra[u];ex[typ]--;delete s.sets[`${u}|${typ}${ex[typ]}`]},{quiet:true});refresh();return}
   switch(b.id){
+    case "wl-create":openCreatePlan();break;
+    case "wl-keep":state.welcomed=true;save();refresh();break;
     case "addex":openPicker({mode:"add"});break;
-    case "edittpl":openTplEditor(current);break;
-    case "savetpl":{const s=getSess(false);state.tpl[current]=clone(s.ex);s.mod=false;save();toast("✓",`Saved as your ${PLAN[current].d} plan`,"Future weeks use this version.","");refresh();break}
+    case "edittpl":openTplEditor(current,false);break;
+    case "savetpl":{const s=getSess(false);state.tpl[current]=clone(s.ex);s.mod=false;save();toast("✓",`Saved as your ${P(current).d} plan`,"Future weeks use this version.","");refresh();break}
     case "backtpl":{const s=getSess(false);s.mod=false;syncSess(s);
       for(const k of Object.keys(s.sets)){const u=k.split("|")[0];if(!s.ex.some(sl=>sl.u===u)&&!s.sets[k].done)delete s.sets[k]}
       save();toast("✓","Back to your regular plan","Anything you already logged today is kept.","");refresh();break}
     case "finish":{const key=sessKey(today(),current);const res=commit(()=>{const s=getSess(true);s.finished=true;s.at=new Date().toTimeString().slice(0,5)},{noLevelModal:true});showSummary(key,res);stopRest();refresh();break}
     case "summary":showSummary(sessKey(today(),current));break;
-    case "clearday":{const m=openModal(`<h2>Clear today's log?</h2><p>This removes every set and change you made for ${esc(PLAN[current].d)} today. Other days stay as they are.</p>
+    case "clearday":{const m=openModal(`<h2>Clear today's log?</h2><p>This removes every set and change you made for ${esc(P(current).d)} today. Other days stay as they are.</p>
       <div class="btnrow"><button class="btn danger" id="mclear">Clear log</button><button class="btn ghost" data-close>Cancel</button></div>`);
       m.querySelector("#mclear").addEventListener("click",()=>{commit(()=>{delete state.sessions[sessKey(today(),current)]},{quiet:true});closeModal();refresh()});break}
   }
@@ -1093,7 +1119,7 @@ function slotMenu(u){
       <button id="m-down" ${j===slots.length-1?"disabled":""}>Move down</button>
       <button id="m-remove" class="danger">Remove from today</button>
     </div>
-    <p class="muted" style="font-size:.85rem">These changes only apply to today. To change every ${esc(PLAN[current].d)}, use Edit regular plan.</p>
+    <p class="muted" style="font-size:.85rem">These changes only apply to today. To change every ${esc(P(current).d)}, use Edit regular plan.</p>
     <button class="btn ghost" data-close>Cancel</button>`);
   const withSess=fn=>{const s=getSess(true);markMod(s);fn(s);save();closeModal();refresh()};
   m.querySelector("#m-swap").onclick=()=>{
@@ -1127,7 +1153,7 @@ function setsEditor(sl,done){
 function openPicker(ctx){
   const swapFrom=ctx.mode.endsWith("swap")?(ctx.mode==="swap"?slotsNow():tplDraft(ctx.day)).find(q=>q.u===ctx.u)?.id:null;
   const fm=swapFrom?EX[swapFrom]?.muscle:null;
-  const title=ctx.mode==="add"?"Add for today":ctx.mode==="swap"?`Swap ${exName(swapFrom)}`:ctx.mode==="tpl-add"?`Add to ${PLAN[ctx.day].d} plan`:`Swap in ${PLAN[ctx.day].d} plan`;
+  const title=ctx.mode==="add"?"Add for today":ctx.mode==="swap"?`Swap ${exName(swapFrom)}`:ctx.mode==="tpl-add"?`Add to ${P(ctx.day).d} plan`:`Swap in ${P(ctx.day).d} plan`;
   const m=openModal(`<div><span class="eyebrow">${ctx.mode.startsWith("tpl")?"Regular plan":"Today only"}</span><h2>${esc(title)}</h2></div>
     <input class="txt" id="pk-q" type="search" placeholder="Search exercises" autocomplete="off" aria-label="Search exercises">
     <div class="pk-list" id="pk-list"></div>
@@ -1171,15 +1197,22 @@ function applyPick(ctx,id){
   }
 }
 const tplDraft=d=>clone(tpl(d));
-function openTplEditor(d){
-  const list=tpl(d);
-  const m=openModal(`<div><span class="eyebrow">Regular plan</span><h2>Every ${esc(PLAN[d].d)} · ${esc(PLAN[d].name)}</h2></div>
+let tplFromWeek=false;
+function openTplEditor(d,fromWeek){
+  if(fromWeek!==undefined)tplFromWeek=fromWeek;
+  const list=tpl(d),pd=P(d);
+  const m=openModal(`<div><span class="eyebrow">Regular plan</span><h2>Every ${esc(P(d).d)} · ${esc(P(d).name)}</h2></div>
     <p class="muted" style="font-size:.88rem">Changes apply from now on. Past workouts and your lift history stay as they are.</p>
+    <div class="formgrid">
+      <label class="full">Workout name<input class="txt" id="tp-name" maxlength="24" value="${esc(pd.name)}" autocomplete="off"></label>
+      <label>Short label<input class="txt" id="tp-tag" maxlength="6" value="${esc(pd.tag||LABEL[pd.type])}" autocomplete="off"></label>
+      <label>Colour<select id="tp-type"><option value="push"${pd.type==="push"?" selected":""}>Red</option><option value="pull"${pd.type==="pull"?" selected":""}>Blue</option><option value="legs"${pd.type==="legs"?" selected":""}>Violet</option><option value="rest"${pd.type==="rest"?" selected":""}>Rest day (grey)</option></select></label>
+    </div>
     <div id="tp-list">${list.map((sl,j)=>`<div class="trow" data-u="${sl.u}"><span class="tn">${esc(exName(sl.id))}</span>
       <span class="tctl"><input type="number" inputmode="numeric" min="1" max="10" value="${sl.sets}" data-f="sets" aria-label="Sets"><span class="muted">×</span><input class="reps" value="${esc(sl.reps)}" data-f="reps" aria-label="Reps" autocomplete="off"></span>
       <span class="tbtns"><button data-a="up" ${j===0?"disabled":""}>Up</button><button data-a="down" ${j===list.length-1?"disabled":""}>Down</button><button data-a="swap">Swap</button><button data-a="del" class="danger">Remove</button></span></div>`).join("")||`<p class="muted">No exercises yet.</p>`}</div>
     <button class="addex" id="tp-add">+ Add an exercise</button>
-    <div class="btnrow"><button class="btn" data-close id="tp-done">Done</button>${tplEdited(d)?`<button class="btn ghost" id="tp-reset">Reset to original plan</button>`:""}</div>`);
+    <div class="btnrow"><button class="btn" data-close id="tp-done">Done</button>${tplEdited(d)||(state.days&&state.days[d])?`<button class="btn ghost" id="tp-reset">Reset to original plan</button>`:""}</div>`);
   const L=m.querySelector("#tp-list");
   L.addEventListener("change",e=>{const i=e.target,u=i.closest(".trow").dataset.u,l=tplDraft(d),sl=l.find(q=>q.u===u);
     if(i.dataset.f==="sets")sl.sets=Math.max(1,Math.min(10,parseInt(i.value)||sl.sets));else sl.reps=i.value.trim().replace(/-/g,"–")||sl.reps;
@@ -1191,8 +1224,11 @@ function openTplEditor(d){
     if(b.dataset.a==="del")l.splice(i,1);
     state.tpl[d]=l;save();openTplEditor(d)});
   m.querySelector("#tp-add").onclick=()=>openPicker({mode:"tpl-add",day:d});
-  m.querySelector("#tp-done").addEventListener("click",refresh);
-  m.querySelector("#tp-reset")?.addEventListener("click",()=>{delete state.tpl[d];save();openTplEditor(d);toast("✓",`${PLAN[d].d} plan reset`,"Back to the original exercises.","")});
+  const saveDay=()=>{const type=m.querySelector("#tp-type").value,nm=m.querySelector("#tp-name").value.trim(),tg=m.querySelector("#tp-tag").value.trim();
+    state.days=state.days||{};state.days[d]={name:nm||(type==="rest"?"Rest":"Workout"),tag:tg||(type==="rest"?"Rest":LABEL[type]),type,focus:(state.days[d]&&state.days[d].focus)!=null?state.days[d].focus:(P(d).name===nm?P(d).focus:""),time:(state.days[d]&&state.days[d].time)!=null?state.days[d].time:P(d).time};save()};
+  ["#tp-name","#tp-tag","#tp-type"].forEach(q=>m.querySelector(q).addEventListener("change",saveDay));
+  m.querySelector("#tp-done").addEventListener("click",()=>{refresh();if(tplFromWeek)openWeek()});
+  m.querySelector("#tp-reset")?.addEventListener("click",()=>{delete state.tpl[d];if(state.days)delete state.days[d];save();openTplEditor(d);toast("✓",`${P(d).d} plan reset`,"Back to the original exercises.","")});
 }
 
 
@@ -1258,7 +1294,7 @@ function bodySVG(side,ms,sel){
       return `<g class="mus${v?"":" nodata"}${sel===m?" sel":""}" data-m="${m}" ${v?`style="fill:var(${tierVar(v.step)})"`:""} tabindex="0" role="button" aria-label="${MNAME[m]}: ${v?stepName(v.step):"not ranked"}"><title>${MNAME[m]}</title>${mir(shape)}</g>`}).join("")}
     <g class="mline">${mir(B.lines)}</g></svg>`;
 }
-const REGIONS=[["Arms",["biceps","triceps"]],["Shoulders",["shoulders","reardelts"]],["Chest",["chest"]],["Back",["lats","upperback","lowerback"]],["Core",["core"]],["Legs",["quads","hamstrings","glutes","hips","calves"]]];
+const REGIONS=[["Arms",["biceps","triceps","forearms"]],["Shoulders",["shoulders","reardelts"]],["Chest",["chest"]],["Back",["lats","upperback","lowerback"]],["Core",["core"]],["Legs",["quads","hamstrings","glutes","hips","calves"]]];
 
 /* ---------- Progress view ---------- */
 let progEx=null,selMuscle=null,rankTab="body";const openReg=new Set();
@@ -1425,7 +1461,14 @@ const STD={bench:1.2,"inc-db-press":.45,"db-bench":.5,"inc-smith":1.0,"machine-p
  "cs-row":.9,"bb-row":1.0,"cable-row":1.0,"machine-row":1.0,tbar:1.0,"db-row":.55,shrug:.6,"back-ext":.6,
  squat:1.5,"leg-press":2.8,"leg-ext":1.1,hack:1.6,"smith-squat":1.4,goblet:.55,bss:.4,lunge:.4,pendulum:1.4,
  "seated-curl":.9,"lying-curl":.8,rdl:1.4,"sl-rdl":.4,"hip-thrust":2.0,"glute-bridge":2.0,"glute-kb":.4,abductor:1.2,adductor:1.3,
- calf:2.0,"seated-calf":1.2,"standing-calf":1.8,"cable-crunch":1.0,"knee-raise":20};
+ calf:2.0,"seated-calf":1.2,"standing-calf":1.8,"cable-crunch":1.0,"knee-raise":20,
+ "bb-inc-bench":1.05,"dec-bench":1.25,"smith-bench":1.15,"inc-machine-press":1.0,"dec-db-press":.5,"db-fly":.3,"inc-db-fly":.27,"high-cable-fly":.35,"machine-fly":1.0,"w-pushup":35,"dec-pushup":28,
+ ohp:.75,arnold:.38,"landmine-press":.6,"front-raise":.16,"cable-front-raise":.2,"upright-row":.6,"pike-pushup":15,"cable-rear-fly":.13,"db-rear-fly":.15,
+ kickback:.18,"ez-oh-ext":.5,"tri-dip-machine":1.2,"bench-dips":25,diamond:22,"bar-pushdown":.65,"bb-curl":.55,"conc-curl":.25,spider:.5,"machine-curl":.6,"rope-hammer":.55,"drag-curl":.5,"reverse-curl":.4,"wrist-curl":.45,
+ chinup:1.4,"neutral-pullup":1.4,"wide-pulldown":1.0,"db-pullover":.4,"machine-pulldown":1.0,pendlay:1.0,"seal-row":.9,"inverted-row":18,"bb-shrug":1.6,"high-row":1.0,
+ deadlift:1.9,"rack-pull":2.1,"good-morning":.8,"front-squat":1.2,"box-squat":1.45,"belt-squat":1.4,"v-squat":1.6,"split-squat":.4,"rev-lunge":.4,"step-up":.35,sissy:15,"bw-squat":50,trapbar:2.0,
+ sldl:1.4,"db-rdl":.5,nordic:8,ghr:12,sumo:1.9,"bb-bridge":2.0,"kb-swing":.4,"sl-calf":20,"smith-calf":1.8,"tib-raise":25,
+ "ab-wheel":15,crunch:40,situp:40,"dec-situp":25,"leg-raise":20,"hanging-leg-raise":15,"russian-twist":40,"machine-crunch":1.0,"v-up":20};
 const bwAt=d=>latestBW(d)??latestBW()??77;
 function levelL(x,score,date){const I=STD[x];if(!I)return null;return EX[x]?.kind==="reps"?score/I:score/bwAt(date)/I}
 function emblem(step,size=44){
@@ -1439,7 +1482,7 @@ function emblem(step,size=44){
 
 /* ---------- Summary ---------- */
 function showSummary(key,res){
-  const c=compute(),s=state.sessions[key],p=PLAN[s.day],sets=doneSets(s).filter(x=>x.t!=="w");
+  const c=compute(),s=state.sessions[key],p=P(s.day),sets=doneSets(s).filter(x=>x.t!=="w");
   const vol=sets.reduce((a,x)=>a+volOf(x.x,x,s.date),0),prs=c.prs.filter(x=>x.k===key),rus=c.rankUps.filter(x=>x.k===key);
   const xp=sets.length*10+prs.length*50+rus.length*40+100+(res?res.newBadges.reduce((a,b)=>a+b.xp,0):0);
   const lvUp=res&&res.after.level>res.before.level;
@@ -1452,6 +1495,75 @@ function showSummary(key,res){
     <button class="btn" data-close>Done</button>`);
 }
 
+/* ---------- Create a plan ---------- */
+const R=(name,tag,type,focus,ex)=>({name,tag,type,focus,ex});
+const REST=R("Rest","Rest","rest","Recover",[]);
+const X={
+ push:[["bench",3,"6–10"],["inc-db-press",3,"8–12"],["db-ohp",3,"8–12"],["db-lat",3,"12–15"],["cable-fly",3,"12–15"],["pushdown",3,"10–15"],["oh-cable-tri",3,"10–12"]],
+ pull:[["pulldown",3,"8–12"],["cable-row",3,"8–12"],["db-row",3,"8–12"],["face-pull",3,"12–15"],["ez-curl",3,"8–12"],["hammer",3,"10–12"]],
+ legs:[["squat",3,"6–10"],["rdl",3,"8–10"],["leg-press",3,"10–15"],["lying-curl",3,"10–12"],["leg-ext",3,"12–15"],["standing-calf",4,"10–15"]],
+ upperA:[["bench",3,"6–10"],["cable-row",3,"8–12"],["db-ohp",3,"8–12"],["pulldown",3,"8–12"],["db-lat",3,"12–15"],["ez-curl",3,"10–12"],["pushdown",3,"10–12"]],
+ lowerA:[["squat",3,"6–10"],["rdl",3,"8–10"],["leg-press",3,"10–15"],["lying-curl",3,"10–12"],["standing-calf",4,"10–15"],["cable-crunch",3,"10–15"]],
+ upperB:[["inc-db-press",3,"8–12"],["pullup",3,"6–10"],["machine-press",3,"10–12"],["machine-row",3,"10–12"],["cable-lat",3,"12–15"],["inc-curl",3,"10–12"],["oh-cable-tri",3,"10–12"]],
+ lowerB:[["hack",3,"8–12"],["hip-thrust",3,"8–12"],["leg-ext",3,"12–15"],["seated-curl",3,"10–12"],["seated-calf",4,"12–15"],["hanging-leg-raise",3,"max"]],
+ fullA:[["squat",3,"6–10"],["bench",3,"6–10"],["cable-row",3,"8–12"],["db-lat",3,"12–15"],["ez-curl",2,"10–12"],["pushdown",2,"10–12"]],
+ fullB:[["rdl",3,"8–10"],["db-ohp",3,"8–12"],["pulldown",3,"8–12"],["leg-press",3,"10–15"],["cable-fly",2,"12–15"],["cable-crunch",3,"10–15"]],
+ fullC:[["leg-press",3,"10–15"],["inc-db-press",3,"8–12"],["machine-row",3,"8–12"],["lying-curl",3,"10–12"],["cable-lat",3,"12–15"],["hammer",2,"10–12"]],
+ chestback:[["bench",4,"6–10"],["pullup",4,"6–10"],["inc-db-press",3,"8–12"],["bb-row",3,"8–10"],["db-fly",3,"10–15"],["cable-row",3,"10–12"],["db-pullover",3,"10–12"]],
+ shoulderarm:[["ohp",4,"6–10"],["db-lat",4,"12–15"],["db-rear-fly",3,"12–15"],["bb-curl",3,"8–12"],["skull",3,"8–12"],["inc-curl",3,"10–12"],["pushdown",3,"10–15"]],
+ chest:[["bench",4,"6–10"],["inc-db-press",3,"8–12"],["machine-press",3,"10–12"],["cable-fly",3,"12–15"],["dips",3,"8–12"]],
+ back:[["pullup",4,"6–10"],["bb-row",3,"8–10"],["pulldown",3,"8–12"],["cable-row",3,"10–12"],["straight-arm",3,"12–15"],["bb-shrug",3,"10–12"]],
+ shoulders:[["ohp",4,"6–10"],["db-ohp",3,"8–12"],["db-lat",4,"12–15"],["cable-lat",3,"12–15"],["reverse-pec",3,"12–15"],["face-pull",3,"12–15"]],
+ arms:[["bb-curl",3,"8–12"],["cg-bench",3,"8–10"],["inc-curl",3,"10–12"],["oh-cable-tri",3,"10–12"],["hammer",3,"10–12"],["pushdown",3,"12–15"]]
+};
+const PRESETS=[
+ {id:"blank",name:"Start from scratch",desc:"Seven empty days. Name each workout and pick your own exercises.",days:[0,1,2,3,4,5,6].map(()=>REST)},
+ {id:"ppl3",name:"Push / Pull / Legs · 3 days",desc:"Mon, Wed, Fri. Each muscle once a week.",days:[R("Push","Push","push","Chest, shoulders, triceps",X.push),REST,R("Pull","Pull","pull","Back, biceps",X.pull),REST,R("Legs","Legs","legs","Quads, hamstrings, calves",X.legs),REST,REST]},
+ {id:"ul4",name:"Upper / Lower · 4 days",desc:"Mon, Tue, Thu, Fri. Each muscle twice a week.",days:[R("Upper A","Upper","push","Chest, back, shoulders, arms",X.upperA),R("Lower A","Lower","legs","Quads, hamstrings, calves",X.lowerA),REST,R("Upper B","Upper","pull","Chest, back, shoulders, arms",X.upperB),R("Lower B","Lower","legs","Quads, glutes, hamstrings",X.lowerB),REST,REST]},
+ {id:"fb3",name:"Full body · 3 days",desc:"Mon, Wed, Fri. Good for beginners or busy weeks.",days:[R("Full body A","Full","push","Whole body",X.fullA),REST,R("Full body B","Full","pull","Whole body",X.fullB),REST,R("Full body C","Full","legs","Whole body",X.fullC),REST,REST]},
+ {id:"arnold6",name:"Arnold split · 6 days",desc:"Chest and back, shoulders and arms, legs, then repeat.",days:[R("Chest & back","Ch/Bk","push","Chest, back",X.chestback),R("Shoulders & arms","Sh/Arm","pull","Shoulders, biceps, triceps",X.shoulderarm),R("Legs","Legs","legs","Quads, hamstrings, calves",X.legs),R("Chest & back","Ch/Bk","push","Chest, back",X.chestback),R("Shoulders & arms","Sh/Arm","pull","Shoulders, biceps, triceps",X.shoulderarm),R("Legs","Legs","legs","Quads, glutes, hamstrings",X.lowerB),REST]},
+ {id:"bro5",name:"Body-part split · 5 days",desc:"Chest, back, shoulders, legs, arms. One muscle group a day.",days:[R("Chest","Chest","push","Chest",X.chest),R("Back","Back","pull","Lats, upper back",X.back),R("Shoulders","Delts","push","Shoulders",X.shoulders),R("Legs","Legs","legs","Quads, hamstrings, calves",X.legs),R("Arms","Arms","pull","Biceps, triceps",X.arms),REST,REST]},
+ {id:"default",name:"V-Taper PPL · 6 days",desc:"The plan the app came with: push, pull, legs twice a week.",days:null}
+];
+function applyPreset(id){
+  const pr=PRESETS.find(q=>q.id===id);
+  if(!pr.days){state.days={};state.tpl={};state.planName=""}
+  else{state.days={};state.tpl={};state.planName=pr.id==="blank"?"My plan":pr.name;
+    pr.days.forEach((dy,d)=>{state.days[d]={name:dy.name,tag:dy.tag,type:dy.type,focus:dy.focus,time:""};
+      state.tpl[d]=dy.ex.map(([x,sets,reps])=>({u:uid(),id:x,sets,reps,note:""}))})}
+  // today's untouched session follows the new plan; anything already logged today is kept
+  for(const k in state.sessions){const se=state.sessions[k];if(se.date===today()&&!doneSets(se).length)delete state.sessions[k]}
+  state.welcomed=true;save();
+}
+function openCreatePlan(){
+  const m=openModal(`<div><span class="eyebrow">Your plan</span><h2>Create a plan</h2></div>
+    <p class="muted" style="font-size:.9rem">Pick a starting point. You can rename days and add, swap or remove any exercise afterwards. Your logged workouts, ranks and medals are kept.</p>
+    <div class="menu">${PRESETS.map(pr=>`<button data-preset="${pr.id}"><span style="display:block">${esc(pr.name)}</span><span class="muted" style="font-weight:500;font-size:.85rem">${esc(pr.desc)}</span></button>`).join("")}</div>
+    <button class="btn ghost" data-close>Cancel</button>`);
+  m.querySelector(".menu").addEventListener("click",e=>{const b=e.target.closest("[data-preset]");if(!b)return;
+    const pr=PRESETS.find(q=>q.id===b.dataset.preset);
+    const m2=openModal(`<h2>Use ${esc(pr.name)}?</h2><p>This replaces your current weekly plan and any plan edits. Logged workouts, ranks, medals and custom exercises stay.</p>
+      <div class="btnrow"><button class="btn" id="pp-go">Use this plan</button><button class="btn ghost" id="pp-back">Back</button></div>`);
+    m2.querySelector("#pp-back").onclick=openCreatePlan;
+    m2.querySelector("#pp-go").onclick=()=>{applyPreset(pr.id);refresh();openWeek();toast("✓","Plan created",pr.id==="blank"?"Tap a day to add exercises.":"Tap any day to change it.","")}});
+}
+function openWeek(){
+  const m=openModal(`<div><span class="eyebrow">${esc(state.planName||"V-Taper PPL")}</span><h2>Your week</h2></div>
+    <p class="muted" style="font-size:.9rem">Tap a day to rename it, change its colour or edit its exercises.</p>
+    <div class="menu">${[0,1,2,3,4,5,6].map(d=>{const pd=P(d),n=tpl(d).length;return `<button data-wd="${d}" style="display:flex;justify-content:space-between;gap:10px;align-items:baseline"><span><span class="muted" style="display:inline-block;width:2.6rem">${pd.d}</span>${esc(pd.name)}</span><span class="muted" style="font-weight:600;font-size:.85rem;white-space:nowrap">${pd.type==="rest"&&!n?"Rest":n+" exercise"+(n===1?"":"s")}</span></button>`}).join("")}</div>
+    <div class="btnrow"><button class="btn" data-close id="wk-done">Done</button><button class="btn ghost" id="wk-new">Start a different plan</button></div>`);
+  m.querySelector(".menu").addEventListener("click",e=>{const b=e.target.closest("[data-wd]");if(b)openTplEditor(+b.dataset.wd,true)});
+  m.querySelector("#wk-new").onclick=openCreatePlan;
+  m.querySelector("#wk-done").addEventListener("click",()=>{tplFromWeek=false;refresh()});
+}
+function renderPlanBox(){
+  const custom=state.days&&Object.keys(state.days).length;
+  $("#planbox").innerHTML=`<span class="eyebrow">Your plan</span><h2>${esc(state.planName||(custom?"My plan":"V-Taper PPL"))}</h2>
+    <p class="muted">${[0,1,2,3,4,5,6].map(d=>P(d)).filter(pd=>pd.type!=="rest").length} training days a week. Build your own split or change any day.</p>
+    <div class="btnrow"><button class="btn sm" id="pb-create">Create a plan</button><button class="btn sm ghost" id="pb-week">Edit my week</button></div>`;
+}
+$("#v-plan").addEventListener("click",e=>{if(e.target.id==="pb-create")openCreatePlan();if(e.target.id==="pb-week"){tplFromWeek=true;openWeek()}});
+
 /* ---------- Navigation ---------- */
 $("#days").addEventListener("click",e=>{const b=e.target.closest(".day");if(!b)return;current=+b.dataset.i;refresh();window.scrollTo(0,0)});
 $("#lvlpill").addEventListener("click",()=>go("profile"));
@@ -1461,7 +1573,7 @@ function go(vw){view=vw;document.querySelectorAll(".tab").forEach(x=>x.setAttrib
 document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{
   document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-selected",x===b));
   ["cardio","rules","science"].forEach(n=>$("#p-"+n).hidden=n!==b.dataset.p)}));
-function refresh(){const c=compute();renderHeader(c);if(view==="train")renderTrain();if(view==="progress")renderProgress();if(view==="profile")renderProfile()}
+function refresh(){const c=compute();renderHeader(c);renderPlanBox();if(view==="train"){renderTrain();welcome()}if(view==="progress")renderProgress();if(view==="profile")renderProfile()}
 save();
 commit(()=>{},{quiet:true});
 refresh();
