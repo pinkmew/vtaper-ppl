@@ -530,7 +530,7 @@ button.cd{border:0;cursor:pointer;font-family:var(--body);position:relative;padd
 
 
 /* ---- v8: rarity, animated frames and banners, pixel pets ---- */
-:root{--r-common:#a7b0ba;--r-rare:#4da3ff;--r-epic:#b77bff;--r-legend:#ffc53d}
+:root{--r-common:#a7b0ba;--r-rare:#4da3ff;--r-epic:#b77bff;--r-legend:#ffc53d;--r-myth:#ff5fd2}
 .rar{font-size:.66rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--rc);border:1.5px solid var(--rc);border-radius:999px;padding:2px 8px;white-space:nowrap}
 .rarh{color:var(--rc);display:flex;align-items:center;gap:10px}
 .rarh::after{content:"";flex:1;height:2px;border-radius:1px;background:var(--rc);opacity:.35}
@@ -734,6 +734,27 @@ body.chatting .tabs,body.chatting .rest{display:none}
 .notif .switch{align-items:center;padding-block:4px}
 .notif .switch>span{flex:1}
 .switch input.tm,.tm{width:auto;height:auto;margin:0;font:700 16px var(--body);color:var(--fg);background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:6px 8px;flex:0 0 auto;width:auto}
+
+/* ---- v13: Mythic, pet profile, codes ---- */
+.rar[style*="--r-myth"]{background:linear-gradient(90deg,#ff5fd2,#7b5cff,#3fd0ff);-webkit-background-clip:text;background-clip:text;color:transparent;border-color:#ff5fd2}
+.shinyb{display:inline-flex;align-items:center;gap:4px;font-size:.7rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#1a0b1e;border-radius:999px;padding:3px 9px;
+  background:linear-gradient(90deg,#ffe14a,#ff9ad8,#9fd8ff,#ffe14a);background-size:200% 100%;animation:shine 3s linear infinite;box-shadow:0 0 12px rgba(255,95,210,.45)}
+@keyframes shine{to{background-position:200% 0}}
+.petprof{align-self:center;width:180px;height:180px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,color-mix(in srgb,var(--rc) 30%,transparent),transparent 68%)}
+.petprof.myth{background:radial-gradient(circle,rgba(255,95,210,.35),transparent 62%),conic-gradient(from 0deg,rgba(255,225,74,.18),rgba(255,95,210,.18),rgba(63,208,255,.18),rgba(255,225,74,.18));animation:glowring 6s linear infinite}
+@keyframes glowring{to{filter:hue-rotate(360deg)}}
+.pdesc{margin:0;font-size:.95rem;line-height:1.45;text-align:center;color:var(--fg)}
+.pfacts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pfacts>div{background:var(--surface-2);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.pfacts .wide{grid-column:1/-1}
+.pfacts b{font-size:.92rem}
+.codebtn{display:flex;align-items:center;gap:10px;width:100%;border:1.5px dashed color-mix(in srgb,var(--r-myth) 55%,var(--line));background:color-mix(in srgb,var(--r-myth) 8%,var(--surface));color:var(--fg);border-radius:14px;padding:12px 14px;cursor:pointer;font-family:var(--body);font-size:1rem;text-align:left}
+.codebtn b{flex:1}
+.codein{text-transform:uppercase;letter-spacing:.14em;font-weight:800;text-align:center}
+.fr-circle{background:conic-gradient(#ff5fd2,#7b5cff,#3fd0ff,#5fffb0,#ffe14a,#ff5fd2);--gl:#ff5fd2;animation:glowp 2.2s ease-in-out infinite}
+.fr-circle::before{content:"";position:absolute;inset:calc(var(--s)*-.16);border-radius:50%;background:conic-gradient(#ffe14a,#ff5fd2,#7b5cff,#3fd0ff,#5fffb0,#ffe14a);-webkit-mask:radial-gradient(circle,transparent 63%,#000 65%,#000 69%,transparent 71%);mask:radial-gradient(circle,transparent 63%,#000 65%,#000 69%,transparent 71%);animation:spin 3s linear infinite}
+.bn-prism{background:linear-gradient(rgba(0,0,0,.35),rgba(0,0,0,.35)),linear-gradient(115deg,#ff5fd2,#7b5cff,#3fd0ff,#5fffb0,#ffe14a,#ff5fd2);background-size:auto,300% 100%;animation:prismmove 9s linear infinite}
+@keyframes prismmove{to{background-position:0 0,300% 0}}
 </style>
 </head>
 <body>
@@ -1988,7 +2009,7 @@ function openProfileEdit(){
 
 /* ---------- Gems, shop items ---------- */
 const gems=c=>200+(c.level-1)*25+(state.gemsEarned||0)-(state.spent||0);
-const RAR=[{n:"Common",v:"--r-common"},{n:"Rare",v:"--r-rare"},{n:"Epic",v:"--r-epic"},{n:"Legendary",v:"--r-legend"}];
+const RAR=[{n:"Common",v:"--r-common"},{n:"Rare",v:"--r-rare"},{n:"Epic",v:"--r-epic"},{n:"Legendary",v:"--r-legend"},{n:"Mythic",v:"--r-myth"}];
 // r: 0 common, 1 rare, 2 epic, 3 legendary. anim: the item moves. earn: unlocked by an achievement instead of gems.
 const SHOP={
  frame:{label:"Picture frames",tab:"Frames",blurb:"A ring around your profile picture. Epic and Legendary frames are animated.",items:[
@@ -1996,12 +2017,12 @@ const SHOP={
   {id:"frost",name:"Frost",price:400,r:1},{id:"royal",name:"Royal",price:400,r:1},{id:"prism",name:"Prism",price:400,r:1},{id:"pulse",name:"Heartbeat",price:450,r:1,anim:1},
   {id:"rgb",name:"RGB spin",price:800,r:2,anim:1},{id:"orbit",name:"Orbit",price:800,r:2,anim:1},{id:"solar",name:"Solar flare",price:900,r:2,anim:1},{id:"thunder",name:"Thunder",price:900,r:2,anim:1},
   {id:"lunar",name:"Moonrise",price:1500,r:3,anim:1},{id:"mars",name:"Red planet",price:1500,r:3,anim:1},{id:"clock",name:"Clockwork",price:1600,r:3,anim:1},{id:"inferno",name:"Inferno",price:1800,r:3,anim:1},{id:"champion",name:"Champion",price:1800,r:3},
-  {id:"founder",name:"Founder",price:0,r:3,exclusive:true},{id:"hoard",name:"Dragon hoard",price:0,r:3,anim:1,chest:1}]},
+  {id:"founder",name:"Founder",price:0,r:3,exclusive:true},{id:"hoard",name:"Dragon hoard",price:0,r:3,anim:1,chest:1},{id:"circle",name:"Inner circle",price:0,r:4,anim:1,code:1}]},
  banner:{label:"Profile banners",tab:"Banners",blurb:"A background for your profile card. Epic and Legendary banners are animated.",items:[
   {id:"",name:"None",price:0,r:0},{id:"sunset",name:"Sunset",price:100,r:0},{id:"ocean",name:"Deep sea",price:100,r:0},{id:"carbon",name:"Carbon",price:100,r:0},
   {id:"plates",name:"Plates",price:300,r:1},{id:"aurora",name:"Aurora",price:350,r:1,anim:1},
   {id:"stars",name:"Starfield",price:600,r:2,anim:1},{id:"snow",name:"Snowfall",price:600,r:2,anim:1},{id:"embers",name:"Embers",price:650,r:2,anim:1},{id:"neon",name:"Neon grid",price:700,r:2,anim:1},
-  {id:"galaxy",name:"Galaxy",price:1200,r:3,anim:1},{id:"goldfoil",name:"Gold foil",price:1200,r:3,anim:1},{id:"rgbwave",name:"RGB wave",price:1400,r:3,anim:1},{id:"vault",name:"Treasure vault",price:0,r:3,anim:1,chest:1}]},
+  {id:"galaxy",name:"Galaxy",price:1200,r:3,anim:1},{id:"goldfoil",name:"Gold foil",price:1200,r:3,anim:1},{id:"rgbwave",name:"RGB wave",price:1400,r:3,anim:1},{id:"vault",name:"Treasure vault",price:0,r:3,anim:1,chest:1},{id:"prism",name:"Prismatic",price:0,r:4,anim:1,code:1}]},
  theme:{label:"App themes",tab:"Themes",blurb:"Recolour the whole app.",items:[
   {id:"",name:"Ember",price:0,r:0},{id:"ocean",name:"Ocean",price:300,r:1},{id:"forest",name:"Forest",price:300,r:1},{id:"crimson",name:"Crimson",price:500,r:2},
   {id:"royal",name:"Royal",price:500,r:2},{id:"midnight",name:"Midnight",price:600,r:2},{id:"goldrush",name:"Gold rush",price:1000,r:3}]},
@@ -2013,7 +2034,7 @@ const SHOP={
   {id:"spartan",name:"Spartan",price:450,r:2},{id:"gladiator",name:"Gladiator",price:450,r:2},{id:"ironwarden",name:"Iron Warden",price:450,r:2},{id:"unbroken",name:"The Unbroken",price:500,r:2},
   {id:"prhunter",name:"PR Hunter",r:2,earn:{badge:"pr50",how:"Set 50 personal records"}},{id:"streaklord",name:"Streak Lord",r:2,earn:{badge:"st8",how:"Hit your weekly target 8 weeks in a row"}},{id:"beasttamer",name:"Beast Tamer",r:2,earn:{pet:1,how:"Raise a pet to its final form"}},
   {id:"imperator",name:"Imperator",price:900,r:3},{id:"titan",name:"Titan",price:900,r:3},{id:"apex",name:"Apex",price:1000,r:3},
-  {id:"centurion",name:"Centurion",r:3,earn:{badge:"s100",how:"Finish 100 workouts"}},{id:"golden",name:"Golden Physique",r:3,earn:{badge:"allgold",how:"Get 8 muscle groups to Gold"}},{id:"founder",name:"Founder",r:3,earn:{founder:1,how:"Open the app before its first birthday"}},{id:"jackpot",name:"Jackpot",price:0,r:3,chest:1}]}
+  {id:"centurion",name:"Centurion",r:3,earn:{badge:"s100",how:"Finish 100 workouts"}},{id:"golden",name:"Golden Physique",r:3,earn:{badge:"allgold",how:"Get 8 muscle groups to Gold"}},{id:"founder",name:"Founder",r:3,earn:{founder:1,how:"Open the app before its first birthday"}},{id:"jackpot",name:"Jackpot",price:0,r:3,chest:1},{id:"innercircle",name:"Inner Circle",price:0,r:4,code:1}]}
 };
 const THEMES={
  ocean:{bg:"#0a1218",surface:"#111d27","surface-2":"#1b2c3a",line:"#2a4254",fg:"#e8f4ff",muted:"#8fa9bd",xp:"#35b6ff","xp-hi":"#9ddcff","xp-soft":"#0c2b40",ink:"#04131d"},
@@ -2048,18 +2069,18 @@ function preview(kind,it,big){
   if(kind==="banner")return `<span class="sw-bn${it.id?" bn-"+it.id:""}"></span>`;
   if(kind==="theme"){const t=THEMES[it.id]||{bg:"#15100a",surface:"#221910",xp:"#f6a51e",fg:"#fff4e2"};
     return `<span class="sw-th" style="background:${t.bg};box-shadow:inset 0 0 0 1.5px ${t.xp}"><i style="background:${t.surface}"></i><i style="background:${t.xp}"></i><i style="background:${t.fg}"></i></span>`}
-  if(kind==="pet")return `<span class="bob">${sprite(it.id,0,big?112:60)}</span>`;
+  if(kind==="pet"){const own=state.pets[it.id];return `<span class="bob">${sprite(it.id,own?petStage(petLevel(own.xp).L):0,big?112:60,own&&own.myth)}</span>`}
   return `<span class="sw-ti">${esc(it.name)}</span>`;
 }
 const rarTag=it=>`<span class="rar" style="--rc:var(${RAR[it.r].v})">${RAR[it.r].n}${it.anim?" · animated":""}</span>`;
-const petItems=()=>Object.entries(PETS).map(([id,p])=>({id,name:p.names[0],r:p.r,price:p.price,el:p.el}));
+const petItems=()=>Object.entries(PETS).filter(([id,p])=>!p.code||state.pets[id]).map(([id,p])=>({id,name:p.names[0],r:p.r,price:p.price,el:p.el,code:p.code}));
 const shopItems=kind=>kind==="pet"?petItems():SHOP[kind].items;
 let shopTab="frame",shopRar=-1;
 /* ---------- Shop rotation: daily deals and a weekly set ---------- */
 function seedRand(seed){let h=2166136261>>>0;for(const ch of seed)h=Math.imul(h^ch.charCodeAt(0),16777619)>>>0;
   return ()=>{h=(h+0x6D2B79F5)>>>0;let t=h;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296}}
 const shuffled=(arr,seed)=>{const r=seedRand(seed),a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
-const buyable=kind=>SHOP[kind].items.filter(it=>it.price>0&&!it.earn&&!it.exclusive&&!it.chest);
+const buyable=kind=>SHOP[kind].items.filter(it=>it.price>0&&!it.earn&&!it.exclusive&&!it.chest&&!it.code);
 const WEEK_N={frame:6,banner:4,theme:3,title:6};
 // Everyone sees the same set: it's picked from the week's date. At least one of each rarity when there is one.
 function weeklySet(kind){
@@ -2130,8 +2151,8 @@ const pct=(d,ch)=>{const p=d.w/ch.drops.reduce((a,x)=>a+x.w,0)*100;return (p<1?p
 function oddsHTML(ch){return `<div class="odds">${ch.drops.map(d=>`<div class="odrow" style="--rc:var(${RAR[dropRar(d)].v})"><i></i><span>${dropName(d)}</span><b class="num">${pct(d,ch)}</b></div>`).join("")}</div>`}
 const rnd=()=>{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]/4294967296};
 const itemPool=r=>["frame","banner","theme","title"].flatMap(k=>buyable(k).filter(i=>i.r===r).map(it=>({kind:k,it})))
-  .concat(Object.entries(PETS).filter(([,p])=>p.r===r).map(([id,p])=>({kind:"pet",it:{id,name:p.names[0],r:p.r}})));
-function grant(kind,id){if(kind==="pet"){state.pets[id]={xp:0};if(!state.pet)state.pet=id}else state.owned[kind+":"+id]=1}
+  .concat(Object.entries(PETS).filter(([,p])=>p.r===r&&!p.code).map(([id,p])=>({kind:"pet",it:{id,name:p.names[0],r:p.r}})));
+function grant(kind,id,via){if(kind==="pet")return givePet(id,via||"chest");state.owned[kind+":"+id]=1}
 function rollChest(ch){
   let x=rnd()*ch.drops.reduce((a,d)=>a+d.w,0),d=ch.drops[ch.drops.length-1];
   for(const o of ch.drops){if(x<o.w){d=o;break}x-=o.w}
@@ -2141,7 +2162,7 @@ function rollChest(ch){
   const list=d.t==="excl"?CHEST_X.map(o=>({kind:o.kind,it:SHOP[o.kind].items.find(i=>i.id===o.id)})):itemPool(d.r);
   const fresh=list.filter(o=>!owns(o.kind,o.it.id)),r=d.t==="excl"?3:d.r;
   if(!fresh.length)return gemsRes(d.t==="excl"?600:DUP[r],r,`You already own every ${d.t==="excl"?"chest-only":RAR[r].n.toLowerCase()} item, so you get gems instead.`);
-  const o=fresh[Math.floor(rnd()*fresh.length)];grant(o.kind,o.it.id);
+  const o=fresh[Math.floor(rnd()*fresh.length)],gp=grant(o.kind,o.it.id,ch.name);if(gp&&gp.myth)setTimeout(()=>mythModal(o.it.id),2600);
   if(r>=2)postActivity("chest",{name:o.kind==="pet"?PETS[o.it.id].names[0]:o.it.name,kind:o.kind,r,chest:ch.name});
   return {pic:preview(o.kind,o.it,true),title:o.kind==="pet"?PETS[o.it.id].names[0]:o.it.name,sub:`${KINDNAME1[o.kind]} · ${o.kind==="pet"?"it's in your Pets now":"tap it in the shop to equip"}`,r,item:o};
 }
@@ -2173,11 +2194,58 @@ function openOdds(){
   m.querySelector("#mh-back").onclick=closeModal;
 }
 
+/* ---------- Codes ---------- */
+// Codes are checked by the server (once per account, some limited to the first few people), then the reward is added here.
+function applyReward(rw){
+  const out=[],gemsOut=(n,why)=>{state.gemsEarned=(state.gemsEarned||0)+n;out.push({pic:spriteImg("gems",112,"Gems"),title:`${n} gems`,sub:why||"Added to your gems.",r:2})};
+  if(rw.gems)gemsOut(rw.gems);
+  for(const o of rw.items||[]){const it=SHOP[o.kind]?.items.find(i=>i.id===o.id);if(!it)continue;state.owned[o.kind+":"+o.id]=1;
+    out.push({pic:preview(o.kind,it,true),title:it.name,sub:`${KINDNAME1[o.kind]} · tap it in the shop to equip`,r:it.r})}
+  if(rw.pet&&PETS[rw.pet]){const g=givePet(rw.pet,"code");
+    if(g)out.push({pic:sprite(rw.pet,0,120,g.myth),title:(g.myth?"Shiny ":"")+PETS[rw.pet].names[0],sub:g.myth?"And it's Mythic! What are the odds?":"A code-only pet. It's in your Pets now.",r:g.myth?4:PETS[rw.pet].r,pet:rw.pet});
+    else gemsOut(200,"You already have this pet, so here are 200 gems.")}
+  if(rw.mythic){const ids=Object.keys(PETS).filter(id=>!PETS[id].code&&!state.pets[id]?.myth),id=ids.length?ids[Math.floor(rnd()*ids.length)]:null;
+    if(id){const g=givePet(id,"code",true),st=petStage(petLevel(state.pets[id].xp).L);
+      out.push({pic:sprite(id,st,128,true),title:"Shiny "+PETS[id].names[st],sub:g&&g.upgraded?"Your pet turned Mythic. It keeps its level.":"A random Mythic pet. Very few people will ever have one.",r:4,pet:id})}
+    else gemsOut(1000,"Every pet you own is already Mythic, so here are 1,000 gems.")}
+  if(rw.chest){const ch=CHESTS.find(c=>c.id===rw.chest);if(ch)out.push(rollChest(ch))}
+  return out;
+}
+function showRewards(list,i=0){
+  const r=list[i];if(!r)return;const last=i>=list.length-1;
+  const m=openModal(`<div class="reveal" style="--rc:var(${RAR[r.r].v})"><span class="rays"></span><span class="rv-pic pop">${r.pic}</span>
+      ${r.r===4?'<span class="shinyb">★ Mythic</span>':rarTag({r:r.r})}<h2>${esc(r.title)}</h2><p class="muted">${esc(r.sub)}</p></div>
+    <div class="btnrow" style="justify-content:center">${last?`<button class="btn" data-close>Brilliant</button>`:`<button class="btn" id="rw-next">Next · ${i+1} of ${list.length}</button>`}${r.pet?`<button class="btn ghost" id="rw-pet">See pet</button>`:""}</div>`);
+  m.querySelector("#rw-next")?.addEventListener("click",()=>showRewards(list,i+1));
+  m.querySelector("#rw-pet")?.addEventListener("click",()=>openPet(r.pet));
+}
+function openRedeem(){
+  if(!CLOUD_HOST||!sb){openModal(`${mhead("Codes")}<h2>Redeem a code</h2><p class="muted">Codes work in the home screen app with a connection.</p>`).querySelector("#mh-back").onclick=closeModal;return}
+  if(!me||!myProfile){const m=openModal(`${mhead("Codes")}<h2>Redeem a code</h2><p class="muted">Sign in first, so the code is saved to your account and can't be lost.</p><div class="btnrow"><button class="btn" data-auth="signin">Sign in</button><button class="btn ghost" data-auth="signup">Create account</button></div>`);m.querySelector("#mh-back").onclick=closeModal;return}
+  const m=openModal(`${mhead("Codes")}<h2>Redeem a code</h2><p class="muted" style="font-size:.9rem">Got a code from a friend? Type it in. Each code works once per account, and some only work for the first few people.</p>
+    <form id="rc-form" style="display:flex;flex-direction:column;gap:10px"><input class="txt codein" id="rc-in" maxlength="40" placeholder="e.g. GOLD-AB12C" autocapitalize="characters" autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Code">
+    <p id="rc-err" class="formerr" hidden></p><button class="btn" type="submit" id="rc-go">Redeem</button></form>`);
+  m.querySelector("#mh-back").onclick=closeModal;
+  m.querySelector("#rc-form").addEventListener("submit",async e=>{e.preventDefault();
+    const v=m.querySelector("#rc-in").value.trim(),err=m.querySelector("#rc-err"),go=m.querySelector("#rc-go");
+    if(v.replace(/[^A-Za-z0-9]/g,"").length<4){err.textContent="That's too short to be a code.";err.hidden=false;return}
+    go.disabled=true;go.textContent="Checking…";err.hidden=true;
+    const {data,error}=await sb.rpc("redeem_code",{p_code:v});
+    go.disabled=false;go.textContent="Redeem";
+    if(error||!data||data.error){err.textContent=error?sbErr(error):data?.error||"Something went wrong.";err.hidden=false;return}
+    const list=applyReward(data.reward||{});(state.codes=state.codes||[]).push({label:data.label||"",at:today()});
+    save();refresh();pushNow();
+    if(data.left!=null&&data.left>=0)toast("🎟",data.label||"Code redeemed",data.left===0?"You were the last one to claim it.":`${data.left} left for other people.`,"");
+    showRewards(list.length?list:[{pic:spriteImg("gems",112,""),title:"Code redeemed",sub:data.label||"",r:0}]);
+  });
+  setTimeout(()=>m.querySelector("#rc-in")?.focus(),60);
+}
+
 /* ---------- Shop screen ---------- */
 function shopCard(kind,it,dealPrice){
   const g=gems(compute()),own=owns(kind,it.id),eq=kind==="pet"?state.pet===it.id:(state.equip[kind]||"")===it.id,free=kind==="pet"&&!Object.keys(state.pets).length&&it.r===0,price=dealPrice??it.price;
   return `<button class="item${eq?" eq":""}" style="--rc:var(${RAR[it.r].v})" data-kind="${kind}" data-item="${it.id}"${dealPrice!=null?` data-deal="${dealPrice}"`:""}><span class="pv">${preview(kind,it)}</span>${kind==="title"?"":`<b>${esc(kind==="pet"&&own?PETS[it.id].names[petStage(petLevel(state.pets[it.id].xp).L)]:it.name)}</b>`}${rarTag(it)}
-    ${eq?`<span class="pill on">${kind==="pet"?"Active":"Equipped"}</span>`:own?`<span class="pill">${kind==="pet"?"Owned · make active":"Owned · equip"}</span>`:it.earn?`<span class="pill">Earned · locked</span>`:it.chest?`<span class="pill">Chest only</span>`:free?`<span class="pill on">Free starter</span>`
+    ${eq?`<span class="pill on">${kind==="pet"?"Active":"Equipped"}</span>`:own?`<span class="pill">${kind==="pet"?"Owned · make active":"Owned · equip"}</span>`:it.earn?`<span class="pill">Earned · locked</span>`:it.chest?`<span class="pill">Chest only</span>`:it.code?`<span class="pill">Code only</span>`:free?`<span class="pill on">Free starter</span>`
       :`<span class="price${g<price?" short":""}">${dealPrice!=null?`<s>${it.price}</s>`:""}${GEM}${price}</span>`}</button>`;
 }
 function renderShop(c){
@@ -2185,6 +2253,7 @@ function renderShop(c){
   const grid=(list,empty)=>list.length?`<div class="shopgrid">${list.join("")}</div>`:`<p class="muted" style="font-size:.88rem">${empty}</p>`;
   let h=`<div class="panel gembox"><div><span class="eyebrow">Your gems</span><div class="gemn">${GEM}<b>${fmtNum(g)}</b></div></div>
     <p class="muted" style="font-size:.85rem">Earn 10 for each daily challenge, 20 more for all three, and 25 every level up.</p></div>
+    <button class="codebtn" id="rc-open"><span>🎟</span><b>Have a code?</b><span class="muted">Redeem it</span></button>
     <div class="panel chests"><div class="ph"><h3>Chests</h3><button class="link" id="ch-odds">Drop rates</button></div>
       <div class="chestrow">${CHESTS.map(ch=>`<button class="chestbtn" data-chest="${ch.id}" style="--rc:var(${RAR[ch.r].v})"><span class="bob">${spriteImg("chest-"+ch.id,60,ch.name)}</span><b>${ch.name.split(" ")[0]}</b><span class="price${g<ch.price?" short":""}">${GEM}${ch.price}</span></button>`).join("")}</div>
       <p class="note" style="padding:0">XP boosts, streak freezes, pet snacks, gems, and items you don't own yet.</p></div>
@@ -2210,14 +2279,16 @@ $("#v-shop").addEventListener("click",e=>{
   const rf=e.target.closest("[data-rf]");if(rf){shopRar=+rf.dataset.rf;renderShop(compute());return}
   const cb=e.target.closest("[data-chest]");if(cb){openChest(cb.dataset.chest);return}
   if(e.target.closest("#ch-odds")){openOdds();return}
+  if(e.target.closest("#rc-open")){openRedeem();return}
   const ub=e.target.closest("[data-use]");if(ub){useItem(ub.dataset.use);return}
   const b=e.target.closest(".item");if(!b)return;
   const kind=b.dataset.kind,it=shopItems(kind).find(i=>i.id===b.dataset.item),c=compute(),g=gems(c);
   if(owns(kind,it.id)){
-    if(kind==="pet"){if(state.pet===it.id){openPet(it.id);return}state.pet=it.id;save();refresh();toast("✓",`${petName(it.id)} is now active`,"It earns XP as you train.","");return}
+    if(kind==="pet"){openPet(it.id);return}
     if((state.equip[kind]||"")===it.id)return;
     state.equip[kind]=it.id;save();refresh();toast("✓",`${it.name} equipped`,SHOP[kind].label,"");return}
   if(it.chest){toast("◆","Chest only","Found in Gold chests.","");return}
+  if(it.code){toast("🎟","Code only","Unlocked with a code from a friend.","");return}
   const deal=b.dataset.deal!=null&&dailyDeals().some(x=>x.kind===kind&&x.it.id===it.id)?+b.dataset.deal:null;
   const free=kind==="pet"&&!Object.keys(state.pets).length&&it.r===0,price=free?0:deal??it.price,short=it.earn?0:price-g;
   const m=openModal(`${mhead("Shop")}<div class="buy"><span class="pv big">${preview(kind,it,true)}</span><h2>${esc(it.name)}</h2>${rarTag(it)}<span class="muted">${kind==="pet"?`${PETS[it.id].el} pet · evolves twice`:SHOP[kind].label}${deal!=null?" · today's deal":""}</span>
@@ -2230,8 +2301,8 @@ $("#v-shop").addEventListener("click",e=>{
   m.querySelector("#mh-back").onclick=()=>{applyTheme();closeModal()};
   m.querySelector("#buy-try")?.addEventListener("click",()=>{applyTheme(it.id);toast("◐","Previewing "+it.name,"Go back to return to your theme.","")});
   m.querySelector("#buy-go")?.addEventListener("click",()=>{state.spent=(state.spent||0)+price;
-    if(kind==="pet"){state.pets[it.id]={xp:0};state.pet=it.id}else{state.owned[kind+":"+it.id]=1;state.equip[kind]=it.id}
-    const ok=save();closeModal();refresh();toast(ok?"✓":"!",ok?`${it.name} unlocked`:"Couldn't save",ok?(kind==="pet"?"It's your active pet now.":"It's equipped now."):"","")});
+    let gp=null;if(kind==="pet"){gp=givePet(it.id,free?"Starter":"Shop");state.pet=it.id}else{state.owned[kind+":"+it.id]=1;state.equip[kind]=it.id}
+    const ok=save();closeModal();refresh();if(gp&&gp.myth){mythModal(it.id);return}toast(ok?"✓":"!",ok?`${it.name} unlocked`:"Couldn't save",ok?(kind==="pet"?"It's your active pet now.":"It's equipped now."):"","")});
 });
 
 /* ---------- Pixel sprites ---------- */
@@ -2315,7 +2386,7 @@ function sprRender(def){
 const sprCache={};
 function spriteURL(key){
   if(sprCache[key])return sprCache[key];
-  const px=sprRender(SPR[key]),cv=document.createElement("canvas");cv.width=32;cv.height=32;const g=cv.getContext("2d");
+  const px=sprRender(key.endsWith("m")?mythDef(key.slice(0,-1)):SPR[key]),cv=document.createElement("canvas");cv.width=32;cv.height=32;const g=cv.getContext("2d");
   px.forEach((c,i)=>{if(c){g.fillStyle=c;g.fillRect(i%32,Math.floor(i/32),1,1)}});
   return sprCache[key]=cv.toDataURL("image/png");
 }
@@ -2556,6 +2627,134 @@ def("snack",{a:"#e9524a",b:"#b33a33",c:"#ffd1c4",d:"#5a8a2a",e:"#7fbf44"},[
 def("gems",{a:"#4fd8ff",b:"#2a8ad6",c:"#c9f4ff",d:"#ffffff"},[
   PG([[9,6],[23,6],[29,13],[16,29],[3,13]],"a"),PG([[9,6],[23,6],[25,13],[7,13]],"c",{n:1}),PG([[7,13],[25,13],[16,29]],"b",{n:1}),DOT([[11,8],[12,8],[10,9]],"d")]);
 
+// Snackub line (Normal): a round, always-hungry cub that never lets go of its honey pot
+const P_SNK={a:"#6f5a96",b:"#4c3c72",c:"#fff0d4",d:"#c9733a",e:"#ffc531",f:"#8f4a22",k:"#ff9fb2",i:"#2a1a40"};
+def("snackub0",P_SNK,[
+  E(9.4,10.4,2.6,2.6,"a",{m:1}),DOT([[9,10],[10,10],[9,11]],"k",{m:1}),
+  E(11.6,28.4,3,1.7,"b",{m:1}),E(16,21.4,9,7.6,"a"),E(16,24,6,4.8,"c",{n:1}),
+  E(16,15.6,4.2,2.6,"c",{n:1}),DOT([[15,15],[16,15]],"K"),
+  E(16,24.4,4.6,3.8,"d"),RC(13.1,20.0,5.7,1.8,"f"),E(16,21.0,2.5,0.9,"e",{n:1,f:1}),DOT([[14,21],[14,22],[17,21],[17,22],[17,23]],"e"),RC(13.5,24.2,5.1,2,"#f3e2c0",{f:1}),DOT([[15,24],[16,24]],"f"),
+  E(10.4,23,2.2,2,"a",{m:1}),
+  EYE(11,12,"round",{m:1}),DOT([[15,17],[16,17]],"K"),DOT([[16,18]],"T"),DOT([[8,15],[9,15]],"k",{m:1})]);
+def("snackub1",P_SNK,[
+  E(8.6,7.6,3,3,"a",{m:1}),DOT([[8,7],[9,7],[8,8]],"k",{m:1}),
+  E(10.6,28.2,3.8,2.2,"b",{m:1}),E(16,20.4,10.4,8.6,"a"),E(16,23.4,7,5.6,"c",{n:1}),
+  E(16,13.4,4.6,2.8,"c",{n:1}),DOT([[15,12],[16,12]],"K"),
+  E(22.6,23.2,4.4,3.8,"d"),RC(19.9,18.8,5.5,1.8,"f"),E(22.6,19.8,2.4,0.9,"e",{n:1,f:1}),DOT([[20,20],[20,21],[23,20],[23,21],[23,22]],"e"),RC(20.2,23.0,4.8,2,"#f3e2c0",{f:1}),DOT([[21,23],[22,23]],"f"),
+  E(22,24,2.4,2.2,"a"),E(7.4,15.6,2.4,2,"a",{a:-30}),DOT([[6,14],[7,14],[6,13],[7,15]],"e"),
+  EYE(10,9,"round",{m:1}),DOT([[14,15],[15,16],[16,16],[17,15]],"K"),DOT([[15,17],[16,17]],"T"),DOT([[7,12],[8,12]],"k",{m:1})]);
+def("snackub2",P_SNK,[
+  E(7,6.6,3.4,3.4,"a",{m:1}),DOT([[6,6],[7,6],[7,7],[6,7]],"k",{m:1}),
+  E(9,28.4,4.8,2.6,"b",{m:1}),E(16,19.6,13,9.8,"a"),E(16,22.6,9.4,7,"c",{n:1}),
+  E(16,12.8,5,3,"c",{n:1}),DOT([[15,11],[16,11]],"K"),
+  E(16,23.6,5.6,4.4,"d"),RC(12.5,18.6,6.9,1.8,"f"),E(16,19.6,3.1,0.9,"e",{n:1,f:1}),DOT([[13,20],[13,21],[17,20],[17,21],[17,22]],"e"),RC(12.9,23.4,6.2,2,"#f3e2c0",{f:1}),DOT([[15,23],[16,23]],"f"),
+  E(9,22.6,3,2.6,"a",{m:1}),
+  EYE(9,9,"sleep",{m:1}),DOT([[14,14],[15,15],[16,15],[17,14]],"K"),DOT([[17,15],[17,16],[18,16]],"e"),DOT([[5,11],[6,11],[7,11]],"k",{m:1}),
+  DOT([[25,4],[26,3],[27,4],[28,2],[29,1],[28,1]],"#9fc2ff")]);
+
+// Kettlet line (Steel): a kettlebell that got up and started training itself
+const P_KTL={a:"#5f6977",b:"#3d4450",c:"#a4aebb",d:"#ffd24a",e:"#e8343e",k:"#8fa0b4",i:"#10141a"};
+def("kettlet0",P_KTL,[
+  E(16,10.4,6,5.4,"a",{hole:[3.6,3.2]}),
+  E(11.6,28.6,2.6,1.4,"b",{m:1}),E(16,21.4,9,7.4,"a"),RC(13.4,24.6,5.2,2.6,"d",{f:1}),DOT([[15,25],[16,25]],"#8a6a12"),
+  EYE(10,18,"round",{m:1}),DOT([[14,22],[15,22]],"K",{m:1}),DOT([[10,15],[11,14],[12,14]],"c")]);
+def("kettlet1",P_KTL,[
+  E(16,7.8,7,6.2,"a",{hole:[4.2,3.6]}),
+  E(10.6,28.4,3.6,2,"b",{m:1}),E(5,20,2.4,4,"a",{m:1,a:20}),E(4.2,24,2.4,2,"b",{m:1}),E(16,20,10.2,8.4,"a"),
+  RC(12,24,8,3,"d",{f:1}),DOT([[14,25],[15,25],[17,25]],"#8a6a12"),RC(8.6,10.8,14.8,1.6,"e",{f:1}),
+  EYE(9,16,"angry",{m:1}),DOT([[13,21],[14,21],[15,21]],"K",{m:1}),DOT([[9,13],[10,12],[11,12],[22,22],[23,21]],"c")]);
+def("kettlet2",P_KTL,[
+  E(16,5.2,4.6,4,"a",{hole:[2.6,2]}),
+  E(10.4,28.4,4,2.4,"b",{m:1}),RC(9,20,14,7,"b"),
+  E(4.2,15.4,3,5,"a",{m:1,a:10}),E(4,23.4,3.4,3,"a",{m:1}),E(4,20,1.8,1.4,"a",{m:1,hole:[0.9,0.6]}),
+  RC(7,9,18,13,"a"),E(16,9,9,2.4,"a"),RC(10,21,12,2.4,"d",{f:1}),DOT([[15,21],[16,21]],"#8a6a12"),
+  DOT([[11,15],[12,16],[13,16],[14,15],[17,15],[18,16],[19,16],[20,15]],"b"),
+  EYE(10,11,"angry",{m:1}),DOT([[14,18],[15,18]],"K",{m:1}),DOT([[9,10],[10,9],[11,9]],"c"),DOT([[1,22],[2,21],[29,21],[30,22]],"c")]);
+
+// Rhinub line (Rock): a rhino calf whose horn is shaped like a dumbbell
+const P_RHN={a:"#a19489",b:"#71665d",c:"#dcd2c8",d:"#3a3f47",e:"#c9ced6",k:"#e9a59a",i:"#2a201a"};
+def("rhinub0",P_RHN,[
+  E(8.4,11.6,2,2.6,"a",{m:1,a:-20}),
+  E(11.4,28.4,3,1.8,"b",{m:1}),E(16,22.4,8.4,6.4,"a"),
+  E(16,15.6,7.6,6,"a"),E(16,19.4,4.4,2.6,"c",{n:1}),PG([[14.6,18],[16,13.6],[17.4,18]],"#efe6d8"),DOT([[14,20],[17,20]],"b"),
+  RC(13,9.4,6,1.4,"e",{f:1}),RC(11.6,8,1.8,4,"d"),RC(18.6,8,1.8,4,"d"),
+  EYE(10,14,"round",{m:1}),DOT([[15,21],[16,21]],"K"),DOT([[8,18],[9,18]],"k",{m:1})]);
+def("rhinub1",P_RHN,[
+  E(7.4,9.6,2.4,3,"a",{m:1,a:-25}),
+  E(10.6,28.4,3.8,2.2,"b",{m:1}),E(16,21.6,10,7.4,"a"),E(6,18.4,3.4,3.4,"e",{m:1}),E(6,18.4,1.2,1.2,"d",{m:1}),
+  E(16,14.4,7.6,6.2,"a"),E(16,18.4,5,2.8,"c",{n:1}),PG([[14.2,17],[16,10.6],[17.8,17]],"#efe6d8"),DOT([[14,19],[17,19]],"b"),
+  RC(12,6,8,1.6,"e",{f:1}),RC(10,3.8,2.4,6,"d"),RC(19.6,3.8,2.4,6,"d"),RC(14.6,7.4,2.8,3,"c"),
+  EYE(10,12,"angry",{m:1}),DOT([[14,20],[15,21],[16,21],[17,20]],"K")]);
+def("rhinub2",P_RHN,[
+  E(6.4,7.6,2.6,3.4,"a",{m:1,a:-25}),
+  E(9.6,28.4,4.6,2.6,"b",{m:1}),E(16,21,12,8,"a"),
+  E(5,16.6,4.4,4.4,"e",{m:1}),E(5,16.6,2.6,2.6,"#9aa1ab",{m:1,n:1}),E(5,16.6,1,1,"d",{m:1}),
+  RC(9,22,14,2.6,"d",{f:1}),
+  E(16,12.8,7.8,6.4,"a"),E(16,17,5.4,3,"c",{n:1}),PG([[14,15.6],[16,8.4],[18,15.6]],"#efe6d8"),DOT([[14,18],[17,18]],"b"),
+  RC(11,3.4,10,1.6,"e",{f:1}),RC(8.4,0.8,2.8,6.6,"d"),RC(20.8,0.8,2.8,6.6,"d"),RC(14.4,4.8,3.2,4,"c"),
+  EYE(10,10,"angry",{m:1}),DOT([[13,19],[14,20],[15,20],[16,20],[17,20],[18,19]],"K"),DOT([[14,21],[17,21]],"W")]);
+
+// Dashkit line (Electric): a cardio kitten that never stops running
+const P_DSH={a:"#ffc94a",b:"#e0952a",c:"#fff4d8",d:"#4a2e16",e:"#3fd0ff",f:"#e8343e",k:"#ff9f7f",i:"#3a2208"};
+def("dashkit0",P_DSH,[
+  E(23.6,24.2,3.4,1.4,"a",{a:-40}),DOT([[25,21],[26,20],[27,21],[26,22]],"d"),
+  PG([[8.6,13],[8,5],[13.6,9.6]],"a",{m:1}),PG([[9.2,11.4],[8.8,7],[12,9.8]],"k",{m:1,n:1}),
+  E(12,28,2.6,1.6,"a",{m:1}),E(16,23.6,6,5,"a"),E(16,24.8,3.6,3,"c",{n:1}),
+  E(16,15.4,8,6.4,"a"),E(16,18,3.6,2.2,"c",{n:1}),RC(8.4,10.2,15.2,1.8,"f",{f:1}),PG([[23,10],[28,8],[27.4,11],[29.6,12.4],[23.6,12.2]],"f"),
+  DOT([[9,15],[10,17],[22,15],[21,17],[13,24],[18,26],[19,23]],"d"),DOT([[11,16],[11,17],[20,16],[20,17]],"d"),
+  EYE(11,13,"big",{m:1}),DOT([[15,18],[16,18]],"K"),DOT([[15,19]],"K"),DOT([[16,19]],"K")]);
+def("dashkit1",P_DSH,[
+  PG([[21,25],[28,22],[26.4,21],[31,15],[28.6,20.4],[30.6,21],[23,27]],"e"),
+  PG([[9.4,10],[8.6,1.6],[13.8,6.6]],"a",{m:1}),PG([[9.8,8.4],[9.4,4],[12.2,6.8]],"k",{m:1,n:1}),
+  E(11.4,28,3,2,"a",{m:1}),E(16,22.4,6.4,6,"a"),E(16,23.8,3.6,3.8,"c",{n:1}),E(9.6,22,1.6,3,"a",{m:1,a:15}),
+  E(16,12,7.2,5.8,"a"),E(16,14.8,3.6,2.2,"c",{n:1}),RC(8.8,7.4,14.4,1.6,"f",{f:1}),PG([[22,7],[29,4],[28,8],[31,9.6],[22.6,9.2]],"f"),
+  DOT([[11,11],[11,12],[11,13],[20,11],[20,12],[20,13]],"d"),DOT([[10,20],[22,21],[13,26],[19,25],[17,20]],"d"),
+  EYE(11,10,"round",{m:1}),DOT([[15,15],[16,15]],"K"),DOT([[14,16],[17,16]],"K")]);
+def("dashkit2",P_DSH,[
+  PG([[0,12],[7,14],[1,16]],"e",{n:1,f:1}),PG([[0,19],[6,20],[1,22]],"e",{n:1,f:1}),
+  PG([[22,24],[29,20],[27,19.4],[32,12],[29.6,18.6],[32,19.4],[24,27]],"e"),
+  PG([[10,8],[9.2,0.4],[14,4.6]],"a",{m:1}),PG([[10.4,6.4],[10,2.6],[12.6,4.8]],"k",{m:1,n:1}),
+  E(10.4,28,4,2.6,"a",{m:1}),E(16,21.4,8.4,7.2,"a"),E(16,23.4,4.8,4.8,"c",{n:1}),E(7.6,21.6,2.2,3.8,"a",{m:1,a:20}),DOT([[5,25],[6,26]],"W",{m:1}),
+  E(16,10.2,6.8,5.4,"a"),E(16,13,3.6,2.2,"c",{n:1}),RC(9.4,5.6,13.2,1.6,"f",{f:1}),PG([[21,5],[29,2],[28,6],[31.6,7.6],[21.6,7.4]],"f"),
+  DOT([[11,9],[11,10],[11,11],[11,12],[20,9],[20,10],[20,11],[20,12]],"d"),DOT([[10,19],[22,19],[12,25],[20,24],[9,23],[23,24],[16,17]],"d"),
+  EYE(12,8,"angry",{m:1}),DOT([[15,13],[16,13]],"K"),DOT([[14,14],[17,14]],"K")]);
+
+// Veelet line (Sky, code only): a griffin chick whose wings make a V
+const P_VEE={a:"#86beff",b:"#4a7fd6",c:"#fff6e0",d:"#ffcf3f",e:"#ffffff",k:"#ffb3c8",i:"#13306a"};
+def("veelet0",P_VEE,[
+  PG([[10,20],[3,9],[5.5,10],[6,13],[8,13],[11,17]],"b",{m:1}),
+  E(12.6,28.2,2.4,1.4,"d",{m:1}),E(16,21.6,7,6.4,"a"),E(16,23.4,4.2,3.8,"c",{n:1}),
+  PG([[14,9],[15,5],[16,7.6],[17,4.6],[18,9]],"d"),E(16,14.6,6.8,5.8,"a"),
+  PG([[14.4,16.4],[17.6,16.4],[16,19.2]],"d"),
+  EYE(11,12,"big",{m:1}),DOT([[9,16],[10,16]],"k",{m:1})]);
+def("veelet1",P_VEE,[
+  PG([[11,19],[1,3],[4,5],[5,9],[7,8],[8,12],[10,12],[13,16]],"b",{m:1}),DOT([[3,5],[5,8],[7,10],[9,13]],"e",{m:1}),
+  E(11.8,28.4,3,1.8,"d",{m:1}),E(16,21.6,6.8,6.6,"a"),E(16,23.6,3.8,4.2,"c",{n:1}),
+  PG([[13.4,7],[14.6,1.6],[16,5],[17.4,1.4],[18.6,7]],"d"),E(16,12,6.2,5.2,"a"),
+  PG([[14,13.6],[18,13.6],[16,17.4]],"d"),
+  EYE(11,10,"angry",{m:1})]);
+def("veelet2",P_VEE,[
+  PG([[11,17],[0,0.5],[3.4,2],[3.6,5.6],[6,5],[6.6,8.8],[8.6,8.4],[9.6,12],[13,14]],"b",{m:1}),DOT([[2,2],[4,5],[6,7],[8,10],[10,12]],"e",{m:1}),DOT([[1,1],[3,3]],"d",{m:1}),
+  E(10.8,28.4,4,2.4,"d",{m:1}),E(16,21.4,8.6,7.6,"a"),E(16,23.6,5,5.2,"c",{n:1}),DOT([[16,20],[15,21],[16,21],[17,21],[16,22]],"d"),
+  E(8.4,22,2.2,3.6,"a",{m:1,a:15}),DOT([[7,25],[8,26]],"d",{m:1}),
+  PG([[12.4,6.6],[13,0.4],[15,3.6],[16,0],[17,3.6],[19,0.4],[19.6,6.6]],"d"),E(16,10.6,6,5,"a"),
+  PG([[13.6,12],[18.4,12],[16,16.6]],"d"),
+  EYE(10,8,"angry",{m:1})]);
+
+// Mythic (shiny) versions: the body colours shift hue and sparkles appear around the pet.
+function hueShift(hex,deg,sat){const [r,g,b]=SPX.hx(hex).map(v=>v/255),mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2,d=mx-mn;
+  let h=0,s=0;if(d){s=d/(1-Math.abs(2*l-1));h=mx===r?((g-b)/d)%6:mx===g?(b-r)/d+2:(r-g)/d+4;h*=60}
+  h=((h+deg)%360+360)%360;s=Math.min(1,s*(sat||1));const C=(1-Math.abs(2*l-1))*s,X=C*(1-Math.abs((h/60)%2-1)),m=l-C/2;
+  const [R,G,B]=h<60?[C,X,0]:h<120?[X,C,0]:h<180?[0,C,X]:h<240?[0,X,C]:h<300?[X,0,C]:[C,0,X];return SPX.hex([R,G,B].map(v=>(v+m)*255))}
+const SPARKLE=[[3,2],[2,3],[3,3],[4,3],[3,4],[28,5],[27,6],[28,6],[29,6],[28,7],[29,26],[1,20],[30,15],[6,29]];
+function mythDef(base){
+  const d=SPR[base],id=base.replace(/\d$/,""),m=MYTH[id]||{h:150};const pal={...d.pal};
+  if(m.h)for(const k of m.k||["a","b"])if(pal[k])pal[k]=hueShift(pal[k],m.h,m.s);
+  Object.assign(pal,m.p||{});
+  return {pal,parts:d.parts.concat([DOT(SPARKLE,"G"),DOT([[3,3],[28,6]],"W")])};
+}
+const MYTH={embit:{h:-150},driplet:{h:150},sprigg:{h:-90},pebblo:{h:-160,k:["a","b","d","e"],s:1.6},zapkit:{h:130},flexo:{p:{a:"#ffd56a",b:"#d9a032",c:"#fff2c4",d:"#2e6bff",f:"#1c1c30"}},lumo:{h:-70,k:["a","b","e"]},gulpo:{h:-150,s:1.5},umbrit:{h:-110,k:["a","b","c","f"]},snackub:{h:70,s:1.6},kettlet:{p:{a:"#d9a531",b:"#9c6c12",c:"#ffe08a",d:"#ffffff"}},rhinub:{h:5,s:3.5},dashkit:{h:-60},veelet:{h:120,k:["a","b","d"]}};
+
 /* ---------- Pixel pets ---------- */
 const PETS={
  embit:{el:"Fire",r:0,price:250,names:["Embit","Embrute","Infernox"]},
@@ -2566,22 +2765,59 @@ const PETS={
  flexo:{el:"Fighting",r:1,price:600,names:["Flexo","Brawlo","Titanox"]},
  lumo:{el:"Mystic",r:2,price:1000,names:["Lumo","Lumora","Astralume"]},
  gulpo:{el:"Normal",r:2,price:1000,names:["Gulpo","Gulpaw","Gorgemaw"]},
- umbrit:{el:"Shadow",r:3,price:2000,names:["Umbrit","Noctern","Eclipsar"]}
+ umbrit:{el:"Shadow",r:3,price:2000,names:["Umbrit","Noctern","Eclipsar"]},
+ snackub:{el:"Normal",r:2,price:1000,names:["Snackub","Hoardle","Hibernox"]},
+ kettlet:{el:"Steel",r:1,price:600,names:["Kettlet","Kettlebrute","Ferrogolem"]},
+ rhinub:{el:"Rock",r:2,price:900,names:["Rhinub","Platehorn","Ironclad"]},
+ dashkit:{el:"Electric",r:1,price:600,names:["Dashkit","Sprintail","Velocheet"]},
+ veelet:{el:"Sky",r:3,price:0,code:1,names:["Veelet","Veehawk","Taperion"]}
 };
-const sprite=(id,st,size)=>spriteImg(id+st,size,PETS[id]?PETS[id].names[st]:"");
+const PET_DESC={
+ embit:"A baby dragon whose crest burns hotter after every PR. It puffs warm air at you when it's proud.",
+ driplet:"Shaped like a raindrop and twice as refreshing. It reminds you to drink water between sets.",
+ sprigg:"A sprout that grows a new leaf every time you show up. Loves sunshine and early sessions.",
+ pebblo:"Sleeps through everything except leg day. Gets a little heavier, and a little stronger, every week.",
+ zapkit:"Its antenna orbs crackle when your heart rate climbs. It has never once sat still.",
+ flexo:"Wears its headband everywhere, even to bed. Has never skipped arm day.",
+ lumo:"A star-tailed spirit said to appear to lifters who never give up. It glows brighter at night.",
+ gulpo:"Stores snacks in its cheeks for later. Later usually comes about four minutes after.",
+ umbrit:"Lurks in the gym after hours. Its red eyes are the last thing a lazy rep ever sees.",
+ snackub:"Never seen without its honey pot. Eats like it's always bulking and naps like it's always recovering.",
+ kettlet:"A kettlebell that got tired of being swung and started swinging itself. It rings when it hits a PR.",
+ rhinub:"Its horn is a solid little dumbbell. It charges through plateaus head first.",
+ dashkit:"A cardio kitten that laps the whole gym before you've finished your warm-up.",
+ veelet:"Only appears to those with the right code. Its wings make a perfect V, the shape every lifter is chasing."
+};
+const MYTH_ODDS=256;
+const sprite=(id,st,size,myth)=>spriteImg(id+st+(myth?"m":""),size,PETS[id]?(myth?"Shiny ":"")+PETS[id].names[st]:"");
+const petMyth=id=>!!state.pets[id]?.myth;
+// Every new pet has a 1 in 256 chance to be Mythic (shiny). A code can also upgrade one you own.
+function givePet(id,via,forceMyth){
+  const have=state.pets[id];
+  if(have){if(forceMyth&&!have.myth){have.myth=true;postActivity("mythic",{id});return {myth:true,upgraded:true}}return null}
+  const myth=!!forceMyth||rnd()<1/MYTH_ODDS;
+  state.pets[id]={xp:0,myth,got:today(),via};if(!state.pet)state.pet=id;
+  if(myth)postActivity("mythic",{id});return {myth};
+}
+function mythModal(id,upgraded){
+  openModal(`<div class="reveal" style="--rc:var(--r-myth)"><span class="rays"></span><span class="rv-pic pop">${sprite(id,petStage(petLevel(state.pets[id].xp).L),128,true)}</span>
+    <span class="shinyb">★ Shiny</span><h2>${upgraded?`Your ${esc(PETS[id].names[0])} turned Mythic!`:`A Mythic ${esc(PETS[id].names[0])}!`}</h2>
+    <p class="muted">${upgraded?"It keeps its level and evolutions, now in rare colours.":`Only 1 in ${MYTH_ODDS} pets look like this. It sparkles forever.`}</p></div>
+    <div class="btnrow" style="justify-content:center"><button class="btn" id="my-see">See its profile</button><button class="btn ghost" data-close>Nice</button></div>`).querySelector("#my-see").onclick=()=>openPet(id);
+}
 function petLevel(xp){let L=1,need=100;while(xp>=need){xp-=need;L++;need=100*L}return {L,into:xp,need}}
 const petStage=L=>L>=20?2:L>=8?1:0;
 const petName=id=>PETS[id].names[petStage(petLevel(state.pets[id]?.xp||0).L)];
 function gainPet(n,viaTreat){
   const id=state.pet;if(!id||!state.pets[id])return;
   const pt=state.pets[id],b=petLevel(pt.xp);pt.xp+=n;const a=petLevel(pt.xp);
-  if(petStage(a.L)>petStage(b.L)){postActivity("pet",{id,from:petStage(b.L),to:petStage(a.L)});
+  if(petStage(a.L)>petStage(b.L)){postActivity("pet",{id,from:petStage(b.L),to:petStage(a.L),myth:!!pt.myth});
     if(viaTreat)setTimeout(()=>evolveModal(id,petStage(b.L),petStage(a.L)),50);
     else toast("★",`${PETS[id].names[petStage(b.L)]} evolved`,`Say hello to ${PETS[id].names[petStage(a.L)]}.`,"")}
   else if(a.L>b.L&&!viaTreat)toast("▲",`${petName(id)} reached level ${a.L}`,"","");
 }
 function evolveModal(id,from,to){
-  openModal(`<div class="buy"><span class="eyebrow">Evolution</span><div class="evo"><span>${sprite(id,from,72)}</span><i>›</i><span class="bob">${sprite(id,to,112)}</span></div>
+  openModal(`<div class="buy"><span class="eyebrow">Evolution</span><div class="evo"><span>${sprite(id,from,72,petMyth(id))}</span><i>›</i><span class="bob">${sprite(id,to,112,petMyth(id))}</span></div>
     <h2>${esc(PETS[id].names[from])} evolved into ${esc(PETS[id].names[to])}</h2></div><button class="btn" data-close>Brilliant</button>`);
 }
 const TREATS=[{id:"snack",name:"Snack",price:30,xp:100},{id:"feast",name:"Feast",price:100,xp:400}];
@@ -2590,20 +2826,31 @@ function petCard(c){
   if(!id||!state.pets[id])return `<div class="panel petcard"><div class="pet-l"><h3>Pixel pets</h3><p class="muted">Pick a pet that trains with you. It earns XP from your sets and evolves twice. Your first one is free.</p>
     <button class="btn sm" id="pet-choose" style="align-self:flex-start">Choose your pet</button></div><span class="bob">${sprite("embit",0,72)}</span></div>`;
   const lv=petLevel(state.pets[id].xp),stg=petStage(lv.L),nextAt=stg===0?8:stg===1?20:null,g=gems(c);
-  return `<div class="panel petcard" style="--rc:var(${RAR[PETS[id].r].v})"><div class="pet-l"><span class="eyebrow">${PETS[id].el} pet · ${RAR[PETS[id].r].n}</span><h3>${esc(PETS[id].names[stg])} <span class="muted">Lv ${lv.L}</span></h3>
+  return `<div class="panel petcard" style="--rc:var(${RAR[PETS[id].r].v})"><div class="pet-l"><span class="eyebrow">${PETS[id].el} pet · ${RAR[PETS[id].r].n}${petMyth(id)?' <span class="shinyb">★ Shiny</span>':""}</span><h3>${esc(PETS[id].names[stg])} <span class="muted">Lv ${lv.L}</span></h3>
       <span class="bar"><i style="width:${(lv.into/lv.need*100).toFixed(0)}%"></i></span>
       <span class="muted num" style="font-size:.85rem">${lv.into} / ${lv.need} XP${nextAt?` · evolves at Lv ${nextAt}`:" · final form"}</span>
       <div class="btnrow">${TREATS.map(t=>`<button class="btn sm ghost" data-treat="${t.id}" ${g<t.price?"disabled":""}>${t.name} ${GEM}${t.price}</button>`).join("")}<button class="btn sm ghost" id="pet-choose">Switch</button></div></div>
-    <button class="petbtn bob" id="pet-open" aria-label="About ${esc(PETS[id].names[stg])}">${sprite(id,stg,84)}</button></div>`;
+    <button class="petbtn bob" id="pet-open" aria-label="About ${esc(PETS[id].names[stg])}">${sprite(id,stg,84,petMyth(id))}</button></div>`;
 }
+const VIA={Starter:"Your starter",Shop:"Bought in the shop",code:"Redeemed with a code"};
 function openPet(id){
-  const lv=petLevel(state.pets[id].xp),stg=petStage(lv.L);
-  const m=openModal(`${mhead("Your pet")}<div class="buy"><span class="bob">${sprite(id,stg,128)}</span><h2>${esc(PETS[id].names[stg])}</h2>${rarTag({r:PETS[id].r})}<span class="muted">${PETS[id].el} · Level ${lv.L}</span></div>
-    <div class="evo">${[0,1,2].map(i=>`<span class="${i>stg?"lock":""}">${sprite(id,i,52)}<small>${i>stg?"???":esc(PETS[id].names[i])}<br>${i===0?"Lv 1":i===1?"Lv 8":"Lv 20"}</small></span>`).join('<i>›</i>')}</div>
-    <p class="muted" style="font-size:.9rem;text-align:center">Your active pet earns 5 XP a set, 25 a PR and 50 for each finished workout. Snacks and feasts from the Profile tab speed it up.</p>`);
+  const pt=state.pets[id];if(!pt)return;const P=PETS[id],lv=petLevel(pt.xp),stg=petStage(lv.L),my=!!pt.myth,act=state.pet===id,nextAt=stg===0?8:stg===1?20:null,snacks=inv().snack||0;
+  const m=openModal(`${mhead("Pet profile")}<div class="petprof${my?" myth":""}" style="--rc:var(${RAR[my?4:P.r].v})"><span class="bob">${sprite(id,stg,132,my)}</span></div>
+    <div class="buy"><h2>${my?"✦ ":""}${esc(P.names[stg])}</h2>
+      <div class="btnrow" style="justify-content:center">${rarTag({r:P.r})}${my?'<span class="shinyb">★ Shiny</span>':""}${act?'<span class="pill on">Active</span>':""}</div>
+      <span class="muted">${P.el} type · Level ${lv.L}</span></div>
+    <div style="display:flex;flex-direction:column;gap:6px"><span class="bar"><i style="width:${(lv.into/lv.need*100).toFixed(0)}%"></i></span><span class="muted num" style="font-size:.85rem">${lv.into} / ${lv.need} XP${nextAt?` · evolves at Lv ${nextAt}`:" · final form"}</span></div>
+    <p class="pdesc">${esc(PET_DESC[id]||"")}</p>
+    <div class="pfacts"><div><span class="eyebrow">Joined you</span><b>${pt.got?fmtD(pt.got):"Early days"}</b></div><div><span class="eyebrow">Found</span><b>${esc(VIA[pt.via]||(pt.via?"In a "+pt.via:"Your first pet"))}</b></div>
+      ${my?`<div class="wide"><span class="eyebrow">Mythic</span><b>A 1 in ${MYTH_ODDS} shiny with its own colours</b></div>`:""}</div>
+    <div class="evo">${[0,1,2].map(i=>`<span class="${i>stg?"lock":""}">${sprite(id,i,52,my)}<small>${i>stg?"???":esc(P.names[i])}<br>${i===0?"Lv 1":i===1?"Lv 8":"Lv 20"}</small></span>`).join('<i>›</i>')}</div>
+    ${act?(snacks?`<button class="btn ghost" id="pp-feed">Feed a snack (${snacks} left)</button>`:""):`<button class="btn" id="pp-act">Make ${esc(P.names[stg])} my active pet</button>`}
+    <p class="muted" style="font-size:.85rem;text-align:center">Your active pet earns 5 XP a set, 25 a PR and 50 for each finished workout.</p>`);
   m.querySelector("#mh-back").onclick=closeModal;
+  m.querySelector("#pp-act")?.addEventListener("click",()=>{state.pet=id;save();refresh();openPet(id);toast("✓",`${petName(id)} is now active`,"It earns XP as you train.","")});
+  m.querySelector("#pp-feed")?.addEventListener("click",()=>{useItem("snack");openPet(id)});
 }
-const heroPet=()=>state.pet&&state.pets[state.pet]?`<span class="heropet bob">${sprite(state.pet,petStage(petLevel(state.pets[state.pet].xp).L),54)}</span>`:"";
+const heroPet=()=>state.pet&&state.pets[state.pet]?`<span class="heropet bob">${sprite(state.pet,petStage(petLevel(state.pets[state.pet].xp).L),54,petMyth(state.pet))}</span>`:"";
 
 /* ---------- Daily challenges ---------- */
 const CH={
@@ -2834,7 +3081,7 @@ function publicStats(c){
     week:{start:ws,workouts:wfin,sets:wsets,volume:Math.round(wk.reduce((a,s)=>a+work(s).reduce((p,x)=>p+volOf(x.x,x,s.date),0),0)),xp:wxp},
     today:all.filter(s=>s.date===td&&doneSets(s).length).map(s=>({name:s.name||P(s.day).name,finished:!!s.finished,at:s.at||"",ex:exSummary(s)})),
     last:last?{date:last.date,name:last.name||P(last.day).name}:null,lifts,banner:state.equip.banner||"",plan:state.planName||"",
-    pet:pet?{id:state.pet,st:petStage(petLevel(pet.xp).L),lv:petLevel(pet.xp).L}:null};
+    pet:pet?{id:state.pet,st:petStage(petLevel(pet.xp).L),lv:petLevel(pet.xp).L,myth:!!pet.myth}:null};
 }
 function syncPill(){const el=$("#syncline");if(el)el.innerHTML=syncText()}
 function syncText(){
@@ -3042,10 +3289,11 @@ function feedHTML(){
     else if(a.kind==="rank"){body=`${nm} reached <b style="color:var(${tierVar(d.step)})">${stepName(d.step)}</b> on ${esc(d.x)}`;side=emblem(d.step,26)}
     else if(a.kind==="level"){body=`${nm} reached <b>level ${d.level}</b> · ${esc(d.title||"")}`}
     else if(a.kind==="medal"){body=`${nm} unlocked the <b>${esc(d.name)}</b> medal`}
+    else if(a.kind==="mythic"&&PETS[d.id]){body=`${nm} found a <b style="color:var(--r-myth)">★ Shiny ${esc(PETS[d.id].names[0])}</b>`;side=`<span class="bob">${sprite(d.id,0,34,true)}</span>`}
     else if(a.kind==="chest"){body=`${nm} found <b style="color:var(${RAR[d.r||0].v})">${esc(d.name)}</b> in a ${esc(d.chest||"chest")}`}
-    else if(a.kind==="pet"&&PETS[d.id]){body=`${nm}${a.user_id===me.id?"r":"'s"} ${esc(PETS[d.id].names[d.from])} evolved into <b>${esc(PETS[d.id].names[d.to])}</b>`;side=`<span class="bob">${sprite(d.id,d.to,34)}</span>`}
+    else if(a.kind==="pet"&&PETS[d.id]){body=`${nm}${a.user_id===me.id?"r":"'s"} ${esc(PETS[d.id].names[d.from])} evolved into <b>${esc(PETS[d.id].names[d.to])}</b>`;side=`<span class="bob">${sprite(d.id,d.to,34,d.myth)}</span>`}
     else body=`${nm} was active`;
-    return `<button class="fitem" data-user="${a.user_id}">${avHTML(p,38)}<span class="ftxt"><span>${body}</span>${a.kind==="rank"||a.kind==="pet"?"":side}<span class="ftime">${ago(a.created_at)}</span></span>${a.kind==="rank"||a.kind==="pet"?side:""}</button>`}).join("")}</div>`;
+    return `<button class="fitem" data-user="${a.user_id}">${avHTML(p,38)}<span class="ftxt"><span>${body}</span>${a.kind==="rank"||a.kind==="pet"||a.kind==="mythic"?"":side}<span class="ftime">${ago(a.created_at)}</span></span>${a.kind==="rank"||a.kind==="pet"||a.kind==="mythic"?side:""}</button>`}).join("")}</div>`;
 }
 function relButton(id){
   if(id===me.id)return `<span class="pill">You</span>`;
@@ -3120,7 +3368,7 @@ function openPerson(id){
         <div class="hist">${s.ex.map(x=>`<div class="hrow" style="grid-template-columns:minmax(0,1fr)"><span class="s"><b>${esc(x.n)}</b><br><span class="muted">${x.s.map(v=>(v[2]==="w"?"W ":v[2]==="d"?"D ":"")+fmtSet(x.k,v)).join(", ")}</span></span></div>`).join("")}</div></div>`).join(""):`<p class="muted">No training logged today${st.last?`. Last workout: ${esc(st.last.name)}, ${ago(st.last.date+"T12:00:00")}.`:"."}</p>`}
       ${Object.keys(ms).length?`<h3>Muscle ranks</h3><div class="bodymap"><figure>${bodySVG("front",ms,null)}<figcaption>Front</figcaption></figure><figure>${bodySVG("back",ms,null)}<figcaption>Back</figcaption></figure></div>`:""}
       ${st.lifts&&st.lifts.length?`<h3>Top lifts</h3><div class="hist">${st.lifts.map(l=>`<div class="hrow" style="grid-template-columns:minmax(0,1fr) auto"><span class="s"><b>${esc(l.n)}</b><br><span class="muted">${l.k==="reps"?`${l.best} reps best`:`Est. max ${kg(l.best)} kg`}</span></span><span class="rank" style="--tier:var(${tierVar(l.step)})">${stepName(l.step)}</span></div>`).join("")}</div>`:""}
-      ${st.pet&&PETS[st.pet.id]?`<div class="petcard panel" style="box-shadow:none;background:var(--surface-2)"><div class="pet-l"><span class="eyebrow">Pet</span><b>${esc(PETS[st.pet.id].names[st.pet.st])} · Lv ${st.pet.lv}</b></div><span class="bob">${sprite(st.pet.id,st.pet.st,64)}</span></div>`:""}`
+      ${st.pet&&PETS[st.pet.id]?`<div class="petcard panel" style="box-shadow:none;background:var(--surface-2)"><div class="pet-l"><span class="eyebrow">Pet</span><b>${esc(PETS[st.pet.id].names[st.pet.st])} · Lv ${st.pet.lv}</b>${st.pet.myth?'<span class="shinyb" style="align-self:flex-start">★ Shiny</span>':""}<span class="muted" style="font-size:.85rem">${esc(PET_DESC[st.pet.id]||"")}</span></div><span class="bob">${sprite(st.pet.id,st.pet.st,64,st.pet.myth)}</span></div>`:""}`
       :`<p class="muted">Add @${esc(p.username)} as a friend to see their workouts and ranks.</p>`}
     ${isMe?"":`<div class="btnrow">${!r?`<button class="btn" data-addf2="${id}">Add friend</button>`:r.status==="accepted"?`<button class="btn" id="pp-msg">Message</button><button class="btn ghost" id="pp-remove">Remove friend</button>`:r.requester===me.id?`<span class="muted">Friend request sent</span>`:`<button class="btn" data-accept2="${r.id}">Accept friend request</button>`}</div>`}`);
   m.querySelector("#mh-back").onclick=closeModal;
