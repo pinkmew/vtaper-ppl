@@ -221,7 +221,7 @@ textarea{width:100%;min-height:90px;font:14px ui-monospace,Menlo,monospace;paddi
 /* Tab bar, rest timer, toasts, modal */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);
   padding:8px max(16px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
-nav.tabs .in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+nav.tabs .in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr);gap:2px}
 .tab{border:0;background:none;color:var(--muted);font:700 .76rem var(--body);letter-spacing:.06em;text-transform:uppercase;padding:10px 0;border-radius:10px;cursor:pointer}
 .tab[aria-selected="true"]{color:var(--fg);background:var(--surface-2)}
 .rest{position:fixed;z-index:7;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));
@@ -597,6 +597,58 @@ button.cd{border:0;cursor:pointer;font-family:var(--body);position:relative;padd
 .bn-goldfoil{background:linear-gradient(110deg,transparent 42%,rgba(255,255,255,.4) 50%,transparent 58%),linear-gradient(rgba(0,0,0,.42),rgba(0,0,0,.42)),linear-gradient(120deg,#5c430c,#a87b17 45%,#e2b84a 55%,#7a5a10);background-size:250% 100%,auto,auto;background-repeat:no-repeat;animation:sweep 3.2s ease-in-out infinite}
 .bn-rgbwave{background:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)),linear-gradient(90deg,#ff5d52,#ffd24a,#6fd44a,#35b6ff,#b48cff,#ff5d52,#ffd24a);background-size:auto,300% 100%;animation:slide 6s linear infinite alternate}
 
+
+/* ---- v9: accounts, friends, groups ---- */
+.tab{font-size:.6rem;position:relative}
+.tab svg{width:22px;height:22px}
+.tbadge,.nbadge{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--push);color:#fff;font-size:.68rem;font-weight:800;line-height:1}
+.tbadge{position:absolute;top:2px;right:calc(50% - 22px)}
+.authf{display:flex;flex-direction:column;gap:12px}
+.authf label{display:flex;flex-direction:column;gap:6px}
+.authf small{font-size:.8rem}
+.formerr{color:var(--push);font-weight:600;font-size:.88rem}
+.okhint{color:var(--xp);font-weight:600;font-size:.8rem}
+.sdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--muted);margin-right:7px;vertical-align:1px}
+.sdot.ok{background:#3ccf85}.sdot.warn{background:var(--warn)}
+.fhero ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.fhead{display:flex;align-items:center;gap:10px}
+.fh-t{display:flex;flex-direction:column;min-width:0;flex:1;line-height:1.25}
+.fh-t .muted{font-size:.8rem}
+.fsearch{display:flex;gap:8px}
+.fsearch .txt{flex:1;min-width:0}
+.prow{display:flex;align-items:center;gap:10px;padding-block:9px;border-top:1px solid var(--line)}
+.panel h3+.prow{border-top:0}
+.prow-main{flex:1;min-width:0;display:flex;align-items:center;gap:12px;border:0;background:none;padding:0;text-align:left;cursor:pointer;color:var(--fg);font-family:var(--body)}
+.prow-t{display:flex;flex-direction:column;min-width:0;line-height:1.3}
+.prow-t b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prow-t .muted,.pstat{font-size:.82rem}
+.pstat{color:var(--muted)}
+.live{display:inline-block;width:8px;height:8px;border-radius:50%;background:#3ccf85;margin-right:6px;box-shadow:0 0 0 3px rgba(60,207,133,.25)}
+.feed{display:flex;flex-direction:column;gap:8px}
+.fitem{display:flex;gap:12px;align-items:flex-start;text-align:left;border:0;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);border-radius:16px;padding:12px;cursor:pointer;color:var(--fg);font-family:var(--body);font-size:.95rem}
+.ftxt{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;line-height:1.35}
+.fsub{color:var(--muted);font-size:.85rem}
+.ftime{color:var(--muted);font-size:.75rem}
+.gcard{display:flex;flex-direction:column;gap:12px;text-align:left;border:0;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);border-radius:18px;padding:14px;cursor:pointer;color:var(--fg);font-family:var(--body)}
+.gc-top{display:flex;align-items:center;gap:12px}
+.gc-t{display:flex;flex-direction:column;flex:1;min-width:0}
+.gc-t b{font-size:1.1rem}
+.gc-t .muted{font-size:.85rem}
+.gc-badge{position:relative;flex:0 0 auto;width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--xp),var(--push));color:var(--ink);display:grid;place-items:center;font-weight:900;font-size:1.4rem}
+.gc-badge i{position:absolute;right:-6px;bottom:-6px;font-style:normal;min-width:22px;height:22px;padding:0 4px;border-radius:999px;background:var(--fg);color:var(--bg);font-size:.72rem;font-weight:900;display:grid;place-items:center}
+.gc-badge.big{width:64px;height:64px;font-size:2rem;border-radius:18px}
+.gc-goal{display:flex;flex-direction:column;gap:6px;font-size:.9rem}
+.gdh{display:flex;align-items:center;gap:16px}
+.codebox{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--surface-2);border-radius:14px;padding:12px 14px}
+.codebox>span{display:flex;flex-direction:column}
+.gcode{font-size:1.5rem;letter-spacing:.2em;font-variant-numeric:tabular-nums}
+.lb{display:flex;flex-direction:column;gap:6px}
+.lbrow{display:flex;align-items:center;gap:10px;border:0;background:var(--surface-2);border-radius:12px;padding:8px 12px 8px 8px;text-align:left;cursor:pointer;color:var(--fg);font-family:var(--body)}
+.lbrow .prow-t{flex:1}
+.lbn{width:22px;text-align:center;color:var(--muted);font-variant-numeric:tabular-nums}
+.lbrow:first-child .lbn{color:var(--xp)}
+.stats.s2{grid-template-columns:repeat(2,minmax(0,1fr))}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -618,6 +670,7 @@ button.cd{border:0;cursor:pointer;font-family:var(--body);position:relative;padd
     <section id="v-train" class="view"></section>
     <section id="v-progress" class="view" hidden></section>
     <section id="v-shop" class="view" hidden></section>
+    <section id="v-friends" class="view" hidden></section>
     <section id="v-profile" class="view" hidden></section>
     <input type="file" accept="image/*" id="ph-in" class="sr" aria-label="Choose a workout photo">
 
@@ -749,12 +802,14 @@ button.cd{border:0;cursor:pointer;font-family:var(--body);position:relative;padd
     <button class="tab" role="tab" id="t-train" data-v="train" aria-selected="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10v4M6 7v10M18 7v10M21 10v4M6 12h12"/></svg>Workout</button>
     <button class="tab" role="tab" id="t-progress" data-v="progress" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.500 8-8 9-4.500-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Ranks</button>
     <button class="tab" role="tab" id="t-shop" data-v="shop" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16l-1.2 11H5.2z"/><path d="M8 9V7a4 4 0 0 1 8 0v2"/></svg>Shop</button>
+    <button class="tab" role="tab" id="t-friends" data-v="friends" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.8 3.3-5.5 6.5-5.5s5.7 1.7 6.5 5.5"/><path d="M16 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c2 .7 3.2 2.4 3.6 5.2"/></svg>Friends<span class="tbadge" id="tb-friends" hidden></span></button>
     <button class="tab" role="tab" id="t-profile" data-v="profile" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.500 4-6 8-6s7 1.500 8 6"/></svg>Profile</button>
     <button class="tab" role="tab" id="t-plan" data-v="plan" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>Plan</button>
   </div>
 </nav>
 
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
 <script>
 /* ---------- Default plan ----------
    [id, name, sets, reps, note, tags, kind]
@@ -894,7 +949,8 @@ function ensurePlans(s){
 let state=ensurePlans((()=>{try{const s=migrate(JSON.parse(localStorage.getItem(KEY)));if(s)return s}catch(e){}return blank()})());
 const activePlan=()=>state.plans.find(p=>p.id===state.active);
 const save=()=>{const ap=activePlan();if(ap){ap.days=state.days;ap.tpl=state.tpl;state.planName=ap.name}
-  try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){return false}};
+  let ok=true;try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){ok=false}
+  if(typeof cloudQueue==="function")cloudQueue();return ok};
 let current=(new Date().getDay()+6)%7, view="train";
 
 /* ---------- Exercise catalogue ---------- */
@@ -1104,6 +1160,7 @@ function commit(mut,opts={}){
     newBadges.forEach(b=>toast(b.glyph,`Medal unlocked · ${b.name}`,b.hint||"",`+${b.xp}`));
     if(after.level>before.level&&!opts.noLevelModal)toast(String(after.level),`Level up · Level ${after.level}`,`${after.title}. +${(after.level-before.level)*25} gems.`,"");
   }
+  cloudEvents(before,after,newBadges,newRanks);
   return {before,after,newBadges,newRanks};
 }
 function toast(ico,title,sub,xp,unit="XP"){
@@ -1275,7 +1332,9 @@ vt.addEventListener("click",e=>{
     case "backtpl":{const s=getSess(false);s.mod=false;syncSess(s);
       for(const k of Object.keys(s.sets)){const u=k.split("|")[0];if(!s.ex.some(sl=>sl.u===u)&&!s.sets[k].done)delete s.sets[k]}
       save();toast("✓","Back to your regular plan","Anything you already logged today is kept.","");refresh();break}
-    case "finish":{const key=sessKey(today(),current);const res=commit(()=>{const s=getSess(true);s.finished=true;s.name=P(current).name;s.at=new Date().toTimeString().slice(0,5)},{noLevelModal:true});showSummary(key,res);stopRest();refresh();break}
+    case "finish":{const key=sessKey(today(),current);const res=commit(()=>{const s=getSess(true);s.finished=true;s.name=P(current).name;s.at=new Date().toTimeString().slice(0,5)},{noLevelModal:true});
+      {const s=state.sessions[key],c2=compute(),ws=doneSets(s).filter(x=>x.t!=="w");postActivity("workout",{name:s.name,sets:ws.length,volume:Math.round(ws.reduce((a,x)=>a+volOf(x.x,x,s.date),0)),prs:c2.prs.filter(p=>p.k===key).map(p=>exName(p.x))})}
+      showSummary(key,res);stopRest();refresh();break}
     case "summary":showSummary(sessKey(today(),current));break;
     case "clearday":{const m=openModal(`<h2>Clear today's log?</h2><p>This removes every set and change you made for ${esc(P(current).d)} today. Other days stay as they are.</p>
       <div class="btnrow"><button class="btn danger" id="mclear">Clear log</button><button class="btn ghost" data-close>Cancel</button></div>`);
@@ -1604,7 +1663,8 @@ function renderProfile(){
     html+=`<div class="bwlist">${days.slice(-5).reverse().map(d=>`<div class="bwrow"><span>${fmtD(d)}</span><span><b>${state.bw[d].toFixed(1)} kg</b> <button class="x-btn" data-del="${d}" aria-label="Delete ${fmtD(d)} weigh-in">Delete</button></span></div>`).join("")}</div>`;
   }
   html+=`</div>`;
-  html+=`<div class="panel"><h3>Backup</h3><p class="muted" style="font-size:.9rem">Your logs live on this phone only. Copy a backup now and then and paste it into Notes. Workout photos aren't included in the backup.</p>
+  html+=accountPanel();
+  html+=`<div class="panel"><h3>Backup</h3><p class="muted" style="font-size:.9rem">${me?"Your account backs everything up automatically. You can also copy a text backup.":"Your logs live on this phone only. Create an account above, or copy a backup now and then and paste it into Notes."} Workout photos stay on this phone.</p>
     <div class="btnrow"><button class="btn sm ghost" id="copybk">Copy backup</button><button class="btn sm ghost" id="showrestore">Restore from backup</button></div>
     <div id="restorebox" hidden style="display:flex;flex-direction:column;gap:8px"><textarea id="restoretx" placeholder="Paste your backup here"></textarea><button class="btn sm" id="dorestore">Restore</button></div>
     ${showReset?`<p>Delete every workout, weigh-in, medal, plan change and XP?</p><div class="btnrow"><button class="btn sm danger" id="doreset">Delete everything</button><button class="btn sm ghost" id="noreset">Cancel</button></div>`:`<button class="link" id="askreset">Reset all data</button>`}</div>`;
@@ -1814,7 +1874,8 @@ function openProfileEdit(){
   const m=openModal(`${mhead("Profile","Save")}<h2>Edit profile</h2>
     <div class="pe-pic"><span id="pe-prev"></span><div class="btnrow"><label class="btn sm ghost" for="pe-file">Choose photo</label><button class="btn sm ghost" id="pe-rm">Remove photo</button></div>
       <input type="file" id="pe-file" accept="image/*" class="sr"></div>
-    <label style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">Username</span><input class="txt" id="pe-name" maxlength="20" value="${esc(state.name||"")}" autocomplete="off" placeholder="Pick a username"></label>
+    <label style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">Username</span><input class="txt" id="pe-name" maxlength="20" value="${esc(myProfile?myProfile.username:(state.name||""))}" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Pick a username">${myProfile?`<small class="muted">Friends find you by this. 3–20 letters, numbers or underscores.</small>`:""}</label>
+    <p id="pe-err" class="formerr" hidden></p>
     <button class="btn" id="pe-save">Save profile</button>`);
   const prev=()=>{m.querySelector("#pe-prev").innerHTML=pic?`<img class="avatar" style="width:96px;height:96px" src="${pic}" alt="Profile picture preview">`:`<span class="avatar" style="width:96px;height:96px;font-size:40px">${esc((m.querySelector("#pe-name").value||"L").trim().charAt(0).toUpperCase()||"L")}</span>`;m.querySelector("#pe-rm").hidden=!pic};
   prev();
@@ -1826,7 +1887,9 @@ function openProfileEdit(){
     img.onload=()=>{const S=192,cv=document.createElement("canvas");cv.width=cv.height=S;const side=Math.min(img.width,img.height);
       cv.getContext("2d").drawImage(img,(img.width-side)/2,(img.height-side)/2,side,side,0,0,S,S);pic=cv.toDataURL("image/jpeg",.82);URL.revokeObjectURL(url);prev()};
     img.onerror=()=>{URL.revokeObjectURL(url);toast("!","That photo didn't work","Try a different picture.","")};img.src=url});
-  const doSave=()=>{const nm=m.querySelector("#pe-name").value.trim();if(!nm){m.querySelector("#pe-name").focus();toast("!","Pick a username","It can't be empty.","");return}
+  if(myProfile)m.querySelector("#pe-name").addEventListener("input",e=>{const c=cleanName(e.target.value);if(c!==e.target.value)e.target.value=c});
+  const doSave=async()=>{let nm=m.querySelector("#pe-name").value.trim();if(!nm){m.querySelector("#pe-name").focus();toast("!","Pick a username","It can't be empty.","");return}
+    if(myProfile){const r=await changeUsername(nm);if(!r.ok){const e=m.querySelector("#pe-err");e.textContent=r.msg;e.hidden=false;return}nm=myProfile.username}
     state.name=nm;state.avatar=pic;const ok=save();closeModal();refresh();toast(ok?"✓":"!",ok?"Profile saved":"Couldn't save",ok?"":"The photo may be too large for this phone's storage.","")};
   m.querySelector("#pe-save").onclick=doSave;m.querySelector("#mh-save").onclick=doSave;m.querySelector("#mh-back").onclick=closeModal;
 }
@@ -1997,7 +2060,7 @@ const petName=id=>PETS[id].names[petStage(petLevel(state.pets[id]?.xp||0).L)];
 function gainPet(n,viaTreat){
   const id=state.pet;if(!id||!state.pets[id])return;
   const pt=state.pets[id],b=petLevel(pt.xp);pt.xp+=n;const a=petLevel(pt.xp);
-  if(petStage(a.L)>petStage(b.L)){
+  if(petStage(a.L)>petStage(b.L)){postActivity("pet",{id,from:petStage(b.L),to:petStage(a.L)});
     if(viaTreat)setTimeout(()=>evolveModal(id,petStage(b.L),petStage(a.L)),50);
     else toast("★",`${PETS[id].names[petStage(b.L)]} evolved`,`Say hello to ${PETS[id].names[petStage(a.L)]}.`,"")}
   else if(a.L>b.L&&!viaTreat)toast("▲",`${petName(id)} reached level ${a.L}`,"","");
@@ -2103,18 +2166,470 @@ function openDay(date){
     try{await PH.del(k)}catch(err){}delete state.sessions[k].photo;save();toast("✓","Photo removed","","");refresh();openDay(date)});
 }
 
+/* ---------- Cloud: accounts and sync ---------- */
+const SB_URL="https://ydfmkkwfegrgbjqsazwb.supabase.co",SB_KEY="sb_publishable_OmH4nB-k-dOhwSg8qhYUFA_7vlprVI5";
+const CLOUD_HOST=/github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname);
+const APP_URL=location.origin+location.pathname;
+let sb=null,me=null,myProfile=null;
+const cloud={status:"off",ver:0,timer:null,pushing:false,again:false,err:""};
+const lsGet=k=>{try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}};
+const lsSet=(k,v)=>{try{v==null?localStorage.removeItem(k):localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const meta=()=>lsGet("vtppl-sync")||{};
+const setMeta=m=>lsSet("vtppl-sync",{...meta(),...m});
+const sameTime=(a,b)=>!!a&&!!b&&Math.abs(Date.parse(a)-Date.parse(b))<2;
+const sbErr=e=>{const m=(e&&(e.message||e.error_description))||"Something went wrong";
+  if(/already registered|already exists/i.test(m))return "That email already has an account. Sign in instead.";
+  if(/invalid login|invalid credentials/i.test(m))return "Wrong email or password.";
+  if(/email not confirmed/i.test(m))return "Confirm your email first. Check your inbox for the link.";
+  if(/password should be|at least 6/i.test(m))return "Use a password of at least 6 characters.";
+  if(/rate limit|too many/i.test(m))return "Too many tries. Wait a minute and try again.";
+  if(/failed to fetch|network|load failed/i.test(m))return "No connection. Check your signal and try again.";
+  if(/unable to validate email|invalid format|is invalid/i.test(m))return "That email address doesn't look right.";
+  return m};
+const USERRE=/^[a-z0-9_]{3,20}$/;
+const cleanName=s=>String(s||"").toLowerCase().replace(/[^a-z0-9_]/g,"").slice(0,20);
+
+function cloudInit(){
+  if(!CLOUD_HOST){cloud.status="off";return}
+  if(!window.supabase||!window.supabase.createClient){cloud.status="unavailable";return}
+  sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  cloud.status="checking";
+  sb.auth.onAuthStateChange((ev,session)=>{
+    // Supabase recommends not awaiting its own calls inside this callback, so work is deferred.
+    setTimeout(()=>{
+      if(ev==="PASSWORD_RECOVERY")openNewPassword();
+      const u=session&&session.user;
+      if(u&&(!me||me.id!==u.id)){me=u;afterSignIn()}
+      else if(!u&&ev!=="TOKEN_REFRESHED"){me=null;myProfile=null;cloud.status="signedout";social.loaded=false;refresh()}
+    },0);
+  });
+}
+async function afterSignIn(){
+  cloud.status="syncing";refresh();
+  const {data:p,error}=await sb.from("profiles").select("*").eq("id",me.id).maybeSingle();
+  if(error){cloud.status="error";cloud.err=sbErr(error);refresh();return}
+  myProfile=p;
+  if(!myProfile){
+    const pending=lsGet("vtppl-pending-username");
+    if(pending){const r=await createProfile(pending);if(r.ok)lsSet("vtppl-pending-username",null)}
+    if(!myProfile){cloud.status="needname";refresh();openPickUsername();return}
+  }
+  state.name=myProfile.username;
+  await syncOnSignIn();
+}
+async function createProfile(username){
+  const u=cleanName(username);if(!USERRE.test(u))return {ok:false,msg:"Use 3–20 letters, numbers or underscores."};
+  const c=compute();
+  const {data,error}=await sb.from("profiles").insert({id:me.id,username:u,avatar:state.avatar||null,frame:state.equip.frame||"",title:titleName()||"",level:c.level}).select().single();
+  if(error)return {ok:false,msg:error.code==="23505"?"That username is taken.":sbErr(error)};
+  myProfile=data;return {ok:true};
+}
+const localHasData=()=>Object.keys(state.sessions).length>0||Object.keys(state.bw).length>0;
+async function syncOnSignIn(){
+  const m=meta();
+  const {data:row,error}=await sb.from("user_state").select("data,updated_at").eq("id",me.id).maybeSingle();
+  if(error){cloud.status="error";cloud.err=sbErr(error);refresh();return}
+  if(!row){setMeta({uid:me.id,at:null,dirty:true});await pushNow();refresh();toast("✓","Account ready","This phone's progress is backed up.","");return}
+  if(m.uid===me.id&&sameTime(row.updated_at,m.at)){if(m.dirty)await pushNow();else cloud.status="synced";refresh();return}
+  if((m.uid===me.id&&!m.dirty)||!localHasData()){applyCloud(row);toast("✓","Signed in","Your progress is loaded from your account.","");return}
+  askConflict(row);
+}
+function applyCloud(row){
+  const s=ensurePlans(migrate(row.data)||blank());
+  state=s;buildEX();themeOn=null;
+  try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}
+  setMeta({uid:me.id,at:row.updated_at,dirty:false});cloud.status="synced";cloud.last=Date.now();refresh();
+}
+function askConflict(row){
+  const cl=ensurePlans(migrate(JSON.parse(JSON.stringify(row.data)))||blank());
+  const info=s=>{const fin=Object.values(s.sessions).filter(x=>x.finished),last=fin.map(x=>x.date).sort().pop();return `${fin.length} workout${fin.length===1?"":"s"}${last?`, last on ${fmtD(last)}`:""}`};
+  const m=openModal(`<h2>Which progress should we keep?</h2>
+    <p>This phone and your account both have saved progress.</p>
+    <div class="menu"><button id="cf-phone"><span style="display:block">Keep this phone's progress</span><span class="muted" style="font-weight:500;font-size:.85rem">${info(state)} · replaces what's in your account</span></button>
+    <button id="cf-cloud"><span style="display:block">Use my account's progress</span><span class="muted" style="font-weight:500;font-size:.85rem">${info(cl)} · replaces what's on this phone</span></button></div>
+    <p class="muted" style="font-size:.85rem">Workout photos stay on this phone either way.</p>`);
+  m.querySelector("#cf-phone").onclick=async()=>{closeModal();setMeta({uid:me.id,at:row.updated_at,dirty:true});await pushNow();refresh();toast("✓","Saved to your account","This phone's progress is backed up.","")};
+  m.querySelector("#cf-cloud").onclick=()=>{closeModal();applyCloud(row);toast("✓","Progress loaded","This phone now matches your account.","")};
+}
+function cloudQueue(){
+  if(!sb||!me||!myProfile)return;
+  cloud.ver++;setMeta({uid:me.id,dirty:true});
+  if(cloud.pushing){cloud.again=true;return}
+  clearTimeout(cloud.timer);cloud.timer=setTimeout(pushNow,2500);
+}
+async function pushNow(){
+  if(!sb||!me||!myProfile)return;
+  if(cloud.pushing){cloud.again=true;return}
+  clearTimeout(cloud.timer);cloud.pushing=true;cloud.again=false;
+  const ver=cloud.ver,at=new Date().toISOString(),c=compute(),stats=publicStats(c);
+  const prof={avatar:state.avatar||null,frame:state.equip.frame||"",title:titleName()||"",level:c.level};
+  const profChanged=Object.keys(prof).some(k=>(myProfile[k]??null)!==(prof[k]??null));
+  try{
+    const jobs=[sb.from("user_state").upsert({id:me.id,data:JSON.parse(JSON.stringify(state)),updated_at:at}),
+      sb.from("user_stats").upsert({id:me.id,stats,updated_at:at})];
+    if(profChanged)jobs.push(sb.from("profiles").update({...prof,updated_at:at}).eq("id",me.id));
+    const q=lsGet("vtppl-actq")||[];if(q.length)jobs.push(sb.from("activity").insert(q.map(a=>({kind:a.kind,payload:a.payload,created_at:a.at}))));
+    const res=await Promise.all(jobs),bad=res.find(r=>r.error);
+    if(bad)throw bad.error;
+    if(profChanged)Object.assign(myProfile,prof);
+    if(q.length){const now=lsGet("vtppl-actq")||[];lsSet("vtppl-actq",now.slice(q.length))}
+    setMeta({uid:me.id,at,dirty:cloud.ver!==ver});cloud.status="synced";cloud.last=Date.now();cloud.err="";
+  }catch(e){cloud.status=navigator.onLine===false||/fetch|network|load failed/i.test(e&&e.message||"")?"offline":"error";cloud.err=sbErr(e)}
+  cloud.pushing=false;syncPill();
+  if(cloud.again||meta().dirty&&cloud.status==="synced"){cloud.again=false;clearTimeout(cloud.timer);cloud.timer=setTimeout(pushNow,1500)}
+}
+function postActivity(kind,payload){
+  if(!sb||!me||!myProfile)return;
+  const q=lsGet("vtppl-actq")||[];q.push({kind,payload,at:new Date().toISOString()});lsSet("vtppl-actq",q.slice(-50));cloudQueue();
+}
+function cloudEvents(before,after,newBadges,newRanks){
+  if(!sb||!me||!myProfile)return;
+  const old=new Set(before.prs.map(p=>p.k+p.x));
+  after.prs.filter(p=>!old.has(p.k+p.x)).forEach(p=>postActivity("pr",{x:exName(p.x),k:EX[p.x]?.kind||"load",w:p.set.w||0,r:p.set.r||0}));
+  newRanks.forEach(r=>postActivity("rank",{x:exName(r.x),step:r.to}));
+  newBadges.forEach(b=>postActivity("medal",{name:b.name,glyph:b.glyph}));
+  if(after.level>before.level)postActivity("level",{level:after.level,title:after.title});
+}
+function exSummary(s){
+  const by={},order=[];
+  doneSets(s).forEach(v=>{if(!by[v.x]){by[v.x]=[];order.push(v.x)}by[v.x].push([v.w??null,v.r??null,v.t||""])});
+  return order.map(x=>({n:exName(x),k:EX[x]?.kind||"load",s:by[x]}));
+}
+function publicStats(c){
+  const ms=muscleStats(c),ws=weekStart(today()),td=today(),all=sortedSessions(),wk=all.filter(s=>s.date>=ws);
+  const work=s=>doneSets(s).filter(x=>x.t!=="w");
+  const wsets=wk.reduce((a,s)=>a+work(s).length,0),wfin=wk.filter(s=>s.finished).length;
+  const wxp=wsets*10+c.prs.filter(p=>p.date>=ws).length*50+c.rankUps.filter(r=>r.date>=ws).length*40+wfin*100;
+  const last=[...all].reverse().find(s=>s.finished),pet=state.pet&&state.pets[state.pet];
+  const lifts=Object.keys(c.best).filter(x=>EX[x]&&EX[x].kind!=="none").sort((a,b)=>(c.stepB[b]-c.stepB[a])||(c.best[b]-c.best[a])).slice(0,12)
+    .map(x=>({n:exName(x),k:EX[x].kind,best:Math.round(c.best[x]*10)/10,step:c.stepB[x]}));
+  return {v:1,date:td,level:c.level,title:titleName()||c.title,xp:c.xp,overall:overallStep(ms),
+    muscles:Object.fromEntries(Object.entries(ms).filter(([,v])=>v).map(([m,v])=>[m,v.step])),
+    workouts:c.finished,prs:c.prs.length,volume:Math.round(c.volume),streak:c.streak,dstreak:c.dstreak,medals:Object.keys(state.earned).length,
+    week:{start:ws,workouts:wfin,sets:wsets,volume:Math.round(wk.reduce((a,s)=>a+work(s).reduce((p,x)=>p+volOf(x.x,x,s.date),0),0)),xp:wxp},
+    today:all.filter(s=>s.date===td&&doneSets(s).length).map(s=>({name:s.name||P(s.day).name,finished:!!s.finished,at:s.at||"",ex:exSummary(s)})),
+    last:last?{date:last.date,name:last.name||P(last.day).name}:null,lifts,banner:state.equip.banner||"",plan:state.planName||"",
+    pet:pet?{id:state.pet,st:petStage(petLevel(pet.xp).L),lv:petLevel(pet.xp).L}:null};
+}
+function syncPill(){const el=$("#syncline");if(el)el.innerHTML=syncText()}
+function syncText(){
+  if(cloud.status==="synced")return `<span class="sdot ok"></span>Backed up${cloud.last?" "+ago(new Date(cloud.last).toISOString()):""}`;
+  if(cloud.status==="syncing"||cloud.pushing)return `<span class="sdot"></span>Saving…`;
+  if(cloud.status==="offline")return `<span class="sdot warn"></span>Offline. Changes will save when you're back online.`;
+  if(cloud.status==="error")return `<span class="sdot warn"></span>${esc(cloud.err||"Couldn't save to your account.")}`;
+  return "";
+}
+function ago(isoStr){
+  const s=(Date.now()-Date.parse(isoStr))/1000;
+  if(s<60)return "just now";if(s<3600)return Math.floor(s/60)+"m ago";if(s<86400)return Math.floor(s/3600)+"h ago";
+  if(s<172800)return "yesterday";return Math.floor(s/86400)+"d ago";
+}
+window.addEventListener("online",()=>{if(me&&meta().dirty)pushNow()});
+document.addEventListener("visibilitychange",async()=>{
+  if(document.hidden){if(me&&meta().dirty)pushNow();return}
+  if(!sb||!me||!myProfile||meta().dirty)return;
+  const {data}=await sb.from("user_state").select("updated_at").eq("id",me.id).maybeSingle();
+  if(data&&!sameTime(data.updated_at,meta().at)){const {data:row}=await sb.from("user_state").select("data,updated_at").eq("id",me.id).maybeSingle();if(row&&$("#modal").hidden){applyCloud(row);toast("↻","Updated","Loaded changes from your other device.","")}}
+});
+
+/* ---------- Account screens ---------- */
+function openAuth(mode){
+  if(!sb){toast("!","Accounts need a connection","Open the app with signal and try again.","");return}
+  const up=mode==="signup";
+  const m=openModal(`${mhead("Account")}<h2>${up?"Create your account":"Sign in"}</h2>
+    <p class="muted" style="font-size:.9rem">${up?"Back up your progress and train with friends. Your username is how friends find you.":"Welcome back. Your progress loads from your account."}</p>
+    <form id="authf" class="authf">
+      ${up?`<label><span class="eyebrow">Username</span><input class="txt" id="au-user" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20" value="${esc(cleanName(state.name==="Lifter"?"":state.name))}" placeholder="e.g. alexi_lifts"><small id="au-uhint" class="muted">3–20 letters, numbers or underscores.</small></label>`:""}
+      <label><span class="eyebrow">Email</span><input class="txt" id="au-email" type="email" autocomplete="email" autocapitalize="none" spellcheck="false" placeholder="you@example.com"></label>
+      <label><span class="eyebrow">Password</span><input class="txt" id="au-pass" type="password" autocomplete="${up?"new-password":"current-password"}" placeholder="${up?"At least 6 characters":"Your password"}"></label>
+      <p id="au-err" class="formerr" hidden></p>
+      <button class="btn" type="submit" id="au-go">${up?"Create account":"Sign in"}</button>
+    </form>
+    ${up?"":`<button class="link" id="au-forgot" style="align-self:center">Forgot your password?</button>`}
+    <p class="muted" style="text-align:center;font-size:.9rem">${up?"Already have an account?":"New here?"} <button class="link" id="au-switch" style="display:inline">${up?"Sign in":"Create an account"}</button></p>`);
+  const err=t=>{const e=m.querySelector("#au-err");e.textContent=t;e.hidden=!t};
+  m.querySelector("#mh-back").onclick=closeModal;
+  m.querySelector("#au-switch").onclick=()=>openAuth(up?"signin":"signup");
+  if(up){const ui=m.querySelector("#au-user"),hint=m.querySelector("#au-uhint");let t;
+    ui.addEventListener("input",()=>{const c=cleanName(ui.value);if(c!==ui.value)ui.value=c;clearTimeout(t);hint.className="muted";hint.textContent="3–20 letters, numbers or underscores.";
+      if(USERRE.test(c))t=setTimeout(async()=>{const {data}=await sb.rpc("username_available",{u:c});if(ui.value!==c)return;hint.className=data?"okhint":"formerr";hint.textContent=data?`@${c} is available`:`@${c} is taken`},400)})}
+  m.querySelector("#au-forgot")?.addEventListener("click",async()=>{const email=m.querySelector("#au-email").value.trim();
+    if(!email){err("Type your email above, then tap Forgot your password again.");return}
+    const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:APP_URL});
+    error?err(sbErr(error)):(closeModal(),toast("✓","Check your email","We sent a link to reset your password.",""))});
+  m.querySelector("#authf").addEventListener("submit",async e=>{
+    e.preventDefault();err("");
+    const email=m.querySelector("#au-email").value.trim(),pass=m.querySelector("#au-pass").value,btn=m.querySelector("#au-go");
+    if(!email||!pass){err("Fill in your email and password.");return}
+    btn.disabled=true;btn.textContent=up?"Creating account…":"Signing in…";
+    const done=()=>{btn.disabled=false;btn.textContent=up?"Create account":"Sign in"};
+    if(up){
+      const u=m.querySelector("#au-user").value;
+      if(!USERRE.test(u)){err("Pick a username of 3–20 letters, numbers or underscores.");done();return}
+      if(pass.length<6){err("Use a password of at least 6 characters.");done();return}
+      const {data:free,error:e1}=await sb.rpc("username_available",{u});
+      if(e1){err(sbErr(e1));done();return}
+      if(!free){err(`@${u} is taken. Try another username.`);done();return}
+      lsSet("vtppl-pending-username",u);
+      const {data,error}=await sb.auth.signUp({email,password:pass,options:{emailRedirectTo:APP_URL}});
+      if(error){err(sbErr(error));done();return}
+      if(!data.session){openModal(`<h2>Check your email</h2><p>We sent a confirmation link to <b>${esc(email)}</b>. Tap it, then come back here and sign in.</p><button class="btn" data-close>OK</button>`);return}
+      closeModal();
+    }else{
+      const {error}=await sb.auth.signInWithPassword({email,password:pass});
+      if(error){err(sbErr(error));done();return}
+      closeModal();
+    }
+  });
+}
+function openPickUsername(){
+  const m=openModal(`<h2>Pick a username</h2><p class="muted" style="font-size:.9rem">Friends search for you by this. You can change it later.</p>
+    <input class="txt" id="pu-name" autocapitalize="none" spellcheck="false" maxlength="20" value="${esc(cleanName(state.name==="Lifter"?"":state.name))}" placeholder="e.g. alexi_lifts">
+    <p id="pu-err" class="formerr" hidden></p><button class="btn" id="pu-go">Save username</button>`);
+  const inp=m.querySelector("#pu-name");inp.addEventListener("input",()=>{const c=cleanName(inp.value);if(c!==inp.value)inp.value=c});
+  m.querySelector("#pu-go").onclick=async()=>{const r=await createProfile(inp.value);
+    if(!r.ok){const e=m.querySelector("#pu-err");e.textContent=r.msg;e.hidden=false;return}
+    closeModal();state.name=myProfile.username;await syncOnSignIn()};
+}
+function openNewPassword(){
+  const m=openModal(`<h2>Choose a new password</h2><input class="txt" id="np-pass" type="password" autocomplete="new-password" placeholder="At least 6 characters">
+    <p id="np-err" class="formerr" hidden></p><button class="btn" id="np-go">Save password</button>`);
+  m.querySelector("#np-go").onclick=async()=>{const p=m.querySelector("#np-pass").value,e=m.querySelector("#np-err");
+    if(p.length<6){e.textContent="Use at least 6 characters.";e.hidden=false;return}
+    const {error}=await sb.auth.updateUser({password:p});
+    if(error){e.textContent=sbErr(error);e.hidden=false;return}
+    closeModal();toast("✓","Password updated","You're signed in.","")};
+}
+async function changeUsername(u){
+  u=cleanName(u);if(!USERRE.test(u))return {ok:false,msg:"Use 3–20 letters, numbers or underscores."};
+  if(u===myProfile.username)return {ok:true};
+  const {error}=await sb.from("profiles").update({username:u}).eq("id",me.id);
+  if(error)return {ok:false,msg:error.code==="23505"?"That username is taken.":sbErr(error)};
+  myProfile.username=u;return {ok:true};
+}
+function accountPanel(){
+  if(!CLOUD_HOST)return `<div class="panel"><h3>Account</h3><p class="muted" style="font-size:.9rem">Accounts and friends work in the home screen app at pinkmew.github.io/vtaper-ppl.</p></div>`;
+  if(!sb)return `<div class="panel"><h3>Account</h3><p class="muted" style="font-size:.9rem">Accounts need a connection. Open the app with signal to sign in.</p></div>`;
+  if(!me)return `<div class="panel acct"><h3>Back up and add friends</h3><p class="muted" style="font-size:.9rem">Create a free account to save your progress online, move it to a new phone, and train with friends.</p>
+    <div class="btnrow"><button class="btn sm" data-auth="signup">Create account</button><button class="btn sm ghost" data-auth="signin">Sign in</button></div></div>`;
+  return `<div class="panel acct"><h3>Account</h3><p><b>@${esc(myProfile?.username||"…")}</b> <span class="muted">· ${esc(me.email||"")}</span></p>
+    <p class="muted" id="syncline" style="font-size:.88rem">${syncText()}</p>
+    <div class="btnrow"><button class="btn sm ghost" id="acct-sync">Save now</button><button class="btn sm ghost" id="acct-out">Sign out</button></div></div>`;
+}
+document.addEventListener("click",async e=>{
+  const a=e.target.closest("[data-auth]");if(a){openAuth(a.dataset.auth);return}
+  if(e.target.closest("#acct-sync")){await pushNow();toast(cloud.status==="synced"?"✓":"!",cloud.status==="synced"?"Saved to your account":"Couldn't save",cloud.status==="synced"?"":cloud.err,"");return}
+  if(e.target.closest("#acct-out")){confirmBox("Sign out of your account? Your progress stays on this phone too.","Sign out",async()=>{
+    if(meta().dirty)await pushNow();await sb.auth.signOut();closeModal();toast("✓","Signed out","","")});}
+});
+
+/* ---------- Friends tab ---------- */
+const social={loaded:false,loading:false,at:0,friendships:[],profiles:{},stats:{},feed:[],groups:[],members:{},search:null};
+let friendTab="feed";
+async function loadSocial(force){
+  if(!sb||!me||!myProfile||social.loading)return;
+  if(!force&&social.loaded&&Date.now()-social.at<30000)return;
+  social.loading=true;
+  try{
+    const [fr,gm,fd]=await Promise.all([sb.from("friendships").select("*"),sb.from("group_members").select("group_id,user_id"),
+      sb.from("activity").select("*").gte("created_at",new Date(Date.now()-7*864e5).toISOString()).order("created_at",{ascending:false}).limit(80)]);
+    for(const r of [fr,gm,fd])if(r.error)throw r.error;
+    social.friendships=fr.data;social.feed=fd.data;
+    const myG=[...new Set(gm.data.filter(x=>x.user_id===me.id).map(x=>x.group_id))];
+    social.members={};gm.data.forEach(x=>{if(myG.includes(x.group_id))(social.members[x.group_id]=social.members[x.group_id]||[]).push(x.user_id)});
+    const ids=new Set([me.id]);fr.data.forEach(f=>{ids.add(f.requester);ids.add(f.addressee)});gm.data.forEach(x=>ids.add(x.user_id));fd.data.forEach(a=>ids.add(a.user_id));
+    const idl=[...ids];
+    const [pr,st,gr]=await Promise.all([sb.from("profiles").select("id,username,avatar,frame,title,level").in("id",idl),
+      sb.from("user_stats").select("id,stats,updated_at").in("id",idl),myG.length?sb.from("groups").select("*").in("id",myG):Promise.resolve({data:[]})]);
+    for(const r of [pr,st,gr])if(r.error)throw r.error;
+    social.profiles=Object.fromEntries(pr.data.map(p=>[p.id,p]));social.stats=Object.fromEntries(st.data.map(s=>[s.id,{...s.stats,_at:s.updated_at}]));
+    social.groups=gr.data.sort((a,b)=>a.name.localeCompare(b.name));
+    social.loaded=true;social.at=Date.now();social.err="";
+  }catch(e){social.err=sbErr(e)}
+  social.loading=false;if(view==="friends")renderFriends();
+  {const tb=$("#tb-friends"),n=social.loaded?incoming().length:0;tb.hidden=!n;tb.textContent=n}
+}
+setInterval(()=>{if(view==="friends"&&!document.hidden&&me)loadSocial()},60000);
+const relOf=id=>social.friendships.find(f=>f.requester===id||f.addressee===id);
+const friendIds=()=>social.friendships.filter(f=>f.status==="accepted").map(f=>f.requester===me.id?f.addressee:f.requester);
+const incoming=()=>social.friendships.filter(f=>f.status==="pending"&&f.addressee===me.id);
+const outgoing=()=>social.friendships.filter(f=>f.status==="pending"&&f.requester===me.id);
+function avHTML(p,size){
+  if(!p)return `<span class="avw" style="--s:${size}px"><span class="avatar" style="width:${size}px;height:${size}px;font-size:${size*.42}px">?</span></span>`;
+  return `<span class="avw${p.frame?" fr-"+p.frame:""}" style="--s:${size}px">${p.avatar?`<img class="avatar" style="width:${size}px;height:${size}px" src="${esc(p.avatar)}" alt="">`:`<span class="avatar" style="width:${size}px;height:${size}px;font-size:${size*.42}px" aria-hidden="true">${esc(p.username.charAt(0).toUpperCase())}</span>`}</span>`;
+}
+const fmtSet=(k,v)=>k==="none"?"✓":k==="reps"?`${v[1]}`:`${k==="bw"?"+":""}${kg(v[0]||0)}×${v[1]}`;
+function statusLine(st){
+  if(!st)return "No workouts shared yet";
+  const td=st.date===today()&&st.today&&st.today.length?st.today[st.today.length-1]:null;
+  if(td){const n=td.ex.reduce((a,e)=>a+e.s.filter(s=>s[2]!=="w").length,0);return `<span class="live"></span>${td.finished?"Trained today":"Training now"} · ${esc(td.name)} · ${n} sets`}
+  return st.last?`Last workout ${ago(st.last.date+"T12:00:00")} · ${esc(st.last.name)}`:"No workouts yet";
+}
+function renderFriends(){
+  const el=$("#v-friends");
+  if(!CLOUD_HOST){el.innerHTML=`<div class="panel"><h2>Friends</h2><p>Friends, groups and the activity feed work in the home screen app.</p><p class="muted">Open pinkmew.github.io/vtaper-ppl in Safari to use them.</p></div>`;return}
+  if(!sb){el.innerHTML=`<div class="empty"><b>You're offline</b><span>Friends need a connection. Open the app with signal to see them.</span></div>`;return}
+  if(!me&&cloud.status==="checking"){el.innerHTML=`<div class="empty"><b>Loading…</b></div>`;return}
+  if(!me){el.innerHTML=`<div class="panel fhero"><h2>Train with friends</h2>
+      <ul><li>Search friends by username and add them</li><li>See their lifts, PRs and rank-ups through the day</li><li>Join a group and push a shared weekly goal</li></ul>
+      <div class="btnrow"><button class="btn" data-auth="signup">Create account</button><button class="btn ghost" data-auth="signin">Sign in</button></div>
+      <p class="muted" style="font-size:.85rem">Free. Your progress is also backed up to your account.</p></div>`;return}
+  if(!myProfile){el.innerHTML=`<div class="empty"><b>Pick a username to continue</b><span>Friends find you by your username.</span><button class="btn" id="fr-pick" style="align-self:center">Pick a username</button></div>`;return}
+  loadSocial();
+  const inc=incoming().length;
+  let h=`<div class="fhead"><span>${avHTML(myProfile,34)}</span><span class="fh-t"><b>@${esc(myProfile.username)}</b><span class="muted">Share your username so friends can add you</span></span><button class="btn sm ghost" id="fr-refresh" aria-label="Refresh">${social.loading?"…":"↻"}</button></div>
+    <div class="subtabs" role="tablist">${[["feed","Feed"],["friends","Friends"],["groups","Groups"]].map(([k,n])=>`<button role="tab" data-ft="${k}" id="ft-${k}" aria-selected="${friendTab===k}">${n}${k==="friends"&&inc?` <span class="nbadge">${inc}</span>`:""}</button>`).join("")}</div>`;
+  if(social.err)h+=`<p class="formerr">${esc(social.err)}</p>`;
+  if(!social.loaded){h+=`<div class="empty"><b>Loading…</b></div>`;el.innerHTML=h;return}
+  h+=friendTab==="feed"?feedHTML():friendTab==="friends"?friendsHTML():groupsHTML();
+  el.innerHTML=h;
+}
+function feedHTML(){
+  const items=social.feed;
+  if(!items.length)return `<div class="empty"><b>Nothing here yet</b><span>Finished workouts, PRs, rank-ups and level-ups from you and your friends show up here.</span><button class="btn sm" data-ft="friends" style="align-self:center">Find friends</button></div>`;
+  return `<div class="feed">${items.map(a=>{const p=social.profiles[a.user_id],nm=p?`<b>${a.user_id===me.id?"You":"@"+esc(p.username)}</b>`:"<b>Someone</b>",d=a.payload||{};let body="",side="";
+    if(a.kind==="workout"){body=`${nm} finished <b>${esc(d.name||"a workout")}</b>`;side=`<span class="fsub">${d.sets||0} sets · ${fmtNum(d.volume||0)} kg${d.prs&&d.prs.length?` · ${d.prs.length} PR${d.prs.length>1?"s":""}`:""}</span>${d.prs&&d.prs.length?`<span class="chips">${d.prs.slice(0,4).map(x=>`<span class="chip">PR · ${esc(x)}</span>`).join("")}</span>`:""}`}
+    else if(a.kind==="pr"){body=`${nm} set a PR on <b>${esc(d.x)}</b>`;side=`<span class="fsub">${d.k==="reps"?`${d.r} reps`:`${d.k==="bw"?"+":""}${kg(d.w)} kg × ${d.r}`}</span>`}
+    else if(a.kind==="rank"){body=`${nm} reached <b style="color:var(${tierVar(d.step)})">${stepName(d.step)}</b> on ${esc(d.x)}`;side=emblem(d.step,26)}
+    else if(a.kind==="level"){body=`${nm} reached <b>level ${d.level}</b> · ${esc(d.title||"")}`}
+    else if(a.kind==="medal"){body=`${nm} unlocked the <b>${esc(d.name)}</b> medal`}
+    else if(a.kind==="pet"&&PETS[d.id]){body=`${nm}${a.user_id===me.id?"r":"'s"} ${esc(PETS[d.id].names[d.from])} evolved into <b>${esc(PETS[d.id].names[d.to])}</b>`;side=`<span class="bob">${sprite(d.id,d.to,34)}</span>`}
+    else body=`${nm} was active`;
+    return `<button class="fitem" data-user="${a.user_id}">${avHTML(p,38)}<span class="ftxt"><span>${body}</span>${a.kind==="rank"||a.kind==="pet"?"":side}<span class="ftime">${ago(a.created_at)}</span></span>${a.kind==="rank"||a.kind==="pet"?side:""}</button>`}).join("")}</div>`;
+}
+function relButton(id){
+  if(id===me.id)return `<span class="pill">You</span>`;
+  const r=relOf(id);
+  if(!r)return `<button class="btn sm" data-addf="${id}">Add</button>`;
+  if(r.status==="accepted")return `<span class="pill on">Friends</span>`;
+  if(r.requester===me.id)return `<button class="btn sm ghost" data-cancelf="${r.id}">Requested · cancel</button>`;
+  return `<button class="btn sm" data-acceptf="${r.id}">Accept</button>`;
+}
+function personRow(id,extra){const p=social.profiles[id];if(!p)return "";
+  return `<div class="prow"><button class="prow-main" data-user="${id}">${avHTML(p,42)}<span class="prow-t"><b>@${esc(p.username)}</b><span class="muted">${esc(p.title||social.stats[id]?.title||"Lifter")} · Lv ${p.level}</span>${extra||""}</span></button>${relButton(id)}</div>`}
+function friendsHTML(){
+  const inc=incoming(),out=outgoing(),fr=friendIds().sort((a,b)=>(social.profiles[a]?.username||"").localeCompare(social.profiles[b]?.username||""));
+  let h=`<form class="fsearch" id="fsearch"><input class="txt" id="fs-q" type="search" autocapitalize="none" spellcheck="false" placeholder="Search by username" value="${esc(social.search?.q||"")}" aria-label="Search by username"><button class="btn sm" type="submit">Search</button></form>`;
+  if(social.search){const rs=social.search.rows;
+    h+=`<div class="panel"><div style="display:flex;justify-content:space-between;align-items:baseline"><h3>Results</h3><button class="link" id="fs-clear">Clear</button></div>${rs.length?rs.map(p=>{social.profiles[p.id]=social.profiles[p.id]||p;return personRow(p.id)}).join(""):`<p class="muted">No one called @${esc(social.search.q)}. Check the spelling.</p>`}</div>`}
+  if(inc.length)h+=`<div class="panel"><h3>Friend requests <span class="nbadge">${inc.length}</span></h3>${inc.map(f=>{const p=social.profiles[f.requester];return p?`<div class="prow"><button class="prow-main" data-user="${f.requester}">${avHTML(p,42)}<span class="prow-t"><b>@${esc(p.username)}</b><span class="muted">wants to be friends</span></span></button><span class="btnrow" style="flex-wrap:nowrap"><button class="btn sm" data-acceptf="${f.id}">Accept</button><button class="btn sm ghost" data-declinef="${f.id}">Decline</button></span></div>`:""}).join("")}</div>`;
+  h+=`<div class="panel"><h3>Friends · ${fr.length}</h3>${fr.length?fr.map(id=>personRow(id,`<span class="pstat">${statusLine(social.stats[id])}</span>`)).join(""):`<p class="muted">No friends yet. Search for a username above, or share yours: <b>@${esc(myProfile.username)}</b></p>`}</div>`;
+  if(out.length)h+=`<div class="panel"><h3>Sent requests</h3>${out.map(f=>personRow(f.addressee,`<span class="pstat">Waiting for them to accept</span>`)).join("")}</div>`;
+  return h;
+}
+function groupWeek(gid){
+  const ids=social.members[gid]||[],ws=weekStart(today());
+  const rows=ids.map(id=>{const st=social.stats[id],wk=st&&st.week&&st.week.start===ws?st.week:{workouts:0,sets:0,volume:0,xp:0};return {id,wk,xp:st?.xp||0}});
+  const goal=Math.max(4,ids.length*4),done=rows.reduce((a,r)=>a+r.wk.workouts,0);
+  return {ids,rows,goal,done,sets:rows.reduce((a,r)=>a+r.wk.sets,0),volume:rows.reduce((a,r)=>a+r.wk.volume,0),xp:rows.reduce((a,r)=>a+r.xp,0),ws};
+}
+function groupsHTML(){
+  let h=`<div class="btnrow"><button class="btn sm" id="g-create">Create a group</button><button class="btn sm ghost" id="g-join">Join with a code</button></div>`;
+  if(!social.groups.length)return h+`<div class="empty"><b>No groups yet</b><span>Create one and share its code, or join a friend's group. Everyone's workouts count toward a shared weekly goal.</span></div>`;
+  return h+social.groups.map(g=>{const w=groupWeek(g.id),gl=levelOf(w.xp),claimed=state.gclaims&&state.gclaims[g.id+w.ws];
+    return `<button class="gcard" data-group="${g.id}"><span class="gc-top"><span class="gc-badge">${esc(g.name.charAt(0).toUpperCase())}<i>${gl.level}</i></span><span class="gc-t"><b>${esc(g.name)}</b><span class="muted">${w.ids.length} member${w.ids.length===1?"":"s"} · Group level ${gl.level}</span></span>${w.done>=w.goal&&!claimed?`<span class="pill on">Reward ready</span>`:""}</span>
+      <span class="gc-goal"><span>This week · <b>${w.done} / ${w.goal}</b> workouts</span><span class="bar"><i style="width:${Math.min(100,w.done/w.goal*100).toFixed(0)}%"></i></span></span></button>`}).join("");
+}
+$("#v-friends").addEventListener("click",async e=>{
+  const t=e.target.closest("[data-ft]");if(t){friendTab=t.dataset.ft;renderFriends();return}
+  if(e.target.closest("#fr-refresh")){loadSocial(true);renderFriends();return}
+  if(e.target.closest("#fr-pick")){openPickUsername();return}
+  if(e.target.closest("#fs-clear")){social.search=null;renderFriends();return}
+  const add=e.target.closest("[data-addf]");
+  if(add){add.disabled=true;const {error}=await sb.from("friendships").insert({requester:me.id,addressee:add.dataset.addf});
+    if(error)toast("!","Couldn't send the request",error.code==="23505"?"You're already connected or have a pending request.":sbErr(error),"");else toast("✓","Request sent",`@${social.profiles[add.dataset.addf]?.username||""} needs to accept it.`,"");
+    await loadSocial(true);return}
+  const acc=e.target.closest("[data-acceptf]");
+  if(acc){acc.disabled=true;const {error}=await sb.from("friendships").update({status:"accepted"}).eq("id",+acc.dataset.acceptf);
+    if(error)toast("!","Couldn't accept",sbErr(error),"");else toast("✓","Friend added","You can now see each other's progress.","");await loadSocial(true);return}
+  const dec=e.target.closest("[data-declinef],[data-cancelf]");
+  if(dec){dec.disabled=true;const {error}=await sb.from("friendships").delete().eq("id",+(dec.dataset.declinef||dec.dataset.cancelf));
+    if(error)toast("!","Something went wrong",sbErr(error),"");await loadSocial(true);return}
+  const u=e.target.closest("[data-user]");if(u){openPerson(u.dataset.user);return}
+  const g=e.target.closest("[data-group]");if(g){openGroup(g.dataset.group);return}
+  if(e.target.closest("#g-create")){openGroupForm("create");return}
+  if(e.target.closest("#g-join")){openGroupForm("join");return}
+});
+$("#v-friends").addEventListener("submit",async e=>{
+  if(e.target.id!=="fsearch")return;e.preventDefault();
+  const q=cleanName($("#fs-q").value);if(q.length<2){toast("!","Type at least 2 characters","","");return}
+  const {data,error}=await sb.from("profiles").select("id,username,avatar,frame,title,level").ilike("username",q+"%").order("username").limit(20);
+  if(error){toast("!","Search didn't work",sbErr(error),"");return}
+  social.search={q,rows:data};renderFriends();
+});
+function openPerson(id){
+  const p=social.profiles[id];if(!p)return;
+  const st=social.stats[id],r=relOf(id),isMe=id===me.id,canSee=!!st;
+  const ms=st?Object.fromEntries(Object.entries(st.muscles||{}).map(([m,s])=>[m,{step:s,i:Math.floor(s/3)}])):{};
+  const td=st&&st.date===today()?st.today||[]:[];
+  const m=openModal(`${mhead(isMe?"Your profile":"Profile")}
+    <div class="panel prof${st&&st.banner?" bn-"+st.banner:""}" style="box-shadow:none">${avHTML(p,64)}<div class="prof-l"><h2>@${esc(p.username)}</h2><span class="ptitle">${esc(p.title||st?.title||"Lifter")} · Level ${p.level}</span>${canSee?`<span class="muted">${statusLine(st)}</span>`:""}</div>${canSee?`<div class="prof-r">${emblem(st.overall,56)}<span class="eyebrow">${st.overall==null?"Unranked":stepName(st.overall)}</span></div>`:""}</div>
+    ${canSee?`<div class="stats s2"><div class="stat"><b>${st.workouts}</b><span>Workouts</span></div><div class="stat"><b>${st.prs}</b><span>PRs</span></div><div class="stat"><b>${(st.volume/1000).toFixed(1)}t</b><span>Lifted</span></div><div class="stat"><b>${st.dstreak||0}</b><span>Day streak</span></div></div>
+      <h3>Today</h3>${td.length?td.map(s=>`<div class="dayblock" style="border:0;padding-top:0"><b>${esc(s.name)}</b> <span class="muted">${s.finished?"finished"+(s.at?" at "+esc(s.at):""):"in progress"}</span>
+        <div class="hist">${s.ex.map(x=>`<div class="hrow" style="grid-template-columns:minmax(0,1fr)"><span class="s"><b>${esc(x.n)}</b><br><span class="muted">${x.s.map(v=>(v[2]==="w"?"W ":v[2]==="d"?"D ":"")+fmtSet(x.k,v)).join(", ")}</span></span></div>`).join("")}</div></div>`).join(""):`<p class="muted">No training logged today${st.last?`. Last workout: ${esc(st.last.name)}, ${ago(st.last.date+"T12:00:00")}.`:"."}</p>`}
+      ${Object.keys(ms).length?`<h3>Muscle ranks</h3><div class="bodymap"><figure>${bodySVG("front",ms,null)}<figcaption>Front</figcaption></figure><figure>${bodySVG("back",ms,null)}<figcaption>Back</figcaption></figure></div>`:""}
+      ${st.lifts&&st.lifts.length?`<h3>Top lifts</h3><div class="hist">${st.lifts.map(l=>`<div class="hrow" style="grid-template-columns:minmax(0,1fr) auto"><span class="s"><b>${esc(l.n)}</b><br><span class="muted">${l.k==="reps"?`${l.best} reps best`:`Est. max ${kg(l.best)} kg`}</span></span><span class="rank" style="--tier:var(${tierVar(l.step)})">${stepName(l.step)}</span></div>`).join("")}</div>`:""}
+      ${st.pet&&PETS[st.pet.id]?`<div class="petcard panel" style="box-shadow:none;background:var(--surface-2)"><div class="pet-l"><span class="eyebrow">Pet</span><b>${esc(PETS[st.pet.id].names[st.pet.st])} · Lv ${st.pet.lv}</b></div><span class="bob">${sprite(st.pet.id,st.pet.st,64)}</span></div>`:""}`
+      :`<p class="muted">Add @${esc(p.username)} as a friend to see their workouts and ranks.</p>`}
+    ${isMe?"":`<div class="btnrow">${!r?`<button class="btn" data-addf2="${id}">Add friend</button>`:r.status==="accepted"?`<button class="btn ghost" id="pp-remove">Remove friend</button>`:r.requester===me.id?`<span class="muted">Friend request sent</span>`:`<button class="btn" data-accept2="${r.id}">Accept friend request</button>`}</div>`}`);
+  m.querySelector("#mh-back").onclick=closeModal;
+  m.querySelector("[data-addf2]")?.addEventListener("click",async()=>{const {error}=await sb.from("friendships").insert({requester:me.id,addressee:id});
+    if(error)toast("!","Couldn't send the request",sbErr(error),"");else toast("✓","Request sent","","");closeModal();await loadSocial(true)});
+  m.querySelector("[data-accept2]")?.addEventListener("click",async()=>{const {error}=await sb.from("friendships").update({status:"accepted"}).eq("id",r.id);
+    if(error)toast("!","Couldn't accept",sbErr(error),"");else toast("✓","Friend added","","");closeModal();await loadSocial(true)});
+  m.querySelector("#pp-remove")?.addEventListener("click",()=>confirmBox(`Remove @${p.username} as a friend? You'll stop seeing each other's progress.`,"Remove friend",async()=>{
+    const {error}=await sb.from("friendships").delete().eq("id",r.id);closeModal();if(error)toast("!","Couldn't remove",sbErr(error),"");else toast("✓","Friend removed","","");await loadSocial(true)}));
+}
+function openGroupForm(mode){
+  const mk=mode==="create";
+  const m=openModal(`${mhead("Groups")}<h2>${mk?"Create a group":"Join a group"}</h2>
+    <p class="muted" style="font-size:.9rem">${mk?"You'll get a 6-character code to share. Up to 30 members.":"Ask a member for the group's 6-character code."}</p>
+    <form id="gform" style="display:flex;flex-direction:column;gap:10px"><input class="txt" id="g-val" maxlength="${mk?30:6}" ${mk?'placeholder="Group name, e.g. Iron Lads"':'placeholder="e.g. 9P2X8V" autocapitalize="characters" style="text-transform:uppercase;letter-spacing:.2em;font-weight:800"'} autocomplete="off">
+    <p id="g-err" class="formerr" hidden></p><button class="btn" type="submit">${mk?"Create group":"Join group"}</button></form>`);
+  m.querySelector("#mh-back").onclick=closeModal;
+  m.querySelector("#gform").addEventListener("submit",async e=>{e.preventDefault();
+    const v=m.querySelector("#g-val").value.trim(),err=m.querySelector("#g-err");
+    if(mk&&v.length<2||!mk&&v.length!==6){err.textContent=mk?"Give the group a name of at least 2 characters.":"Codes are 6 characters.";err.hidden=false;return}
+    const {data,error}=await sb.rpc(mk?"create_group":"join_group",mk?{gname:v}:{gcode:v});
+    if(error){err.textContent=sbErr(error);err.hidden=false;return}
+    closeModal();toast("✓",mk?"Group created":"Joined "+data.name,mk?`Share the code ${data.code} with friends.`:"Your workouts now count toward the group goal.","");
+    await loadSocial(true);openGroup(data.id)});
+}
+function openGroup(gid){
+  const g=social.groups.find(x=>x.id===gid);if(!g)return;
+  const w=groupWeek(gid),gl=levelOf(w.xp),key=gid+w.ws,claimed=state.gclaims&&state.gclaims[key];
+  const rows=[...w.rows].sort((a,b)=>b.wk.xp-a.wk.xp||b.wk.workouts-a.wk.workouts);
+  const m=openModal(`${mhead("Group")}<div class="gdh"><span class="gc-badge big">${esc(g.name.charAt(0).toUpperCase())}<i>${gl.level}</i></span><div><h2>${esc(g.name)}</h2><span class="muted">${w.ids.length} member${w.ids.length===1?"":"s"} · Group level ${gl.level}</span></div></div>
+    <div class="codebox"><span><span class="eyebrow">Invite code</span><b class="gcode">${esc(g.code)}</b></span><button class="btn sm ghost" id="g-copy">Copy</button></div>
+    <div class="panel" style="box-shadow:none;background:var(--surface-2)"><span class="eyebrow">This week's goal</span><b style="font-size:1.2rem">${w.done} / ${w.goal} workouts</b><span class="bar"><i style="width:${Math.min(100,w.done/w.goal*100).toFixed(0)}%"></i></span>
+      <span class="muted" style="font-size:.85rem">${w.sets} sets · ${(w.volume/1000).toFixed(1)} tonnes together · 4 workouts per member</span>
+      ${w.done>=w.goal?(claimed?`<span class="pill on" style="align-self:flex-start">Reward claimed</span>`:`<button class="btn sm" id="g-claim" style="align-self:flex-start">Claim 50 gems</button>`):`<span class="muted" style="font-size:.85rem">Hit the goal and everyone can claim 50 gems.</span>`}</div>
+    <div class="panel" style="box-shadow:none;background:var(--surface-2)"><span class="eyebrow">Group XP · level ${gl.level}</span><span class="bar"><i style="width:${(gl.into/gl.need*100).toFixed(0)}%"></i></span><span class="muted num" style="font-size:.85rem">${fmtNum(w.xp)} XP from every member's training</span></div>
+    <h3>This week's leaderboard</h3><div class="lb">${rows.map((r,i)=>{const p=social.profiles[r.id];return p?`<button class="lbrow" data-user2="${r.id}"><b class="lbn">${i+1}</b>${avHTML(p,34)}<span class="prow-t"><b>${r.id===me.id?"You":"@"+esc(p.username)}</b><span class="muted">${r.wk.workouts} workouts · ${r.wk.sets} sets</span></span><b class="num">${fmtNum(r.wk.xp)} XP</b></button>`:""}).join("")}</div>
+    <button class="link" id="g-leave" style="align-self:center">Leave group</button>`);
+  m.querySelector("#mh-back").onclick=closeModal;
+  m.querySelector("#g-copy").onclick=async()=>{try{await navigator.clipboard.writeText(g.code);toast("✓","Code copied",g.code,"")}catch(e){toast("!","Copy didn't work",`The code is ${g.code}.`,"")}};
+  m.querySelector("#g-claim")?.addEventListener("click",()=>{state.gclaims=state.gclaims||{};state.gclaims[key]=1;state.gemsEarned=(state.gemsEarned||0)+50;save();refresh();openGroup(gid);toast("◆","Group goal reward",g.name,"+50","gems")});
+  m.querySelectorAll("[data-user2]").forEach(b=>b.onclick=()=>openPerson(b.dataset.user2));
+  m.querySelector("#g-leave").onclick=()=>confirmBox(`Leave ${g.name}? You can rejoin later with the code.`,"Leave group",async()=>{
+    const {error}=await sb.from("group_members").delete().eq("group_id",gid).eq("user_id",me.id);closeModal();
+    if(error)toast("!","Couldn't leave",sbErr(error),"");else toast("✓","You left "+g.name,"","");await loadSocial(true)});
+}
+
+
 /* ---------- Navigation ---------- */
 $("#days").addEventListener("click",e=>{const b=e.target.closest(".day");if(!b)return;current=+b.dataset.i;refresh();window.scrollTo(0,0)});
 $("#lvlpill").addEventListener("click",()=>go("profile"));
 $("#ctr-gems").addEventListener("click",()=>go("shop"));
 document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>go(t.dataset.v)));
 function go(vw){view=vw;document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",x.dataset.v===vw));
-  ["train","progress","shop","profile","plan"].forEach(n=>$("#v-"+n).hidden=n!==vw);
+  ["train","progress","shop","friends","profile","plan"].forEach(n=>$("#v-"+n).hidden=n!==vw);
   if(state.visits.d!==today())state.visits={d:today()};state.visits[vw]=1;refresh();window.scrollTo(0,0)}
 document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{
   document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-selected",x===b));
   ["cardio","rules","science"].forEach(n=>$("#p-"+n).hidden=n!==b.dataset.p)}));
-function refresh(){let c=compute();if(checkChallenges(c))c=compute();applyTheme();renderHeader(c);renderPlanBox();if(view==="train"){renderTrain();welcome();chalCard(c)}if(view==="progress")renderProgress();if(view==="shop")renderShop(c);if(view==="profile")renderProfile()}
+function refresh(){let c=compute();if(checkChallenges(c))c=compute();applyTheme();renderHeader(c);renderPlanBox();if(view==="train"){renderTrain();welcome();chalCard(c)}if(view==="progress")renderProgress();if(view==="shop")renderShop(c);if(view==="friends")renderFriends();{const tb=$("#tb-friends"),n=me&&social.loaded?incoming().length:0;tb.hidden=!n;tb.textContent=n}if(view==="profile")renderProfile()}
+cloudInit();
 rotateCheck();
 founderCheck();
 save();
