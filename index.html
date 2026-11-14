@@ -528,6 +528,75 @@ button.cd{border:0;cursor:pointer;font-family:var(--body);position:relative;padd
 .wphoto{width:100%;border-radius:14px;display:block}
 .phslot:empty{display:none}
 
+
+/* ---- v8: rarity, animated frames and banners, pixel pets ---- */
+:root{--r-common:#a7b0ba;--r-rare:#4da3ff;--r-epic:#b77bff;--r-legend:#ffc53d}
+.rar{font-size:.66rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--rc);border:1.5px solid var(--rc);border-radius:999px;padding:2px 8px;white-space:nowrap}
+.rarh{color:var(--rc);display:flex;align-items:center;gap:10px}
+.rarh::after{content:"";flex:1;height:2px;border-radius:1px;background:var(--rc);opacity:.35}
+.rarbar{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.rarbar button{border:1.5px solid var(--line);background:none;color:var(--muted);border-radius:999px;padding:6px 12px;font-weight:800;font-size:.8rem;cursor:pointer;white-space:nowrap;font-family:var(--body)}
+.rarbar button[aria-pressed="true"]{border-color:var(--rc);color:var(--rc);background:color-mix(in srgb,var(--rc) 14%,transparent)}
+.item{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--rc) 45%,var(--line));background:linear-gradient(160deg,color-mix(in srgb,var(--rc) 12%,var(--surface)),var(--surface) 60%)}
+.item.eq{box-shadow:inset 0 0 0 2.5px var(--rc)}
+.subtabs button{font-size:.98rem}
+.evo{display:flex;align-items:center;justify-content:center;gap:6px;text-align:center}
+.evo span{display:flex;flex-direction:column;align-items:center;gap:4px}
+.evo small{font-size:.72rem;color:var(--muted);line-height:1.2}
+.evo i{font-style:normal;color:var(--muted);font-size:1.3rem}
+.evo .lock svg{filter:brightness(0);opacity:.55}
+.sprite{image-rendering:pixelated;display:block}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6%)}}
+.bob{display:inline-block;animation:bob 1.6s steps(4) infinite}
+.petcard{flex-direction:row;align-items:center;justify-content:space-between;gap:12px;box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--rc,var(--line)) 50%,var(--line))}
+.pet-l{display:flex;flex-direction:column;gap:7px;min-width:0;flex:1}
+.petbtn{border:0;background:none;padding:0;cursor:pointer;flex:0 0 auto}
+.hero{position:relative}
+.heropet{position:absolute;right:14px;top:12px}
+/* frames */
+.avw .avatar{position:relative;z-index:1}
+.avw::before,.avw::after{pointer-events:none;border-radius:50%}
+@keyframes glowp{0%,100%{box-shadow:0 0 calc(var(--s)*.06) var(--gl)}50%{box-shadow:0 0 calc(var(--s)*.36) var(--gl)}}
+@keyframes flick{0%,100%{filter:brightness(1)}40%{filter:brightness(1.4)}55%{filter:brightness(.8)}70%{filter:brightness(1.25)}}
+@keyframes tw{from{opacity:.25}to{opacity:1}}
+.fr-frost{background:conic-gradient(#eafcff,#7fd6ff,#eafcff,#4aa8ff,#eafcff)}
+.fr-pulse{--gl:#ff4d6d;background:#ff4d6d;animation:glowp 1.6s ease-in-out infinite}
+.fr-rgb,.fr-inferno{background:none}
+.fr-rgb::before{content:"";position:absolute;inset:0;background:conic-gradient(#ff5d52,#ffd24a,#6fd44a,#35b6ff,#b48cff,#ff5d52);animation:spin 3s linear infinite}
+.fr-orbit{background:#2b3c6e}
+.fr-orbit::after{content:"";position:absolute;z-index:2;inset:calc(var(--s)*-.1);background:radial-gradient(circle calc(var(--s)*.085) at 50% calc(var(--s)*.085),#8fe6ff 60%,#3aa0e0 96%,transparent);animation:spin 3.6s linear infinite}
+.fr-solar{background:#ffb23c;--gl:#ffb23c;animation:glowp 2.4s ease-in-out infinite}
+.fr-solar::before{content:"";position:absolute;inset:calc(var(--s)*-.24);background:repeating-conic-gradient(rgba(255,196,84,.85) 0 5deg,transparent 5deg 30deg);-webkit-mask:radial-gradient(circle,#000 52%,transparent 71%);mask:radial-gradient(circle,#000 52%,transparent 71%);animation:spin 16s linear infinite}
+.fr-thunder{background:#16224a}
+.fr-thunder::before{content:"";position:absolute;inset:0;background:conic-gradient(transparent 0 40deg,#f2f8ff 44deg,#6fb6ff 54deg,transparent 62deg 180deg,#f2f8ff 186deg,#6fb6ff 196deg,transparent 206deg 300deg,#bfe0ff 304deg,transparent 312deg);animation:spin 1.2s steps(10) infinite}
+.fr-thunder{--gl:#6fb6ff;animation:glowp .9s steps(3) infinite}
+.fr-inferno{box-shadow:0 0 calc(var(--s)*.3) rgba(255,90,30,.65)}
+.fr-inferno::before{content:"";position:absolute;inset:calc(var(--s)*-.04);background:conic-gradient(#ff3d1f,#ffb23c,#ff6a1f,#ffe07a,#ff3d1f,#ffb23c,#ff3d1f);animation:spin 2.2s linear infinite,flick .8s infinite}
+.fr-lunar{background:#1b2244}
+.fr-lunar::after{content:"";position:absolute;z-index:2;inset:calc(var(--s)*-.12);background:radial-gradient(circle calc(var(--s)*.1) at 50% calc(var(--s)*.1),#f6f2dc 55%,#b9b393 96%,transparent);animation:spin 8s linear infinite}
+.fr-lunar::before{content:"";position:absolute;inset:calc(var(--s)*-.22);background:radial-gradient(circle 1.6px at 14% 24%,#fff 98%,transparent),radial-gradient(circle 1.2px at 86% 18%,#fff 98%,transparent),radial-gradient(circle 1.6px at 90% 74%,#fff 98%,transparent),radial-gradient(circle 1.2px at 8% 80%,#fff 98%,transparent),radial-gradient(circle 1.4px at 50% 99%,#fff 98%,transparent);animation:tw 1.4s ease-in-out infinite alternate}
+.fr-mars{background:#3a1410}
+.fr-mars::after{content:"";position:absolute;z-index:2;inset:calc(var(--s)*-.13);background:radial-gradient(circle calc(var(--s)*.11) at 50% calc(var(--s)*.11),#ff7a48 50%,#b8421f 96%,transparent),radial-gradient(circle calc(var(--s)*.05) at 50% calc(100% - var(--s)*.05),#ded6c6 96%,transparent);animation:spin 9s linear infinite}
+.fr-founder::after{z-index:2}
+.fr-clock{background:repeating-conic-gradient(#e8d9a8 0 3deg,#3a2f14 3deg 30deg)}
+.fr-clock::before{content:"";position:absolute;inset:0;background:conic-gradient(#ffd24a 0 16deg,transparent 16deg);animation:spin 6s linear infinite}
+.fr-clock::after{content:"";position:absolute;inset:0;background:conic-gradient(#ff6a3c 0 26deg,transparent 26deg);animation:spin 36s linear infinite}
+/* banners */
+@keyframes slide{to{background-position:0 0,100% 0}}
+@keyframes drift{to{background-position:120px 120px,-150px 150px,90px -90px,0 0,0 0}}
+@keyframes fall{to{background-position:0 120px,0 150px,0 90px,0 0}}
+@keyframes rise{to{background-position:0 -120px,0 -150px,0 -90px,0 0}}
+@keyframes gridm{to{background-position:0 0,0 0,0 40px,0 0}}
+@keyframes sweep{from{background-position:120% 0,0 0,0 0}to{background-position:-60% 0,0 0,0 0}}
+.bn-aurora{background:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.25)),linear-gradient(120deg,#1b3a2f,#274a7a,#5a2a7a,#1f6a5a,#1b3a2f);background-size:auto,300% 100%;animation:slide 10s ease-in-out infinite alternate}
+.bn-stars{background:radial-gradient(1.6px 1.6px at 20px 30px,#fff,transparent),radial-gradient(1.6px 1.6px at 90px 70px,#cfe3ff,transparent),radial-gradient(1.1px 1.1px at 50px 60px,#fff,transparent),linear-gradient(rgba(0,0,0,.15),rgba(0,0,0,.15)),linear-gradient(120deg,#0b1030,#1d2152);background-size:120px 120px,150px 150px,90px 90px,auto,auto;animation:drift 22s linear infinite}
+.bn-snow{background:radial-gradient(2.2px 2.2px at 20px 30px,#fff,transparent),radial-gradient(1.8px 1.8px at 90px 70px,#e6f4ff,transparent),radial-gradient(1.4px 1.4px at 50px 60px,#fff,transparent),linear-gradient(#2c4a6e,#13233a);background-size:120px 120px,150px 150px,90px 90px,auto;animation:fall 7s linear infinite}
+.bn-embers{background:radial-gradient(2px 2px at 20px 30px,#ffb23c,transparent),radial-gradient(1.6px 1.6px at 90px 70px,#ff6a1f,transparent),radial-gradient(1.3px 1.3px at 50px 60px,#ffe07a,transparent),linear-gradient(#2a0d08,#571a0c);background-size:120px 120px,150px 150px,90px 90px,auto;animation:rise 6s linear infinite}
+.bn-neon{background:linear-gradient(rgba(12,0,30,.35),rgba(12,0,30,.35)),repeating-linear-gradient(90deg,rgba(255,60,200,.4) 0 2px,transparent 2px 40px),repeating-linear-gradient(0deg,rgba(60,220,255,.38) 0 2px,transparent 2px 40px),linear-gradient(#1a0533,#3a0a5e);animation:gridm 2.4s linear infinite}
+.bn-galaxy{background:radial-gradient(1.6px 1.6px at 20px 30px,#fff,transparent),radial-gradient(1.4px 1.4px at 90px 70px,#ffd9f5,transparent),radial-gradient(1.1px 1.1px at 50px 60px,#cfe3ff,transparent),radial-gradient(ellipse at 28% 40%,rgba(190,90,255,.6),transparent 60%),radial-gradient(ellipse at 78% 62%,rgba(50,150,255,.55),transparent 55%) #070818;background-size:120px 120px,150px 150px,90px 90px,auto,auto;animation:drift 30s linear infinite}
+.bn-goldfoil{background:linear-gradient(110deg,transparent 42%,rgba(255,255,255,.4) 50%,transparent 58%),linear-gradient(rgba(0,0,0,.42),rgba(0,0,0,.42)),linear-gradient(120deg,#5c430c,#a87b17 45%,#e2b84a 55%,#7a5a10);background-size:250% 100%,auto,auto;background-repeat:no-repeat;animation:sweep 3.2s ease-in-out infinite}
+.bn-rgbwave{background:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)),linear-gradient(90deg,#ff5d52,#ffd24a,#6fd44a,#35b6ff,#b48cff,#ff5d52,#ffd24a);background-size:auto,300% 100%;animation:slide 6s linear infinite alternate}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -803,7 +872,7 @@ const clone=o=>JSON.parse(JSON.stringify(o));
 
 /* ---------- State ---------- */
 const KEY="vtppl-state-v1";
-const blank=()=>({v:2,name:"Lifter",avatar:"",sessions:{},bw:{},earned:{},tpl:{},custom:{},days:{},planName:"",plans:[],active:"",rotate:false,rotWeek:"",editBack:"",spent:0,gemsEarned:0,owned:{},equip:{frame:"",banner:"",theme:"",title:""},chal:{},visits:{},founder:false});
+const blank=()=>({v:2,name:"Lifter",avatar:"",sessions:{},bw:{},earned:{},tpl:{},custom:{},days:{},planName:"",plans:[],active:"",rotate:false,rotWeek:"",editBack:"",spent:0,gemsEarned:0,owned:{},equip:{frame:"",banner:"",theme:"",title:""},chal:{},visits:{},founder:false,pets:{},pet:""});
 const defaultTpl=d=>PLAN[d].ex.map((e,j)=>({u:`d${d}-${j}`,id:e[0],sets:e[2],reps:e[3],note:e[4]}));
 function migrate(s){
   if(!s||!s.sessions)return null;
@@ -1021,6 +1090,7 @@ function commit(mut,opts={}){
   let after=compute();const newBadges=[];
   for(const b of BADGES)if(!state.earned[b.id]&&badgeDone(b,after)){state.earned[b.id]=today();newBadges.push(b)}
   if(newBadges.length)after=compute();
+  const dPet=(after.sets-before.sets)*5+(after.prs.length-before.prs.length)*25+(after.finished-before.finished)*50;if(dPet>0)gainPet(dPet);
   save();
   const newRanks=after.rankUps.filter(r=>!before.rankUps.some(o=>o.k===r.k&&o.x===r.x&&o.to===r.to));
   if(!opts.quiet){
@@ -1103,7 +1173,7 @@ function renderTrain(){
       ${weekCard(c)}<button class="addex" id="addex">+ Train anyway: add an exercise</button>`;return;
   }
   if(state.plans.length>1)html+=`<div class="weekbar"><span>This week · <b>${esc(state.planName)}</b></span><button id="swplan">Switch plan</button></div>`;
-  html+=`<div class="hero" style="${st}">
+  html+=`<div class="hero" style="${st}">${heroPet()}
     <span class="tag">${p.d} · ${esc(p.tag||LABEL[p.type])} · ${fmtD(today())}</span><h2>${rest?"Extra session":p.name}</h2><p>${rest?"Logged on your rest day":p.focus}</p>
     <div class="meta"><span><strong>${slots.length}</strong> exercises</span><span><strong>${tot}</strong> sets</span>${p.time&&!sess.mod?`<span><strong>${p.time}</strong></span>`:""}</div>
     <span class="bar"><i style="width:${tot?done/tot*100:0}%"></i></span>
@@ -1501,7 +1571,7 @@ function renderProfile(){
       <span class="muted num">${fmtNum(c.into)} / ${fmtNum(c.need)} XP · ${fmtNum(c.xp)} total</span><span class="bar"><i style="width:${(c.into/c.need*100).toFixed(1)}%"></i></span>
       <button class="btn sm ghost" id="editname" style="align-self:flex-start;margin-top:4px">Edit profile</button></div>
     <div class="prof-r">${emblem(os,72)}<span class="eyebrow">${os==null?"Unranked":stepName(os)}</span></div></div>
-    <p class="note">10 XP a set · 50 XP a PR · 40 XP a rank up · 100 XP a finished workout · medal bonuses</p>`;
+    <p class="note">10 XP a set · 50 XP a PR · 40 XP a rank up · 100 XP a finished workout · medal bonuses</p>`+petCard(c);
   // Month calendar: tap a trained day to review it
   const base=parseD(today()),first=new Date(base.getFullYear(),base.getMonth()+calOff,1),y=first.getFullYear(),mo=first.getMonth(),n=new Date(y,mo+1,0).getDate(),lead=(first.getDay()+6)%7;
   const byDate={};for(const se of sortedSessions())if(doneSets(se).length)(byDate[se.date]=byDate[se.date]||[]).push(se);
@@ -1549,6 +1619,10 @@ $("#v-profile").addEventListener("click",async e=>{
   const id=e.target.id;
   if(e.target.dataset.del){const d=e.target.dataset.del;commit(()=>{delete state.bw[d]},{quiet:true});refresh();return}
   if(id==="editname"){openProfileEdit();return}
+  const tr=e.target.closest("[data-treat]");
+  if(tr){const t=TREATS.find(q=>q.id===tr.dataset.treat);if(gems(compute())<t.price)return;state.spent=(state.spent||0)+t.price;gainPet(t.xp,true);save();refresh();toast("✓",`${petName(state.pet)} enjoyed the ${t.name.toLowerCase()}`,"",`+${t.xp}`,"pet XP");return}
+  if(e.target.closest("#pet-choose")){shopTab="pet";go("shop");return}
+  if(e.target.closest("#pet-open")){openPet(state.pet);return}
   if(id==="cal-prev"){calOff--;renderProfile();return}
   if(id==="cal-next"){if(calOff<0)calOff++;renderProfile();return}
   const dy=e.target.closest("[data-day]");if(dy){openDay(dy.dataset.day);return}
@@ -1759,20 +1833,32 @@ function openProfileEdit(){
 
 /* ---------- Gems, shop items ---------- */
 const gems=c=>200+(c.level-1)*25+(state.gemsEarned||0)-(state.spent||0);
+const RAR=[{n:"Common",v:"--r-common"},{n:"Rare",v:"--r-rare"},{n:"Epic",v:"--r-epic"},{n:"Legendary",v:"--r-legend"}];
+// r: 0 common, 1 rare, 2 epic, 3 legendary. anim: the item moves. earn: unlocked by an achievement instead of gems.
 const SHOP={
- frame:{label:"Picture frames",blurb:"A ring around your profile picture.",items:[
-  {id:"",name:"Classic",price:0},{id:"steel",name:"Steel",price:150},{id:"ember",name:"Ember",price:250},{id:"aqua",name:"Aqua",price:250},
-  {id:"toxic",name:"Toxic",price:350},{id:"royal",name:"Royal",price:450},{id:"prism",name:"Prism",price:650},{id:"champion",name:"Champion",price:900},
-  {id:"founder",name:"Founder",price:0,exclusive:true}]},
- banner:{label:"Profile banners",blurb:"A background for your profile card.",items:[
-  {id:"",name:"None",price:0},{id:"sunset",name:"Sunset",price:100},{id:"ocean",name:"Deep sea",price:150},{id:"carbon",name:"Carbon",price:200},
-  {id:"aurora",name:"Aurora",price:300},{id:"plates",name:"Plates",price:350},{id:"goldfoil",name:"Gold foil",price:550}]},
- theme:{label:"App themes",blurb:"Recolour the whole app.",items:[
-  {id:"",name:"Ember",price:0},{id:"ocean",name:"Ocean",price:300},{id:"forest",name:"Forest",price:300},{id:"crimson",name:"Crimson",price:400},
-  {id:"royal",name:"Royal",price:500},{id:"midnight",name:"Midnight",price:600},{id:"goldrush",name:"Gold rush",price:800}]},
- title:{label:"Titles",blurb:"Shown under your username instead of your level title.",items:[
-  {id:"",name:"Level title",price:0},{id:"gymrat",name:"Gym Rat",price:75},{id:"platechaser",name:"Plate Chaser",price:100},{id:"repmachine",name:"Rep Machine",price:100},
-  {id:"legday",name:"Leg Day Survivor",price:150},{id:"ironaddict",name:"Iron Addict",price:200},{id:"neverskips",name:"Never Skips",price:250}]}
+ frame:{label:"Picture frames",tab:"Frames",blurb:"A ring around your profile picture. Epic and Legendary frames are animated.",items:[
+  {id:"",name:"Classic",price:0,r:0},{id:"steel",name:"Steel",price:150,r:0},{id:"ember",name:"Ember",price:150,r:0},{id:"aqua",name:"Aqua",price:150,r:0},{id:"toxic",name:"Toxic",price:150,r:0},
+  {id:"frost",name:"Frost",price:400,r:1},{id:"royal",name:"Royal",price:400,r:1},{id:"prism",name:"Prism",price:400,r:1},{id:"pulse",name:"Heartbeat",price:450,r:1,anim:1},
+  {id:"rgb",name:"RGB spin",price:800,r:2,anim:1},{id:"orbit",name:"Orbit",price:800,r:2,anim:1},{id:"solar",name:"Solar flare",price:900,r:2,anim:1},{id:"thunder",name:"Thunder",price:900,r:2,anim:1},
+  {id:"lunar",name:"Moonrise",price:1500,r:3,anim:1},{id:"mars",name:"Red planet",price:1500,r:3,anim:1},{id:"clock",name:"Clockwork",price:1600,r:3,anim:1},{id:"inferno",name:"Inferno",price:1800,r:3,anim:1},{id:"champion",name:"Champion",price:1800,r:3},
+  {id:"founder",name:"Founder",price:0,r:3,exclusive:true}]},
+ banner:{label:"Profile banners",tab:"Banners",blurb:"A background for your profile card. Epic and Legendary banners are animated.",items:[
+  {id:"",name:"None",price:0,r:0},{id:"sunset",name:"Sunset",price:100,r:0},{id:"ocean",name:"Deep sea",price:100,r:0},{id:"carbon",name:"Carbon",price:100,r:0},
+  {id:"plates",name:"Plates",price:300,r:1},{id:"aurora",name:"Aurora",price:350,r:1,anim:1},
+  {id:"stars",name:"Starfield",price:600,r:2,anim:1},{id:"snow",name:"Snowfall",price:600,r:2,anim:1},{id:"embers",name:"Embers",price:650,r:2,anim:1},{id:"neon",name:"Neon grid",price:700,r:2,anim:1},
+  {id:"galaxy",name:"Galaxy",price:1200,r:3,anim:1},{id:"goldfoil",name:"Gold foil",price:1200,r:3,anim:1},{id:"rgbwave",name:"RGB wave",price:1400,r:3,anim:1}]},
+ theme:{label:"App themes",tab:"Themes",blurb:"Recolour the whole app.",items:[
+  {id:"",name:"Ember",price:0,r:0},{id:"ocean",name:"Ocean",price:300,r:1},{id:"forest",name:"Forest",price:300,r:1},{id:"crimson",name:"Crimson",price:500,r:2},
+  {id:"royal",name:"Royal",price:500,r:2},{id:"midnight",name:"Midnight",price:600,r:2},{id:"goldrush",name:"Gold rush",price:1000,r:3}]},
+ title:{label:"Titles",tab:"Titles",blurb:"Shown under your username. Some are bought, some are earned.",items:[
+  {id:"",name:"Level title",price:0,r:0},
+  {id:"gymrat",name:"Gym Rat",price:75,r:0},{id:"platechaser",name:"Plate Chaser",price:75,r:0},{id:"repmachine",name:"Rep Machine",price:75,r:0},{id:"chalkgoblin",name:"Chalk Goblin",price:75,r:0},{id:"proteinfiend",name:"Protein Fiend",price:75,r:0},
+  {id:"legday",name:"Leg Day Survivor",price:200,r:1},{id:"ironaddict",name:"Iron Addict",price:200,r:1},{id:"neverskips",name:"Never Skips",price:200,r:1},{id:"stallion",name:"Stallion",price:250,r:1},{id:"pumpchaser",name:"Pump Chaser",price:200,r:1},
+  {id:"earlyriser",name:"Early Riser",r:1,earn:{badge:"early",how:"Finish a workout before 8am"}},
+  {id:"spartan",name:"Spartan",price:450,r:2},{id:"gladiator",name:"Gladiator",price:450,r:2},{id:"ironwarden",name:"Iron Warden",price:450,r:2},{id:"unbroken",name:"The Unbroken",price:500,r:2},
+  {id:"prhunter",name:"PR Hunter",r:2,earn:{badge:"pr50",how:"Set 50 personal records"}},{id:"streaklord",name:"Streak Lord",r:2,earn:{badge:"st8",how:"Hit your weekly target 8 weeks in a row"}},{id:"beasttamer",name:"Beast Tamer",r:2,earn:{pet:1,how:"Raise a pet to its final form"}},
+  {id:"imperator",name:"Imperator",price:900,r:3},{id:"titan",name:"Titan",price:900,r:3},{id:"apex",name:"Apex",price:1000,r:3},
+  {id:"centurion",name:"Centurion",r:3,earn:{badge:"s100",how:"Finish 100 workouts"}},{id:"golden",name:"Golden Physique",r:3,earn:{badge:"allgold",how:"Get 8 muscle groups to Gold"}},{id:"founder",name:"Founder",r:3,earn:{founder:1,how:"Open the app before its first birthday"}}]}
 };
 const THEMES={
  ocean:{bg:"#0a1218",surface:"#111d27","surface-2":"#1b2c3a",line:"#2a4254",fg:"#e8f4ff",muted:"#8fa9bd",xp:"#35b6ff","xp-hi":"#9ddcff","xp-soft":"#0c2b40",ink:"#04131d"},
@@ -1788,7 +1874,13 @@ function applyTheme(id=state.equip.theme){
   if(themeOn===id)return;themeOn=id;const t=THEMES[id],st=document.documentElement.style;
   TVARS.forEach(v=>t?st.setProperty("--"+v,t[v]):st.removeProperty("--"+v));
 }
-const owns=(kind,id)=>!id||!!state.owned[kind+":"+id]||(kind==="frame"&&id==="founder"&&state.founder);
+const earnedOk=e=>e.badge?!!state.earned[e.badge]:e.pet?Object.values(state.pets).some(p=>petStage(petLevel(p.xp).L)===2):e.founder?!!state.founder:false;
+function owns(kind,id){
+  if(kind==="pet")return !!state.pets[id];
+  if(!id)return true;const it=SHOP[kind].items.find(i=>i.id===id);
+  if(it&&it.earn)return earnedOk(it.earn);
+  return !!state.owned[kind+":"+id]||(kind==="frame"&&id==="founder"&&state.founder);
+}
 const titleName=()=>{const t=SHOP.title.items.find(i=>i.id===state.equip.title);return t&&t.id?t.name:""};
 function founderCheck(){
   // Everyone who opens the app before its first birthday (8 Nov 2027) keeps the Founder frame for good.
@@ -1796,42 +1888,144 @@ function founderCheck(){
     setTimeout(()=>toast("★","Founder frame unlocked","An exclusive frame for early users. It can't be bought.",""),600)}
 }
 const GEM=`<svg class="gem-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10l5 6-10 12L2 9z"/></svg>`;
-function preview(kind,it){
-  if(kind==="frame")return avatarHTML(54,it.id);
+function preview(kind,it,big){
+  if(kind==="frame")return avatarHTML(big?96:54,it.id);
   if(kind==="banner")return `<span class="sw-bn${it.id?" bn-"+it.id:""}"></span>`;
   if(kind==="theme"){const t=THEMES[it.id]||{bg:"#15100a",surface:"#221910",xp:"#f6a51e",fg:"#fff4e2"};
     return `<span class="sw-th" style="background:${t.bg};box-shadow:inset 0 0 0 1.5px ${t.xp}"><i style="background:${t.surface}"></i><i style="background:${t.xp}"></i><i style="background:${t.fg}"></i></span>`}
+  if(kind==="pet")return `<span class="bob">${sprite(it.id,0,big?112:60)}</span>`;
   return `<span class="sw-ti">${esc(it.name)}</span>`;
 }
+const rarTag=it=>`<span class="rar" style="--rc:var(${RAR[it.r].v})">${RAR[it.r].n}${it.anim?" · animated":""}</span>`;
+const petItems=()=>Object.entries(PETS).map(([id,p])=>({id,name:p.names[0],r:p.r,price:p.price,el:p.el}));
+const shopItems=kind=>kind==="pet"?petItems():SHOP[kind].items;
+let shopTab="frame",shopRar=-1;
 function renderShop(c){
-  const g=gems(c);
+  const g=gems(c),kinds=["frame","banner","theme","title","pet"],noPet=!Object.keys(state.pets).length;
   let h=`<div class="panel gembox"><div><span class="eyebrow">Your gems</span><div class="gemn">${GEM}<b>${fmtNum(g)}</b></div></div>
-    <p class="muted" style="font-size:.85rem">Earn 10 for each daily challenge, 20 more for all three, and 25 every level up.</p></div>`;
-  for(const kind of Object.keys(SHOP)){const S=SHOP[kind];
-    h+=`<h3 class="sect">${S.label}</h3><p class="note" style="margin-top:-8px">${S.blurb}</p><div class="shopgrid">${S.items.filter(it=>!it.exclusive||owns(kind,it.id)).map(it=>{
-      const own=owns(kind,it.id),eq=(state.equip[kind]||"")===it.id;
-      return `<button class="item${eq?" eq":""}" data-kind="${kind}" data-item="${it.id}"><span class="pv">${preview(kind,it)}</span>${kind==="title"?"":`<b>${esc(it.name)}</b>`}
-        ${eq?`<span class="pill on">Equipped</span>`:own?`<span class="pill">${it.exclusive?"Exclusive · equip":"Owned · equip"}</span>`:`<span class="price${g<it.price?" short":""}">${GEM}${it.price}</span>`}</button>`}).join("")}</div>`}
+    <p class="muted" style="font-size:.85rem">Earn 10 for each daily challenge, 20 more for all three, and 25 every level up.</p></div>
+    <div class="subtabs" role="tablist">${kinds.map(k=>`<button role="tab" data-st="${k}" id="st-${k}" aria-selected="${shopTab===k}">${k==="pet"?"Pets":SHOP[k].tab}</button>`).join("")}</div>
+    <div class="rarbar">${[["-1","All"]].concat(RAR.map((r,i)=>[String(i),r.n])).map(([v,n])=>`<button data-rf="${v}" aria-pressed="${String(shopRar)===v}" style="--rc:var(${v==="-1"?"--muted":RAR[+v].v})">${n}</button>`).join("")}</div>
+    <p class="note">${shopTab==="pet"?(noPet?"Choose your first pet. Embit or Driplet is free.":"Pets level up as you train and evolve at levels 8 and 20. Your active pet earns the XP."):SHOP[shopTab].blurb}</p>`;
+  const all=shopItems(shopTab).filter(it=>!it.exclusive||owns(shopTab,it.id));
+  const card=it=>{const kind=shopTab,own=owns(kind,it.id),eq=kind==="pet"?state.pet===it.id:(state.equip[kind]||"")===it.id,free=kind==="pet"&&noPet&&it.r===0;
+    return `<button class="item${eq?" eq":""}" style="--rc:var(${RAR[it.r].v})" data-kind="${kind}" data-item="${it.id}"><span class="pv">${preview(kind,it)}</span>${kind==="title"?"":`<b>${esc(kind==="pet"&&own?PETS[it.id].names[petStage(petLevel(state.pets[it.id].xp).L)]:it.name)}</b>`}${rarTag(it)}
+      ${eq?`<span class="pill on">${kind==="pet"?"Active":"Equipped"}</span>`:own?`<span class="pill">${kind==="pet"?"Owned · make active":"Owned · equip"}</span>`:it.earn?`<span class="pill">Earned · locked</span>`:free?`<span class="pill on">Free starter</span>`:`<span class="price${g<it.price?" short":""}">${GEM}${it.price}</span>`}</button>`};
+  RAR.forEach((R,i)=>{if(shopRar!==-1&&shopRar!==i)return;const list=all.filter(it=>it.r===i);if(!list.length)return;
+    h+=`<h3 class="sect rarh" style="--rc:var(${R.v})">${R.n}</h3><div class="shopgrid">${list.map(card).join("")}</div>`});
+  if(shopRar!==-1&&!all.some(it=>it.r===shopRar))h+=`<div class="empty"><b>Nothing here yet</b><span>There are no ${RAR[shopRar].n.toLowerCase()} items in this section.</span></div>`;
   $("#v-shop").innerHTML=h;
 }
 $("#v-shop").addEventListener("click",e=>{
+  const st=e.target.closest("[data-st]");if(st){shopTab=st.dataset.st;renderShop(compute());return}
+  const rf=e.target.closest("[data-rf]");if(rf){shopRar=+rf.dataset.rf;renderShop(compute());return}
   const b=e.target.closest(".item");if(!b)return;
-  const kind=b.dataset.kind,it=SHOP[kind].items.find(i=>i.id===b.dataset.item),c=compute(),g=gems(c);
+  const kind=b.dataset.kind,it=shopItems(kind).find(i=>i.id===b.dataset.item),c=compute(),g=gems(c);
   if(owns(kind,it.id)){
+    if(kind==="pet"){if(state.pet===it.id){openPet(it.id);return}state.pet=it.id;save();refresh();toast("✓",`${petName(it.id)} is now active`,"It earns XP as you train.","");return}
     if((state.equip[kind]||"")===it.id)return;
     state.equip[kind]=it.id;save();refresh();toast("✓",`${it.name} equipped`,SHOP[kind].label,"");return}
-  const short=it.price-g;
-  const m=openModal(`${mhead("Shop")}<div class="buy"><span class="pv big">${kind==="frame"?avatarHTML(96,it.id):preview(kind,it)}</span><h2>${esc(it.name)}</h2><span class="muted">${SHOP[kind].label}</span>
-      <div class="gemn">${GEM}<b>${it.price}</b></div></div>
-    <p class="muted" style="text-align:center">You have ${fmtNum(g)} gems.${short>0?` You need ${short} more.`:` You'll have ${fmtNum(g-it.price)} left.`}</p>
+  const free=kind==="pet"&&!Object.keys(state.pets).length&&it.r===0,price=free?0:it.price,short=it.earn?0:price-g;
+  const m=openModal(`${mhead("Shop")}<div class="buy"><span class="pv big">${preview(kind,it,true)}</span><h2>${esc(it.name)}</h2>${rarTag(it)}<span class="muted">${kind==="pet"?`${it.el} pet · evolves twice`:SHOP[kind].label}</span>
+      ${it.earn?"":`<div class="gemn">${GEM}<b>${free?"Free":price}</b></div>`}</div>
+    ${it.earn?`<p style="text-align:center"><b>Earned, not bought.</b><br><span class="muted">${esc(it.earn.how)}.</span></p>`
+      :`<p class="muted" style="text-align:center">You have ${fmtNum(g)} gems.${short>0?` You need ${short} more.`:free?" Your first pet is free.":` You'll have ${fmtNum(g-price)} left.`}</p>`}
+    ${kind==="pet"?`<div class="evo">${[0,1,2].map(i=>`<span>${sprite(it.id,i,52)}<small>${esc(PETS[it.id].names[i])}<br>${i===0?"Lv 1":i===1?"Lv 8":"Lv 20"}</small></span>`).join('<i>›</i>')}</div>`:""}
     ${kind==="theme"?`<button class="btn ghost" id="buy-try">Preview this theme</button>`:""}
-    <button class="btn" id="buy-go" ${short>0?"disabled":""}>${short>0?`Need ${short} more gems`:`Buy for ${it.price} gems`}</button>`);
-  const back=()=>{applyTheme();closeModal()};
-  m.querySelector("#mh-back").onclick=back;
+    ${it.earn?"":`<button class="btn" id="buy-go" ${short>0?"disabled":""}>${short>0?`Need ${short} more gems`:free?"Choose "+esc(it.name):`Buy for ${price} gems`}</button>`}`);
+  m.querySelector("#mh-back").onclick=()=>{applyTheme();closeModal()};
   m.querySelector("#buy-try")?.addEventListener("click",()=>{applyTheme(it.id);toast("◐","Previewing "+it.name,"Go back to return to your theme.","")});
-  m.querySelector("#buy-go").onclick=()=>{state.spent=(state.spent||0)+it.price;state.owned[kind+":"+it.id]=1;state.equip[kind]=it.id;const ok=save();closeModal();refresh();
-    toast(ok?"✓":"!",ok?`${it.name} unlocked`:"Couldn't save",ok?"It's equipped now.":"","")};
+  m.querySelector("#buy-go")?.addEventListener("click",()=>{state.spent=(state.spent||0)+price;
+    if(kind==="pet"){state.pets[it.id]={xp:0};state.pet=it.id}else{state.owned[kind+":"+it.id]=1;state.equip[kind]=it.id}
+    const ok=save();closeModal();refresh();toast(ok?"✓":"!",ok?`${it.name} unlocked`:"Couldn't save",ok?(kind==="pet"?"It's your active pet now.":"It's equipped now."):"","")});
 });
+
+/* ---------- Pixel pets ---------- */
+// Original creatures. Each form is drawn from a body shape plus mirrored detail pixels on a 16×16 grid.
+const PETS={
+ embit:{el:"Fire",r:0,price:250,names:["Embit","Embrute","Infernox"],pal:{a:"#ff7a3c",b:"#d9481f",c:"#ffd9a0",o:"#4a1508",f:"#ffb23c",g:"#fff0a0"},forms:[
+  {rx:4.2,ry:4,cy:10.5,e:[6,9],parts:[[7,4,"f"],[7,5,"g"],[6,5,"f"],[6,6,"f"]]},
+  {rx:5.2,ry:5,cy:9.8,e:[5,8],parts:[[7,1,"f"],[7,2,"f"],[6,2,"f"],[7,3,"g"],[6,3,"f"],[5,3,"f"],[6,4,"g"],[5,4,"f"],[1,10,"a"],[1,9,"f"]]},
+  {rx:6.2,ry:5.8,cy:9.6,e:[5,8],big:1,parts:[[7,0,"f"],[7,1,"g"],[6,1,"f"],[7,2,"g"],[6,2,"f"],[5,2,"f"],[4,1,"f"],[4,2,"f"],[4,3,"f"],[5,3,"g"],[6,3,"g"],[0,7,"f"],[0,8,"f"],[1,6,"f"],[0,6,"g"]]}]},
+ driplet:{el:"Water",r:0,price:250,names:["Driplet","Tidalin","Maelstrom"],pal:{a:"#4aa8ff",b:"#2a6fd6",c:"#d4f0ff",o:"#0b2450",f:"#8fd8ff",g:"#ffffff"},forms:[
+  {rx:4,ry:4,cy:10.5,e:[6,9],parts:[[7,6,"a"],[7,5,"a"],[7,4,"f"]]},
+  {rx:5,ry:5,cy:9.8,e:[5,8],parts:[[7,2,"f"],[7,3,"a"],[7,4,"a"],[6,4,"a"],[1,9,"f"],[0,8,"f"],[1,8,"a"]]},
+  {rx:6,ry:5.8,cy:9.6,e:[5,8],big:1,parts:[[7,0,"g"],[7,1,"f"],[6,1,"f"],[7,2,"a"],[6,2,"a"],[5,2,"f"],[4,3,"f"],[5,3,"a"],[6,3,"a"],[7,3,"a"],[0,7,"f"],[1,7,"a"],[0,8,"a"],[0,6,"g"],[1,6,"f"]]}]},
+ pebblo:{el:"Rock",r:1,price:500,names:["Pebblo","Bouldoze","Mountitan"],pal:{a:"#b98a58",b:"#845c36",c:"#b98a58",o:"#2e1c0c",f:"#6fae4a",g:"#9be06a"},forms:[
+  {rx:4.8,ry:3.8,cy:10.8,e:[5,10],sleep:1,parts:[[7,6,"f"],[6,6,"g"],[5,6,"f"],[2,9,"b"],[3,12,"b"],[6,13,"b"]]},
+  {rx:5.8,ry:4.8,cy:10,e:[5,9],sleep:1,parts:[[7,4,"f"],[6,4,"g"],[5,4,"f"],[4,5,"g"],[1,8,"b"],[2,12,"b"],[5,13,"b"],[3,7,"b"]]},
+  {rx:6.8,ry:5.8,cy:9.8,e:[5,8],sleep:1,big:1,parts:[[7,3,"f"],[6,3,"g"],[5,3,"f"],[4,4,"g"],[7,2,"g"],[1,7,"b"],[0,9,"b"],[2,13,"b"],[5,14,"b"],[3,6,"b"],[2,10,"b"]]}]},
+ zapkit:{el:"Electric",r:1,price:500,names:["Zapkit","Voltail","Thundrake"],pal:{a:"#4fdcc8",b:"#229c88",c:"#e0fff9",o:"#06342e",f:"#ffe45c",g:"#ffffff"},forms:[
+  {rx:4,ry:3.8,cy:10.8,e:[6,10],parts:[[7,6,"f"],[7,5,"f"],[6,4,"f"],[7,3,"g"]]},
+  {rx:5,ry:4.8,cy:10,e:[5,9],parts:[[7,4,"f"],[6,3,"f"],[7,2,"f"],[6,1,"g"],[2,6,"a"],[1,5,"f"],[0,10,"f"],[1,11,"f"],[0,12,"f"]]},
+  {rx:6,ry:5.6,cy:9.8,e:[5,8],big:1,parts:[[7,3,"f"],[6,2,"f"],[7,1,"f"],[6,0,"g"],[3,3,"a"],[2,2,"f"],[1,1,"g"],[1,6,"a"],[0,5,"f"],[0,9,"f"],[0,10,"g"],[1,11,"f"],[0,12,"f"]]}]},
+ lumo:{el:"Mystic",r:2,price:1000,names:["Lumo","Lumora","Astralume"],pal:{a:"#b9a6ff",b:"#8a6fe0",c:"#f1ecff",o:"#2a1d5c",f:"#ffe98a",g:"#ffffff"},forms:[
+  {rx:3.8,ry:3.6,cy:8.5,e:[6,8],parts:[[7,2,"f"],[7,13,"a"],[7,14,"b"]]},
+  {rx:4.6,ry:4.4,cy:8.2,e:[5,7],parts:[[7,0,"g"],[7,1,"f"],[6,1,"f"],[5,2,"f"],[7,14,"a"],[6,14,"a"],[7,15,"b"],[2,7,"a"],[1,6,"f"]]},
+  {rx:5.4,ry:5,cy:8.2,e:[5,7],big:1,parts:[[7,0,"g"],[6,0,"f"],[5,1,"f"],[4,1,"f"],[3,2,"f"],[7,14,"a"],[6,14,"a"],[7,15,"b"],[1,6,"f"],[0,5,"g"],[1,7,"a"],[0,7,"f"],[0,9,"f"],[1,10,"f"]]}]},
+ umbrit:{el:"Shadow",r:3,price:2000,names:["Umbrit","Noctern","Eclipsar"],pal:{a:"#5d4b80",b:"#3b2e58",c:"#a08ccc",o:"#100a1c",f:"#ff4d6d",g:"#ffd0da"},forms:[
+  {rx:4,ry:3.8,cy:10.8,e:[6,10],glow:1,parts:[[4,6,"o"],[4,5,"o"],[3,4,"f"]]},
+  {rx:5,ry:4.8,cy:10,e:[5,9],glow:1,parts:[[3,4,"o"],[4,4,"o"],[3,3,"o"],[2,2,"f"],[0,9,"b"],[0,8,"b"],[1,8,"b"]]},
+  {rx:6,ry:5.6,cy:9.8,e:[5,8],glow:1,big:1,parts:[[2,3,"o"],[3,3,"o"],[2,2,"o"],[1,1,"o"],[1,0,"f"],[7,2,"f"],[6,2,"g"],[7,1,"f"],[0,6,"b"],[0,7,"b"],[0,8,"b"],[1,7,"b"],[0,5,"f"]]}]}
+};
+const spriteCache={};
+function sprite(id,st,size){
+  const key=id+st;
+  if(!spriteCache[key]){
+    const pt=PETS[id],f=pt.forms[st],pal={...pt.pal,w:"#ffffff"},px={};
+    const set=(x,y,k)=>{if(x>=0&&x<16&&y>=0&&y<16)px[x+","+y]=k},both=(x,y,k)=>{set(x,y,k);set(15-x,y,k)};
+    const inE=(x,y,rx,ry,cy)=>((x+.5-8)/rx)**2+((y+.5-cy)/ry)**2<=1;
+    for(let y=0;y<16;y++)for(let x=0;x<16;x++)if(inE(x,y,f.rx,f.ry,f.cy)){
+      let k=((x+.5-8)/f.rx*.55+(y+.5-f.cy)/f.ry)>.78?"b":"a";
+      if(inE(x,y,f.rx*.55,f.ry*.48,f.cy+f.ry*.38))k="c";set(x,y,k)}
+    const body=Object.keys(px);
+    for(const p of body){const [x,y]=p.split(",").map(Number);[[1,0],[-1,0],[0,1],[0,-1]].forEach(([dx,dy])=>{const q=(x+dx)+","+(y+dy);if(!px[q])set(x+dx,y+dy,"o")})}
+    f.parts.forEach(([x,y,k])=>both(x,y,k));
+    const [ex,ey]=f.e;
+    if(f.sleep){both(ex,ey+1,"o");both(ex+1,ey+1,"o")}
+    else if(f.glow){both(ex,ey,"f");both(ex,ey+1,"f");if(f.big){both(ex+1,ey,"g");both(ex+1,ey+1,"f")}}
+    else if(f.big){both(ex,ey,"w");both(ex+1,ey,"w");both(ex,ey+1,"w");both(ex+1,ey+1,"o")}
+    else{both(ex,ey,"w");both(ex,ey+1,"o")}
+    both(7,ey+3,"o");
+    spriteCache[key]=Object.entries(px).map(([p,k])=>{const [x,y]=p.split(",");return `<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${pal[k]}"/>`}).join("");
+  }
+  return `<svg class="sprite" width="${size}" height="${size}" viewBox="0 0 16 16" shape-rendering="crispEdges" role="img" aria-label="${PETS[id].names[st]}">${spriteCache[key]}</svg>`;
+}
+function petLevel(xp){let L=1,need=100;while(xp>=need){xp-=need;L++;need=100*L}return {L,into:xp,need}}
+const petStage=L=>L>=20?2:L>=8?1:0;
+const petName=id=>PETS[id].names[petStage(petLevel(state.pets[id]?.xp||0).L)];
+function gainPet(n,viaTreat){
+  const id=state.pet;if(!id||!state.pets[id])return;
+  const pt=state.pets[id],b=petLevel(pt.xp);pt.xp+=n;const a=petLevel(pt.xp);
+  if(petStage(a.L)>petStage(b.L)){
+    if(viaTreat)setTimeout(()=>evolveModal(id,petStage(b.L),petStage(a.L)),50);
+    else toast("★",`${PETS[id].names[petStage(b.L)]} evolved`,`Say hello to ${PETS[id].names[petStage(a.L)]}.`,"")}
+  else if(a.L>b.L&&!viaTreat)toast("▲",`${petName(id)} reached level ${a.L}`,"","");
+}
+function evolveModal(id,from,to){
+  openModal(`<div class="buy"><span class="eyebrow">Evolution</span><div class="evo"><span>${sprite(id,from,72)}</span><i>›</i><span class="bob">${sprite(id,to,112)}</span></div>
+    <h2>${esc(PETS[id].names[from])} evolved into ${esc(PETS[id].names[to])}</h2></div><button class="btn" data-close>Brilliant</button>`);
+}
+const TREATS=[{id:"snack",name:"Snack",price:30,xp:100},{id:"feast",name:"Feast",price:100,xp:400}];
+function petCard(c){
+  const id=state.pet;
+  if(!id||!state.pets[id])return `<div class="panel petcard"><div class="pet-l"><h3>Pixel pets</h3><p class="muted">Pick a pet that trains with you. It earns XP from your sets and evolves twice. Your first one is free.</p>
+    <button class="btn sm" id="pet-choose" style="align-self:flex-start">Choose your pet</button></div><span class="bob">${sprite("embit",0,72)}</span></div>`;
+  const lv=petLevel(state.pets[id].xp),stg=petStage(lv.L),nextAt=stg===0?8:stg===1?20:null,g=gems(c);
+  return `<div class="panel petcard" style="--rc:var(${RAR[PETS[id].r].v})"><div class="pet-l"><span class="eyebrow">${PETS[id].el} pet · ${RAR[PETS[id].r].n}</span><h3>${esc(PETS[id].names[stg])} <span class="muted">Lv ${lv.L}</span></h3>
+      <span class="bar"><i style="width:${(lv.into/lv.need*100).toFixed(0)}%"></i></span>
+      <span class="muted num" style="font-size:.85rem">${lv.into} / ${lv.need} XP${nextAt?` · evolves at Lv ${nextAt}`:" · final form"}</span>
+      <div class="btnrow">${TREATS.map(t=>`<button class="btn sm ghost" data-treat="${t.id}" ${g<t.price?"disabled":""}>${t.name} ${GEM}${t.price}</button>`).join("")}<button class="btn sm ghost" id="pet-choose">Switch</button></div></div>
+    <button class="petbtn bob" id="pet-open" aria-label="About ${esc(PETS[id].names[stg])}">${sprite(id,stg,84)}</button></div>`;
+}
+function openPet(id){
+  const lv=petLevel(state.pets[id].xp),stg=petStage(lv.L);
+  const m=openModal(`${mhead("Your pet")}<div class="buy"><span class="bob">${sprite(id,stg,128)}</span><h2>${esc(PETS[id].names[stg])}</h2>${rarTag({r:PETS[id].r})}<span class="muted">${PETS[id].el} · Level ${lv.L}</span></div>
+    <div class="evo">${[0,1,2].map(i=>`<span class="${i>stg?"lock":""}">${sprite(id,i,52)}<small>${i>stg?"???":esc(PETS[id].names[i])}<br>${i===0?"Lv 1":i===1?"Lv 8":"Lv 20"}</small></span>`).join('<i>›</i>')}</div>
+    <p class="muted" style="font-size:.9rem;text-align:center">Your active pet earns 5 XP a set, 25 a PR and 50 for each finished workout. Snacks and feasts from the Profile tab speed it up.</p>`);
+  m.querySelector("#mh-back").onclick=closeModal;
+}
+const heroPet=()=>state.pet&&state.pets[state.pet]?`<span class="heropet bob">${sprite(state.pet,petStage(petLevel(state.pets[state.pet].xp).L),54)}</span>`:"";
 
 /* ---------- Daily challenges ---------- */
 const CH={
