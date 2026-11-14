@@ -648,6 +648,7 @@ button.cd{border:0;cursor:pointer;font-family:var(--body);position:relative;padd
 .lbn{width:22px;text-align:center;color:var(--muted);font-variant-numeric:tabular-nums}
 .lbrow:first-child .lbn{color:var(--xp)}
 .stats.s2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px}
 
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -2171,6 +2172,8 @@ const SB_URL="https://ydfmkkwfegrgbjqsazwb.supabase.co",SB_KEY="sb_publishable_O
 const CLOUD_HOST=/github\.io$|^localhost$|^127\.0\.0\.1$/.test(location.hostname);
 const APP_URL=location.origin+location.pathname;
 let sb=null,me=null,myProfile=null;
+const LINK=(()=>{const h=new URLSearchParams(location.hash.slice(1));return {type:h.get("type")||"",error:h.get("error_code")||h.get("error")||"",desc:h.get("error_description")||""}})();
+const STANDALONE=window.navigator.standalone===true||(window.matchMedia&&matchMedia("(display-mode: standalone)").matches);
 const cloud={status:"off",ver:0,timer:null,pushing:false,again:false,err:""};
 const lsGet=k=>{try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}};
 const lsSet=(k,v)=>{try{v==null?localStorage.removeItem(k):localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
@@ -2182,6 +2185,8 @@ const sbErr=e=>{const m=(e&&(e.message||e.error_description))||"Something went w
   if(/invalid login|invalid credentials/i.test(m))return "Wrong email or password.";
   if(/email not confirmed/i.test(m))return "Confirm your email first. Check your inbox for the link.";
   if(/password should be|at least 6/i.test(m))return "Use a password of at least 6 characters.";
+  if(/email rate limit/i.test(m))return "The app has sent its maximum emails for this hour. Try again in an hour.";
+  if(/security purposes|only request this after/i.test(m))return "Wait a minute before asking for another email.";
   if(/rate limit|too many/i.test(m))return "Too many tries. Wait a minute and try again.";
   if(/failed to fetch|network|load failed/i.test(m))return "No connection. Check your signal and try again.";
   if(/unable to validate email|invalid format|is invalid/i.test(m))return "That email address doesn't look right.";
@@ -2194,6 +2199,7 @@ function cloudInit(){
   if(!window.supabase||!window.supabase.createClient){cloud.status="unavailable";return}
   sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
   cloud.status="checking";
+  if(LINK.error)setTimeout(()=>openModal(`<h2>That link didn't work</h2><p>${/expired/i.test(LINK.desc+LINK.error)?"It has expired.":"It may have been used already."} Go to <b>Profile → Sign in</b>. If your email isn't confirmed yet, you can send a new link from there.</p><button class="btn" data-close>OK</button>`),400);
   sb.auth.onAuthStateChange((ev,session)=>{
     // Supabase recommends not awaiting its own calls inside this callback, so work is deferred.
     setTimeout(()=>{
@@ -2212,9 +2218,12 @@ async function afterSignIn(){
   if(!myProfile){
     const pending=lsGet("vtppl-pending-username");
     if(pending){const r=await createProfile(pending);if(r.ok)lsSet("vtppl-pending-username",null)}
+    if(!myProfile&&LINK.type==="signup"&&!STANDALONE){cloud.status="needname";refresh();
+      openModal(`<h2>Email confirmed</h2><p>Your account is ready. Open <b>V-Taper</b> from your home screen and sign in with your email and password.</p><button class="btn" data-close>OK</button>`);return}
     if(!myProfile){cloud.status="needname";refresh();openPickUsername();return}
   }
   state.name=myProfile.username;
+  if(LINK.type==="signup")setTimeout(()=>toast("✓","Email confirmed","You're signed in.",""),300);
   await syncOnSignIn();
 }
 async function createProfile(username){
@@ -2373,14 +2382,31 @@ function openAuth(mode){
       lsSet("vtppl-pending-username",u);
       const {data,error}=await sb.auth.signUp({email,password:pass,options:{emailRedirectTo:APP_URL}});
       if(error){err(sbErr(error));done();return}
-      if(!data.session){openModal(`<h2>Check your email</h2><p>We sent a confirmation link to <b>${esc(email)}</b>. Tap it, then come back here and sign in.</p><button class="btn" data-close>OK</button>`);return}
+      if(!data.session){openCheckEmail(email);return}
       closeModal();
     }else{
       const {error}=await sb.auth.signInWithPassword({email,password:pass});
-      if(error){err(sbErr(error));done();return}
+      if(error){err(sbErr(error));done();
+        if(/not confirmed/i.test(error.message||"")&&!m.querySelector("#au-resend")){const r=document.createElement("button");r.className="btn sm ghost";r.id="au-resend";r.type="button";r.textContent="Send a new confirmation email";
+          m.querySelector("#au-err").after(r);r.onclick=()=>openCheckEmail(email,true)}
+        return}
       closeModal();
     }
   });
+}
+function openCheckEmail(email,sendNow){
+  const m=openModal(`<h2>Check your email</h2>
+    <p>We ${sendNow?"are sending":"sent"} a confirmation link to <b>${esc(email)}</b>.</p>
+    <ol class="steps"><li>Open the email and tap the link.</li><li>Come back to this app.</li><li>Tap <b>Sign in</b> and use the same email and password.</li></ol>
+    <p class="muted" style="font-size:.85rem">Can't see it? Check your spam or junk folder. It can take a few minutes.</p>
+    <p id="ce-msg" class="muted" hidden></p>
+    <div class="btnrow"><button class="btn" id="ce-signin">Go to sign in</button><button class="btn ghost" id="ce-resend">Resend email</button></div>`);
+  const btn=m.querySelector("#ce-resend"),msg=m.querySelector("#ce-msg");
+  const cool=s=>{btn.disabled=true;let n=s;btn.textContent=`Resend in ${n}s`;const t=setInterval(()=>{n--;if(n<=0||!document.body.contains(btn)){clearInterval(t);btn.disabled=false;btn.textContent="Resend email";return}btn.textContent=`Resend in ${n}s`},1000)};
+  const send=async()=>{btn.disabled=true;const {error}=await sb.auth.resend({type:"signup",email,options:{emailRedirectTo:APP_URL}});
+    msg.hidden=false;msg.className=error?"formerr":"okhint";msg.textContent=error?sbErr(error):"Sent. Check your inbox.";cool(60)};
+  btn.onclick=send;m.querySelector("#ce-signin").onclick=()=>openAuth("signin");
+  if(sendNow)send();else cool(60);
 }
 function openPickUsername(){
   const m=openModal(`<h2>Pick a username</h2><p class="muted" style="font-size:.9rem">Friends search for you by this. You can change it later.</p>
