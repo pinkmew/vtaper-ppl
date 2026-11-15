@@ -15,3 +15,7 @@ Run `supabase-update-3.sql` in Supabase → SQL Editor. Codes are stored as SHA-
 To add a code later, in the SQL Editor: `select public.add_code('YOUR-CODE', '{"gems": 250}', null, '250 gems');`
 Rewards can combine `gems`, `chest` ("bronze", "silver" or "gold"), `pet`, `mythic` ("random") and `items` ([{"kind": "frame", "id": "circle"}]).
 The third value limits how many people can use it (null means no limit).
+
+## Update 4: Origin pets
+Run `supabase-update-4.sql` in Supabase → SQL Editor. It makes @munchlax the admin and gives them Hollowfang.
+Origin pets are given and taken back from Profile → Admin in the app (admins only).

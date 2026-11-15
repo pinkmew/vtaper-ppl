@@ -531,7 +531,7 @@ button.cd{border:0;cursor:pointer;font-family:var(--body);position:relative;padd
 
 
 /* ---- v8: rarity, animated frames and banners, pixel pets ---- */
-:root{--r-common:#a7b0ba;--r-rare:#4da3ff;--r-epic:#b77bff;--r-legend:#ffc53d;--r-myth:#ff5fd2}
+:root{--r-common:#a7b0ba;--r-rare:#4da3ff;--r-epic:#b77bff;--r-legend:#ffc53d;--r-myth:#ff5fd2;--r-origin:#ff2a4a}
 .rar{font-size:.66rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--rc);border:1.5px solid var(--rc);border-radius:999px;padding:2px 8px;white-space:nowrap}
 .rarh{color:var(--rc);display:flex;align-items:center;gap:10px}
 .rarh::after{content:"";flex:1;height:2px;border-radius:1px;background:var(--rc);opacity:.35}
@@ -850,6 +850,17 @@ nav.tabs .tab .tl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-
 .rpe button{padding:7px 0;border-radius:9px}
 .mvrow{display:grid;grid-template-columns:1fr 84px 28px;gap:6px;align-items:center;margin-bottom:6px}
 .danger-t{color:var(--push)}
+
+/* ---- v15: Origin tier and admin ---- */
+.rar[style*="--r-origin"]{color:#fff;background:linear-gradient(90deg,#14060a,#5e0716,#14060a);border-color:#ff2a4a;box-shadow:0 0 10px rgba(255,42,74,.55);animation:originpulse 2.4s ease-in-out infinite}
+@keyframes originpulse{50%{box-shadow:0 0 18px rgba(255,42,74,.9)}}
+.petprof.origin{background:radial-gradient(circle,rgba(255,42,74,.38),transparent 64%),radial-gradient(circle,rgba(20,6,10,.9) 40%,transparent 72%)}
+.petprof.origin.myth{background:radial-gradient(circle,rgba(63,160,255,.4),transparent 64%),radial-gradient(circle,rgba(10,16,40,.9) 40%,transparent 72%)}
+.adm-pets{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.adm-pet{border:0;background:var(--surface-2);color:var(--fg);border-radius:14px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;font-family:var(--body)}
+.adm-pet b{font-size:.8rem}
+.adm-pet.on{box-shadow:inset 0 0 0 2px var(--r-origin);background:color-mix(in srgb,var(--r-origin) 14%,var(--surface-2))}
+.admin{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--r-origin) 60%,var(--line))}
 </style>
 </head>
 <body>
@@ -1887,7 +1898,7 @@ function renderProfile(){
     html+=`<div class="bwlist">${days.slice(-5).reverse().map(d=>`<div class="bwrow"><span>${fmtD(d)}</span><span><b>${state.bw[d].toFixed(1)} kg</b> <button class="x-btn" data-del="${d}" aria-label="Delete ${fmtD(d)} weigh-in">Delete</button></span></div>`).join("")}</div>`;
   }
   html+=`</div>`;
-  html+=accountPanel()+notifPanel();
+  html+=accountPanel()+adminPanel()+notifPanel();
   html+=`<div class="panel"><h3>Backup</h3><p class="muted" style="font-size:.9rem">${me?"Your account backs everything up automatically. You can also copy a text backup.":"Your logs live on this phone only. Create an account above, or copy a backup now and then and paste it into Notes."} Workout photos stay on this phone.</p>
     <div class="btnrow"><button class="btn sm ghost" id="copybk">Copy backup</button><button class="btn sm ghost" id="showrestore">Restore from backup</button></div>
     <div id="restorebox" hidden style="display:flex;flex-direction:column;gap:8px"><textarea id="restoretx" placeholder="Paste your backup here"></textarea><button class="btn sm" id="dorestore">Restore</button></div>
@@ -2124,7 +2135,7 @@ function openProfileEdit(){
 
 /* ---------- Gems, shop items ---------- */
 const gems=c=>200+(c.level-1)*25+(state.gemsEarned||0)-(state.spent||0);
-const RAR=[{n:"Common",v:"--r-common"},{n:"Rare",v:"--r-rare"},{n:"Epic",v:"--r-epic"},{n:"Legendary",v:"--r-legend"},{n:"Mythic",v:"--r-myth"}];
+const RAR=[{n:"Common",v:"--r-common"},{n:"Rare",v:"--r-rare"},{n:"Epic",v:"--r-epic"},{n:"Legendary",v:"--r-legend"},{n:"Mythic",v:"--r-myth"},{n:"Origin",v:"--r-origin"}];
 // r: 0 common, 1 rare, 2 epic, 3 legendary. anim: the item moves. earn: unlocked by an achievement instead of gems.
 const SHOP={
  frame:{label:"Picture frames",tab:"Frames",blurb:"A ring around your profile picture. Epic and Legendary frames are animated.",items:[
@@ -2188,7 +2199,7 @@ function preview(kind,it,big){
   return `<span class="sw-ti">${esc(it.name)}</span>`;
 }
 const rarTag=it=>`<span class="rar" style="--rc:var(${RAR[it.r].v})">${RAR[it.r].n}${it.anim?" · animated":""}</span>`;
-const petItems=()=>Object.entries(PETS).filter(([id,p])=>!p.code||state.pets[id]).map(([id,p])=>({id,name:p.names[0],r:p.r,price:p.price,el:p.el,code:p.code}));
+const petItems=()=>Object.entries(PETS).filter(([id,p])=>(!p.code&&!p.origin)||state.pets[id]).map(([id,p])=>({id,name:p.names[0],r:p.r,price:p.price,el:p.el,code:p.code}));
 const shopItems=kind=>kind==="pet"?petItems():SHOP[kind].items;
 let shopTab="frame",shopRar=-1;
 /* ---------- Shop rotation: daily deals and a weekly set ---------- */
@@ -2319,7 +2330,7 @@ function applyReward(rw){
   if(rw.pet&&PETS[rw.pet]){const g=givePet(rw.pet,"code");
     if(g)out.push({pic:sprite(rw.pet,0,120,g.myth),title:(g.myth?"Shiny ":"")+PETS[rw.pet].names[0],sub:g.myth?"And it's Mythic! What are the odds?":"A code-only pet. It's in your Pets now.",r:g.myth?4:PETS[rw.pet].r,pet:rw.pet});
     else gemsOut(200,"You already have this pet, so here are 200 gems.")}
-  if(rw.mythic){const ids=Object.keys(PETS).filter(id=>!PETS[id].code&&!state.pets[id]?.myth),id=ids.length?ids[Math.floor(rnd()*ids.length)]:null;
+  if(rw.mythic){const ids=Object.keys(PETS).filter(id=>!PETS[id].code&&!PETS[id].origin&&!state.pets[id]?.myth),id=ids.length?ids[Math.floor(rnd()*ids.length)]:null;
     if(id){const g=givePet(id,"code",true),st=petStage(petLevel(state.pets[id].xp).L);
       out.push({pic:sprite(id,st,128,true),title:"Shiny "+PETS[id].names[st],sub:g&&g.upgraded?"Your pet turned Mythic. It keeps its level.":"A random Mythic pet. Very few people will ever have one.",r:4,pet:id})}
     else gemsOut(1000,"Every pet you own is already Mythic, so here are 1,000 gems.")}
@@ -2441,12 +2452,12 @@ function sprInside(s,X,Y){
   if(s.t==="p"){let ins=false;const P=s.pts;for(let i=0,j=P.length-1;i<P.length;j=i++){const [xi,yi]=P[i],[xj,yj]=P[j];if((yi>Y)!==(yj>Y)&&X<(xj-xi)*(Y-yi)/(yj-yi)+xi)ins=!ins}return ins}
   return false;
 }
-function sprMirror(s){
-  if(s.t==="e")return {...s,cx:32-s.cx,a:s.a?-s.a:0,m:0};
-  if(s.t==="r")return {...s,x:32-s.x-s.w,m:0};
-  if(s.t==="p")return {...s,pts:s.pts.map(([x,y])=>[32-x,y]),m:0};
-  if(s.t==="d")return {...s,px:s.px.map(([x,y])=>[31-x,y]),m:0};
-  if(s.t==="eye")return {...s,x:31-s.x,flip:1,m:0};
+function sprMirror(s,N=32){
+  if(s.t==="e")return {...s,cx:N-s.cx,a:s.a?-s.a:0,m:0};
+  if(s.t==="r")return {...s,x:N-s.x-s.w,m:0};
+  if(s.t==="p")return {...s,pts:s.pts.map(([x,y])=>[N-x,y]),m:0};
+  if(s.t==="d")return {...s,px:s.px.map(([x,y])=>[N-1-x,y]),m:0};
+  if(s.t==="eye")return {...s,x:N-1-s.x,flip:1,m:0};
   return s;
 }
 function sprBox(s){
@@ -2469,8 +2480,8 @@ const EYES={
 };
 EYES.big=["WKK","WKK","KKK","KIK"];
 function sprRender(def){
-  const N=32,pal={...SPR_FIX,...def.pal};const parts=[];
-  for(const s of def.parts){parts.push(s);if(s.m)parts.push(sprMirror(s))}
+  const N=def.n||32,pal={...SPR_FIX,...def.pal};const parts=[];
+  for(const s of def.parts){parts.push(s);if(s.m)parts.push(sprMirror(s,N))}
   const shapes=parts.filter(s=>s.t==="e"||s.t==="r"||s.t==="p");
   const own=new Int16Array(N*N).fill(-1);
   shapes.forEach((s,i)=>{for(let y=0;y<N;y++)for(let x=0;x<N;x++)if(sprInside(s,x+.5,y+.5))own[y*N+x]=i});
@@ -2501,8 +2512,8 @@ function sprRender(def){
 const sprCache={};
 function spriteURL(key){
   if(sprCache[key])return sprCache[key];
-  const px=sprRender(key.endsWith("m")?mythDef(key.slice(0,-1)):SPR[key]),cv=document.createElement("canvas");cv.width=32;cv.height=32;const g=cv.getContext("2d");
-  px.forEach((c,i)=>{if(c){g.fillStyle=c;g.fillRect(i%32,Math.floor(i/32),1,1)}});
+  const d0=key.endsWith("m")?mythDef(key.slice(0,-1)):SPR[key],N=d0.n||32,px=sprRender(d0),cv=document.createElement("canvas");cv.width=N;cv.height=N;const g=cv.getContext("2d");
+  px.forEach((c,i)=>{if(c){g.fillStyle=c;g.fillRect(i%N,Math.floor(i/N),1,1)}});
   return sprCache[key]=cv.toDataURL("image/png");
 }
 const spriteImg=(key,size,label)=>`<img class="sprite" src="${spriteURL(key)}" width="${size}" height="${size}" alt="${esc(label||"")}" draggable="false">`;
@@ -2866,9 +2877,75 @@ function mythDef(base){
   const d=SPR[base],id=base.replace(/\d$/,""),m=MYTH[id]||{h:150};const pal={...d.pal};
   if(m.h)for(const k of m.k||["a","b"])if(pal[k])pal[k]=hueShift(pal[k],m.h,m.s);
   Object.assign(pal,m.p||{});
-  return {pal,parts:d.parts.concat([DOT(SPARKLE,"G"),DOT([[3,3],[28,6]],"W")])};
+  const N=d.n||32,sc=([x,y])=>[Math.round(x*N/32),Math.round(y*N/32)];
+  return {n:d.n,pal,parts:d.parts.concat([DOT(SPARKLE.map(sc),"G"),DOT([[3,3],[28,6]].map(sc),"W")])};
 }
-const MYTH={embit:{h:-150},driplet:{h:150},sprigg:{h:-90},pebblo:{p:{a:"#f2a7c0",b:"#c06c8c",c:"#ffd9e6",d:"#b38cff",e:"#e0ccff"}},zapkit:{h:130},flexo:{p:{a:"#ffd56a",b:"#d9a032",c:"#fff2c4",d:"#2e6bff",f:"#1c1c30"}},lumo:{p:{a:"#ffb0d8",b:"#e46fae",c:"#fff0f8",e:"#7fe4ff",i:"#8a1f5c"}},gulpo:{p:{a:"#7fd3a0",b:"#4f9f70",d:"#ffd36a"}},umbrit:{h:-110,k:["a","b","c","f"]},snackub:{p:{a:"#e8609f",b:"#a8336a",k:"#ffd0e4"}},kettlet:{p:{a:"#d9a531",b:"#9c6c12",c:"#ffe08a",d:"#ffffff"}},rhinub:{h:5,s:3.5},dashkit:{h:-60},veelet:{h:120,k:["a","b","d"]}};
+
+// ---- Origin pets (48×48, gifted by the admin only) ----
+const defN=(k,n,pal,parts)=>{SPR[k]={n,pal,parts}};
+// A run of circles along a path, getting thinner from r0 to r1: used for tendrils, tails and serpent bodies.
+function chain(pts,r0,r1,c,o={},step=.8){
+  const out=[],seg=[];let total=0;for(let i=1;i<pts.length;i++){const d=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]);seg.push(d);total+=d}
+  let acc=0;for(let i=1;i<pts.length;i++){const [x0,y0]=pts[i-1],[x1,y1]=pts[i],d=seg[i-1],n=Math.max(1,Math.ceil(d/step));
+    for(let k=0;k<=n;k++){if(k===n&&i<pts.length-1)continue;const t=k/n,f=(acc+d*t)/total,r=r0+(r1-r0)*f;out.push(E(x0+(x1-x0)*t,y0+(y1-y0)*t,r,r,c,{n:1,f:1,...o}))}acc+=d}
+  return out;
+}
+const tendril=(pts,r0,r1,o={})=>[...chain(pts.map(([x,y])=>[x+.7,y+.7]),r0,r1,"b2",o),...chain(pts,r0,r1,"d",o),...chain(pts.slice(1),Math.max(.6,r0*.35),.5,"e",{...o,n2:1})];
+
+// ---- Hollowfang v2: a cloaked wolf-wraith ----
+const P_HW={a:"#2a2631",b:"#141118",b2:"#4a0612",c:"#efe9e2",d:"#c3122f",e:"#ff4a5c",p:"#5b2a78",q:"#8f3a9a",f:"#ff2a3a",g:"#1a0006",k:"#cfc5ba",i:"#0d0a12",h:"#3a3442"};
+const blade=(pts,r0,o={})=>[...chain(pts.map(([x,y])=>[x+.8,y+.8]),r0,.5,"b2",o),...chain(pts.slice(0,3),r0,r0*.55,"d",o),...chain(pts.slice(2),r0*.55,.5,"q",o),...chain(pts.slice(3),r0*.3,.4,"p",o),...chain(pts.slice(0,3),r0*.35,r0*.2,"e",{...o,n2:1})];
+defN("hollow2",48,P_HW,[
+  PG([[17,11],[14,2],[20,8.6]],"d",{m:1}),PG([[17.4,9.6],[15.6,5],[19,8.4]],"e",{m:1,n:1}),
+  ...blade([[16,14],[9,17],[6,24],[4,32],[2,40]],5.6,{m:1}),
+  PG([[19,13],[29,13],[33,24],[37,36],[41,47],[35,45.4],[30,47],[24,45.6],[18,47],[13,45.4],[7,47],[11,36],[15,24]],"a"),
+  PG([[17,13],[24,19],[31,13],[30,17],[24,23],[18,17]],"b",{n:1}),
+  DOT([[19,27],[19,28],[18,31],[18,32],[17,36],[16,40],[29,27],[29,28],[30,31],[30,32],[31,36],[32,40],[24,30],[24,31],[24,35],[24,36],[24,41],[21,38],[27,38]],"h"),
+  E(12.6,27,1.4,5.6,"c",{m:1,a:14}),PG([[10,31],[9,36.4],[10.6,33.4],[11.6,37],[12.4,33.6],[13.8,36.4],[14,31.6]],"c",{m:1}),DOT([[11,26],[12,27],[11,28]],"d",{m:1}),
+  PG([[19.6,6],[18.4,0.4],[22.4,4.2]],"a",{m:1}),PG([[20,5],[19.4,2.4],[21.6,4.4]],"d",{m:1,n:1}),
+  E(24,8.6,5.2,4.6,"h"),PG([[19.6,6],[28.4,6],[27.6,11],[24,15.4],[20.4,11]],"c"),
+  DOT([[21,7],[22,7],[23,7],[21,8],[22,8],[23,8]],"g"),DOT([[22,8]],"f"),DOT([[21,7]],"#ff8a90"),DOT([[25,7],[26,7],[27,7],[25,8],[26,8]],"b"),
+  DOT([[24,6],[24,7],[25,9],[24,10],[25,11]],"k"),DOT([[23,13],[24,13],[25,13]],"b"),
+  DOT([[20,4],[21,3],[22,3],[23,3],[24,3],[25,3],[26,3],[27,3],[28,4]],"k")]);
+defN("hollow0",48,P_HW,[
+  ...blade([[19,26],[14,28],[12,32],[11,36],[10,40]],2.6,{m:1}),
+  PG([[19,24],[29,24],[32,34],[34,42],[28,41],[24,42.6],[20,41],[14,42],[16,34]],"a"),PG([[19,24],[24,28],[29,24],[24,31]],"b",{n:1}),
+  PG([[18.6,19],[17,12],[21.6,16.6]],"a",{m:1}),PG([[19,17.4],[18.4,14.6],[20.6,16.6]],"d",{m:1,n:1}),
+  E(24,20.4,6,5.4,"h"),PG([[18.6,18],[29.4,18],[28,23],[24,27],[20,23]],"c"),
+  DOT([[20,19],[21,19],[22,19],[20,20],[21,20],[22,20],[21,21]],"g"),DOT([[21,20]],"f"),DOT([[20,19]],"#ff8a90"),DOT([[26,19],[27,19],[26,20],[27,20]],"b"),DOT([[23,24],[24,24]],"b"),
+  DOT([[24,18],[24,19],[25,21]],"k")]);
+
+defN("hollow1",48,P_HW,[
+  PG([[18.4,17],[16,10],[21,15]],"d",{m:1}),
+  ...blade([[18,20],[12,23],[9,29],[8,35],[6,42]],4,{m:1}),
+  PG([[19.6,19],[28.4,19],[31,28],[34,38],[37,46],[31,44.6],[24,46],[17,44.6],[11,46],[14,38],[17,28]],"a"),
+  PG([[18,19],[24,24.6],[30,19],[29,22],[24,28],[19,22]],"b",{n:1}),DOT([[20,31],[19,35],[28,31],[29,35],[24,34],[24,39],[21,40],[27,40]],"h"),
+  E(14.4,31,1.2,4.6,"c",{m:1,a:14}),PG([[12.6,34.4],[12,38.4],[13.4,36],[14.2,38.6],[15,36.2],[16,38.2],[15.8,34.6]],"c",{m:1}),
+  PG([[20.4,12.4],[19,6],[23,10.4]],"a",{m:1}),PG([[20.8,11.4],[20.2,8.4],[22.4,10.6]],"d",{m:1,n:1}),
+  E(24,14.6,5,4.6,"h"),PG([[19.6,12.4],[28.4,12.4],[27.4,17],[24,20.6],[20.6,17]],"c"),
+  DOT([[21,13],[22,13],[23,13],[21,14],[22,14],[23,14]],"g"),DOT([[22,14]],"f"),DOT([[21,13]],"#ff8a90"),DOT([[25,13],[26,13],[27,13],[25,14],[26,14]],"b"),
+  DOT([[24,12],[24,13],[25,15],[24,16]],"k"),DOT([[23,18],[24,18],[25,18]],"b")]);
+// ---- Small mythical spirits ----
+const P_ORI={a:"#d6e4ff",b:"#a9b9e8",c:"#ffffff",d:"#b9a6ff",e:"#7f6ad6",f:"#4fd8ff",g:"#ffe27a",k:"#ffc0d8",i:"#2a2a6a"};
+defN("oriel",48,P_ORI,[
+  ...chain([[24,33],[21,38],[24,42],[30,42],[32,37],[28,34.4],[25.6,36.6]],1.6,.8,"a"),PG([[26.4,34.4],[23.4,38.8],[23,34.6],[24.6,31.4]],"g"),
+  E(17.6,28,1.4,3,"a",{a:40,m:1}),E(24,28.6,4.4,4.6,"a"),
+  PG([[12,18],[13,10],[17,5],[24,3],[31,5],[35,10],[36,18],[33,24],[31.4,17],[28,12.6],[24,11.6],[20,12.6],[16.6,17],[15,24]],"d"),
+  PG([[15,9],[13,4],[18,6]],"e",{m:1}),
+  E(24,18.6,7.6,7,"a"),
+  DOT([[23,12],[24,12],[23,13],[24,13],[22,13],[25,13],[23,14],[24,14]],"f"),DOT([[23,12]],"c"),
+  DOT([[19,18],[20,19],[21,19],[22,18]],"i",{m:1}),DOT([[19,21],[20,21]],"k",{m:1}),DOT([[23,22],[24,22]],"e"),
+  DOT([[6,10],[42,8],[40,30],[8,34],[5,22]],"g")]);
+const P_BLM={a:"#e4f8d6",b:"#9fd18a",c:"#ffffff",d:"#ff8fb8",e:"#e05a92",f:"#8fe3a0",g:"#5fbf72",k:"#ffb3c8",i:"#1f6a5a",h:"#c9f2ff"};
+defN("bloomlet",48,P_BLM,[
+  E(13,22,6.4,3.4,"f",{a:-35,m:1}),E(14,30,5,2.6,"f",{a:30,m:1}),DOT([[10,20],[12,21],[14,22],[11,29],[13,30]],"g",{m:1}),
+  E(20.6,40,1.6,2.6,"a",{m:1}),E(24,34,5.4,5.4,"a"),PG([[17.6,34],[24,30],[30.4,34],[29,40],[24,38],[19,40]],"d"),PG([[20,35],[24,32],[28,35],[24,36]],"k",{n:1}),
+  E(24,20,8,7.4,"a"),
+  PG([[14.6,19],[15,10],[19,6],[24,4.4],[29,6],[33,10],[33.4,19],[30,14.6],[27,16],[24,12.6],[21,16],[18,14.6]],"d"),PG([[19,8],[24,5.6],[29,8],[24,10]],"e",{n:1}),
+  E(24,3.6,2,2.4,"h"),DOT([[23,3]],"c"),
+  EYE(18,19,"big",{m:1}),DOT([[16,25],[17,25]],"k",{m:1}),DOT([[23,25],[24,26],[25,25]],"e")]);
+for(const k of ["oriel","bloomlet"])for(const st of [0,1,2])SPR[k+st]=SPR[k];
+const MYTH={hollow:{p:{a:"#e9e5f0",b:"#a9a0bb",h:"#c9c1d8",b2:"#16205a",d:"#2a6bff",e:"#8fe0ff",q:"#7a5cff",p:"#33207a",f:"#3fa0ff",g:"#001030"}},oriel:{p:{a:"#fff1d6",b:"#e3c48f",d:"#ffd36a",e:"#d9962a",f:"#ff6ad5"}},bloomlet:{p:{d:"#86b8ff",e:"#4a72d6",k:"#c9dcff",f:"#ffe27a",g:"#d9a531"}},embit:{h:-150},driplet:{h:150},sprigg:{h:-90},pebblo:{p:{a:"#f2a7c0",b:"#c06c8c",c:"#ffd9e6",d:"#b38cff",e:"#e0ccff"}},zapkit:{h:130},flexo:{p:{a:"#ffd56a",b:"#d9a032",c:"#fff2c4",d:"#2e6bff",f:"#1c1c30"}},lumo:{p:{a:"#ffb0d8",b:"#e46fae",c:"#fff0f8",e:"#7fe4ff",i:"#8a1f5c"}},gulpo:{p:{a:"#7fd3a0",b:"#4f9f70",d:"#ffd36a"}},umbrit:{h:-110,k:["a","b","c","f"]},snackub:{p:{a:"#e8609f",b:"#a8336a",k:"#ffd0e4"}},kettlet:{p:{a:"#d9a531",b:"#9c6c12",c:"#ffe08a",d:"#ffffff"}},rhinub:{h:5,s:3.5},dashkit:{h:-60},veelet:{h:120,k:["a","b","d"]}};
 
 /* ---------- Pixel pets ---------- */
 const PETS={
@@ -2885,7 +2962,10 @@ const PETS={
  kettlet:{el:"Steel",r:1,price:600,names:["Kettlet","Kettlebrute","Ferrogolem"]},
  rhinub:{el:"Rock",r:2,price:900,names:["Rhinub","Platehorn","Ironclad"]},
  dashkit:{el:"Electric",r:1,price:600,names:["Dashkit","Sprintail","Velocheet"]},
- veelet:{el:"Sky",r:3,price:0,code:1,names:["Veelet","Veehawk","Taperion"]}
+ veelet:{el:"Sky",r:3,price:0,code:1,names:["Veelet","Veehawk","Taperion"]},
+ hollow:{el:"Shadow",r:5,price:0,origin:1,names:["Hollowpup","Hollowmaw","Hollowfang"]},
+ oriel:{el:"Psychic",r:5,price:0,origin:1,one:1,names:["Oriel","Oriel","Oriel"]},
+ bloomlet:{el:"Grass",r:5,price:0,origin:1,one:1,names:["Bloomlet","Bloomlet","Bloomlet"]}
 };
 const PET_DESC={
  embit:"A baby dragon whose crest burns hotter after every PR. It puffs warm air at you when it's proud.",
@@ -2901,7 +2981,10 @@ const PET_DESC={
  kettlet:"A kettlebell that got tired of being swung and started swinging itself. It rings when it hits a PR.",
  rhinub:"Its horn is a solid little dumbbell. It charges through plateaus head first.",
  dashkit:"A cardio kitten that laps the whole gym before you've finished your warm-up.",
- veelet:"Only appears to those with the right code. Its wings make a perfect V, the shape every lifter is chasing."
+ veelet:"Only appears to those with the right code. Its wings make a perfect V, the shape every lifter is chasing.",
+ hollow:"The founder's own. A masked wraith that feeds on missed reps and grows a new crimson tendril for every hard session. Only the founder can give one away.",
+ oriel:"A moon-crested spirit that drifts above people who train while everyone else sleeps. Its star gem glows on PR days.",
+ bloomlet:"A shy flower fairy said to bloom only for people who never skip mobility. Gifted by the founder."
 };
 const MYTH_ODDS=256;
 const sprite=(id,st,size,myth)=>spriteImg(id+st+(myth?"m":""),size,PETS[id]?(myth?"Shiny ":"")+PETS[id].names[st]:"");
@@ -2911,7 +2994,8 @@ function givePet(id,via,forceMyth){
   const have=state.pets[id];
   if(have){if(forceMyth&&!have.myth){have.myth=true;postActivity("mythic",{id});return {myth:true,upgraded:true}}return null}
   const myth=!!forceMyth||rnd()<1/MYTH_ODDS;
-  state.pets[id]={xp:0,myth,got:today(),via};if(!state.pet)state.pet=id;
+  // Origin pets arrive fully grown, at level 20.
+  state.pets[id]={xp:PETS[id].origin?19000:0,myth,got:today(),via};if(!state.pet)state.pet=id;
   if(myth)postActivity("mythic",{id});return {myth};
 }
 function mythModal(id,upgraded){
@@ -2926,7 +3010,7 @@ const petName=id=>PETS[id].names[petStage(petLevel(state.pets[id]?.xp||0).L)];
 function gainPet(n,viaTreat){
   const id=state.pet;if(!id||!state.pets[id])return;
   const pt=state.pets[id],b=petLevel(pt.xp);pt.xp+=n;const a=petLevel(pt.xp);
-  if(petStage(a.L)>petStage(b.L)){postActivity("pet",{id,from:petStage(b.L),to:petStage(a.L),myth:!!pt.myth});
+  if(!PETS[id].one&&petStage(a.L)>petStage(b.L)){postActivity("pet",{id,from:petStage(b.L),to:petStage(a.L),myth:!!pt.myth});
     if(viaTreat)setTimeout(()=>evolveModal(id,petStage(b.L),petStage(a.L)),50);
     else toast("★",`${PETS[id].names[petStage(b.L)]} evolved`,`Say hello to ${PETS[id].names[petStage(a.L)]}.`,"")}
   else if(a.L>b.L&&!viaTreat)toast("▲",`${petName(id)} reached level ${a.L}`,"","");
@@ -2943,22 +3027,22 @@ function petCard(c){
   const lv=petLevel(state.pets[id].xp),stg=petStage(lv.L),nextAt=stg===0?8:stg===1?20:null,g=gems(c);
   return `<div class="panel petcard" style="--rc:var(${RAR[PETS[id].r].v})"><div class="pet-l"><span class="eyebrow">${PETS[id].el} pet · ${RAR[PETS[id].r].n}${petMyth(id)?' <span class="shinyb">★ Shiny</span>':""}</span><h3>${esc(PETS[id].names[stg])} <span class="muted">Lv ${lv.L}</span></h3>
       <span class="bar"><i style="width:${(lv.into/lv.need*100).toFixed(0)}%"></i></span>
-      <span class="muted num" style="font-size:.85rem">${lv.into} / ${lv.need} XP${nextAt?` · evolves at Lv ${nextAt}`:" · final form"}</span>
+      <span class="muted num" style="font-size:.85rem">${lv.into} / ${lv.need} XP${PETS[id].one?"":nextAt?` · evolves at Lv ${nextAt}`:" · final form"}</span>
       <div class="btnrow">${TREATS.map(t=>`<button class="btn sm ghost" data-treat="${t.id}" ${g<t.price?"disabled":""}>${t.name} ${GEM}${t.price}</button>`).join("")}<button class="btn sm ghost" id="pet-choose">Switch</button></div></div>
     <button class="petbtn bob" id="pet-open" aria-label="About ${esc(PETS[id].names[stg])}">${sprite(id,stg,84,petMyth(id))}</button></div>`;
 }
-const VIA={Starter:"Your starter",Shop:"Bought in the shop",code:"Redeemed with a code"};
+const VIA={Starter:"Your starter",Shop:"Bought in the shop",code:"Redeemed with a code",gift:"A gift from the founder"};
 function openPet(id){
   const pt=state.pets[id];if(!pt)return;const P=PETS[id],lv=petLevel(pt.xp),stg=petStage(lv.L),my=!!pt.myth,act=state.pet===id,nextAt=stg===0?8:stg===1?20:null,snacks=inv().snack||0;
-  const m=openModal(`${mhead("Pet profile")}<div class="petprof${my?" myth":""}" style="--rc:var(${RAR[my?4:P.r].v})"><span class="bob">${sprite(id,stg,132,my)}</span></div>
+  const m=openModal(`${mhead("Pet profile")}<div class="petprof${my?" myth":""}${P.origin?" origin":""}" style="--rc:var(${RAR[my?4:P.r].v})"><span class="bob">${sprite(id,stg,132,my)}</span></div>
     <div class="buy"><h2>${my?"✦ ":""}${esc(P.names[stg])}</h2>
       <div class="btnrow" style="justify-content:center">${rarTag({r:P.r})}${my?'<span class="shinyb">★ Shiny</span>':""}${act?'<span class="pill on">Active</span>':""}</div>
       <span class="muted">${P.el} type · Level ${lv.L}</span></div>
-    <div style="display:flex;flex-direction:column;gap:6px"><span class="bar"><i style="width:${(lv.into/lv.need*100).toFixed(0)}%"></i></span><span class="muted num" style="font-size:.85rem">${lv.into} / ${lv.need} XP${nextAt?` · evolves at Lv ${nextAt}`:" · final form"}</span></div>
+    <div style="display:flex;flex-direction:column;gap:6px"><span class="bar"><i style="width:${(lv.into/lv.need*100).toFixed(0)}%"></i></span><span class="muted num" style="font-size:.85rem">${lv.into} / ${lv.need} XP${PETS[id].one?"":nextAt?` · evolves at Lv ${nextAt}`:" · final form"}</span></div>
     <p class="pdesc">${esc(PET_DESC[id]||"")}</p>
     <div class="pfacts"><div><span class="eyebrow">Joined you</span><b>${pt.got?fmtD(pt.got):"Early days"}</b></div><div><span class="eyebrow">Found</span><b>${esc(VIA[pt.via]||(pt.via?"In a "+pt.via:"Your first pet"))}</b></div>
       ${my?`<div class="wide"><span class="eyebrow">Mythic</span><b>A 1 in ${MYTH_ODDS} shiny with its own colours</b></div>`:""}</div>
-    <div class="evo">${[0,1,2].map(i=>`<span class="${i>stg?"lock":""}">${sprite(id,i,52,my)}<small>${i>stg?"???":esc(P.names[i])}<br>${i===0?"Lv 1":i===1?"Lv 8":"Lv 20"}</small></span>`).join('<i>›</i>')}</div>
+    ${P.one?`<p class="muted" style="text-align:center;font-size:.88rem;margin:0">A mythical spirit. It doesn't evolve; it just keeps getting stronger.</p>`:`<div class="evo">${[0,1,2].map(i=>`<span class="${i>stg?"lock":""}">${sprite(id,i,52,my)}<small>${i>stg?"???":esc(P.names[i])}<br>${i===0?"Lv 1":i===1?"Lv 8":"Lv 20"}</small></span>`).join('<i>›</i>')}</div>`}
     ${act?(snacks?`<button class="btn ghost" id="pp-feed">Feed a snack (${snacks} left)</button>`:""):`<button class="btn" id="pp-act">Make ${esc(P.names[stg])} my active pet</button>`}
     <p class="muted" style="font-size:.85rem;text-align:center">Your active pet earns 5 XP a set, 25 a PR and 50 for each finished workout.</p>`);
   m.querySelector("#mh-back").onclick=closeModal;
@@ -3086,7 +3170,7 @@ function cloudInit(){
       if(ev==="PASSWORD_RECOVERY")openNewPassword();
       const u=session&&session.user;
       if(u&&(!me||me.id!==u.id)){me=u;afterSignIn()}
-      else if(!u&&ev!=="TOKEN_REFRESHED"){stopLive();me=null;myProfile=null;cloud.status="signedout";social.loaded=false;refresh()}
+      else if(!u&&ev!=="TOKEN_REFRESHED"){stopLive();isAdmin=false;me=null;myProfile=null;cloud.status="signedout";social.loaded=false;refresh()}
     },0);
   });
 }
@@ -3105,7 +3189,7 @@ async function afterSignIn(){
   state.name=myProfile.username;
   if(LINK.type==="signup")setTimeout(()=>toast("✓","Email confirmed","You're signed in.",""),300);
   await syncOnSignIn();
-  startLive();loadSocial();
+  startLive();loadSocial();checkAdmin();
   await pushRefresh();if(push.sub){try{await savePushSub()}catch(e){}}pushSchedule();if(view==="profile")renderProfile();
 }
 async function createProfile(username){
@@ -3349,6 +3433,7 @@ async function loadSocial(force){
       sb.from("messages").select("*").order("id",{ascending:false}).limit(300)]);
     for(const r of [fr,gm,fd])if(r.error)throw r.error;
     if(!ms.error){takeMsgs(ms.data);chat.ready=true}
+    const pg=await sb.from("pet_grants").select("user_id,pet_id");if(!pg.error)applyGrants(pg.data);
     social.friendships=fr.data;social.feed=fd.data;
     const myG=[...new Set(gm.data.filter(x=>x.user_id===me.id).map(x=>x.group_id))];
     social.members={};gm.data.forEach(x=>{if(myG.includes(x.group_id))(social.members[x.group_id]=social.members[x.group_id]||[]).push(x.user_id)});
@@ -3410,11 +3495,12 @@ function feedHTML(){
     else if(a.kind==="rank"){body=`${nm} reached <b style="color:var(${tierVar(d.step)})">${stepName(d.step)}</b> on ${esc(d.x)}`;side=emblem(d.step,26)}
     else if(a.kind==="level"){body=`${nm} reached <b>level ${d.level}</b> · ${esc(d.title||"")}`}
     else if(a.kind==="medal"){body=`${nm} unlocked the <b>${esc(d.name)}</b> medal`}
+    else if(a.kind==="origin"&&PETS[d.id]){body=`${nm} was given the Origin pet <b style="color:var(--r-origin)">${esc(PETS[d.id].names[0])}</b>`;side=`<span class="bob">${sprite(d.id,0,34,d.myth)}</span>`}
     else if(a.kind==="mythic"&&PETS[d.id]){body=`${nm} found a <b style="color:var(--r-myth)">★ Shiny ${esc(PETS[d.id].names[0])}</b>`;side=`<span class="bob">${sprite(d.id,0,34,true)}</span>`}
     else if(a.kind==="chest"){body=`${nm} found <b style="color:var(${RAR[d.r||0].v})">${esc(d.name)}</b> in a ${esc(d.chest||"chest")}`}
     else if(a.kind==="pet"&&PETS[d.id]){body=`${nm}${a.user_id===me.id?"r":"'s"} ${esc(PETS[d.id].names[d.from])} evolved into <b>${esc(PETS[d.id].names[d.to])}</b>`;side=`<span class="bob">${sprite(d.id,d.to,34,d.myth)}</span>`}
     else body=`${nm} was active`;
-    return `<button class="fitem" data-user="${a.user_id}">${avHTML(p,38)}<span class="ftxt"><span>${body}</span>${a.kind==="rank"||a.kind==="pet"||a.kind==="mythic"?"":side}<span class="ftime">${ago(a.created_at)}</span></span>${a.kind==="rank"||a.kind==="pet"||a.kind==="mythic"?side:""}</button>`}).join("")}</div>`;
+    return `<button class="fitem" data-user="${a.user_id}">${avHTML(p,38)}<span class="ftxt"><span>${body}</span>${a.kind==="rank"||a.kind==="pet"||a.kind==="mythic"||a.kind==="origin"?"":side}<span class="ftime">${ago(a.created_at)}</span></span>${a.kind==="rank"||a.kind==="pet"||a.kind==="mythic"||a.kind==="origin"?side:""}</button>`}).join("")}</div>`;
 }
 function relButton(id){
   if(id===me.id)return `<span class="pill">You</span>`;
@@ -3491,7 +3577,7 @@ function openPerson(id){
         <div class="hist">${s.ex.map(x=>`<div class="hrow" style="grid-template-columns:minmax(0,1fr)"><span class="s"><b>${esc(x.n)}</b><br><span class="muted">${x.s.map(v=>(v[2]==="w"?"W ":v[2]==="d"?"D ":"")+fmtSet(x.k,v)).join(", ")}</span></span></div>`).join("")}</div></div>`).join(""):`<p class="muted">No training logged today${st.last?`. Last workout: ${esc(st.last.name)}, ${ago(st.last.date+"T12:00:00")}.`:"."}</p>`}
       ${Object.keys(ms).length?`<h3>Muscle ranks</h3><div class="bodymap"><figure>${bodySVG("front",ms,null)}<figcaption>Front</figcaption></figure><figure>${bodySVG("back",ms,null)}<figcaption>Back</figcaption></figure></div>`:""}
       ${st.lifts&&st.lifts.length?`<h3>Top lifts</h3><div class="hist">${st.lifts.map(l=>`<div class="hrow" style="grid-template-columns:minmax(0,1fr) auto"><span class="s"><b>${esc(l.n)}</b><br><span class="muted">${l.k==="reps"?`${l.best} reps best`:`Est. max ${kg(l.best)} kg`}</span></span><span class="rank" style="--tier:var(${tierVar(l.step)})">${stepName(l.step)}</span></div>`).join("")}</div>`:""}
-      ${st.pet&&PETS[st.pet.id]?`<div class="petcard panel" style="box-shadow:none;background:var(--surface-2)"><div class="pet-l"><span class="eyebrow">Pet</span><b>${esc(PETS[st.pet.id].names[st.pet.st])} · Lv ${st.pet.lv}</b>${st.pet.myth?'<span class="shinyb" style="align-self:flex-start">★ Shiny</span>':""}<span class="muted" style="font-size:.85rem">${esc(PET_DESC[st.pet.id]||"")}</span></div><span class="bob">${sprite(st.pet.id,st.pet.st,64,st.pet.myth)}</span></div>`:""}`
+      ${st.pet&&PETS[st.pet.id]&&(!PETS[st.pet.id].origin||hasGrant(id,st.pet.id))?`<div class="petcard panel" style="box-shadow:none;background:var(--surface-2)"><div class="pet-l"><span class="eyebrow">Pet</span><b>${esc(PETS[st.pet.id].names[st.pet.st])} · Lv ${st.pet.lv}</b>${st.pet.myth?'<span class="shinyb" style="align-self:flex-start">★ Shiny</span>':""}<span class="muted" style="font-size:.85rem">${esc(PET_DESC[st.pet.id]||"")}</span></div><span class="bob">${sprite(st.pet.id,st.pet.st,64,st.pet.myth)}</span></div>`:""}`
       :`<p class="muted">Add @${esc(p.username)} as a friend to see their workouts and ranks.</p>`}
     ${isMe?"":`<div class="btnrow">${!r?`<button class="btn" data-addf2="${id}">Add friend</button>`:r.status==="accepted"?`<button class="btn" id="pp-msg">Message</button><button class="btn ghost" id="pp-remove">Remove friend</button>`:r.requester===me.id?`<span class="muted">Friend request sent</span>`:`<button class="btn" data-accept2="${r.id}">Accept friend request</button>`}</div>`}`);
   m.querySelector("#mh-back").onclick=closeModal;
@@ -4011,6 +4097,64 @@ function openMore(){
     state.bar=p;save();renderBar();openMore()});
 }
 $("nav.tabs").addEventListener("click",e=>{const t=e.target.closest(".tab");if(!t)return;if(t.id==="t-more"){openMore();return}go(t.dataset.v)});
+
+
+/* ---------- Origin pets and admin controls ---------- */
+// Origin pets come only from the server's gift list; the app adds or removes them to match it.
+let isAdmin=false;
+const originIds=()=>Object.keys(PETS).filter(k=>PETS[k].origin);
+const hasGrant=(uid,pet)=>!!(social.grants&&social.grants[uid]&&social.grants[uid].has(pet));
+function applyGrants(rows){
+  social.grants={};for(const r of rows)(social.grants[r.user_id]=social.grants[r.user_id]||new Set()).add(r.pet_id);
+  const mine=social.grants[me.id]||new Set();let changed=false;const fresh=[];
+  for(const id of originIds()){
+    if(mine.has(id)&&!state.pets[id]){givePet(id,"gift");fresh.push(id);changed=true}
+    else if(!mine.has(id)&&state.pets[id]){delete state.pets[id];if(state.pet===id)state.pet=Object.keys(state.pets)[0]||"";changed=true}}
+  if(changed){save();refresh()}
+  if(fresh.length){postActivity("origin",{id:fresh[0],myth:petMyth(fresh[0])});originModal(fresh[0])}
+}
+function originModal(id){
+  openModal(`<div class="reveal" style="--rc:var(--r-origin)"><span class="rays"></span><span class="rv-pic pop">${sprite(id,2,150,petMyth(id))}</span>
+    ${rarTag({r:5})}<h2>You've been given ${esc(PETS[id].names[2])}</h2><p class="muted">An Origin pet, the rarest tier in Costante. Only the founder can give these out.</p></div>
+    <div class="btnrow" style="justify-content:center"><button class="btn" id="og-see">See its profile</button><button class="btn ghost" data-close>Amazing</button></div>`).querySelector("#og-see").onclick=()=>openPet(id);
+}
+async function checkAdmin(){if(!sb||!me){isAdmin=false;return}const {data,error}=await sb.rpc("am_i_admin");isAdmin=!error&&data===true;if(view==="profile")renderProfile()}
+function adminPanel(){
+  if(!isAdmin)return "";
+  return `<div class="panel admin"><div class="ph"><h3>Admin</h3><span class="pill">Only you see this</span></div>
+    <p class="muted" style="font-size:.9rem;margin:0">Give someone an Origin pet, or take one back.</p><button class="btn sm" id="adm-open" style="align-self:flex-start">Open admin controls</button></div>`;
+}
+function openAdmin(sel){
+  const ids=originIds();sel=ids.includes(sel)?sel:ids[0];const top=id=>PETS[id].one?0:2;
+  const m=openModal(`${mhead("Admin")}<h2>Origin pets</h2>
+    <div class="adm-pets">${ids.map(id=>`<button class="adm-pet${id===sel?" on":""}" data-ap="${id}">${sprite(id,top(id),56)}<b>${esc(PETS[id].names[top(id)])}</b></button>`).join("")}</div>
+    <form id="adm-form" style="display:flex;flex-direction:column;gap:10px">
+      <label class="fld"><span>Their username</span><input class="txt" id="adm-user" placeholder="username" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"></label>
+      <p id="adm-msg" class="formerr" hidden></p>
+      <div class="btnrow"><button class="btn" type="submit">Give ${esc(PETS[sel].names[0])}</button><button class="btn ghost" type="button" id="adm-take">Take it back</button></div></form>
+    <h3>Who has Origin pets</h3><div id="adm-list"><p class="muted">Loading…</p></div>`);
+  m.querySelector("#mh-back").onclick=closeModal;
+  m.querySelectorAll("[data-ap]").forEach(b=>b.onclick=()=>openAdmin(b.dataset.ap));
+  const say=(t,ok)=>{const e=m.querySelector("#adm-msg");e.textContent=t;e.hidden=false;e.style.color=ok?"var(--good)":""};
+  const user=()=>m.querySelector("#adm-user").value.trim().replace(/^@/,"").toLowerCase();
+  const act=async give=>{const u=user();if(!u){say("Type a username first.");return}
+    const {data,error}=await sb.rpc("grant_pet",{p_username:u,p_pet:sel,p_give:give});
+    if(error){say(sbErr(error));return}say(data,true);loadList();loadSocial(true)};
+  m.querySelector("#adm-form").addEventListener("submit",e=>{e.preventDefault();act(true)});
+  const take=m.querySelector("#adm-take");
+  take.onclick=()=>{if(!user()){say("Type a username first.");return}
+    if(take.dataset.sure){delete take.dataset.sure;take.textContent="Take it back";act(false);return}
+    take.dataset.sure="1";take.textContent=`Tap again to take it from @${user()}`};
+  async function loadList(){
+    const {data,error}=await sb.rpc("list_grants"),el=m.querySelector("#adm-list");if(!el||!el.isConnected)return;
+    if(error){el.innerHTML=`<p class="formerr">${esc(sbErr(error))}</p>`;return}
+    el.innerHTML=data.length?data.map(r=>`<div class="berow">${PETS[r.pet_id]?`<span class="be-i">${sprite(r.pet_id,PETS[r.pet_id].one?0:2,32)}</span>`:""}<b>@${esc(r.username)}</b><span class="muted" style="font-size:.8rem">${esc(PETS[r.pet_id]?PETS[r.pet_id].names[PETS[r.pet_id].one?0:2]:r.pet_id)} · ${fmtD(String(r.granted_at).slice(0,10))}</span>
+      <button class="be-mv" data-fill="${esc(r.username)}" data-pet="${esc(r.pet_id)}" aria-label="Select @${esc(r.username)}">✎</button></div>`).join(""):`<p class="muted">Nobody yet.</p>`;
+    el.querySelectorAll("[data-fill]").forEach(b=>b.onclick=()=>{if(b.dataset.pet!==sel&&PETS[b.dataset.pet]){openAdmin(b.dataset.pet);setTimeout(()=>{const i=$("#adm-user");if(i)i.value=b.dataset.fill},30);return}m.querySelector("#adm-user").value=b.dataset.fill});
+  }
+  loadList();
+}
+document.addEventListener("click",e=>{if(e.target.closest("#adm-open"))openAdmin()});
 
 /* ---------- Navigation ---------- */
 $("#days").addEventListener("click",e=>{const b=e.target.closest(".day");if(!b)return;current=+b.dataset.i;refresh();window.scrollTo(0,0)});
