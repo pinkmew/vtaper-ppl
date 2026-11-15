@@ -961,6 +961,30 @@ button.bmv{cursor:pointer}button.bmv[aria-pressed="true"]{box-shadow:inset 0 0 0
 .swrow{display:flex;align-items:center;gap:10px;font-weight:700;font-size:.92rem}.swrow input{width:22px;height:22px;accent-color:var(--xp)}
 .chat-btl{border:0;background:var(--surface-2);color:var(--fg);border-radius:12px;padding:8px 12px;font-weight:800;cursor:pointer;font-family:var(--body);flex:none}
 .newdot{font-size:.6rem;font-weight:900;background:var(--xp);color:var(--ink);border-radius:99px;padding:1px 6px;letter-spacing:.04em}
+
+/* ---- v23: block clears + word messages ---- */
+.toasts{z-index:40}
+.sheet.pzsheet{position:relative}
+.wbox{position:relative}
+.wmsg{position:absolute;left:50%;top:-4px;z-index:6;transform:translate(-50%,-12px);opacity:0;pointer-events:none;background:var(--fg);color:var(--bg);font-weight:800;font-size:1rem;padding:11px 18px;border-radius:12px;box-shadow:0 10px 26px rgba(0,0,0,.45);white-space:nowrap;transition:opacity .18s,transform .18s}
+.wmsg.on{opacity:1;transform:translate(-50%,0)}
+.wrow.shake{animation:wshake .42s}
+@keyframes wshake{15%,55%{transform:translateX(-9px)}35%,75%{transform:translateX(9px)}90%{transform:translateX(-3px)}}
+.bkwrap{position:relative}
+.bkfx{position:absolute;inset:0;padding:4px;display:grid;grid-template-columns:repeat(8,1fr);gap:2px;pointer-events:none}
+.bkfx i.clr{border-radius:5px;animation:bkclr .5s ease-in both}
+@keyframes bkclr{0%{transform:scale(1)}35%{transform:scale(1.15);filter:brightness(2.4);box-shadow:0 0 16px #fff}100%{transform:scale(0) rotate(25deg);opacity:0}}
+.bkpop{position:absolute;left:50%;top:50%;display:flex;flex-direction:column;align-items:center;font-family:var(--display);font-weight:900;font-size:2.3rem;line-height:1;color:#fff;text-shadow:0 3px 0 #0009,0 0 22px var(--xp);pointer-events:none;white-space:nowrap;animation:bkpop 1.05s ease-out both}
+.bkpop small{font-size:1rem;font-weight:800;color:var(--xp);margin-top:4px;text-shadow:0 2px 0 #000a}
+@keyframes bkpop{0%{opacity:0;transform:translate(-50%,-30%) scale(.5)}18%{opacity:1;transform:translate(-50%,-50%) scale(1.18)}32%{transform:translate(-50%,-50%) scale(1)}75%{opacity:1;transform:translate(-50%,-62%)}100%{opacity:0;transform:translate(-50%,-85%)}}
+.bkgrid.shake{animation:bkshake .28s}
+@keyframes bkshake{25%{transform:translate(-3px,2px)}50%{transform:translate(3px,-2px)}75%{transform:translate(-2px,1px)}}
+.bkgrid i.will{box-shadow:inset 0 0 0 2px #fff,0 0 10px rgba(255,255,255,.55);filter:brightness(1.3)}
+.bkgrid i.pop{animation:bkin .22s ease-out}
+@keyframes bkin{0%{transform:scale(.6)}70%{transform:scale(1.08)}}
+#bk-score{display:inline-block}#bk-score.bump{animation:bump .4s}
+@keyframes bump{40%{transform:scale(1.45);color:var(--xp)}}
+@media (prefers-reduced-motion:reduce){.bkfx i.clr,.bkpop,.bkgrid.shake,.wrow.shake,.bkgrid i.pop{animation-duration:.01s}}
 </style>
 </head>
 <body>
@@ -4797,7 +4821,7 @@ function openWord(daily){
   const P=pz(),ans=daily?shuffled(ANSW,"gymword")[Math.floor(new Date(today()+"T12:00:00").getTime()/864e5)%ANSW.length]:ANSW[Math.floor(rnd()*ANSW.length)];
   const saved=daily&&P.word&&P.word.d===today()?P.word:null;let gs=saved?saved.g.slice():[],cur="",over=saved?!!saved.over:false;
   const m=openModal(`${mhead(daily?"Daily Gym Word":"Gym Word")}<p class="muted" style="font-size:.88rem;text-align:center;margin:0">Green is the right letter in the right place. Yellow is in the word but somewhere else.</p>
-    <div class="wgrid" id="w-grid"></div><div id="w-foot"><div class="wkeys" id="w-keys"></div></div>`);
+    <div class="wbox"><div class="wmsg" id="w-msg" role="alert" aria-live="assertive"></div><div class="wgrid" id="w-grid"></div></div><div id="w-foot"><div class="wkeys" id="w-keys"></div></div>`);
   m.classList.add("pzsheet");
   const draw=()=>{m.querySelector("#w-grid").innerHTML=Array.from({length:6},(_,r)=>{const g=gs[r],mk=g?wordMarks(g,ans):null,txt=g||(r===gs.length?cur:"");
       return `<div class="wrow">${Array.from({length:5},(_,i)=>`<span class="wc ${mk?mk[i]:txt[i]?"t":""}">${(txt[i]||"").toUpperCase()}</span>`).join("")}</div>`}).join("");
@@ -4807,9 +4831,12 @@ function openWord(daily){
     const r=already?{xp:0}:pzFinish("word",won?40:10,daily,won);
     m.querySelector("#w-foot").innerHTML=pzResult(won?"Got it!":"So close",won?`${gs.length} ${gs.length===1?"try":"tries"} · the word was ${ans.toUpperCase()}`:`The word was ${ans.toUpperCase()}`,r);
     m.querySelector("#pz-again").onclick=()=>openWord(false);m.querySelector("#pz-done").onclick=pzClose};
+  let msgT=0;
+  const say=t=>{const el=m.querySelector("#w-msg");if(!el)return;el.textContent=t;el.classList.remove("on");void el.offsetWidth;el.classList.add("on");clearTimeout(msgT);msgT=setTimeout(()=>el.classList.remove("on"),1900);
+    const row=m.querySelectorAll("#w-grid .wrow")[gs.length];if(row){row.classList.remove("shake");void row.offsetWidth;row.classList.add("shake")}try{navigator.vibrate&&navigator.vibrate([30,40,30])}catch(e){}};
   const key=k=>{if(over)return;
     if(k==="⌫"||k==="Backspace")cur=cur.slice(0,-1);
-    else if(k==="⏎"||k==="Enter"){if(cur.length<5){toast("!","Not enough letters","","");return}if(!wordOK(cur)){toast("!","Not in the word list","Try another word.","");return}
+    else if(k==="⏎"||k==="Enter"){if(cur.length<5){say("Not enough letters");return}if(!wordOK(cur)){say(`${cur.toUpperCase()} isn't in the word list`);return}
       gs.push(cur);cur="";if(daily){P.word={d:today(),g:gs.slice()};save()}draw();if(gs[gs.length-1]===ans)finish(true);else if(gs.length>=6)finish(false);return}
     else if(/^[a-z]$/i.test(k)&&cur.length<5)cur+=k.toLowerCase();draw()};
   draw();if(over)finish(gs[gs.length-1]===ans);
@@ -4830,25 +4857,41 @@ function openBlock(daily){
   const anyFit=sh=>{for(let r=0;r<N;r++)for(let c=0;c<N;c++)if(fits(sh,r,c))return true;return false};
   const deal=()=>{for(let t=0;t<30;t++){tray=[0,1,2].map(()=>BSH[Math.floor(rng()*BSH.length)]);if(tray.some(anyFit))break}};
   const m=openModal(`${mhead(daily?"Daily Block Stack":"Block Stack")}<div class="pzbar"><span><span class="eyebrow">Score</span> <b class="num" id="bk-score">0</b></span><span class="muted num">Best ${P.best.block||0}</span></div>
-    <div class="bkgrid" id="bk-grid"></div><div id="bk-foot"><div class="bktray" id="bk-tray"></div><div class="btgrid"><span class="note" style="padding:0">${daily?"Score 150 to clear today's daily.":"Drag a block onto the board."}</span><button class="btn ghost sm" id="bk-end">End game</button></div></div>`);
+    <div class="bkwrap" id="bk-wrap"><div class="bkgrid" id="bk-grid"></div></div><div id="bk-foot"><div class="bktray" id="bk-tray"></div><div class="btgrid"><span class="note" style="padding:0">${daily?"Score 150 to clear today's daily.":"Drag a block onto the board."}</span><button class="btn ghost sm" id="bk-end">End game</button></div></div>`);
   m.classList.add("pzsheet");const gel=m.querySelector("#bk-grid");
-  const drawGrid=(ghost,gcol)=>{gel.innerHTML=grid.map((v,i)=>`<i class="${v>=0?"f":ghost&&ghost.has(i)?"g":""}" style="${v>=0?`background:${BCOL[v]}`:ghost&&ghost.has(i)?`background:${BCOL[gcol]}`:""}"></i>`).join("")};
+  const drawGrid=(ghost,gcol,will,fresh)=>{gel.innerHTML=grid.map((v,i)=>`<i class="${v>=0?"f":ghost&&ghost.has(i)?"g":""}${will&&will.has(i)?" will":""}${fresh&&fresh.has(i)?" pop":""}" style="${v>=0?`background:${BCOL[v]}`:ghost&&ghost.has(i)?`background:${BCOL[gcol]}`:""}"></i>`).join("")};
+  // Which cells would clear if these cells were filled.
+  const lines=extra=>{const full=i=>grid[i]>=0||(extra&&extra.has(i)),rows=[],cols=[],out=new Set();
+    for(let i=0;i<N;i++){if([...Array(N).keys()].every(j=>full(i*N+j)))rows.push(i);if([...Array(N).keys()].every(j=>full(j*N+i)))cols.push(i)}
+    rows.forEach(i=>{for(let j=0;j<N;j++)out.add(i*N+j)});cols.forEach(i=>{for(let j=0;j<N;j++)out.add(j*N+i)});return {rows,cols,cells:out}};
+  const wrap=m.querySelector("#bk-wrap");
+  const clearFx=(cells,rows,cols,gain,combo)=>{
+    const fx=document.createElement("div");fx.className="bkfx";
+    fx.innerHTML=Array.from({length:N*N},(_,i)=>{if(!cells.has(i))return "<i></i>";const r=Math.floor(i/N),c=i%N,d=Math.min(rows.includes(r)?c:99,cols.includes(c)?r:99);
+      return `<i class="clr" style="background:${BCOL[grid[i]]};animation-delay:${d*35}ms"></i>`}).join("");
+    wrap.appendChild(fx);setTimeout(()=>fx.remove(),900);
+    const k=rows.length+cols.length,pop=document.createElement("div");pop.className="bkpop";
+    pop.innerHTML=`${k>=3?"Triple!":k===2?"Double!":"Clear!"}<small>+${gain}${combo>1?` · combo ×${combo}`:""}</small>`;wrap.appendChild(pop);setTimeout(()=>pop.remove(),1100);
+    gel.classList.remove("shake");void gel.offsetWidth;gel.classList.add("shake");
+    const sc=m.querySelector("#bk-score");if(sc){sc.classList.remove("bump");void sc.offsetWidth;sc.classList.add("bump")}
+  };
   const pieceHTML=(sh,cell)=>`<span class="bkp" style="width:${sh.w*cell}px;height:${sh.h*cell}px">${sh.c.map(([r,c])=>`<i style="left:${c*cell}px;top:${r*cell}px;width:${cell-2}px;height:${cell-2}px;background:${BCOL[sh.col]}"></i>`).join("")}</span>`;
   const drawTray=()=>{const el=m.querySelector("#bk-tray");if(!el)return;el.innerHTML=tray.map((sh,i)=>`<button class="bkslot${sh&&!anyFit(sh)?" dead":""}" data-t="${i}" ${sh?"":"disabled"} aria-label="Block ${i+1}">${sh?pieceHTML(sh,18):""}</button>`).join("");const s=m.querySelector("#bk-score");if(s)s.textContent=score};
   const end=()=>{if(over)return;over=true;const pb=score>(P.best.block||0);if(pb)P.best.block=score;const r=pzFinish("block",Math.min(50,Math.floor(score/8)),daily,score>=150);
     m.querySelector("#bk-foot").innerHTML=pzResult(score>=150?"Nice stacking":"Board full",`Score ${score}${pb?" · new best":""}${daily&&score<150?" · 150 clears the daily":""}`,r,daily?"Try again":"Play again");
     m.querySelector("#pz-again").onclick=()=>openBlock(daily);m.querySelector("#pz-done").onclick=pzClose};
-  const place=(ti,r,c)=>{const sh=tray[ti];sh.c.forEach(([dr,dc])=>grid[(r+dr)*N+c+dc]=sh.col);score+=sh.c.length;tray[ti]=null;
-    const rows=[],cols=[];for(let i=0;i<N;i++){if([...Array(N).keys()].every(j=>grid[i*N+j]>=0))rows.push(i);if([...Array(N).keys()].every(j=>grid[j*N+i]>=0))cols.push(i)}
-    const k=rows.length+cols.length;if(k){streak++;score+=10*k*k+5*(streak-1);rows.forEach(i=>{for(let j=0;j<N;j++)grid[i*N+j]=-1});cols.forEach(i=>{for(let j=0;j<N;j++)grid[j*N+i]=-1});try{navigator.vibrate&&navigator.vibrate(20)}catch(e){}}else streak=0;
-    if(tray.every(x=>!x))deal();drawGrid();drawTray();if(!tray.some(x=>x&&anyFit(x)))setTimeout(end,500)};
+  const place=(ti,r,c)=>{const sh=tray[ti],placed=new Set(sh.c.map(([dr,dc])=>(r+dr)*N+c+dc));placed.forEach(i=>grid[i]=sh.col);score+=sh.c.length;tray[ti]=null;
+    const {rows,cols,cells}=lines(),k=rows.length+cols.length;
+    if(k){streak++;const gain=10*k*k+5*(streak-1);score+=gain;clearFx(cells,rows,cols,gain,streak);cells.forEach(i=>grid[i]=-1);try{navigator.vibrate&&navigator.vibrate(k>1?[25,30,45]:30)}catch(e){}}else streak=0;
+    if(tray.every(x=>!x))deal();drawGrid(null,0,null,new Set([...placed].filter(i=>grid[i]>=0)));drawTray();if(!tray.some(x=>x&&anyFit(x)))setTimeout(end,k?1000:500)};
   deal();drawGrid();drawTray();
   let dg=null;
   m.querySelector("#bk-tray").addEventListener("pointerdown",e=>{const b=e.target.closest("[data-t]");if(!b||over||b.disabled)return;const ti=+b.dataset.t,sh=tray[ti],gr=gel.getBoundingClientRect(),cell=gr.width/N;
     const fl=document.createElement("div");fl.className="bkfloat";fl.innerHTML=pieceHTML(sh,cell);document.body.appendChild(fl);b.classList.add("lift");
     dg={ti,sh,fl,cell,b,pos:null};try{b.setPointerCapture(e.pointerId)}catch(x){}move(e);e.preventDefault()});
   const move=e=>{if(!dg)return;const {sh,fl,cell}=dg,gr=gel.getBoundingClientRect(),x=e.clientX-sh.w*cell/2,y=e.clientY-sh.h*cell-46;fl.style.transform=`translate(${x}px,${y}px)`;
-    const c=Math.round((x-gr.left)/cell),r=Math.round((y-gr.top)/cell),ok=fits(sh,r,c);dg.pos=ok?[r,c]:null;drawGrid(ok?new Set(sh.c.map(([dr,dc])=>(r+dr)*N+c+dc)):null,sh.col)};
+    const c=Math.round((x-gr.left)/cell),r=Math.round((y-gr.top)/cell),ok=fits(sh,r,c),key=ok?r+","+c:"";if(key===dg.key)return;dg.key=key;dg.pos=ok?[r,c]:null;
+    const gh=ok?new Set(sh.c.map(([dr,dc])=>(r+dr)*N+c+dc)):null;drawGrid(gh,sh.col,gh?lines(gh).cells:null)};
   const drop=()=>{if(!dg)return;const d=dg;dg=null;d.fl.remove();d.b.classList.remove("lift");if(d.pos)place(d.ti,d.pos[0],d.pos[1]);else drawGrid()};
   const tr=m.querySelector("#bk-tray");tr.addEventListener("pointermove",move);tr.addEventListener("pointerup",drop);tr.addEventListener("pointercancel",drop);
   m.querySelector("#bk-end").onclick=end;
