@@ -986,6 +986,20 @@ button.bmv{cursor:pointer}button.bmv[aria-pressed="true"]{box-shadow:inset 0 0 0
 @keyframes bump{40%{transform:scale(1.45);color:var(--xp)}}
 @media (prefers-reduced-motion:reduce){.bkfx i.clr,.bkpop,.bkgrid.shake,.wrow.shake,.bkgrid i.pop{animation-duration:.01s}}
 .adm-prev{display:flex;align-items:center;gap:12px;background:var(--surface-2);border-radius:14px;padding:8px 12px}.adm-prev>span{display:flex;flex-direction:column;gap:2px;min-width:0}
+
+/* ---- v24: puzzle difficulty, leaderboards, block battles ---- */
+.dfl{display:flex;flex-direction:column;gap:8px}
+.dfb{border:0;border-radius:16px;background:var(--surface-2);color:var(--fg);text-align:left;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:2px 10px;cursor:pointer;font-family:var(--body)}
+.dfb b{font-size:1.1rem}.dfb span{grid-column:1;color:var(--muted);font-size:.86rem}.dfb em{grid-row:1/3;grid-column:2;align-self:center;font-style:normal;font-weight:800;font-size:.8rem;color:var(--xp)}
+.dfb.last{box-shadow:inset 0 0 0 2px var(--xp)}.dfb:active{transform:scale(.98)}
+.seg3.sm button{padding:8px 4px;font-size:.84rem}
+.pz-lb{flex:none;border:0;background:var(--surface-2);border-radius:12px;width:42px;height:42px;font-size:1.2rem;cursor:pointer}
+.pz-top{align-items:flex-start}
+.lbrow.me{box-shadow:inset 0 0 0 2px var(--xp)}
+.bbclock{font-family:var(--display);font-size:2.2rem;font-weight:900}
+.bbtime{font-family:var(--display);font-size:1.5rem;font-weight:900;padding:2px 12px;border-radius:10px;background:var(--surface-2)}.bbtime.low{color:#fff;background:#e5484d;animation:bump .5s infinite}
+.bbvs{display:flex;align-items:center;justify-content:center;gap:16px}.bbvs>span{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 14px;border-radius:16px;background:var(--surface-2);min-width:110px}
+.bbvs>span.top{box-shadow:inset 0 0 0 2px var(--xp)}.bbvs b{font-family:var(--display);font-size:1.6rem}.bbvs small{color:var(--muted);font-weight:700}.bbvs i{font-style:normal;color:var(--muted);font-weight:800}
 </style>
 </head>
 <body>
@@ -3678,7 +3692,7 @@ async function loadSocial(force){
     for(const r of [pr,st,gr])if(r.error)throw r.error;
     social.profiles=Object.fromEntries(pr.data.map(p=>[p.id,p]));social.stats=Object.fromEntries(st.data.map(s=>[s.id,{...s.stats,_at:s.updated_at}]));
     social.groups=gr.data.sort((a,b)=>a.name.localeCompare(b.name));
-    social.loaded=true;social.at=Date.now();social.err="";loadBattles().then(()=>{if(pendingBattle){const b=pendingBattle;pendingBattle=null;openBattleId(b)}});
+    social.loaded=true;social.at=Date.now();social.err="";loadBB();loadBattles().then(()=>{if(pendingBattle){const b=pendingBattle;pendingBattle=null;openBattleId(b)}});
   }catch(e){social.err=sbErr(e)}
   social.loading=false;done();if(social.again){social.again=false;return loadSocial(true)}
   if(view==="friends"&&!chat.open)renderFriends();updateBadges();
@@ -3724,6 +3738,10 @@ function feedHTML(){
   if(!items.length)return `<div class="empty"><b>Nothing here yet</b><span>Finished workouts, PRs, rank-ups and level-ups from you and your friends show up here.</span><button class="btn sm" data-ft="friends" style="align-self:center">Find friends</button></div>`;
   return `<div class="feed">${items.map(a=>{const p=social.profiles[a.user_id],nm=p?`<b>${a.user_id===me.id?"You":"@"+esc(p.username)}</b>`:"<b>Someone</b>",d=a.payload||{};let body="",side="";
     if(a.kind==="workout"){body=`${nm} finished <b>${esc(d.name||"a workout")}</b>`;side=`<span class="fsub">${d.sets||0} sets · ${fmtNum(d.volume||0)} kg${d.prs&&d.prs.length?` · ${d.prs.length} PR${d.prs.length>1?"s":""}`:""}</span>${d.prs&&d.prs.length?`<span class="chips">${d.prs.slice(0,4).map(x=>`<span class="chip">PR · ${esc(x)}</span>`).join("")}</span>`:""}${d.ex&&d.ex.length?`<span class="fex">${exLines(d.ex,3)}${d.ex.length>3?`<span>+ ${d.ex.length-3} more · tap to see everything</span>`:""}</span>`:""}${d.photo?`<img class="fphoto" data-php="${esc(d.photo)}" alt="Workout photo">`:""}`}
+    else if(a.kind==="puzzle"){const g=PZ[d.g]?PZ[d.g].n:"a puzzle";
+      body=d.daily?(d.g==="crown"?`${nm} solved today's <b>Crowns</b> in ${fmtClock(d.time||0)}`:d.g==="word"?`${nm} got today's <b>Gym Word</b> in ${d.score}/${d.of||6}`:`${nm} scored <b>${fmtNum(d.score||0)}</b> in today's <b>Block Stack</b>`)
+        :`${nm} set a new ${esc((DIFF[d.diff]||{n:""}).n)} <b>${g}</b> best: <b>${d.g==="crown"?fmtClock(d.time||0):fmtNum(d.score||0)}</b>`}
+    else if(a.kind==="bb"){body=`${nm} beat @${esc(d.vs||"a friend")} at <b>Block Stack</b>, <b>${fmtNum(d.my||0)}</b> to ${fmtNum(d.their||0)} (${d.mins} min)`}
     else if(a.kind==="battle"){body=`${nm} won a <b>${d.fmt} v ${d.fmt} pet battle</b> against @${esc(d.vs||"a friend")}`}
     else if(a.kind==="pr"){body=`${nm} set a PR on <b>${esc(d.x)}</b>`;side=`<span class="fsub">${d.k==="time"?fmtDur(d.sec):d.k==="reps"?`${d.r} reps`:`${d.k==="bw"?"+":""}${kg(d.w)} kg × ${d.r}`}</span>`}
     else if(a.kind==="cardio"&&CTYPES[d.type]){const T=CTYPES[d.type];body=`${nm} ${T.verb} ${d.dist?`<b>${fmtKm(d.dist)} km</b>`:d.reps?`<b>${d.reps} × ${d.each} m</b>`:""}${d.sec?` in <b>${fmtDur(d.sec)}</b>`:""}`;side=`<span class="fsub">${T.ico} ${esc(T.n)}${d.dist&&d.sec?" · "+fmtPace(d.sec,d.dist):""}</span>${d.pr&&d.pr.length?`<span class="chips">${d.pr.map(x=>`<span class="chip">PB · ${esc(x)}</span>`).join("")}</span>`:""}`}
@@ -3823,7 +3841,7 @@ function openPerson(id){
     if(error)toast("!","Couldn't accept",sbErr(error),"");else toast("✓","Friend added","","");closeModal();await loadSocial(true)});
   m.querySelector("#pp-msg")?.addEventListener("click",()=>openChat("dm:"+id));
   m.querySelector("#pp-pet")?.addEventListener("click",()=>openPetView(st.pet,p.username,()=>openPerson(id)));
-  m.querySelector("#pp-btl")?.addEventListener("click",()=>openChallenge(id));
+  m.querySelector("#pp-btl")?.addEventListener("click",()=>openVersus(id));
   m.querySelector("#pp-remove")?.addEventListener("click",()=>confirmBox(`Remove @${p.username} as a friend? You'll stop seeing each other's progress.`,"Remove friend",async()=>{
     const {error}=await sb.from("friendships").delete().eq("id",r.id);closeModal();if(error)toast("!","Couldn't remove",sbErr(error),"");else toast("✓","Friend removed","","");await loadSocial(true)}));
 }
@@ -3909,7 +3927,7 @@ async function pollMsgs(){
 setInterval(pollMsgs,4000);
 function updateBadges(){
   const nf=me&&social.loaded?incoming().length+unreadCount():0,nb=battleBadge(),pins=barPins(),set=(el,n)=>{if(el){el.hidden=!n;el.textContent=n}};
-  set($("#tb-friends"),nf);set($("#tb-battle"),nb);set($("#tb-more"),(pins.includes("friends")?0:nf)+(pins.includes("battle")?0:nb));
+  const np=bbBadge();set($("#tb-friends"),nf);set($("#tb-battle"),nb);set($("#tb-puzzles"),np);set($("#tb-more"),(pins.includes("friends")?0:nf)+(pins.includes("battle")?0:nb)+(pins.includes("puzzles")?0:np));
   const cb=document.querySelector("#ft-chats .nbadge"),u=unreadCount();if(cb){cb.hidden=!u;cb.textContent=u}
 }
 function chatsHTML(){
@@ -3976,7 +3994,7 @@ if(window.visualViewport){visualViewport.addEventListener("resize",fitChat);visu
   tx.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing&&matchMedia("(hover:hover)").matches){e.preventDefault();el.querySelector("#chat-form").requestSubmit()}});
   el.querySelector("#chat-form").addEventListener("submit",e=>{e.preventDefault();const v=tx.value;tx.value="";grow();sendChat(v);tx.focus()});
   el.querySelector("#chat-back").addEventListener("click",()=>{closeChatView();if(view==="friends")renderFriends()});
-  el.querySelector("#chat-btl").addEventListener("click",()=>{const k=chat.open;if(!k||!k.startsWith("dm:"))return;closeChatView();openChallenge(k.slice(3))});
+  el.querySelector("#chat-btl").addEventListener("click",()=>{const k=chat.open;if(!k||!k.startsWith("dm:"))return;closeChatView();openVersus(k.slice(3))});
   el.querySelector("#chat-who").addEventListener("click",()=>{const k=chat.open;if(!k)return;if(k.startsWith("dm:"))openPerson(k.slice(3));else openGroup(k.slice(2))});
   el.querySelector("#chat-list").addEventListener("click",e=>{const b=e.target.closest("[data-mid]");if(!b)return;const k=chat.open,m=(chat.msgs[k]||[]).find(x=>String(x.id)===b.dataset.mid);if(!m||m.sender!==me.id)return;
     if(m.failed){sendChat(m.body,m);return}if(m.temp)return;
@@ -3987,9 +4005,10 @@ if(window.visualViewport){visualViewport.addEventListener("resize",fitChat);visu
 // Opening the app from a notification: "#chat=dm:<id>", "#friends" or "#train".
 let pendingRoute=null;
 function routeTo(url){
-  if(!url)return;try{if(location.hash&&/^#(chat=|friends|train|battle)/.test(location.hash))history.replaceState(null,"",location.pathname+location.search)}catch(e){}
+  if(!url)return;try{if(location.hash&&/^#(chat=|friends|train|battle|bb=)/.test(location.hash))history.replaceState(null,"",location.pathname+location.search)}catch(e){}
   if(url.startsWith("#chat=")){const k=decodeURIComponent(url.slice(6));friendTab="chats";go("friends");if(me&&social.loaded)openChat(k);else pendingRoute=k;return}
   if(url==="#friends"){friendTab="friends";go("friends");return}
+  if(url.startsWith("#bb=")){const id=url.split("=")[1];go("puzzles");if(me&&social.loaded&&bb.loaded)openBB(id);else pendingBB=id;return}
   if(url.startsWith("#battle")){const id=url.split("=")[1];go("battle");if(id){if(me&&social.loaded&&bt.loaded)openBattleId(id);else pendingBattle=id}return}
   if(url==="#train")go("train");
 }
@@ -4740,30 +4759,177 @@ const W5="aahedaaliiaarghaartiabacaabaciabackabacsabaftabakaabampabandabaseabash
 const pz=()=>{state.pz=state.pz||{};state.pz.days=state.pz.days||{};state.pz.best=state.pz.best||{};return state.pz};
 const pzDay=()=>{const p=pz(),d=today();if(!p.days[d]){p.days[d]={};const ks=Object.keys(p.days).sort();for(const k of ks.slice(0,Math.max(0,ks.length-14)))delete p.days[k]}return p.days[d]};
 const PZ={crown:{n:"Crowns",ico:"♛",d:"Place one crown in every row, column and colour zone. Crowns can't touch, not even at the corners."},
-  word:{n:"Gym Word",ico:"🅰",d:"Guess the five-letter fitness word in six tries."},
+  word:{n:"Gym Word",ico:"🅰",d:"Guess the five-letter fitness word."},
   block:{n:"Block Stack",ico:"▦",d:"Drag blocks onto the board. Fill a row or column to clear it."}};
-// Award XP (capped per day) and tick the daily. Returns {xp, bonus, disc}.
-function pzFinish(k,xp,daily,ok){
+const DIFF={easy:{n:"Easy",x:.6},medium:{n:"Medium",x:1},hard:{n:"Hard",x:1.6}};
+const DIFF_D={crown:{easy:"6 × 6 grid",medium:"7 × 7 grid",hard:"8 × 8 grid"},word:{easy:"7 tries",medium:"6 tries",hard:"5 tries, and every green and yellow letter must be used in your next guess"},
+  block:{easy:"Mostly small, friendly blocks",medium:"The normal mix of blocks",hard:"Bigger, awkward blocks"}};
+const pzOnline=()=>!!(sb&&me&&myProfile);
+async function pzSubmit(k,mode,score,time){if(!pzOnline())return null;
+  try{const {data,error}=await sb.rpc("puzzle_submit",{p_game:k,p_mode:mode,p_day:today(),p_score:Math.round(score)||0,p_time:Math.round(time)||0});return error?null:data}catch(e){return null}}
+// Award XP (difficulty multiplier, capped per day), tick the daily, save the score and post to friends.
+// meta: {diff, score, time}
+function pzFinish(k,base,daily,ok,meta){
+  meta=meta||{};const diff=daily?"medium":meta.diff||"medium",xp=Math.round(base*DIFF[diff].x);
   let got=0,bonus=0,disc=null;const day=pzDay(),first=daily&&ok&&!day[k];
   commit(()=>{got=awardXP("p",xp);if(first){day[k]=1;bonus=awardXP("p",20);
     if(["crown","word","block"].every(x=>day[x])&&!day.disc){day.disc=1;disc=randDisc();addDisc(disc)}}});
   if(disc)setTimeout(()=>toast("💿","All three daily puzzles done",`You won a move disc: ${MV[disc].n}.`,""),600);
-  return {xp:got+bonus,bonus,disc,capped:got<xp};
+  if((ok||k==="block")&&meta.score!=null)pzSubmit(k,daily?"daily":diff,meta.score,meta.time).then(better=>{
+    const P=pz();P.posted=P.posted||{};const pk=k+diff+today();
+    if(first)postActivity("puzzle",{g:k,daily:1,score:meta.score,time:meta.time,of:meta.of});
+    else if(better&&!daily&&k!=="word"&&!P.posted[pk]){if(Object.keys(P.posted).length>40)P.posted={};P.posted[pk]=1;save();postActivity("puzzle",{g:k,diff,score:meta.score,time:meta.time,pb:1})}});
+  return {xp:got+bonus,bonus,disc,capped:got<xp,diff:daily?null:diff};
 }
-const pzResult=(title,sub,r,again)=>`<div class="bt-res win"><h2>${title}</h2><p class="muted" style="text-align:center">${sub}</p><div class="sumgrid" style="grid-template-columns:1fr"><div><b style="color:var(--xp)">+${r.xp}</b><span>XP${r.bonus?" · includes the daily bonus":""}</span></div></div>
+const pzResult=(title,sub,r,again)=>`<div class="bt-res win"><h2>${title}</h2><p class="muted" style="text-align:center">${sub}</p><div class="sumgrid" style="grid-template-columns:1fr"><div><b style="color:var(--xp)">+${r.xp}</b><span>XP${r.bonus?" · includes the daily bonus":r.diff&&r.diff!=="medium"?` · ${DIFF[r.diff].n} ×${DIFF[r.diff].x}`:""}</span></div></div>
   ${r.capped?`<p class="note" style="padding:0;text-align:center">You've reached today's puzzle XP cap of ${CAPS.p}. You can keep playing for fun.</p>`:""}</div><div class="btgrid"><button class="btn ghost" id="pz-again">${again||"Play another"}</button><button class="btn" id="pz-done">Done</button></div>`;
+function pickDiff(k){
+  const P=pz();P.diff=P.diff||{};const cur=P.diff[k]||"medium";
+  const m=openModal(`${mhead(PZ[k].n)}<h2>Choose a difficulty</h2><div class="dfl">${Object.entries(DIFF).map(([d,v])=>`<button class="dfb${d===cur?" last":""}" data-d="${d}"><b>${v.n}</b><span>${DIFF_D[k][d]}</span><em>${v.x===1?"Normal XP":"XP ×"+v.x}</em></button>`).join("")}</div>
+    <p class="note" style="padding:0">Daily puzzles are always Medium, so everyone plays the same one.</p>`);
+  m.querySelector("#mh-back").onclick=closeModal;
+  m.querySelector(".dfl").onclick=e=>{const b=e.target.closest("[data-d]");if(!b)return;P.diff[k]=b.dataset.d;save();pzOpen(k,false,b.dataset.d)};
+}
+const pzOpen=(k,daily,diff)=>k==="crown"?openCrown(daily,diff):k==="word"?openWord(daily,diff):openBlock(daily,diff);
 function renderPuzzles(){
   const day=pzDay(),c=capDay(),n=["crown","word","block"].filter(k=>day[k]).length;
   $("#v-puzzles").innerHTML=`<div class="panel pzhead"><div class="pet-l"><span class="eyebrow">Daily puzzles</span><h3>${n} of 3 done</h3><span class="muted" style="font-size:.88rem">${day.disc?"Today's move disc collected. New puzzles tomorrow.":"Finish all three today for a free move disc."}</span>
       <span class="bar"><i style="width:${n/3*100}%"></i></span></div>${discPic(day.disc?"secondwind":"thunderclap",54)}</div>
-    ${Object.entries(PZ).map(([k,p])=>`<div class="panel pzcard"><div class="pz-top"><span class="pz-ico">${p.ico}</span><div class="pet-l"><h3>${p.n}${day[k]?' <span class="pill on">Done</span>':""}</h3><span class="muted" style="font-size:.88rem">${p.d}</span></div></div>
-      <div class="btgrid"><button class="btn${day[k]?" ghost":""}" data-pz="${k}" data-daily="1">${day[k]?"Daily again":"Play daily"}</button><button class="btn ghost" data-pz="${k}">Free play</button></div></div>`).join("")}
-    <div class="panel"><h3>XP</h3><p class="muted" style="font-size:.9rem">Every puzzle you finish pays XP, as many times as you like, up to ${CAPS.p} a day. The first daily clear of each adds 20 more.</p>
+    <button class="btn ghost" data-lb="crown">🏆 Leaderboards</button>
+    ${Object.entries(PZ).map(([k,p])=>`<div class="panel pzcard"><div class="pz-top"><span class="pz-ico">${p.ico}</span><div class="pet-l"><h3>${p.n}${day[k]?' <span class="pill on">Done</span>':""}</h3><span class="muted" style="font-size:.88rem">${p.d}</span></div><button class="pz-lb" data-lb="${k}" aria-label="${p.n} leaderboard">🏆</button></div>
+      <div class="btgrid"><button class="btn${day[k]?" ghost":""}" data-pz="${k}" data-daily="1">${day[k]?"Daily again":"Play daily"}</button><button class="btn ghost" data-pz="${k}">Free play</button></div>
+      ${k==="block"?`<button class="btn ghost" id="bb-new">⚔ Battle a friend</button>`:""}</div>`).join("")}
+    ${bbPanel()}
+    <div class="panel"><h3>XP</h3><p class="muted" style="font-size:.9rem">Every puzzle you finish pays XP, as many times as you like, up to ${CAPS.p} a day. Easy pays ×0.6 and Hard ×1.6. The first daily clear of each adds 20 more.</p>
       <div class="capgrid"><span>Puzzle XP today</span><b class="num">${c.p||0} / ${CAPS.p}</b></div></div>`;
 }
-document.addEventListener("click",e=>{const b=e.target.closest("#v-puzzles [data-pz]");if(!b)return;const k=b.dataset.pz,d=!!b.dataset.daily;k==="crown"?openCrown(d):k==="word"?openWord(d):openBlock(d)});
+document.addEventListener("click",e=>{if(!e.target.closest("#v-puzzles"))return;const t=e.target.closest("button");if(!t)return;
+  if(t.dataset.pz){const k=t.dataset.pz;if(t.dataset.daily)pzOpen(k,true,"medium");else pickDiff(k)}
+  else if(t.dataset.lb)openBoard(t.dataset.lb);else if(t.id==="bb-new")openBBChallenge();else if(t.dataset.bb)openBB(t.dataset.bb);});
 const pzClose=()=>{closeModal();refresh()};
 const fmtClock=s=>Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0");
+
+/* ---------- Puzzle leaderboards ---------- */
+const lbS={k:"crown",mode:"daily",scope:"all"};
+const LB_NOTE={crown:{daily:"Fastest solve of today's grid.",all:"Fastest solve at this difficulty."},word:{daily:"Fewest tries on today's word, then fastest.",all:"Most words solved at this difficulty."},block:{daily:"Best score on today's blocks.",all:"Highest score at this difficulty."}};
+const lbVal=(k,mode,r)=>k==="crown"?fmtClock(r.time_s):k==="word"?(mode==="daily"?`${r.score}/6 · ${fmtClock(r.time_s)}`:`${r.wins} solved`):fmtNum(r.score);
+function openBoard(k){
+  if(k)lbS.k=k;
+  const m=openModal(`${mhead("Leaderboards")}<div class="seg3" id="lb-g">${Object.entries(PZ).map(([g,p])=>`<button data-g="${g}">${p.n}</button>`).join("")}</div>
+    <div class="seg3 sm" id="lb-m">${[["daily","Today"],["easy","Easy"],["medium","Medium"],["hard","Hard"]].map(([v,n])=>`<button data-m="${v}">${n}</button>`).join("")}</div>
+    <div class="seg3 sm" id="lb-s"><button data-s="all">Everyone</button><button data-s="friends">Friends</button></div>
+    <p class="note" id="lb-note" style="padding:0"></p><div class="lb" id="lb-list"></div>`);
+  m.querySelector("#mh-back").onclick=()=>{closeModal();refresh()};
+  let seq=0;
+  const load=async()=>{
+    const press=(sel,attr,v)=>m.querySelectorAll(sel+" button").forEach(b=>b.setAttribute("aria-pressed",b.dataset[attr]===v));
+    press("#lb-g","g",lbS.k);press("#lb-m","m",lbS.mode);press("#lb-s","s",lbS.scope);
+    m.querySelector("#lb-note").textContent=LB_NOTE[lbS.k][lbS.mode==="daily"?"daily":"all"];
+    const el=m.querySelector("#lb-list");
+    if(!pzOnline()){el.innerHTML=`<div class="empty"><b>Sign in to see the leaderboards</b><span>Create an account on your Profile and your scores will appear here.</span></div>`;return}
+    el.innerHTML=`<p class="muted">Loading…</p>`;const my=++seq;
+    const {data,error}=await sb.rpc("puzzle_board",{p_game:lbS.k,p_mode:lbS.mode,p_day:today(),p_scope:lbS.scope});if(my!==seq||!el.isConnected)return;
+    if(error){el.innerHTML=/puzzle_board|schema cache|PGRST202/i.test((error.message||"")+(error.code||""))?`<div class="empty"><b>Leaderboards need one more setup step</b><span>Run the latest supabase-run-this.sql in Supabase.</span></div>`:`<p class="formerr">${esc(sbErr(error))}</p>`;return}
+    if(!data.length){el.innerHTML=`<div class="empty"><b>No scores yet</b><span>${lbS.mode==="daily"?"Be the first to finish today's puzzle.":"Play a game at this difficulty to get on the board."}</span></div>`;return}
+    el.innerHTML=data.map(r=>`<button class="lbrow${r.user_id===me.id?" me":""}" data-u="${r.user_id}"><b class="lbn">${r.rank}</b>${avHTML(r,34)}<span class="prow-t"><b>${r.user_id===me.id?"You":"@"+esc(r.username)}</b><span class="muted">Lv ${r.level}</span></span><b class="num">${lbVal(lbS.k,lbS.mode,r)}</b></button>`).join("");
+  };
+  m.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+    if(b.dataset.g){lbS.k=b.dataset.g;load()}else if(b.dataset.m){lbS.mode=b.dataset.m;load()}else if(b.dataset.s){lbS.scope=b.dataset.s;load()}
+    else if(b.dataset.u&&b.dataset.u!==me.id)openPerson(b.dataset.u)});
+  load();
+}
+
+/* ---------- Block Stack battles ---------- */
+const bb={list:[],loaded:false,err:"",at:0};let pendingBB=null;
+const bbMe=r=>r.p1===me.id?1:2,bbOpp=r=>r.p1===me.id?r.p2:r.p1,bbMy=r=>r["score"+bbMe(r)],bbTheir=r=>r["score"+(3-bbMe(r))],bbStarted=r=>!!r["start"+bbMe(r)];
+const bbNeeds=r=>(r.status==="open"&&bbMy(r)==null)||(r.status==="done"&&!(state.bbdone||{})[r.id]);
+const bbBadge=()=>pzOnline()&&bb.loaded?bb.list.filter(bbNeeds).length:0;
+async function loadBB(force){
+  if(!pzOnline())return;if(!force&&bb.loaded&&Date.now()-bb.at<8000)return;
+  const {data,error}=await sb.from("block_battles").select("*").order("updated_at",{ascending:false}).limit(30);
+  if(error){bb.err=/block_battles|schema cache|does not exist/i.test(error.message||"")?"setup":sbErr(error);bb.loaded=false}else{bb.err="";bb.list=data;bb.loaded=true}
+  bb.at=Date.now();updateBadges();if(view==="puzzles")renderPuzzles();
+  if(pendingBB&&bb.loaded){const id=pendingBB;pendingBB=null;openBB(id)}
+}
+function bbPanel(){
+  if(!pzOnline())return "";
+  if(bb.err==="setup")return `<div class="panel"><h3>Block Stack battles</h3><p class="muted" style="font-size:.9rem;margin:0">Run the latest supabase-run-this.sql in Supabase to battle friends at Block Stack.</p></div>`;
+  if(bb.err)return `<p class="formerr">${esc(bb.err)}</p>`;
+  const rows=bb.list.filter(r=>r.status!=="declined").slice(0,8);if(!rows.length)return "";
+  return `<div class="panel"><h3>Block Stack battles</h3>${rows.map(r=>{const my=bbMy(r),th=bbTheir(r),o=social.profiles[bbOpp(r)];let sub,btn="";
+    if(r.status==="open"&&my==null){sub=`${r.mins} min · your go`;btn=`<button class="btn sm" data-bb="${r.id}">Play</button>`}
+    else if(r.status==="open"){sub=`You scored ${fmtNum(my)} · waiting for them`}
+    else{const w=r.winner===me.id,d=!r.winner;sub=`${d?"Draw":w?"You won":"You lost"} ${fmtNum(my)}–${fmtNum(th)} · ${ago(r.updated_at)}`;if(!(state.bbdone||{})[r.id])btn=`<button class="btn sm" data-bb="${r.id}">Collect</button>`}
+    return `<div class="prow"><button class="prow-main" data-bb="${r.id}">${avHTML(o,40)}<span class="prow-t"><b>${o?"@"+esc(o.username):"Friend"}</b><span class="muted">${sub}</span></span></button>${btn}</div>`}).join("")}</div>`;
+}
+function openVersus(uid){
+  const m=openModal(`${mhead("Battle")}<div class="buy">${avHTML(social.profiles[uid],64)}<h2>Battle ${esc(uname(uid))}</h2></div>
+    <div class="dfl"><button class="dfb" id="vs-pet"><b>⚔ Pet battle</b><span>Turn-based, with your pets and their moves</span></button><button class="dfb" id="vs-bb"><b>▦ Block Stack battle</b><span>1, 2 or 3 minutes on the same blocks. Highest score wins.</span></button></div>`);
+  m.querySelector("#mh-back").onclick=closeModal;m.querySelector("#vs-pet").onclick=()=>openChallenge(uid);m.querySelector("#vs-bb").onclick=()=>openBBChallenge(uid);
+}
+function openBBChallenge(uid){
+  if(!pzOnline()){toast("!","Sign in first","Create an account on your Profile to battle friends.","");return}
+  if(!uid){const fs=friendIds();
+    const m=openModal(`${mhead("Block Stack battle")}<h2>Who do you want to battle?</h2>${fs.length?fs.map(id=>{const p=social.profiles[id];return p?`<div class="prow"><button class="prow-main" data-ch="${id}">${avHTML(p,42)}<span class="prow-t"><b>@${esc(p.username)}</b><span class="muted">Lv ${p.level}</span></span></button><button class="btn sm" data-ch="${id}">Battle</button></div>`:""}).join(""):`<div class="empty"><b>No friends yet</b><span>Add friends on the Friends tab, then challenge them here.</span></div>`}`);
+    m.querySelector("#mh-back").onclick=closeModal;m.querySelectorAll("[data-ch]").forEach(b=>b.onclick=()=>openBBChallenge(b.dataset.ch));return}
+  let mins=2;
+  const m=openModal(`${mhead("Block Stack battle")}<div class="buy">${avHTML(social.profiles[uid],56)}<h2>Battle ${esc(uname(uid))}</h2></div><span class="eyebrow">How long?</span>
+    <div class="seg3" id="bb-mins">${[1,2,3].map(n=>`<button data-n="${n}" aria-pressed="${n===mins}">${n} min</button>`).join("")}</div>
+    <p class="note" style="padding:0">You both get exactly the same blocks. Each of you plays once, whenever you like, and the highest score when the clock runs out wins.</p>
+    <button class="btn" id="bb-send">Send challenge</button>`);
+  m.querySelector("#mh-back").onclick=closeModal;
+  m.querySelector("#bb-mins").onclick=e=>{const b=e.target.closest("[data-n]");if(!b)return;mins=+b.dataset.n;m.querySelectorAll("#bb-mins button").forEach(x=>x.setAttribute("aria-pressed",x===b))};
+  m.querySelector("#bb-send").onclick=async e=>{e.target.disabled=true;const {data,error}=await sb.rpc("bb_challenge",{p_opponent:uid,p_mins:mins});
+    if(error){e.target.disabled=false;toast("!","Couldn't send the challenge",/bb_challenge|schema cache/i.test(error.message||"")?"Block Stack battles aren't set up on the server yet.":sbErr(error),"");return}
+    toast("⚔","Challenge sent",`${uname(uid)} will get a notification.`,"");await loadBB(true);openBB(data)};
+}
+async function openBB(id){
+  if(!pzOnline())return;let r=bb.list.find(x=>String(x.id)===String(id));
+  if(!r){const {data}=await sb.from("block_battles").select("*").eq("id",id).maybeSingle();r=data;if(r&&!social.profiles[bbOpp(r)])await loadSocial(true)}
+  if(!r){toast("!","That battle is gone","","");return}
+  const opp=uname(bbOpp(r)),my=bbMy(r);
+  if(r.status==="declined"){toast("!","That battle was cancelled","","");return}
+  if(r.status==="open"&&my==null&&bbStarted(r)){const s=((state.bbprog||{})[r.id]||{}).s||0;await bbSend(r,s);return openBB(r.id)}
+  if(r.status==="open"&&my==null){
+    const th=bbTheir(r)!=null,canX=bbMe(r)===2||!r.start2;
+    const m=openModal(`${mhead("Block Stack battle")}<div class="buy">${avHTML(social.profiles[bbOpp(r)],64)}<h2>You vs ${esc(opp)}</h2><span class="bbclock num">${r.mins}:00</span></div>
+      <ul class="howl"><li>You both get exactly the same blocks.</li><li>Highest score when the clock runs out wins.</li><li><b>You get one go.</b> Once you start, the clock keeps running, and leaving ends your go.</li></ul>
+      <p class="note" style="padding:0">${th?`${esc(opp)} has played. Their score stays hidden until you finish.`:`${esc(opp)} hasn't played yet.`}</p>
+      <button class="btn" id="bb-go">Start</button>${canX?`<button class="btn ghost sm" id="bb-x">${bbMe(r)===1?"Cancel challenge":"Decline"}</button>`:""}`);
+    m.querySelector("#mh-back").onclick=()=>{closeModal();refresh()};
+    m.querySelector("#bb-x")?.addEventListener("click",async()=>{const {error}=await sb.rpc("bb_decline",{p_id:r.id});if(error)toast("!","Couldn't cancel",sbErr(error),"");closeModal();loadBB(true)});
+    m.querySelector("#bb-go").onclick=async e=>{e.target.disabled=true;const {data,error}=await sb.rpc("bb_start",{p_id:r.id});
+      if(error){e.target.disabled=false;toast("!","Couldn't start",sbErr(error),"");loadBB(true);return}
+      state.bbprog=state.bbprog||{};state.bbprog[r.id]={s:0};save();openBlock(false,"medium",{id:r.id,seed:data,mins:r.mins,opp,row:r})};
+    return;
+  }
+  if(r.status==="open"){const m=openModal(`${mhead("Block Stack battle")}<div class="buy">${avHTML(social.profiles[bbOpp(r)],64)}<h2>Waiting for ${esc(opp)}</h2><span class="bbclock num">${fmtNum(my)}</span><span class="muted">Your score</span></div><p class="note" style="padding:0;text-align:center">You'll get a notification when they've played.</p><button class="btn" data-close>OK</button>`);
+    m.querySelector("#mh-back").onclick=closeModal;return}
+  bbResult(r);
+}
+async function bbSend(r,score){
+  const {data,error}=await sb.rpc("bb_submit",{p_id:r.id,p_score:score});
+  if(state.bbprog){delete state.bbprog[r.id];save()}
+  if(error&&!/already in/.test(error.message||"")){toast("!","Couldn't send your score",sbErr(error),"");return null}
+  await loadBB(true);return data;
+}
+function bbReward(r){
+  if((state.bbdone||{})[r.id])return null;const won=r.winner===me.id,draw=!r.winner;let xp=0,g=0;
+  commit(()=>{xp=awardXP("b",won?40:draw?25:15);if(won)g=awardGems(10);state.bbdone=state.bbdone||{};state.bbdone[r.id]=1;
+    const ks=Object.keys(state.bbdone);if(ks.length>80)for(const k of ks.slice(0,ks.length-80))delete state.bbdone[k]});
+  if(won)postActivity("bb",{vs:(social.profiles[bbOpp(r)]||{}).username||"a friend",my:bbMy(r),their:bbTheir(r),mins:r.mins});
+  updateBadges();return {xp,g};
+}
+function bbResultHTML(r){
+  const won=r.winner===me.id,draw=!r.winner,rw=bbReward(r),me1=bbMe(r)===1,mp=social.profiles[me.id]||myProfile,op=social.profiles[bbOpp(r)];
+  return `<div class="bt-res ${won||draw?"win":"lose"}"><h2>${draw?"Draw":won?"You win!":"They win"}</h2>
+    <div class="bbvs"><span class="${won?"top":""}">${avHTML(mp,44)}<b class="num">${fmtNum(bbMy(r))}</b><small>You</small></span><i>vs</i><span class="${!won&&!draw?"top":""}">${avHTML(op,44)}<b class="num">${fmtNum(bbTheir(r))}</b><small>${op?"@"+esc(op.username):"Them"}</small></span></div>
+    ${rw?`<div class="sumgrid"><div><b style="color:var(--xp)">+${rw.xp}</b><span>XP</span></div><div><b>${rw.g?"+"+rw.g:"0"}</b><span>Gems</span></div></div>`:`<p class="muted" style="text-align:center">Rewards already collected.</p>`}</div>`;
+}
+function bbResult(r){
+  const m=openModal(`${mhead("Block Stack battle")}${bbResultHTML(r)}<div class="btgrid"><button class="btn ghost" id="bb-re">Rematch</button><button class="btn" data-close>Done</button></div>`);
+  m.querySelector("#mh-back").onclick=()=>{closeModal();refresh()};m.querySelector("#bb-re").onclick=()=>openBBChallenge(bbOpp(r));
+}
 
 // ---- Crowns ----
 function crownCount(N,reg,limit){
@@ -4784,12 +4950,12 @@ function crownGen(N,rng){
   return null;
 }
 const CROWN_COL=["#e8a0a0","#9fc5e8","#b6d7a8","#f6d98b","#c9b3e6","#f4b183","#9fd9d0","#d5d0c4","#e6a8cf"];
-function openCrown(daily,size){
-  const N=daily?7:size||7,rng=daily?seedRand("crown"+today()):rnd,G=crownGen(N,rng)||crownGen(6,rnd),P=pz();
+function openCrown(daily,diff){
+  diff=daily?"medium":diff||"medium";const N={easy:6,medium:7,hard:8}[diff],rng=daily?seedRand("crown"+today()):rnd,G=crownGen(N,rng)||crownGen(6,rnd),P=pz();
   const saved=daily&&P.crown&&P.crown.d===today()&&P.crown.m.length===G.N*G.N?P.crown:null;
   let marks=saved?saved.m.slice():new Array(G.N*G.N).fill(0),t0=Date.now()-(saved?saved.t*1000:0),done=false,drag=null,moved=false;
-  const m=openModal(`${mhead(daily?"Daily Crowns":"Crowns")}<div class="pzbar"><span class="muted">${esc(PZ.crown.d)}</span><b class="num" id="cr-time">0:00</b></div>
-    <div class="crgrid" id="cr-grid" style="--n:${G.N}"></div><div id="cr-foot"><div class="btgrid"><button class="btn ghost sm" id="cr-clear">Clear board</button>${daily?"":`<div class="seg3" id="cr-size">${[6,7,8].map(s=>`<button data-s="${s}" aria-pressed="${s===G.N}">${s}×${s}</button>`).join("")}</div>`}</div>
+  const m=openModal(`${mhead(daily?"Daily Crowns":`Crowns · ${DIFF[diff].n}`)}<div class="pzbar"><span class="muted">${esc(PZ.crown.d)}</span><b class="num" id="cr-time">0:00</b></div>
+    <div class="crgrid" id="cr-grid" style="--n:${G.N}"></div><div id="cr-foot"><div class="btgrid"><button class="btn ghost sm" id="cr-clear">Clear board</button></div>
     <p class="note" style="padding:0">Tap once for ✕, twice for a crown. Drag across tiles to cross them out quickly.</p></div>`);
   m.classList.add("pzsheet");const grid=m.querySelector("#cr-grid"),n=G.N;
   const bad=()=>{const b=new Set(),cr=[];marks.forEach((v,i)=>{if(v===2)cr.push(i)});
@@ -4797,10 +4963,10 @@ function openCrown(daily,size){
   const draw=()=>{const {b}=bad();grid.innerHTML=marks.map((v,i)=>{const r=Math.floor(i/n),c=i%n,g=G.reg[i],bw=(dr,dc)=>{const rr=r+dr,cc=c+dc;return rr<0||cc<0||rr>=n||cc>=n||G.reg[rr*n+cc]!==g?"3px":"1px"};
     return `<button class="crc${b.has(i)?" bad":""}" data-i="${i}" style="background:${CROWN_COL[g%9]};border-width:${bw(-1,0)} ${bw(0,1)} ${bw(1,0)} ${bw(0,-1)}" aria-label="Row ${r+1}, column ${c+1}${v===2?", crown":v===1?", crossed":""}">${v===2?"♛":v===1?"✕":""}</button>`}).join("")};
   const check=()=>{const {b,cr}=bad();if(daily){P.crown={d:today(),m:marks.slice(),t:Math.round((Date.now()-t0)/1000)};save()}
-    if(cr.length===n&&!b.size&&!done){done=true;clearInterval(iv);const sec=Math.round((Date.now()-t0)/1000),key="crown"+n,pb=!P.best[key]||sec<P.best[key];if(pb)P.best[key]=sec;
-      const r=pzFinish("crown",{6:30,7:40,8:50}[n]||40,daily,true);grid.classList.add("solved");
+    if(cr.length===n&&!b.size&&!done){done=true;clearInterval(iv);const sec=Math.max(4,Math.round((Date.now()-t0)/1000)),key=daily?"crown_daily":"crown_"+diff,pb=!P.best[key]||sec<P.best[key];if(pb)P.best[key]=sec;
+      const r=pzFinish("crown",40,daily,true,{diff,score:0,time:sec});grid.classList.add("solved");
       m.querySelector("#cr-foot").innerHTML=pzResult("Solved!",`${fmtClock(sec)}${pb?" · your best time":` · best ${fmtClock(P.best[key])}`}`,r);
-      m.querySelector("#pz-again").onclick=()=>openCrown(false,n);m.querySelector("#pz-done").onclick=pzClose}};
+      m.querySelector("#pz-again").onclick=()=>daily?pickDiff("crown"):openCrown(false,diff);m.querySelector("#pz-done").onclick=pzClose}};
   const iv=setInterval(()=>{const el=document.getElementById("cr-time");if(!el){clearInterval(iv);return}el.textContent=fmtClock((Date.now()-t0)/1000)},500);
   draw();
   const cellAt=e=>{const el=document.elementFromPoint(e.clientX,e.clientY),b=el&&el.closest(".crc");return b&&grid.contains(b)?+b.dataset.i:-1};
@@ -4809,7 +4975,6 @@ function openCrown(daily,size){
   const up=e=>{if(done||drag==null)return;const i=drag;drag=null;if(i<0)return;if(!moved){marks[i]=(marks[i]+1)%3}draw();check()};
   grid.addEventListener("pointerup",up);grid.addEventListener("pointercancel",()=>{drag=null});
   m.querySelector("#cr-clear").onclick=()=>{marks.fill(0);draw();check()};
-  m.querySelector("#cr-size")?.addEventListener("click",e=>{const b=e.target.closest("[data-s]");if(b)openCrown(false,+b.dataset.s)});
   m.querySelector("#mh-back").onclick=()=>{clearInterval(iv);pzClose()};
   if(saved)check();
 }
@@ -4818,27 +4983,38 @@ function openCrown(daily,size){
 const ANSW="squat bench press curls lunge plank chest delts quads glute bicep traps sweat power speed pulse heart lungs water sleep steps miles track cycle climb boxer fiber grain fruit salad steak toned lifts heavy light grips chalk strap plate racks belts shoes socks spine bones joint ankle wrist elbow knees thigh torso waist blood nerve relax pumps gains shred carbs sugar shake meals diets tempo pause drops round paced racer relay medal coach teams sport score goals habit daily early agile quick tough solid steel metal weigh scale grams kilos pound timer clock watch music towel sauna steam bands ropes cable pivot twist crawl clean throw punch kicks block dodge guard stand hikes trail bikes skate rower swing vault rings flips dance barre spins".split(" ");
 let WSET=null;const wordOK=w=>{if(!WSET){WSET=new Set(ANSW);for(let i=0;i<W5.length;i+=5)WSET.add(W5.slice(i,i+5))}return WSET.has(w)};
 function wordMarks(g,ans){const r=Array(5).fill("n"),left={};for(let i=0;i<5;i++){if(g[i]===ans[i])r[i]="y";else left[ans[i]]=(left[ans[i]]||0)+1}for(let i=0;i<5;i++)if(r[i]!=="y"&&left[g[i]]>0){r[i]="m";left[g[i]]--}return r}
-function openWord(daily){
+// Hard mode: greens stay put, yellows must be used. Returns a message or "".
+function hardRule(gs,ans,cur){
+  for(const g of gs){const mk=wordMarks(g,ans);
+    for(let i=0;i<5;i++)if(mk[i]==="y"&&cur[i]!==g[i])return `Letter ${i+1} must be ${g[i].toUpperCase()}`;
+    const need={};for(let i=0;i<5;i++)if(mk[i]==="m")need[g[i]]=(need[g[i]]||0)+1;
+    for(const [ch,n] of Object.entries(need)){const have=[...cur].filter((c,i)=>c===ch&&!(mk[i]==="y"&&g[i]===ch)).length;if(have<n)return `Your guess must use ${ch.toUpperCase()}`}}
+  return "";
+}
+function openWord(daily,diff){
+  diff=daily?"medium":diff||"medium";const tries={easy:7,medium:6,hard:5}[diff],hard=diff==="hard";
   const P=pz(),ans=daily?shuffled(ANSW,"gymword")[Math.floor(new Date(today()+"T12:00:00").getTime()/864e5)%ANSW.length]:ANSW[Math.floor(rnd()*ANSW.length)];
-  const saved=daily&&P.word&&P.word.d===today()?P.word:null;let gs=saved?saved.g.slice():[],cur="",over=saved?!!saved.over:false;
-  const m=openModal(`${mhead(daily?"Daily Gym Word":"Gym Word")}<p class="muted" style="font-size:.88rem;text-align:center;margin:0">Green is the right letter in the right place. Yellow is in the word but somewhere else.</p>
+  const saved=daily&&P.word&&P.word.d===today()?P.word:null;let gs=saved?saved.g.slice():[],cur="",over=saved?!!saved.over:false,t0=Date.now()-((saved&&saved.t)||0)*1000;
+  const m=openModal(`${mhead(daily?"Daily Gym Word":`Gym Word · ${DIFF[diff].n}`)}<p class="muted" style="font-size:.88rem;text-align:center;margin:0">Green is the right letter in the right place. Yellow is in the word but somewhere else.${hard?" Hard: use every green and yellow letter.":""}</p>
     <div class="wbox"><div class="wmsg" id="w-msg" role="alert" aria-live="assertive"></div><div class="wgrid" id="w-grid"></div></div><div id="w-foot"><div class="wkeys" id="w-keys"></div></div>`);
   m.classList.add("pzsheet");
-  const draw=()=>{m.querySelector("#w-grid").innerHTML=Array.from({length:6},(_,r)=>{const g=gs[r],mk=g?wordMarks(g,ans):null,txt=g||(r===gs.length?cur:"");
+  const secs=()=>Math.round((Date.now()-t0)/1000);
+  const draw=()=>{m.querySelector("#w-grid").innerHTML=Array.from({length:tries},(_,r)=>{const g=gs[r],mk=g?wordMarks(g,ans):null,txt=g||(r===gs.length?cur:"");
       return `<div class="wrow">${Array.from({length:5},(_,i)=>`<span class="wc ${mk?mk[i]:txt[i]?"t":""}">${(txt[i]||"").toUpperCase()}</span>`).join("")}</div>`}).join("");
     const kb=m.querySelector("#w-keys");if(!kb)return;const st={};gs.forEach(g=>wordMarks(g,ans).forEach((v,i)=>{const o=st[g[i]];if(v==="y"||(v==="m"&&o!=="y")||(v==="n"&&!o))st[g[i]]=v}));
     kb.innerHTML=["qwertyuiop","asdfghjkl","⏎zxcvbnm⌫"].map(row=>`<div class="wkr">${[...row].map(ch=>`<button class="wky ${st[ch]||""}${ch==="⏎"||ch==="⌫"?" wide":""}" data-k="${ch}" aria-label="${ch==="⏎"?"Enter":ch==="⌫"?"Delete":ch}">${ch==="⏎"?"Enter":ch.toUpperCase()}</button>`).join("")}</div>`).join("")};
-  const finish=won=>{over=true;if(daily){P.word={d:today(),g:gs.slice(),over:1};save()}const already=saved&&saved.over;
-    const r=already?{xp:0}:pzFinish("word",won?40:10,daily,won);
-    m.querySelector("#w-foot").innerHTML=pzResult(won?"Got it!":"So close",won?`${gs.length} ${gs.length===1?"try":"tries"} · the word was ${ans.toUpperCase()}`:`The word was ${ans.toUpperCase()}`,r);
-    m.querySelector("#pz-again").onclick=()=>openWord(false);m.querySelector("#pz-done").onclick=pzClose};
+  const finish=won=>{over=true;const t=saved&&saved.over?saved.t:secs();if(daily){P.word={d:today(),g:gs.slice(),over:1,t};save()}const already=saved&&saved.over;
+    const r=already?{xp:0}:pzFinish("word",won?40:10,daily,won,{diff,score:gs.length,time:t,of:tries});
+    m.querySelector("#w-foot").innerHTML=pzResult(won?"Got it!":"So close",won?`${gs.length}/${tries} · ${fmtClock(t)} · the word was ${ans.toUpperCase()}`:`The word was ${ans.toUpperCase()}`,r);
+    m.querySelector("#pz-again").onclick=()=>daily?pickDiff("word"):openWord(false,diff);m.querySelector("#pz-done").onclick=pzClose};
   let msgT=0;
   const say=t=>{const el=m.querySelector("#w-msg");if(!el)return;el.textContent=t;el.classList.remove("on");void el.offsetWidth;el.classList.add("on");clearTimeout(msgT);msgT=setTimeout(()=>el.classList.remove("on"),1900);
     const row=m.querySelectorAll("#w-grid .wrow")[gs.length];if(row){row.classList.remove("shake");void row.offsetWidth;row.classList.add("shake")}try{navigator.vibrate&&navigator.vibrate([30,40,30])}catch(e){}};
   const key=k=>{if(over)return;
     if(k==="⌫"||k==="Backspace")cur=cur.slice(0,-1);
     else if(k==="⏎"||k==="Enter"){if(cur.length<5){say("Not enough letters");return}if(!wordOK(cur)){say(`${cur.toUpperCase()} isn't in the word list`);return}
-      gs.push(cur);cur="";if(daily){P.word={d:today(),g:gs.slice()};save()}draw();if(gs[gs.length-1]===ans)finish(true);else if(gs.length>=6)finish(false);return}
+      if(hard){const why=hardRule(gs,ans,cur);if(why){say(why);return}}
+      gs.push(cur);cur="";if(daily){P.word={d:today(),g:gs.slice(),t:secs()};save()}draw();if(gs[gs.length-1]===ans)finish(true);else if(gs.length>=tries)finish(false);return}
     else if(/^[a-z]$/i.test(k)&&cur.length<5)cur+=k.toLowerCase();draw()};
   draw();if(over)finish(gs[gs.length-1]===ans);
   m.querySelector("#w-foot").addEventListener("click",e=>{const b=e.target.closest("[data-k]");if(b)key(b.dataset.k)});
@@ -4849,16 +5025,23 @@ function openWord(daily){
 // ---- Block Stack ----
 const BSH=(()=>{const base=[[[0,0]],[[0,0],[0,1]],[[0,0],[0,1],[0,2]],[[0,0],[0,1],[0,2],[0,3]],[[0,0],[0,1],[0,2],[0,3],[0,4]],[[0,0],[0,1],[1,0],[1,1]],[[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]],
     [[0,0],[1,0],[1,1]],[[0,0],[1,0],[2,0],[2,1]],[[0,0],[1,0],[2,0],[2,1],[2,2]],[[0,0],[0,1],[0,2],[1,1]],[[0,0],[0,1],[1,1],[1,2]],[[0,1],[0,2],[1,0],[1,1]],[[0,0],[0,1],[0,2],[1,0],[1,1],[1,2]]];
+  const kind=[0,0,0,0,1,0,1,0,2,1,2,2,2,1];// 0 small, 1 big, 2 awkward
   const norm=s=>{const mr=Math.min(...s.map(c=>c[0])),mc=Math.min(...s.map(c=>c[1]));return s.map(([r,c])=>[r-mr,c-mc]).sort((a,b)=>a[0]-b[0]||a[1]-b[1])},seen=new Set(),out=[];
-  base.forEach((s,ci)=>{let cur=s;for(let k=0;k<4;k++){cur=norm(cur.map(([r,c])=>[c,-r]));const key=JSON.stringify(cur);if(!seen.has(key)){seen.add(key);out.push({c:cur,col:ci%7,h:Math.max(...cur.map(x=>x[0]))+1,w:Math.max(...cur.map(x=>x[1]))+1})}}});return out})();
+  base.forEach((s,ci)=>{let cur=s;for(let k=0;k<4;k++){cur=norm(cur.map(([r,c])=>[c,-r]));const key=JSON.stringify(cur);if(!seen.has(key)){seen.add(key);out.push({c:cur,col:ci%7,kind:kind[ci],h:Math.max(...cur.map(x=>x[0]))+1,w:Math.max(...cur.map(x=>x[1]))+1})}}});return out})();
 const BCOL=["#ff6b6b","#ffa94d","#ffd43b","#69db7c","#4dabf7","#b197fc","#f783ac"];
-function openBlock(daily){
-  const P=pz(),rng=daily?seedRand("block"+today()):rnd,N=8;let grid=new Array(64).fill(-1),tray=[],score=0,streak=0,over=false;
+const BWT={easy:[3,.7,.5],medium:[1,1,1],hard:[.6,1.5,1.8]};
+const pickShape=(rng,diff)=>{const w=BWT[diff]||BWT.medium,tot=BSH.reduce((a,s)=>a+w[s.kind],0);let x=rng()*tot;for(const s of BSH){x-=w[s.kind];if(x<0)return s}return BSH[BSH.length-1]};
+// battle: {id, seed, mins, opp, row}
+function openBlock(daily,diff,battle){
+  diff=daily||battle?"medium":diff||"medium";
+  const P=pz(),rng=battle?seedRand("bb"+battle.seed):daily?seedRand("block"+today()):rnd,N=8,bkey=battle?null:daily?"block":"block_"+diff,best=bkey?P.best[bkey]||0:0;
+  let grid=new Array(64).fill(-1),tray=[],score=0,streak=0,over=false,endAt=battle?Date.now()+battle.mins*60000:0,tick=0;
   const fits=(sh,r,c)=>sh.c.every(([dr,dc])=>{const rr=r+dr,cc=c+dc;return rr>=0&&cc>=0&&rr<N&&cc<N&&grid[rr*N+cc]<0});
   const anyFit=sh=>{for(let r=0;r<N;r++)for(let c=0;c<N;c++)if(fits(sh,r,c))return true;return false};
-  const deal=()=>{for(let t=0;t<30;t++){tray=[0,1,2].map(()=>BSH[Math.floor(rng()*BSH.length)]);if(tray.some(anyFit))break}};
-  const m=openModal(`${mhead(daily?"Daily Block Stack":"Block Stack")}<div class="pzbar"><span><span class="eyebrow">Score</span> <b class="num" id="bk-score">0</b></span><span class="muted num">Best ${P.best.block||0}</span></div>
-    <div class="bkwrap" id="bk-wrap"><div class="bkgrid" id="bk-grid"></div></div><div id="bk-foot"><div class="bktray" id="bk-tray"></div><div class="btgrid"><span class="note" style="padding:0">${daily?"Score 150 to clear today's daily.":"Drag a block onto the board."}</span><button class="btn ghost sm" id="bk-end">End game</button></div></div>`);
+  const deal=()=>{for(let t=0;t<30;t++){tray=[0,1,2].map(()=>pickShape(rng,diff));if(tray.some(anyFit))break}};
+  const title=battle?`vs ${battle.opp}`:daily?"Daily Block Stack":`Block Stack · ${DIFF[diff].n}`;
+  const m=openModal(`${mhead(title)}<div class="pzbar"><span><span class="eyebrow">Score</span> <b class="num" id="bk-score">0</b></span>${battle?`<b class="num bbtime" id="bk-time">${battle.mins}:00</b>`:`<span class="muted num">Best ${fmtNum(best)}</span>`}</div>
+    <div class="bkwrap" id="bk-wrap"><div class="bkgrid" id="bk-grid"></div></div><div id="bk-foot"><div class="bktray" id="bk-tray"></div><div class="btgrid"><span class="note" style="padding:0">${battle?"Same blocks as your friend. Score as much as you can before time runs out.":daily?"Score 150 to clear today's daily.":"Drag a block onto the board."}</span><button class="btn ghost sm" id="bk-end">${battle?"Finish now":"End game"}</button></div></div>`);
   m.classList.add("pzsheet");const gel=m.querySelector("#bk-grid");
   const drawGrid=(ghost,gcol,will,fresh)=>{gel.innerHTML=grid.map((v,i)=>`<i class="${v>=0?"f":ghost&&ghost.has(i)?"g":""}${will&&will.has(i)?" will":""}${fresh&&fresh.has(i)?" pop":""}" style="${v>=0?`background:${BCOL[v]}`:ghost&&ghost.has(i)?`background:${BCOL[gcol]}`:""}"></i>`).join("")};
   // Which cells would clear if these cells were filled.
@@ -4878,14 +5061,23 @@ function openBlock(daily){
   };
   const pieceHTML=(sh,cell)=>`<span class="bkp" style="width:${sh.w*cell}px;height:${sh.h*cell}px">${sh.c.map(([r,c])=>`<i style="left:${c*cell}px;top:${r*cell}px;width:${cell-2}px;height:${cell-2}px;background:${BCOL[sh.col]}"></i>`).join("")}</span>`;
   const drawTray=()=>{const el=m.querySelector("#bk-tray");if(!el)return;el.innerHTML=tray.map((sh,i)=>`<button class="bkslot${sh&&!anyFit(sh)?" dead":""}" data-t="${i}" ${sh?"":"disabled"} aria-label="Block ${i+1}">${sh?pieceHTML(sh,18):""}</button>`).join("");const s=m.querySelector("#bk-score");if(s)s.textContent=score};
-  const end=()=>{if(over)return;over=true;const pb=score>(P.best.block||0);if(pb)P.best.block=score;const r=pzFinish("block",Math.min(50,Math.floor(score/8)),daily,score>=150);
-    m.querySelector("#bk-foot").innerHTML=pzResult(score>=150?"Nice stacking":"Board full",`Score ${score}${pb?" · new best":""}${daily&&score<150?" · 150 clears the daily":""}`,r,daily?"Try again":"Play again");
-    m.querySelector("#pz-again").onclick=()=>openBlock(daily);m.querySelector("#pz-done").onclick=pzClose};
+  const end=async why=>{if(over)return;over=true;clearInterval(tick);if(dg){dg.fl.remove();dg=null}
+    if(battle){const foot=m.querySelector("#bk-foot");foot.innerHTML=`<div class="bt-res win"><h2>${why==="time"?"Time's up!":why==="full"?"Board full":"Finished"}</h2><p class="num" style="text-align:center;font-size:1.6rem;font-weight:900;margin:0">${fmtNum(score)}</p><div class="bt-wait"><span class="spin"></span><span class="muted">Sending your score…</span></div></div>`;
+      const res=await bbSend(battle.row,score);const row=bb.list.find(x=>x.id===battle.id);if(!m.isConnected)return;
+      if(row&&row.status==="done"){foot.innerHTML=`${bbResultHTML(row)}<div class="btgrid"><button class="btn ghost" id="bb-re">Rematch</button><button class="btn" id="pz-done">Done</button></div>`;foot.querySelector("#bb-re").onclick=()=>openBBChallenge(bbOpp(row))}
+      else foot.innerHTML=`<div class="bt-res win"><h2>${fmtNum(score)}</h2><p class="muted" style="text-align:center">${res==null?"Your score couldn't be sent. Open the battle again to retry.":`Score sent. Waiting for ${esc(battle.opp)} to play; you'll get a notification.`}</p></div><button class="btn" id="pz-done">Done</button>`;
+      foot.querySelector("#pz-done").onclick=pzClose;return}
+    const pb=score>best&&score>0;if(pb)P.best[bkey]=score;const r=pzFinish("block",Math.min(50,Math.floor(score/8)),daily,score>=150,{diff,score});
+    m.querySelector("#bk-foot").innerHTML=pzResult(score>=150?"Nice stacking":"Board full",`Score ${fmtNum(score)}${pb?" · new best":""}${daily&&score<150?" · 150 clears the daily":""}`,r,daily?"Try again":"Play again");
+    m.querySelector("#pz-again").onclick=()=>openBlock(daily,diff);m.querySelector("#pz-done").onclick=pzClose};
   const place=(ti,r,c)=>{const sh=tray[ti],placed=new Set(sh.c.map(([dr,dc])=>(r+dr)*N+c+dc));placed.forEach(i=>grid[i]=sh.col);score+=sh.c.length;tray[ti]=null;
     const {rows,cols,cells}=lines(),k=rows.length+cols.length;
     if(k){streak++;const gain=10*k*k+5*(streak-1);score+=gain;clearFx(cells,rows,cols,gain,streak);cells.forEach(i=>grid[i]=-1);try{navigator.vibrate&&navigator.vibrate(k>1?[25,30,45]:30)}catch(e){}}else streak=0;
-    if(tray.every(x=>!x))deal();drawGrid(null,0,null,new Set([...placed].filter(i=>grid[i]>=0)));drawTray();if(!tray.some(x=>x&&anyFit(x)))setTimeout(end,k?1000:500)};
+    if(battle){state.bbprog=state.bbprog||{};state.bbprog[battle.id]={s:score};save()}
+    if(tray.every(x=>!x))deal();drawGrid(null,0,null,new Set([...placed].filter(i=>grid[i]>=0)));drawTray();if(!tray.some(x=>x&&anyFit(x)))setTimeout(()=>end("full"),k?1000:500)};
   deal();drawGrid();drawTray();
+  if(battle)tick=setInterval(()=>{if(!m.isConnected){clearInterval(tick);return}const left=Math.max(0,endAt-Date.now()),el=m.querySelector("#bk-time");
+    if(el){el.textContent=fmtClock(Math.ceil(left/1000));el.classList.toggle("low",left<=10000)}if(left<=0)end("time")},250);
   let dg=null;
   m.querySelector("#bk-tray").addEventListener("pointerdown",e=>{const b=e.target.closest("[data-t]");if(!b||over||b.disabled)return;const ti=+b.dataset.t,sh=tray[ti],gr=gel.getBoundingClientRect(),cell=gr.width/N;
     const fl=document.createElement("div");fl.className="bkfloat";fl.innerHTML=pieceHTML(sh,cell);document.body.appendChild(fl);b.classList.add("lift");
@@ -4893,10 +5085,12 @@ function openBlock(daily){
   const move=e=>{if(!dg)return;const {sh,fl,cell}=dg,gr=gel.getBoundingClientRect(),x=e.clientX-sh.w*cell/2,y=e.clientY-sh.h*cell-46;fl.style.transform=`translate(${x}px,${y}px)`;
     const c=Math.round((x-gr.left)/cell),r=Math.round((y-gr.top)/cell),ok=fits(sh,r,c),key=ok?r+","+c:"";if(key===dg.key)return;dg.key=key;dg.pos=ok?[r,c]:null;
     const gh=ok?new Set(sh.c.map(([dr,dc])=>(r+dr)*N+c+dc)):null;drawGrid(gh,sh.col,gh?lines(gh).cells:null)};
-  const drop=()=>{if(!dg)return;const d=dg;dg=null;d.fl.remove();d.b.classList.remove("lift");if(d.pos)place(d.ti,d.pos[0],d.pos[1]);else drawGrid()};
+  const drop=()=>{if(!dg)return;const d=dg;dg=null;d.fl.remove();d.b.classList.remove("lift");if(over)return;if(d.pos)place(d.ti,d.pos[0],d.pos[1]);else drawGrid()};
   const tr=m.querySelector("#bk-tray");tr.addEventListener("pointermove",move);tr.addEventListener("pointerup",drop);tr.addEventListener("pointercancel",drop);
-  m.querySelector("#bk-end").onclick=end;
-  m.querySelector("#mh-back").onclick=()=>{if(dg)dg.fl.remove();pzClose()};
+  const endBtn=m.querySelector("#bk-end");
+  endBtn.onclick=()=>{if(battle&&!endBtn.dataset.sure){endBtn.dataset.sure=1;endBtn.textContent="Tap again to finish";setTimeout(()=>{if(endBtn.isConnected){delete endBtn.dataset.sure;endBtn.textContent="Finish now"}},2500);return}end("quit")};
+  m.querySelector("#mh-back").onclick=()=>{if(battle&&!over){const b=m.querySelector("#mh-back");if(!b.dataset.sure){b.dataset.sure=1;toast("!","Leaving ends your go",`Tap Back again to finish with ${fmtNum(score)} points.`,"");setTimeout(()=>delete b.dataset.sure,3000);return}end("quit");return}
+    if(dg)dg.fl.remove();clearInterval(tick);pzClose()};
 }
 
 /* ---------- Workout posts: exercises, weights and an optional photo ---------- */
@@ -4956,7 +5150,7 @@ ICON.more=`<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" wid
 const barPins=()=>{let b=Array.isArray(state.bar)?state.bar.filter((v,i,a)=>PAGES[v]&&a.indexOf(v)===i):null;if(!b||b.length<3)b=BAR_DEF.slice();return b.slice(0,6)};
 function renderBar(){
   const pins=barPins(),inn=$("nav.tabs .in");inn.style.gridTemplateColumns=`repeat(${pins.length+1},minmax(0,1fr))`;
-  inn.innerHTML=pins.map(v=>`<button class="tab" role="tab" id="t-${v}" data-v="${v}" aria-selected="${view===v}">${ICON[v]}<span class="tl">${PAGES[v]}</span>${v==="friends"||v==="battle"?`<span class="tbadge" id="tb-${v}" hidden></span>`:""}</button>`).join("")
+  inn.innerHTML=pins.map(v=>`<button class="tab" role="tab" id="t-${v}" data-v="${v}" aria-selected="${view===v}">${ICON[v]}<span class="tl">${PAGES[v]}</span>${v==="friends"||v==="battle"||v==="puzzles"?`<span class="tbadge" id="tb-${v}" hidden></span>`:""}</button>`).join("")
     +`<button class="tab" id="t-more" aria-selected="${!pins.includes(view)}" aria-haspopup="dialog">${ICON.more}<span class="tl">${pins.includes(view)?"More":PAGES[view]}</span><span class="tbadge" id="tb-more" hidden></span></button>`;
   updateBadges();
 }
@@ -5067,7 +5261,7 @@ $("#ctr-gems").addEventListener("click",()=>go("shop"));
 function go(vw){view=vw;
   ["train","today","cardio","progress","shop","friends","profile","plan","battle","puzzles"].forEach(n=>$("#v-"+n).hidden=n!==vw);if(PAGES[vw]&&(vw==="battle"||vw==="puzzles")){state.seenNew=state.seenNew||{};state.seenNew[vw]=1}renderBar();
   if(state.visits.d!==today())state.visits={d:today()};state.visits[vw]=1;refresh();window.scrollTo(0,0);
-  if(vw==="friends"&&me&&myProfile&&Date.now()-social.at>3000)loadSocial(true);if(vw==="battle"){if(me&&myProfile&&!social.loaded)loadSocial(true);else loadBattles(true)}}
+  if(vw==="friends"&&me&&myProfile&&Date.now()-social.at>3000)loadSocial(true);if(vw==="battle"){if(me&&myProfile&&!social.loaded)loadSocial(true);else loadBattles(true)}if(vw==="puzzles"){if(me&&myProfile&&!social.loaded)loadSocial(true);else loadBB(true)}}
 document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{
   document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-selected",x===b));
   ["cardio","rules","science"].forEach(n=>$("#p-"+n).hidden=n!==b.dataset.p)}));
@@ -5084,7 +5278,7 @@ save();
 commit(()=>{},{quiet:true});
 refresh();
 pushRefresh().then(()=>{if(view==="profile")renderProfile()});
-if(/^#(chat=|friends|train|battle)/.test(location.hash))routeTo(location.hash);
+if(/^#(chat=|friends|train|battle|bb=)/.test(location.hash))routeTo(location.hash);
 let lastDay=today();
 document.addEventListener("visibilitychange",()=>{if(document.hidden)return;pollMsgs();
   if(today()!==lastDay){lastDay=today();useFreezes();refresh();pushSchedule()}});

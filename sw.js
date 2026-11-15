@@ -1,5 +1,5 @@
 // Offline support: the page loads from the network when online (so updates show), and from cache with no signal.
-const CACHE = "costante-v26";
+const CACHE = "costante-v27";
 const CORE = ["./", "index.html", "manifest.webmanifest", "costante-180.png", "costante-192.png", "costante-512.png", "logo.svg"];
 
 self.addEventListener("install", e => {
