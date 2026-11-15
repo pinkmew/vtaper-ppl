@@ -861,6 +861,23 @@ nav.tabs .tab .tl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-
 .adm-pet b{font-size:.8rem}
 .adm-pet.on{box-shadow:inset 0 0 0 2px var(--r-origin);background:color-mix(in srgb,var(--r-origin) 14%,var(--surface-2))}
 .admin{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--r-origin) 60%,var(--line))}
+
+/* ---- v16: egg hatching ---- */
+.hatch{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:6px 0 4px}
+.hatch h2{margin:0}
+.eggbtn{border:0;background:radial-gradient(circle,color-mix(in srgb,var(--rc) 28%,transparent),transparent 66%);border-radius:50%;padding:14px;cursor:pointer;animation:eggidle 2.4s ease-in-out infinite;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.eggbtn img{display:block}
+.eggbtn.shake2{animation:eggshake .45s ease-in-out}
+.eggbtn.burst{animation:eggburst .5s ease-in forwards}
+@keyframes eggidle{0%,100%{transform:rotate(0)}10%{transform:rotate(-4deg)}20%{transform:rotate(4deg)}30%{transform:rotate(0)}}
+@keyframes eggshake{0%,100%{transform:translateX(0) rotate(0)}20%{transform:translateX(-6px) rotate(-8deg)}40%{transform:translateX(6px) rotate(8deg)}60%{transform:translateX(-4px) rotate(-5deg)}80%{transform:translateX(3px) rotate(3deg)}}
+@keyframes eggburst{0%{transform:scale(1);opacity:1;filter:brightness(1)}60%{transform:scale(1.25);opacity:1;filter:brightness(2.4)}100%{transform:scale(1.6);opacity:0;filter:brightness(4)}}
+.eggdots{display:flex;gap:8px}
+.eggdots i{width:10px;height:10px;border-radius:50%;background:var(--surface-2);box-shadow:inset 0 0 0 1.5px var(--line)}
+.eggdots i.on{background:var(--rc);box-shadow:0 0 8px var(--rc)}
+.reveal .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;animation:flash .6s ease-out}
+@keyframes flash{0%{opacity:.85}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.eggbtn,.eggbtn.shake2{animation:none}}
 </style>
 </head>
 <body>
@@ -2288,9 +2305,9 @@ function rollChest(ch){
   const list=d.t==="excl"?CHEST_X.map(o=>({kind:o.kind,it:SHOP[o.kind].items.find(i=>i.id===o.id)})):itemPool(d.r);
   const fresh=list.filter(o=>!owns(o.kind,o.it.id)),r=d.t==="excl"?3:d.r;
   if(!fresh.length)return gemsRes(d.t==="excl"?600:DUP[r],r,`You already own every ${d.t==="excl"?"chest-only":RAR[r].n.toLowerCase()} item, so you get gems instead.`);
-  const o=fresh[Math.floor(rnd()*fresh.length)],gp=grant(o.kind,o.it.id,ch.name);if(gp&&gp.myth)setTimeout(()=>mythModal(o.it.id),2600);
+  const o=fresh[Math.floor(rnd()*fresh.length)],gp=grant(o.kind,o.it.id,ch.name);
   if(r>=2)postActivity("chest",{name:o.kind==="pet"?PETS[o.it.id].names[0]:o.it.name,kind:o.kind,r,chest:ch.name});
-  return {pic:preview(o.kind,o.it,true),title:o.kind==="pet"?PETS[o.it.id].names[0]:o.it.name,sub:`${KINDNAME1[o.kind]} · ${o.kind==="pet"?"it's in your Pets now":"tap it in the shop to equip"}`,r,item:o};
+  return {pic:preview(o.kind,o.it,true),title:o.kind==="pet"?PETS[o.it.id].names[0]:o.it.name,sub:`${KINDNAME1[o.kind]} · ${o.kind==="pet"?"it's in your Pets now":"tap it in the shop to equip"}`,r,item:o,hatch:o.kind==="pet"&&gp?o.it.id:null};
 }
 function openChest(id){
   const ch=CHESTS.find(c=>c.id===id),g=gems(compute()),short=ch.price-g;
@@ -2307,6 +2324,7 @@ function doOpen(ch){
   state.spent=(state.spent||0)+ch.price;const res=rollChest(ch);save();refresh();
   const m=openModal(`<div class="chestopen" style="--rc:var(${RAR[res.r].v})"><span class="shake">${spriteImg("chest-"+ch.id,140,ch.name)}</span><span class="muted">Opening…</span></div>`);
   setTimeout(()=>{if(!m.isConnected)return;const left=gems(compute());
+    if(res.hatch){showHatch(res.hatch,{intro:`From your ${ch.name.toLowerCase()}`});return}
     m.innerHTML=`<div class="reveal" style="--rc:var(${RAR[res.r].v})"><span class="rays"></span><span class="rv-pic pop">${res.pic}</span>
       ${rarTag({r:res.r})}<h2>${esc(res.title)}</h2><p class="muted">${esc(res.sub)}</p></div>
       <div class="btnrow" style="justify-content:center"><button class="btn" id="rv-again" ${left<ch.price?"disabled":""}>${left<ch.price?"Not enough gems":`Open another (${ch.price})`}</button><button class="btn ghost" data-close>Done</button></div>
@@ -2328,17 +2346,18 @@ function applyReward(rw){
   for(const o of rw.items||[]){const it=SHOP[o.kind]?.items.find(i=>i.id===o.id);if(!it)continue;state.owned[o.kind+":"+o.id]=1;
     out.push({pic:preview(o.kind,it,true),title:it.name,sub:`${KINDNAME1[o.kind]} · tap it in the shop to equip`,r:it.r})}
   if(rw.pet&&PETS[rw.pet]){const g=givePet(rw.pet,"code");
-    if(g)out.push({pic:sprite(rw.pet,0,120,g.myth),title:(g.myth?"Shiny ":"")+PETS[rw.pet].names[0],sub:g.myth?"And it's Mythic! What are the odds?":"A code-only pet. It's in your Pets now.",r:g.myth?4:PETS[rw.pet].r,pet:rw.pet});
+    if(g)out.push({hatch:rw.pet,pet:rw.pet,r:PETS[rw.pet].r});
     else gemsOut(200,"You already have this pet, so here are 200 gems.")}
   if(rw.mythic){const ids=Object.keys(PETS).filter(id=>!PETS[id].code&&!PETS[id].origin&&!state.pets[id]?.myth),id=ids.length?ids[Math.floor(rnd()*ids.length)]:null;
     if(id){const g=givePet(id,"code",true),st=petStage(petLevel(state.pets[id].xp).L);
-      out.push({pic:sprite(id,st,128,true),title:"Shiny "+PETS[id].names[st],sub:g&&g.upgraded?"Your pet turned Mythic. It keeps its level.":"A random Mythic pet. Very few people will ever have one.",r:4,pet:id})}
+      out.push(g&&g.upgraded?{pic:sprite(id,st,128,true),title:"Shiny "+PETS[id].names[st],sub:"Your pet turned Mythic. It keeps its level.",r:4,pet:id}:{hatch:id,pet:id,r:4})}
     else gemsOut(1000,"Every pet you own is already Mythic, so here are 1,000 gems.")}
   if(rw.chest){const ch=CHESTS.find(c=>c.id===rw.chest);if(ch)out.push(rollChest(ch))}
   return out;
 }
 function showRewards(list,i=0){
   const r=list[i];if(!r)return;const last=i>=list.length-1;
+  if(r.hatch){showHatch(r.hatch,{intro:"From your code",onDone:last?null:()=>showRewards(list,i+1)});return}
   const m=openModal(`<div class="reveal" style="--rc:var(${RAR[r.r].v})"><span class="rays"></span><span class="rv-pic pop">${r.pic}</span>
       ${r.r===4?'<span class="shinyb">★ Mythic</span>':rarTag({r:r.r})}<h2>${esc(r.title)}</h2><p class="muted">${esc(r.sub)}</p></div>
     <div class="btnrow" style="justify-content:center">${last?`<button class="btn" data-close>Brilliant</button>`:`<button class="btn" id="rw-next">Next · ${i+1} of ${list.length}</button>`}${r.pet?`<button class="btn ghost" id="rw-pet">See pet</button>`:""}</div>`);
@@ -2428,7 +2447,7 @@ $("#v-shop").addEventListener("click",e=>{
   m.querySelector("#buy-try")?.addEventListener("click",()=>{applyTheme(it.id);toast("◐","Previewing "+it.name,"Go back to return to your theme.","")});
   m.querySelector("#buy-go")?.addEventListener("click",()=>{state.spent=(state.spent||0)+price;
     let gp=null;if(kind==="pet"){gp=givePet(it.id,free?"Starter":"Shop");state.pet=it.id}else{state.owned[kind+":"+it.id]=1;state.equip[kind]=it.id}
-    const ok=save();closeModal();refresh();if(gp&&gp.myth){mythModal(it.id);return}toast(ok?"✓":"!",ok?`${it.name} unlocked`:"Couldn't save",ok?(kind==="pet"?"It's your active pet now.":"It's equipped now."):"","")});
+    const ok=save();closeModal();refresh();if(gp){showHatch(it.id);return}toast(ok?"✓":"!",ok?`${it.name} unlocked`:"Couldn't save",ok?(kind==="pet"?"It's your active pet now.":"It's equipped now."):"","")});
 });
 
 /* ---------- Pixel sprites ---------- */
@@ -2976,6 +2995,65 @@ const LUNA_ART="luna";SPR.lunapet=SPR[LUNA_ART];
 for(const k of ["oriel","bloomlet","lunapet"])for(const st of [0,1,2])SPR[k+st]=SPR[k];
 const MYTH={lunapet:{p:{a:"#f3f2ef",b:"#c9c6c2",c:"#ffffff",d:"#5a6478",e:"#363d4c",f:"#7d879a",k:"#aeb4c0",i:"#7fc4ff"}},hollow:{p:{a:"#e9e5f0",b:"#a9a0bb",h:"#c9c1d8",b2:"#16205a",d:"#2a6bff",e:"#8fe0ff",q:"#7a5cff",p:"#33207a",f:"#3fa0ff",g:"#001030"}},oriel:{p:{a:"#fff1d6",b:"#e3c48f",d:"#ffd36a",e:"#d9962a",f:"#ff6ad5"}},bloomlet:{p:{d:"#86b8ff",e:"#4a72d6",k:"#c9dcff",f:"#ffe27a",g:"#d9a531"}},embit:{h:-150},driplet:{h:150},sprigg:{h:-90},pebblo:{p:{a:"#f2a7c0",b:"#c06c8c",c:"#ffd9e6",d:"#b38cff",e:"#e0ccff"}},zapkit:{h:130},flexo:{p:{a:"#ffd56a",b:"#d9a032",c:"#fff2c4",d:"#2e6bff",f:"#1c1c30"}},lumo:{p:{a:"#ffb0d8",b:"#e46fae",c:"#fff0f8",e:"#7fe4ff",i:"#8a1f5c"}},gulpo:{p:{a:"#7fd3a0",b:"#4f9f70",d:"#ffd36a"}},umbrit:{h:-110,k:["a","b","c","f"]},snackub:{p:{a:"#e8609f",b:"#a8336a",k:"#ffd0e4"}},kettlet:{p:{a:"#d9a531",b:"#9c6c12",c:"#ffe08a",d:"#ffffff"}},rhinub:{h:5,s:3.5},dashkit:{h:-60},veelet:{h:120,k:["a","b","d"]}};
 
+
+/* ---------- Eggs and hatching ---------- */
+// Every new pet arrives in an egg styled after it. Tap four times: three cracks, then it hatches as a baby.
+const EGG_ART={
+  lunapet:{base:"#f0dfc2",cap:"#3d2519",spot:"#3d2519",gem:"#9fd0f5"},
+  hollow:{base:"#2a2631",spot:"#c3122f",vein:1,mask:"#efe9e2"},
+  oriel:{base:"#d6e4ff",spot:"#b9a6ff",gem:"#4fd8ff"},
+  bloomlet:{base:"#e4f8d6",spot:"#ff8fb8",cap:"#ff8fb8"},
+  veelet:{base:"#86beff",spot:"#ffcf3f",cap:"#4a7fd6"},
+  snackub:{base:"#6f5a96",spot:"#ffc531"},kettlet:{base:"#5f6977",spot:"#ffd24a"},embit:{base:"#ef4d55",spot:"#ffd23f"}
+};
+function capPts(cx,cy,rx,ry,cut){const pts=[];for(let i=0;i<=48;i++){const t=Math.PI+Math.PI*i/48,x=cx+rx*Math.cos(t),y=cy+ry*Math.sin(t);if(y<=cut)pts.push([x,y])}
+  const zig=[];for(let x=pts[pts.length-1][0];x>pts[0][0];x-=2.2)zig.push([x,cut+((zig.length%2)?1.6:0)]);return pts.concat(zig)}
+const CRACKS=[[],
+  [[19,7],[20,8],[19,9],[20,10],[21,11]],
+  [[19,7],[20,8],[19,9],[20,10],[21,11],[22,12],[21,13],[22,14],[18,10],[17,11],[16,12]],
+  [[19,7],[20,8],[19,9],[20,10],[21,11],[22,12],[21,13],[22,14],[18,10],[17,11],[16,12],[6,17],[7,16],[8,17],[9,18],[10,17],[11,16],[12,17],[13,18],[14,17],[15,16],[16,17],[17,18],[18,17],[19,16],[20,17],[21,18],[22,17],[23,16],[24,17],[25,18],[26,17],[22,15],[23,16]]];
+function eggDef(id,st){
+  const p=(SPR[id+"0"]||{}).pal||{},A=EGG_ART[id]||{},base=A.base||p.a||"#f0e0c0",spot=A.spot||p.d||p.b||"#c08040";
+  const pal={a:base,s:spot,c:A.cap||spot,v:A.mask||"#ffffff",g:A.gem||"#ffffff",l:"#fff3b0"};
+  const parts=[E(16,17.6,10.4,13,"a")];
+  if(A.cap)parts.push(PG(capPts(16,17.6,10.4,13,10.5),"c",{n:1}));
+  if(A.vein){parts.push(PG([[8,9],[14,6],[15,15],[9,17]],"v",{n:1}),DOT([[18,8],[19,9],[19,10],[20,11],[21,12],[20,13],[21,14],[22,15],[22,16],[11,20],[12,21],[12,22],[13,23],[14,24],[22,22],[23,23],[23,24],[24,25],[17,26],[16,27]],"s"),DOT([[10,11],[11,12]],"#c3122f"))}
+  else parts.push(E(10.6,21.6,2.4,2,"s",{n:1}),E(21,22.6,2.8,2.3,"s",{n:1}),E(15.6,27,1.8,1.4,"s",{n:1}),...(A.cap?[]:[E(20.6,11.6,2,1.7,"s",{n:1}),E(12.6,9.6,1.5,1.3,"s",{n:1})]));
+  if(A.gem)parts.push(E(16,15.6,1.6,1.6,"g",{n:1}),DOT([[15,15]],"W"));
+  parts.push(DOT([[9,9],[10,8],[9,10]],"W"));
+  if(st>0)parts.push(DOT(CRACKS[st],"K"));
+  if(st>=3)parts.push(DOT(CRACKS[3].filter(([x,y])=>y>=15&&y<=18).map(([x,y])=>[x,y-1]).filter(([x,y])=>!CRACKS[3].some(c=>c[0]===x&&c[1]===y)),"l"));
+  return {pal,parts};
+}
+const eggKey=(id,st)=>{const k="egg_"+id+"_"+st;if(!SPR[k])SPR[k]=eggDef(id,st);return k};
+// opts: {intro, onDone}
+function showHatch(id,opts={}){
+  const P=PETS[id],my=petMyth(id),tapsNeeded=4;let taps=0,done=false;
+  const m=openModal(`<div class="hatch" style="--rc:var(${RAR[P.r].v})">
+      ${opts.intro?`<span class="eyebrow" style="text-align:center">${esc(opts.intro)}</span>`:""}
+      <h2>${P.origin?"An Origin egg":"A new egg"}</h2>
+      <button class="eggbtn" id="egg" aria-label="Tap the egg to hatch it">${spriteImg(eggKey(id,0),180,"Egg")}</button>
+      <div class="eggdots">${Array.from({length:tapsNeeded},(_,i)=>`<i data-d="${i}"></i>`).join("")}</div>
+      <p class="muted" id="egg-hint">Tap the egg to hatch it</p></div>`);
+  const btn=m.querySelector("#egg"),hint=m.querySelector("#egg-hint");
+  btn.addEventListener("click",()=>{
+    if(done)return;taps++;m.querySelectorAll(".eggdots i").forEach((d,i)=>d.classList.toggle("on",i<taps));
+    try{navigator.vibrate&&navigator.vibrate(taps<tapsNeeded?25:[40,40,90])}catch(e){}
+    if(taps<tapsNeeded){btn.innerHTML=spriteImg(eggKey(id,taps),180,"Egg");btn.classList.remove("shake2");void btn.offsetWidth;btn.classList.add("shake2");
+      hint.textContent=["","Something's moving…","It's cracking!","Almost there… one more tap!"][taps];return}
+    done=true;btn.classList.add("burst");hint.textContent="";
+    setTimeout(()=>{if(!m.isConnected)return;
+      m.innerHTML=`<div class="reveal" style="--rc:var(${my?"--r-myth":RAR[P.r].v})"><span class="rays"></span><span class="flash"></span><span class="rv-pic pop">${sprite(id,0,150,my)}</span>
+        <div class="btnrow" style="justify-content:center">${rarTag({r:P.r})}${my?'<span class="shinyb">★ Shiny</span>':""}</div>
+        <h2>${my?"A shiny ":""}${esc(P.names[0])} hatched!</h2><p class="muted">${my?`Only 1 in ${MYTH_ODDS} pets hatch shiny. `:""}${esc(PET_DESC[id]||"")}</p></div>
+        <div class="btnrow" style="justify-content:center">${opts.onDone?`<button class="btn" id="h-next">Continue</button>`:`<button class="btn" id="h-see">See its profile</button><button class="btn ghost" data-close>Done</button>`}</div>`;
+      m.querySelector("[data-close]")?.addEventListener("click",closeModal);
+      m.querySelector("#h-see")?.addEventListener("click",()=>openPet(id));
+      m.querySelector("#h-next")?.addEventListener("click",()=>opts.onDone());
+    },520);
+  });
+}
+
 /* ---------- Pixel pets ---------- */
 const PETS={
  embit:{el:"Fire",r:0,price:250,names:["Embit","Embrute","Infernox"]},
@@ -3025,8 +3103,7 @@ function givePet(id,via,forceMyth){
   const have=state.pets[id];
   if(have){if(forceMyth&&!have.myth){have.myth=true;postActivity("mythic",{id});return {myth:true,upgraded:true}}return null}
   const myth=!!forceMyth||rnd()<1/MYTH_ODDS;
-  // Origin pets arrive fully grown, at level 20.
-  state.pets[id]={xp:PETS[id].origin?19000:0,myth,got:today(),via};if(!state.pet)state.pet=id;
+  state.pets[id]={xp:0,myth,got:today(),via};if(!state.pet)state.pet=id;
   if(myth)postActivity("mythic",{id});return {myth};
 }
 function mythModal(id,upgraded){
@@ -4142,7 +4219,8 @@ function applyGrants(rows){
     if(mine.has(id)&&!state.pets[id]){givePet(id,"gift");fresh.push(id);changed=true}
     else if(!mine.has(id)&&state.pets[id]){delete state.pets[id];if(state.pet===id)state.pet=Object.keys(state.pets)[0]||"";changed=true}}
   if(changed){save();refresh()}
-  if(fresh.length){postActivity("origin",{id:fresh[0],myth:petMyth(fresh[0])});originModal(fresh[0])}
+  if(fresh.length){fresh.forEach(id=>postActivity("origin",{id,myth:petMyth(id)}));
+    const next=i=>showHatch(fresh[i],{intro:"A gift from the founder",onDone:i<fresh.length-1?()=>next(i+1):null});next(0)}
 }
 function originModal(id){
   openModal(`<div class="reveal" style="--rc:var(--r-origin)"><span class="rays"></span><span class="rv-pic pop">${sprite(id,2,150,petMyth(id))}</span>
