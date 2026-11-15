@@ -1,6 +1,6 @@
 // Offline support: the page loads from the network when online (so updates show), and from cache with no signal.
-const CACHE = "costante-v20";
-const CORE = ["./", "index.html", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "logo.svg"];
+const CACHE = "costante-v21";
+const CORE = ["./", "index.html", "manifest.webmanifest", "costante-180.png", "costante-192.png", "costante-512.png", "logo.svg"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
@@ -40,7 +40,7 @@ self.addEventListener("push", e => {
   let d = {};
   try { d = e.data ? e.data.json() : {}; } catch (_) { d = { title: "Costante", body: e.data ? e.data.text() : "" }; }
   e.waitUntil(self.registration.showNotification(d.title || "Costante", {
-    body: d.body || "", tag: d.tag || undefined, renotify: !!d.tag, icon: "icon-192.png", badge: "icon-192.png", data: { url: d.url || "" }
+    body: d.body || "", tag: d.tag || undefined, renotify: !!d.tag, icon: "costante-192.png", badge: "costante-192.png", data: { url: d.url || "" }
   }));
 });
 self.addEventListener("notificationclick", e => {
