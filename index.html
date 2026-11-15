@@ -2944,8 +2944,37 @@ defN("bloomlet",48,P_BLM,[
   PG([[14.6,19],[15,10],[19,6],[24,4.4],[29,6],[33,10],[33.4,19],[30,14.6],[27,16],[24,12.6],[21,16],[18,14.6]],"d"),PG([[19,8],[24,5.6],[29,8],[24,10]],"e",{n:1}),
   E(24,3.6,2,2.4,"h"),DOT([[23,3]],"c"),
   EYE(18,19,"big",{m:1}),DOT([[16,25],[17,25]],"k",{m:1}),DOT([[23,25],[24,26],[25,25]],"e")]);
-for(const k of ["oriel","bloomlet"])for(const st of [0,1,2])SPR[k+st]=SPR[k];
-const MYTH={hollow:{p:{a:"#e9e5f0",b:"#a9a0bb",h:"#c9c1d8",b2:"#16205a",d:"#2a6bff",e:"#8fe0ff",q:"#7a5cff",p:"#33207a",f:"#3fa0ff",g:"#001030"}},oriel:{p:{a:"#fff1d6",b:"#e3c48f",d:"#ffd36a",e:"#d9962a",f:"#ff6ad5"}},bloomlet:{p:{d:"#86b8ff",e:"#4a72d6",k:"#c9dcff",f:"#ffe27a",g:"#d9a531"}},embit:{h:-150},driplet:{h:150},sprigg:{h:-90},pebblo:{p:{a:"#f2a7c0",b:"#c06c8c",c:"#ffd9e6",d:"#b38cff",e:"#e0ccff"}},zapkit:{h:130},flexo:{p:{a:"#ffd56a",b:"#d9a032",c:"#fff2c4",d:"#2e6bff",f:"#1c1c30"}},lumo:{p:{a:"#ffb0d8",b:"#e46fae",c:"#fff0f8",e:"#7fe4ff",i:"#8a1f5c"}},gulpo:{p:{a:"#7fd3a0",b:"#4f9f70",d:"#ffd36a"}},umbrit:{h:-110,k:["a","b","c","f"]},snackub:{p:{a:"#e8609f",b:"#a8336a",k:"#ffd0e4"}},kettlet:{p:{a:"#d9a531",b:"#9c6c12",c:"#ffe08a",d:"#ffffff"}},rhinub:{h:5,s:3.5},dashkit:{h:-60},veelet:{h:120,k:["a","b","d"]}};
+
+// ---- Luna: a seal-point Siamese ----
+const P_LUNA={a:"#f0dfc2",b:"#d4b088",c:"#fbf3e6",d:"#3d2519",e:"#1f120c",f:"#6a4430",g:"#e6e8ec",h:"#dff2ff",i:"#9fd0f5",j:"#9fc4d8",k:"#c9a07a"};
+const lunaEyes=(x,y,sleepy)=>sleepy
+  ?[DOT([[x,y+1],[x+1,y+1],[x+2,y],[x+3,y]],"i",{m:1}),DOT([[x,y+2],[x+1,y+2],[x+2,y+1],[x+3,y+1]],"e",{m:1})]
+  :[DOT([[x,y],[x+1,y],[x+2,y],[x+3,y],[x,y+1],[x+1,y+1],[x+2,y+1],[x+3,y+1],[x+1,y+2],[x+2,y+2],[x+3,y+2],[x+1,y-1],[x+2,y-1]],"i",{m:1}),DOT([[x+2,y],[x+2,y+1],[x+2,y-1]],"e",{m:1}),DOT([[x+1,y],[x,y+1]],"h",{m:1}),DOT([[x+1,y-1]],"W",{m:1})];
+const lunaBody=(sleepy)=>[
+  ...chain([[30,43],[36,43.4],[40,41],[41.4,36],[39.6,32]],2.4,1.6,"d"),
+  E(17,39.6,5.4,5.6,"b",{m:1}),
+  E(24,33.4,8.4,11.4,"a"),E(24,29.6,5,7.4,"c",{n:1}),
+  E(21.2,36.6,2.4,5.4,"k",{m:1}),E(21.2,41,2.3,3.8,"d",{m:1}),E(21.2,44.4,2.6,1.4,"e",{m:1}),
+  PG([[17,14],[14.4,1.6],[21.6,8.6]],"d",{m:1}),PG([[17.4,12],[16,4.8],[20.4,8.8]],"e",{m:1,n:1}),
+  E(24,16.6,8.8,7.8,"a"),
+  E(24,18.4,6.8,6.4,"f",{n:1}),E(24,19.6,5,5,"d",{n:1}),PG([[21.6,12.6],[24,9],[26.4,12.6],[25.4,16],[22.6,16]],"f",{n:1}),PG([[22.8,13],[24,11],[25.2,13],[24.6,15.4],[23.4,15.4]],"d",{n:1}),
+  E(24,21.6,1.6,1.1,"e"),DOT([[23,23],[24,23]],"e"),DOT([[22,24],[25,24]],"f"),
+  ...lunaEyes(18,17,sleepy),
+  RC(18.4,24.6,11.2,1.8,"j",{f:1}),E(24,27,2.2,1.8,"g"),DOT([[23,26],[24,26]],"W"),DOT([[22,27],[25,27],[23,28],[24,28]],"#7a7e86")];
+defN("luna",48,P_LUNA,lunaBody(false));
+defN("lunasleepy",48,P_LUNA,[...lunaBody(true),DOT([[4,6],[5,5],[6,6],[5,7],[40,10],[41,9],[42,10],[41,11],[7,30],[43,24]],"#ffe9a0")]);
+defN("lunachibi",48,P_LUNA,[
+  ...chain([[31,41],[37,40],[40,36],[39,31],[37,29]],2.2,1.6,"d"),
+  E(18.4,42.4,3.2,2,"e",{m:1}),E(24,35.6,8.6,8,"a"),E(24,37.4,5,5.4,"c",{n:1}),E(19.6,38.6,2.6,4.4,"d",{m:1}),
+  PG([[13.4,19],[11.6,5],[20.6,12.6]],"d",{m:1}),PG([[14,17],[13,8],[19,12.8]],"e",{m:1,n:1}),
+  E(24,21,11,9.4,"a"),E(24,23,8.4,7.6,"f",{n:1}),E(24,24.4,6.4,6,"d",{n:1}),PG([[21,15],[24,11],[27,15],[26,19],[22,19]],"f",{n:1}),
+  DOT([[17,20],[18,20],[19,20],[20,20],[17,21],[18,21],[19,21],[20,21],[18,22],[19,22],[20,22],[18,19],[19,19]],"i",{m:1}),DOT([[19,19],[19,20],[19,21],[19,22]],"e",{m:1}),DOT([[18,20],[17,21]],"h",{m:1}),DOT([[18,19]],"W",{m:1}),
+  E(24,26.4,1.6,1.1,"e"),DOT([[23,28],[24,28]],"e"),DOT([[13,26],[14,26],[34,26],[35,26]],"#d99a9a"),
+  RC(17.4,29.6,13.2,1.8,"j",{f:1}),E(24,32,2.2,1.8,"g"),DOT([[23,31],[24,31]],"W"),DOT([[22,32],[25,32],[23,33],[24,33]],"#7a7e86")]);
+// Which Luna drawing is used: "luna", "lunasleepy" or "lunachibi".
+const LUNA_ART="luna";SPR.lunapet=SPR[LUNA_ART];
+for(const k of ["oriel","bloomlet","lunapet"])for(const st of [0,1,2])SPR[k+st]=SPR[k];
+const MYTH={lunapet:{p:{a:"#f3f2ef",b:"#c9c6c2",c:"#ffffff",d:"#5a6478",e:"#363d4c",f:"#7d879a",k:"#aeb4c0",i:"#7fc4ff"}},hollow:{p:{a:"#e9e5f0",b:"#a9a0bb",h:"#c9c1d8",b2:"#16205a",d:"#2a6bff",e:"#8fe0ff",q:"#7a5cff",p:"#33207a",f:"#3fa0ff",g:"#001030"}},oriel:{p:{a:"#fff1d6",b:"#e3c48f",d:"#ffd36a",e:"#d9962a",f:"#ff6ad5"}},bloomlet:{p:{d:"#86b8ff",e:"#4a72d6",k:"#c9dcff",f:"#ffe27a",g:"#d9a531"}},embit:{h:-150},driplet:{h:150},sprigg:{h:-90},pebblo:{p:{a:"#f2a7c0",b:"#c06c8c",c:"#ffd9e6",d:"#b38cff",e:"#e0ccff"}},zapkit:{h:130},flexo:{p:{a:"#ffd56a",b:"#d9a032",c:"#fff2c4",d:"#2e6bff",f:"#1c1c30"}},lumo:{p:{a:"#ffb0d8",b:"#e46fae",c:"#fff0f8",e:"#7fe4ff",i:"#8a1f5c"}},gulpo:{p:{a:"#7fd3a0",b:"#4f9f70",d:"#ffd36a"}},umbrit:{h:-110,k:["a","b","c","f"]},snackub:{p:{a:"#e8609f",b:"#a8336a",k:"#ffd0e4"}},kettlet:{p:{a:"#d9a531",b:"#9c6c12",c:"#ffe08a",d:"#ffffff"}},rhinub:{h:5,s:3.5},dashkit:{h:-60},veelet:{h:120,k:["a","b","d"]}};
 
 /* ---------- Pixel pets ---------- */
 const PETS={
@@ -2965,7 +2994,8 @@ const PETS={
  veelet:{el:"Sky",r:3,price:0,code:1,names:["Veelet","Veehawk","Taperion"]},
  hollow:{el:"Shadow",r:5,price:0,origin:1,names:["Hollowpup","Hollowmaw","Hollowfang"]},
  oriel:{el:"Psychic",r:5,price:0,origin:1,one:1,names:["Oriel","Oriel","Oriel"]},
- bloomlet:{el:"Grass",r:5,price:0,origin:1,one:1,names:["Bloomlet","Bloomlet","Bloomlet"]}
+ bloomlet:{el:"Grass",r:5,price:0,origin:1,one:1,names:["Bloomlet","Bloomlet","Bloomlet"]},
+ lunapet:{el:"Normal",r:5,price:0,origin:1,one:1,names:["Luna","Luna","Luna"],oneNote:"Luna doesn't evolve. She's already perfect."}
 };
 const PET_DESC={
  embit:"A baby dragon whose crest burns hotter after every PR. It puffs warm air at you when it's proud.",
@@ -2984,7 +3014,8 @@ const PET_DESC={
  veelet:"Only appears to those with the right code. Its wings make a perfect V, the shape every lifter is chasing.",
  hollow:"The founder's own. A masked wraith that feeds on missed reps and grows a new crimson tendril for every hard session. Only the founder can give one away.",
  oriel:"A moon-crested spirit that drifts above people who train while everyone else sleeps. Its star gem glows on PR days.",
- bloomlet:"A shy flower fairy said to bloom only for people who never skip mobility. Gifted by the founder."
+ bloomlet:"A shy flower fairy said to bloom only for people who never skip mobility. Gifted by the founder.",
+ lunapet:"A seal-point Siamese with ice-blue eyes and a stare that sees straight through excuses. Loves sunbeams, judges skipped leg days. There is only one Luna."
 };
 const MYTH_ODDS=256;
 const sprite=(id,st,size,myth)=>spriteImg(id+st+(myth?"m":""),size,PETS[id]?(myth?"Shiny ":"")+PETS[id].names[st]:"");
@@ -3042,7 +3073,7 @@ function openPet(id){
     <p class="pdesc">${esc(PET_DESC[id]||"")}</p>
     <div class="pfacts"><div><span class="eyebrow">Joined you</span><b>${pt.got?fmtD(pt.got):"Early days"}</b></div><div><span class="eyebrow">Found</span><b>${esc(VIA[pt.via]||(pt.via?"In a "+pt.via:"Your first pet"))}</b></div>
       ${my?`<div class="wide"><span class="eyebrow">Mythic</span><b>A 1 in ${MYTH_ODDS} shiny with its own colours</b></div>`:""}</div>
-    ${P.one?`<p class="muted" style="text-align:center;font-size:.88rem;margin:0">A mythical spirit. It doesn't evolve; it just keeps getting stronger.</p>`:`<div class="evo">${[0,1,2].map(i=>`<span class="${i>stg?"lock":""}">${sprite(id,i,52,my)}<small>${i>stg?"???":esc(P.names[i])}<br>${i===0?"Lv 1":i===1?"Lv 8":"Lv 20"}</small></span>`).join('<i>›</i>')}</div>`}
+    ${P.one?`<p class="muted" style="text-align:center;font-size:.88rem;margin:0">${esc(P.oneNote||"A mythical spirit. It doesn't evolve; it just keeps getting stronger.")}</p>`:`<div class="evo">${[0,1,2].map(i=>`<span class="${i>stg?"lock":""}">${sprite(id,i,52,my)}<small>${i>stg?"???":esc(P.names[i])}<br>${i===0?"Lv 1":i===1?"Lv 8":"Lv 20"}</small></span>`).join('<i>›</i>')}</div>`}
     ${act?(snacks?`<button class="btn ghost" id="pp-feed">Feed a snack (${snacks} left)</button>`:""):`<button class="btn" id="pp-act">Make ${esc(P.names[stg])} my active pet</button>`}
     <p class="muted" style="font-size:.85rem;text-align:center">Your active pet earns 5 XP a set, 25 a PR and 50 for each finished workout.</p>`);
   m.querySelector("#mh-back").onclick=closeModal;
