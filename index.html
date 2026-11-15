@@ -1014,6 +1014,23 @@ body{min-height:100dvh}
 .sheet.lbsheet{height:min(86dvh,760px)}
 .lbbox{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;transition:opacity .15s}
 .lbbox.busy{opacity:.45;pointer-events:none}
+
+/* ---- v27: full-screen game sheets, compact results ---- */
+.modal:has(.sheet.pzsheet),.modal:has(.sheet.btsheet){padding:0}
+.sheet.btsheet,.sheet.pzsheet{max-width:520px;padding:calc(env(safe-area-inset-top,0px) + 10px) max(14px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));gap:12px;scrollbar-width:none}
+.sheet.btsheet::-webkit-scrollbar,.sheet.pzsheet::-webkit-scrollbar{display:none;width:0;height:0}
+#bk-foot,#cr-foot,#w-foot{display:flex;flex-direction:column;gap:12px}
+.bktray{margin-bottom:0}
+.pzres{display:flex;flex-direction:column;gap:12px}
+.pzres-top{display:flex;align-items:center;gap:12px;background:var(--surface-2);border-radius:16px;padding:12px 14px}
+.pzres-top>div{flex:1;min-width:0}
+.pzres h2{margin:0;font-size:1.35rem;line-height:1.15;color:var(--xp)}
+.pzres p{margin:3px 0 0;font-size:.85rem;line-height:1.35;color:var(--muted)}
+.xpchip{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:70px;padding:8px 10px;border-radius:12px;background:var(--xp-soft);color:var(--xp)}
+.xpchip b{font-family:var(--display);font-size:1.45rem;font-weight:900;line-height:1}
+.xpchip small{font-size:.64rem;font-weight:800;letter-spacing:.1em;margin-top:2px}
+.wgrid{--wsz:max(34px,min(15vw,58px,calc((100dvh - 400px) / var(--rows,6) - 6px)))}
+.wrow{grid-template-columns:repeat(5,var(--wsz))}.wc{font-size:calc(var(--wsz) * .48)}
 </style>
 </head>
 <body>
@@ -4819,8 +4836,10 @@ function pzFinish(k,base,daily,ok,meta){
     pzQueue({k,mode:daily?"daily":diff,day:today(),score:meta.score,time:meta.time,of:meta.of,post:first?"daily":!daily&&k!=="word"?"pb":null})}
   return {xp:got+bonus,bonus,disc,capped:got<xp,diff:daily?null:diff};
 }
-const pzResult=(title,sub,r,again)=>`<div class="bt-res win"><h2>${title}</h2><p class="muted" style="text-align:center">${sub}</p><div class="sumgrid" style="grid-template-columns:1fr"><div><b style="color:var(--xp)">+${r.xp}</b><span>XP${r.bonus?" · includes the daily bonus":r.diff&&r.diff!=="medium"?` · ${DIFF[r.diff].n} ×${DIFF[r.diff].x}`:""}</span></div></div>
-  ${r.capped?`<p class="note" style="padding:0;text-align:center">You've reached today's puzzle XP cap of ${CAPS.p}. You can keep playing for fun.</p>`:""}</div><div class="btgrid"><button class="btn ghost" id="pz-again">${again||"Play another"}</button><button class="btn" id="pz-done">Done</button></div>`;
+const pzResult=(title,sub,r,again)=>{const tag=r.bonus?"includes the daily bonus":r.diff&&r.diff!=="medium"?`${DIFF[r.diff].n} ×${DIFF[r.diff].x} XP`:"";
+  return `<div class="pzres"><div class="pzres-top"><div><h2>${title}</h2><p>${sub}${tag?` · ${tag}`:""}</p></div><span class="xpchip"><b>+${r.xp}</b><small>XP</small></span></div>
+  ${r.capped?`<p class="note" style="padding:0;text-align:center;margin:0">You've reached today's puzzle XP cap of ${CAPS.p}. You can keep playing for fun.</p>`:""}
+  <div class="btgrid"><button class="btn ghost" id="pz-again">${again||"Play another"}</button><button class="btn" id="pz-done">Done</button></div></div>`};
 function pickDiff(k){
   const P=pz();P.diff=P.diff||{};const cur=P.diff[k]||"medium";
   const m=openModal(`${mhead(PZ[k].n)}<h2>Choose a difficulty</h2><div class="dfl">${Object.entries(DIFF).map(([d,v])=>`<button class="dfb${d===cur?" last":""}" data-d="${d}"><b>${v.n}</b><span>${DIFF_D[k][d]}</span><em>${v.x===1?"Normal XP":"XP ×"+v.x}</em></button>`).join("")}</div>
@@ -5040,7 +5059,7 @@ function openWord(daily,diff){
   const P=pz(),ans=daily?shuffled(ANSW,"gymword")[Math.floor(new Date(today()+"T12:00:00").getTime()/864e5)%ANSW.length]:ANSW[Math.floor(rnd()*ANSW.length)];
   const saved=daily&&P.word&&P.word.d===today()?P.word:null;let gs=saved?saved.g.slice():[],cur="",over=saved?!!saved.over:false,t0=Date.now()-((saved&&saved.t)||0)*1000;
   const m=openModal(`${mhead(daily?"Daily Gym Word":`Gym Word · ${DIFF[diff].n}`)}<p class="muted" style="font-size:.88rem;text-align:center;margin:0">Green is the right letter in the right place. Yellow is in the word but somewhere else.${hard?" Hard: use every green and yellow letter.":""}</p>
-    <div class="wbox"><div class="wmsg" id="w-msg" role="alert" aria-live="assertive"></div><div class="wgrid" id="w-grid"></div></div><div id="w-foot"><div class="wkeys" id="w-keys"></div></div>`);
+    <div class="wbox"><div class="wmsg" id="w-msg" role="alert" aria-live="assertive"></div><div class="wgrid" id="w-grid" style="--rows:${tries}"></div></div><div id="w-foot"><div class="wkeys" id="w-keys"></div></div>`);
   m.classList.add("pzsheet");
   const secs=()=>Math.round((Date.now()-t0)/1000);
   const draw=()=>{m.querySelector("#w-grid").innerHTML=Array.from({length:tries},(_,r)=>{const g=gs[r],mk=g?wordMarks(g,ans):null,txt=g||(r===gs.length?cur:"");
