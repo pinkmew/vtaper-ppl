@@ -878,6 +878,89 @@ nav.tabs .tab .tl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-
 .reveal .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;animation:flash .6s ease-out}
 @keyframes flash{0%{opacity:.85}100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){.eggbtn,.eggbtn.shake2{animation:none}}
+/* ---- v22: battles, puzzles, richer posts ---- */
+.tchip{font-size:.68rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:color-mix(in srgb,var(--tc) 24%,var(--surface-2));color:var(--fg);box-shadow:inset 0 0 0 1.5px var(--tc);white-space:nowrap}
+.tchip.lock{--tc:var(--line);color:var(--muted);box-shadow:inset 0 0 0 1.5px var(--line);background:none}
+.tchip.st-burn{--tc:#f0803c}.tchip.st-stun{--tc:#e9bb2e}
+.pbt{display:flex;flex-direction:column;gap:10px}
+.statgrid{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:6px 10px;align-items:center;font-size:.86rem}
+.statgrid span{color:var(--muted);font-weight:700}.statgrid b{text-align:right}
+.stb{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}.stb div{height:100%;border-radius:99px;background:var(--xp)}
+.mvlist{display:flex;flex-direction:column;gap:6px}
+.bmv{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:12px;background:var(--surface-2);border:0;border-left:5px solid var(--tc);color:var(--fg);font-family:var(--body);text-align:left;width:100%;min-width:0}
+button.bmv{cursor:pointer}button.bmv[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--xp);background:var(--xp-soft)}
+.mv-n{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25}.mv-n small{color:var(--muted);font-size:.74rem}
+.mv-p{font-family:var(--display);font-weight:800;font-size:1.05rem;font-variant-numeric:tabular-nums}
+.discrow{display:flex;align-items:center;gap:8px}.discrow .bmv{flex:1}
+.disc{display:inline-block;flex:none;width:var(--ds,44px);height:var(--ds,44px);border-radius:50%;background:radial-gradient(circle,var(--surface) 0 14%,#0000 15%),conic-gradient(from 20deg,var(--tc),#fff8 12%,var(--tc) 30%,color-mix(in srgb,var(--tc) 55%,#000) 55%,var(--tc) 75%,#fff6 88%,var(--tc));box-shadow:inset 0 0 0 2px #0003}
+.teamrow{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.monchip{display:inline-flex;flex-direction:column;align-items:center;gap:0;background:var(--surface-2);border-radius:12px;padding:6px 6px 4px;min-width:58px}
+.monchip small{font-size:.68rem;font-weight:800;color:var(--muted)}
+.petbtn{border:0;background:none;padding:0;cursor:pointer}
+.btgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:center}
+.btrank{flex-direction:row;align-items:center;gap:14px;box-shadow:inset 0 0 0 1.5px var(--tc)}
+.shield{flex:none;width:54px;height:60px;display:grid;place-items:center;background:var(--tc);clip-path:polygon(50% 0,100% 16%,100% 58%,50% 100%,0 58%,0 16%)}
+.shield b{font-family:var(--display);font-size:1.5rem;font-weight:900;color:#1a1408}
+.capgrid{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:.88rem}.capgrid span{color:var(--muted)}
+.seg3{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
+.seg3 button{border:0;border-radius:12px;padding:11px 6px;font-weight:800;font-size:.95rem;background:var(--surface-2);color:var(--fg);cursor:pointer;font-family:var(--body)}
+.seg3 button[aria-pressed="true"]{background:var(--xp);color:var(--ink)}.seg3 button:disabled{opacity:.4}
+.tcrow{display:grid;grid-template-columns:86px minmax(0,1fr);gap:10px;align-items:start;padding:9px 0;border-top:1px solid var(--line)}
+.tcrow>div{display:flex;flex-direction:column;gap:4px}.tcrow small{font-size:.66rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.tcrow span{display:flex;flex-wrap:wrap;gap:4px}
+.howl{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:.95rem}
+.sheet.btsheet,.sheet.pzsheet{max-height:100%;height:100%;border-radius:0;max-width:480px;padding:14px 14px calc(14px + env(safe-area-inset-bottom));animation:none}
+.bt{display:flex;flex-direction:column;gap:10px;flex:1;min-height:0}
+.bt-top{display:flex;align-items:center;gap:10px}.bt-top b{flex:1;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bt-field{flex:1;min-height:250px;display:flex;flex-direction:column;justify-content:space-between;gap:6px;border-radius:18px;padding:12px;background:linear-gradient(180deg,color-mix(in srgb,var(--xp) 10%,var(--surface-2)),var(--surface-2) 55%,color-mix(in srgb,var(--pull,#4da3ff) 12%,var(--surface-2)))}
+.bt-row{display:flex;align-items:center;gap:8px}.bt-row.foe{justify-content:flex-end}.bt-row.me{justify-content:flex-start}
+.bt-info{flex:1;min-width:0;background:var(--surface);border-radius:14px;padding:9px 11px;display:flex;flex-direction:column;gap:5px;box-shadow:inset 0 0 0 1px var(--line)}
+.bi-n{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.bi-n b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bi-t{display:flex;gap:4px;flex-wrap:wrap}.bi-t .tchip{font-size:.58rem;padding:2px 7px}
+.bi-b{display:flex;justify-content:space-between;align-items:center;font-size:.8rem}
+.hpbar{display:block;height:10px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.hpbar i{display:block;height:100%;border-radius:99px;background:#4cd964;transition:width .35s ease-out}.hpbar i.mid{background:#f2c53d}.hpbar i.low{background:#ff5b4f}
+.tdots{display:flex;gap:4px}.tdots i{width:9px;height:9px;border-radius:50%;background:var(--muted);opacity:.55}.tdots i.on{background:var(--xp);opacity:1}.tdots i.out{background:var(--push);opacity:.35}
+.bt-spr{flex:none;display:grid;place-items:center;min-width:112px}
+.bt-row.me .bt-spr img{transform:scaleX(-1)}
+.bt-spr .down{display:block;opacity:.25;transform:translateY(14px) scale(.8);transition:all .4s}
+.bt-row.me .bt-spr.lunge{animation:lungeR .32s}.bt-row.foe .bt-spr.lunge{animation:lungeL .32s}
+.bt-spr.hit{animation:bhit .35s}.bt-spr.hit2{animation:bhit .5s 2}
+@keyframes lungeR{40%{transform:translate(26px,-18px)}}@keyframes lungeL{40%{transform:translate(-26px,18px)}}
+@keyframes bhit{0%,100%{transform:none;filter:none}25%{transform:translateX(-7px);filter:brightness(2.2)}50%{transform:translateX(7px)}75%{transform:translateX(-4px);filter:brightness(1.6)}}
+.bt-log{border:0;text-align:left;min-height:54px;background:var(--surface-2);color:var(--fg);border-radius:14px;padding:12px 14px;font-weight:700;font-size:.98rem;font-family:var(--body);box-shadow:inset 0 0 0 1px var(--line)}
+.bt-acts{display:flex;flex-direction:column;gap:8px;min-height:150px}
+.bt-moves{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mvbtn{border:0;border-radius:14px;padding:11px 10px;min-height:58px;display:flex;flex-direction:column;gap:2px;text-align:left;cursor:pointer;font-family:var(--body);color:var(--fg);background:color-mix(in srgb,var(--tc) 26%,var(--surface-2));box-shadow:inset 0 0 0 2px var(--tc);min-width:0}
+.mvbtn b{font-size:.95rem;line-height:1.15}.mvbtn small{font-size:.72rem;color:var(--muted);font-weight:700}.mvbtn em{font-style:normal}.mvbtn .se{color:#4cd964}.mvbtn .nve{color:#ff8a80}
+.bt-wait{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:14px 8px}.bt-wait .muted{font-size:.85rem}
+.spin{width:26px;height:26px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--xp);animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.bt-sw{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.swbtn{border:0;border-radius:12px;background:var(--surface-2);color:var(--fg);display:flex;align-items:center;gap:8px;padding:6px 8px;text-align:left;cursor:pointer;font-family:var(--body);min-width:0}
+.swbtn span{display:flex;flex-direction:column;min-width:0;line-height:1.2}.swbtn b{font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.swbtn small{font-size:.7rem;color:var(--muted)}.swbtn:disabled{opacity:.45}
+.bt-res{display:flex;flex-direction:column;gap:8px}.bt-res h2{text-align:center;font-size:1.6rem}.bt-res.win h2{color:var(--xp)}.bt-res.lose h2{color:var(--muted)}
+.pzhead{flex-direction:row;align-items:center;gap:14px}.pzcard .pz-top{display:flex;gap:12px;align-items:center}
+.pz-ico{flex:none;width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:1.7rem;background:var(--xp-soft);color:var(--xp)}
+.pzbar{display:flex;justify-content:space-between;align-items:center;gap:12px}.pzbar .muted{font-size:.82rem}.pzbar b{font-size:1.2rem}
+.crgrid{display:grid;grid-template-columns:repeat(var(--n),1fr);aspect-ratio:1;border:3px solid #17140f;border-radius:10px;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+.crc{border:solid #17140f;border-radius:0;padding:0;margin:0;font-size:clamp(1rem,5.4vw,1.6rem);font-weight:800;color:#17140f;cursor:pointer;display:grid;place-items:center;min-width:0;line-height:1}
+.crc.bad{color:#c4121f;animation:bhit .3s}.crgrid.solved .crc{filter:saturate(1.3)}
+.wgrid{display:flex;flex-direction:column;gap:6px;align-items:center}.wrow{display:grid;grid-template-columns:repeat(5,min(15vw,58px));gap:6px}
+.wc{aspect-ratio:1;display:grid;place-items:center;border-radius:10px;font-family:var(--display);font-weight:800;font-size:1.6rem;box-shadow:inset 0 0 0 2px var(--line);color:var(--fg)}
+.wc.t{box-shadow:inset 0 0 0 2px var(--muted)}.wc.y,.wky.y{background:#3fa55a;color:#fff;box-shadow:none}.wc.m,.wky.m{background:#d9a520;color:#fff;box-shadow:none}.wc.n{background:var(--surface-2);color:var(--muted);box-shadow:none}
+.wkeys{display:flex;flex-direction:column;gap:6px}.wkr{display:flex;gap:4px;justify-content:center}
+.wky{flex:1;max-width:38px;height:50px;border:0;border-radius:8px;background:var(--surface-2);color:var(--fg);font-weight:800;font-size:.95rem;cursor:pointer;padding:0;font-family:var(--body)}
+.wky.wide{max-width:60px;flex:1.6;font-size:.72rem}.wky.n{opacity:.38}
+.bkgrid{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;aspect-ratio:1;background:var(--surface-2);border-radius:12px;padding:4px;touch-action:none}
+.bkgrid i{border-radius:5px;background:color-mix(in srgb,var(--fg) 7%,transparent)}.bkgrid i.f{box-shadow:inset 0 -3px 0 #0003,inset 0 2px 0 #fff4}.bkgrid i.g{opacity:.45}
+.bktray{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+.bkslot{border:0;height:104px;border-radius:14px;background:var(--surface-2);display:grid;place-items:center;cursor:grab;touch-action:none;padding:0}.bkslot.dead{opacity:.4}.bkslot.lift .bkp{opacity:.2}
+.bkp{position:relative;display:block;pointer-events:none}.bkp i{position:absolute;border-radius:4px;box-shadow:inset 0 -3px 0 #0003,inset 0 2px 0 #fff4}
+.bkfloat{position:fixed;left:0;top:0;z-index:999;pointer-events:none;opacity:.92}
+.fex{display:flex;flex-direction:column;gap:2px;font-size:.82rem;color:var(--muted)}.fex b{color:var(--fg);font-weight:700}
+.fphoto{width:100%;max-height:220px;object-fit:cover;border-radius:12px;display:block;background:var(--surface-2);min-height:60px}
+.swrow{display:flex;align-items:center;gap:10px;font-weight:700;font-size:.92rem}.swrow input{width:22px;height:22px;accent-color:var(--xp)}
+.chat-btl{border:0;background:var(--surface-2);color:var(--fg);border-radius:12px;padding:8px 12px;font-weight:800;cursor:pointer;font-family:var(--body);flex:none}
+.newdot{font-size:.6rem;font-weight:900;background:var(--xp);color:var(--ink);border-radius:99px;padding:1px 6px;letter-spacing:.04em}
 </style>
 </head>
 <body>
@@ -898,6 +981,8 @@ nav.tabs .tab .tl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-
     <section id="v-train" class="view"></section>
     <section id="v-today" class="view" hidden></section>
     <section id="v-cardio" class="view" hidden></section>
+    <section id="v-battle" class="view" hidden></section>
+    <section id="v-puzzles" class="view" hidden></section>
     <section id="v-progress" class="view" hidden></section>
     <section id="v-shop" class="view" hidden></section>
     <section id="v-friends" class="view" hidden></section>
@@ -1273,7 +1358,7 @@ function compute(){
   const tierOf=x=>first[x]==null?null:{step:stepB[x],i:Math.floor(stepB[x]/3),L:Lb[x]??null,g:best[x]/first[x]-1};
   const ctx={TDAYS,WT,best,first,hist,prs,sets,finished,volume,warm,drops,streak,bestStreak,dstreak,perfect,tierOf,stepB,rankUps,dates,times,bonusXP,cardio};
   const badgeXP=Object.keys(state.earned).reduce((a,id)=>a+(BADGES.find(b=>b.id===id)?.xp||0),0);
-  const xp=sets*10+prs.length*50+finished*100+rankUps.length*40+badgeXP+bonusXP+cardio.xp;
+  const xp=sets*10+prs.length*50+finished*100+rankUps.length*40+badgeXP+bonusXP+cardio.xp+(state.bx||0);
   return {...ctx,xp,...levelOf(xp)};
 }
 function levelOf(xp){let L=1,need=200,acc=0;while(xp>=acc+need){acc+=need;L++;need=200+75*(L-1)}
@@ -1585,7 +1670,7 @@ vt.addEventListener("click",e=>{
       save();toast("✓","Back to your regular plan","Anything you already logged today is kept.","");refresh();break}
     case "finish":{const key=sessKey(today(),current);const boost=state.boostOn;const res=commit(()=>{const s=getSess(true);s.finished=true;s.name=P(current).name;s.at=new Date().toTimeString().slice(0,5);if(boost){s.boost=boost.m;state.boostOn=null}},{noLevelModal:true});
       if(boost)setTimeout(()=>toast("⚡",`×${boost.m} XP boost used`,"This workout's XP is boosted.",""),400);pushSchedule();
-      {const s=state.sessions[key],c2=compute(),ws=doneSets(s).filter(x=>x.t!=="w");postActivity("workout",{name:s.name,sets:ws.length,volume:Math.round(ws.reduce((a,x)=>a+volOf(x.x,x,s.date),0)),prs:c2.prs.filter(p=>p.k===key).map(p=>exName(p.x))})}
+      {const s=state.sessions[key],c2=compute(),ws=doneSets(s).filter(x=>x.t!=="w");postActivity("workout",{key,ex:exSummary(s),name:s.name,sets:ws.length,volume:Math.round(ws.reduce((a,x)=>a+volOf(x.x,x,s.date),0)),prs:c2.prs.filter(p=>p.k===key).map(p=>exName(p.x))})}
       showSummary(key,res);stopRest();pushRestCancel();refresh();break}
     case "summary":showSummary(sessKey(today(),current));break;
     case "clearday":{const m=openModal(`<h2>Clear today's log?</h2><p>This removes every set and change you made for ${esc(P(current).d)} today. Other days stay as they are.</p>
@@ -2000,6 +2085,7 @@ function showSummary(key,res){
     ${prs.length?`<div class="panel" style="padding:12px"><span class="eyebrow">Personal records</span>${prs.map(r=>`<p>${esc(exName(r.x))}</p>`).join("")}</div>`:(rus.length?"":`<p class="muted">No PRs today. Matching your numbers on a cut still counts as progress.</p>`)}
     <div style="display:flex;flex-direction:column;gap:6px"><span class="muted num">Level ${c.level} · ${fmtNum(c.into)} / ${fmtNum(c.need)} XP</span><span class="bar"><i style="width:${(c.into/c.need*100).toFixed(1)}%"></i></span></div>
     <label class="btn ghost phbtn" for="ph-in" data-phkey="${key}">${s.photo?"Photo added ✓ · change it":"Add a workout photo"}</label>
+    ${me&&myProfile?`<label class="swrow"><input type="checkbox" id="sum-share" data-key="${key}" ${s.photo&&!s.shared?"":"checked"}> Share the photo with friends</label><p class="note" style="padding:0;margin-top:-8px">Friends see your exercises and weights on the post. The photo is only added if this is on.</p>`:""}
     <button class="btn" data-close>Done</button>`);
 }
 
@@ -2283,13 +2369,13 @@ function invPanel(){
 const DUP=[25,60,150,400];
 const CHEST_X=[{kind:"frame",id:"hoard"},{kind:"banner",id:"vault"},{kind:"title",id:"jackpot"}];
 const CHESTS=[
- {id:"bronze",name:"Bronze chest",price:60,r:0,drops:[{w:30,t:"gems",lo:20,hi:50},{w:22,t:"snack",n:2},{w:18,t:"boost15",n:1},{w:12,t:"freeze",n:1},{w:14,t:"item",r:0},{w:4,t:"item",r:1}]},
- {id:"silver",name:"Silver chest",price:150,r:1,drops:[{w:22,t:"gems",lo:60,hi:130},{w:15,t:"snack",n:5},{w:18,t:"boost2",n:1},{w:13,t:"freeze",n:2},{w:22,t:"item",r:1},{w:9,t:"item",r:2},{w:1,t:"item",r:3}]},
- {id:"gold",name:"Gold chest",price:400,r:3,drops:[{w:15,t:"gems",lo:150,hi:320},{w:15,t:"boost2",n:2},{w:12,t:"freeze",n:3},{w:40,t:"item",r:2},{w:15,t:"item",r:3},{w:3,t:"excl"}]}
+ {id:"bronze",name:"Bronze chest",price:60,r:0,drops:[{w:30,t:"gems",lo:20,hi:50},{w:22,t:"snack",n:2},{w:18,t:"boost15",n:1},{w:12,t:"freeze",n:1},{w:14,t:"item",r:0},{w:4,t:"item",r:1},{w:8,t:"disc"}]},
+ {id:"silver",name:"Silver chest",price:150,r:1,drops:[{w:22,t:"gems",lo:60,hi:130},{w:15,t:"snack",n:5},{w:18,t:"boost2",n:1},{w:13,t:"freeze",n:2},{w:22,t:"item",r:1},{w:9,t:"item",r:2},{w:1,t:"item",r:3},{w:12,t:"disc"}]},
+ {id:"gold",name:"Gold chest",price:400,r:3,drops:[{w:15,t:"gems",lo:150,hi:320},{w:15,t:"boost2",n:2},{w:12,t:"freeze",n:3},{w:40,t:"item",r:2},{w:15,t:"item",r:3},{w:3,t:"excl"},{w:10,t:"disc",n:2}]}
 ];
 const KINDNAME1={frame:"Frame",banner:"Banner",theme:"Theme",title:"Title",pet:"Pet"};
-const dropName=d=>d.t==="gems"?`${d.lo}–${d.hi} gems`:d.t==="item"?`${RAR[d.r].n} item`:d.t==="excl"?"Chest-only Legendary":`${ITEMS[d.t].name}${d.n>1?" ×"+d.n:""}`;
-const dropRar=d=>d.t==="item"?d.r:d.t==="excl"?3:d.t==="gems"?0:ITEMS[d.t].r;
+const dropName=d=>d.t==="disc"?`Move disc${d.n>1?" ×"+d.n:""}`:d.t==="gems"?`${d.lo}–${d.hi} gems`:d.t==="item"?`${RAR[d.r].n} item`:d.t==="excl"?"Chest-only Legendary":`${ITEMS[d.t].name}${d.n>1?" ×"+d.n:""}`;
+const dropRar=d=>d.t==="disc"?1:d.t==="item"?d.r:d.t==="excl"?3:d.t==="gems"?0:ITEMS[d.t].r;
 const pct=(d,ch)=>{const p=d.w/ch.drops.reduce((a,x)=>a+x.w,0)*100;return (p<1?p.toFixed(1):Math.round(p))+"%"};
 function oddsHTML(ch){return `<div class="odds">${ch.drops.map(d=>`<div class="odrow" style="--rc:var(${RAR[dropRar(d)].v})"><i></i><span>${dropName(d)}</span><b class="num">${pct(d,ch)}</b></div>`).join("")}</div>`}
 const rnd=()=>{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]/4294967296};
@@ -2301,6 +2387,7 @@ function rollChest(ch){
   for(const o of ch.drops){if(x<o.w){d=o;break}x-=o.w}
   const gemsRes=(n,r,why)=>{state.gemsEarned=(state.gemsEarned||0)+n;return {pic:spriteImg("gems",112,"Gems"),title:`${n} gems`,sub:why||"Added to your gems.",r}};
   if(d.t==="gems")return gemsRes(d.lo+Math.floor(rnd()*(d.hi-d.lo+1)),d.lo>=150?2:d.lo>=60?1:0);
+  if(d.t==="disc"){const k=randDisc();addDisc(k,d.n||1);return {pic:discPic(k,112),title:`Move disc: ${MV[k].n}`+(d.n>1?` ×${d.n}`:""),sub:"Teach it to any pet from the pet's profile.",r:1}}
   if(ITEMS[d.t]){const extra=addItem(d.t,d.n);return {pic:spriteImg(ITEMS[d.t].spr,112,ITEMS[d.t].name),title:ITEMS[d.t].name+(d.n>1?` ×${d.n}`:""),sub:ITEMS[d.t].desc+(extra?` You were full, so ${extra} became ${extra*20} gems.`:""),r:ITEMS[d.t].r}}
   const list=d.t==="excl"?CHEST_X.map(o=>({kind:o.kind,it:SHOP[o.kind].items.find(i=>i.id===o.id)})):itemPool(d.r);
   const fresh=list.filter(o=>!owns(o.kind,o.it.id)),r=d.t==="excl"?3:d.r;
@@ -2405,6 +2492,9 @@ function renderShop(c){
     ${invPanel()}
     <div class="sect-h"><h3 class="sect">Daily deals</h3><span class="cdn" data-cd="day">${cdText("day")}</span></div>
     <div class="shopgrid">${dailyDeals().map(x=>shopCard(x.kind,x.it,x.price)).join("")}</div>
+    <div class="sect-h"><h3 class="sect">Move discs</h3><span class="cdn" data-cd="week">${cdText("week")}</span></div>
+    <div class="mvlist">${weeklyDiscs().map(k=>`<div class="discrow">${discPic(k,34)}${mvRow(k)}<button class="btn sm" data-buydisc="${k}" ${g<DISC_PRICE?"disabled":""}>${GEM}${DISC_PRICE}${(state.discs||{})[k]?` · have ${state.discs[k]}`:""}</button></div>`).join("")}</div>
+    <p class="note">A disc teaches one pet a battle move. Use it from the pet's profile.</p>
     <div class="subtabs" role="tablist">${kinds.map(k=>`<button role="tab" data-st="${k}" id="st-${k}" aria-selected="${shopTab===k}">${k==="pet"?"Pets":SHOP[k].tab}</button>`).join("")}</div>
     <div class="rarbar">${[["-1","All"]].concat(RAR.map((r,i)=>[String(i),r.n])).map(([v,n])=>`<button data-rf="${v}" aria-pressed="${String(shopRar)===v}" style="--rc:var(${v==="-1"?"--muted":RAR[+v].v})">${n}</button>`).join("")}</div>
     <p class="note">${shopTab==="pet"?(noPet?"Choose your first pet. Embit, Driplet or Sprigg is free.":"Pets level up as you train and evolve at levels 8 and 20. Your active pet earns the XP."):SHOP[shopTab].blurb}</p>`;
@@ -2969,7 +3059,7 @@ const P_LUNA={a:"#f0dfc2",b:"#d4b088",c:"#fbf3e6",d:"#3d2519",e:"#1f120c",f:"#6a
 const lunaEyes=(x,y,sleepy)=>sleepy
   ?[DOT([[x,y+1],[x+1,y+1],[x+2,y],[x+3,y]],"i",{m:1}),DOT([[x,y+2],[x+1,y+2],[x+2,y+1],[x+3,y+1]],"e",{m:1})]
   :[DOT([[x,y],[x+1,y],[x+2,y],[x+3,y],[x,y+1],[x+1,y+1],[x+2,y+1],[x+3,y+1],[x+1,y+2],[x+2,y+2],[x+3,y+2],[x+1,y-1],[x+2,y-1]],"i",{m:1}),DOT([[x+2,y],[x+2,y+1],[x+2,y-1]],"e",{m:1}),DOT([[x+1,y],[x,y+1]],"h",{m:1}),DOT([[x+1,y-1]],"W",{m:1})];
-const lunaBody=(sleepy)=>[
+const lunaBody=(sleepy,collar="j")=>[
   ...chain([[30,43],[36,43.4],[40,41],[41.4,36],[39.6,32]],2.4,1.6,"d"),
   E(17,39.6,5.4,5.6,"b",{m:1}),
   E(24,33.4,8.4,11.4,"a"),E(24,29.6,5,7.4,"c",{n:1}),
@@ -2979,7 +3069,7 @@ const lunaBody=(sleepy)=>[
   E(24,18.4,6.8,6.4,"f",{n:1}),E(24,19.6,5,5,"d",{n:1}),PG([[21.6,12.6],[24,9],[26.4,12.6],[25.4,16],[22.6,16]],"f",{n:1}),PG([[22.8,13],[24,11],[25.2,13],[24.6,15.4],[23.4,15.4]],"d",{n:1}),
   E(24,21.6,1.6,1.1,"e"),DOT([[23,23],[24,23]],"e"),DOT([[22,24],[25,24]],"f"),
   ...lunaEyes(18,17,sleepy),
-  RC(18.4,24.6,11.2,1.8,"j",{f:1}),E(24,27,2.2,1.8,"g"),DOT([[23,26],[24,26]],"W"),DOT([[22,27],[25,27],[23,28],[24,28]],"#7a7e86")];
+  RC(18.4,24.6,11.2,1.8,collar,{f:1}),E(24,27,2.2,1.8,collar==="j"?"g":"o"),DOT([[23,26],[24,26]],"W"),DOT([[22,27],[25,27],[23,28],[24,28]],collar==="j"?"#7a7e86":"#a8741c")];
 defN("luna",48,P_LUNA,lunaBody(false));
 defN("lunasleepy",48,P_LUNA,[...lunaBody(true),DOT([[4,6],[5,5],[6,6],[5,7],[40,10],[41,9],[42,10],[41,11],[7,30],[43,24]],"#ffe9a0")]);
 defN("lunachibi",48,P_LUNA,[
@@ -2991,9 +3081,14 @@ defN("lunachibi",48,P_LUNA,[
   E(24,26.4,1.6,1.1,"e"),DOT([[23,28],[24,28]],"e"),DOT([[13,26],[14,26],[34,26],[35,26]],"#d99a9a"),
   RC(17.4,29.6,13.2,1.8,"j",{f:1}),E(24,32,2.2,1.8,"g"),DOT([[23,31],[24,31]],"W"),DOT([[22,32],[25,32],[23,33],[24,33]],"#7a7e86")]);
 // Which Luna drawing is used: "luna", "lunasleepy" or "lunachibi".
-const LUNA_ART="luna";SPR.lunapet=SPR[LUNA_ART];
-for(const k of ["oriel","bloomlet","lunapet"])for(const st of [0,1,2])SPR[k+st]=SPR[k];
-const MYTH={lunapet:{p:{a:"#f3f2ef",b:"#c9c6c2",c:"#ffffff",d:"#5a6478",e:"#363d4c",f:"#7d879a",k:"#aeb4c0",i:"#7fc4ff"}},hollow:{p:{a:"#e9e5f0",b:"#a9a0bb",h:"#c9c1d8",b2:"#16205a",d:"#2a6bff",e:"#8fe0ff",q:"#7a5cff",p:"#33207a",f:"#3fa0ff",g:"#001030"}},oriel:{p:{a:"#fff1d6",b:"#e3c48f",d:"#ffd36a",e:"#d9962a",f:"#ff6ad5"}},bloomlet:{p:{d:"#86b8ff",e:"#4a72d6",k:"#c9dcff",f:"#ffe27a",g:"#d9a531"}},embit:{h:-150},driplet:{h:150},sprigg:{h:-90},pebblo:{p:{a:"#f2a7c0",b:"#c06c8c",c:"#ffd9e6",d:"#b38cff",e:"#e0ccff"}},zapkit:{h:130},flexo:{p:{a:"#ffd56a",b:"#d9a032",c:"#fff2c4",d:"#2e6bff",f:"#1c1c30"}},lumo:{p:{a:"#ffb0d8",b:"#e46fae",c:"#fff0f8",e:"#7fe4ff",i:"#8a1f5c"}},gulpo:{p:{a:"#7fd3a0",b:"#4f9f70",d:"#ffd36a"}},umbrit:{h:-110,k:["a","b","c","f"]},snackub:{p:{a:"#e8609f",b:"#a8336a",k:"#ffd0e4"}},kettlet:{p:{a:"#d9a531",b:"#9c6c12",c:"#ffe08a",d:"#ffffff"}},rhinub:{h:5,s:3.5},dashkit:{h:-60},veelet:{h:120,k:["a","b","d"]}};
+// Moon Luna: the same cat with a crescent-moon halo and a gold collar.
+const crescent=(cx,cy,R,r,up)=>{const pts=[],d2r=Math.PI/180,a=(R*R-r*r+up*up)/(2*up),h=Math.sqrt(R*R-a*a),t0=Math.atan2(-a,-h)/d2r+360,t1=Math.atan2(-a,h)/d2r,u0=Math.atan2(up-a,h)/d2r,u1=Math.atan2(up-a,-h)/d2r+360;
+  for(let t=t0;t>=t1;t-=8)pts.push([cx+R*Math.cos(t*d2r),cy+R*Math.sin(t*d2r)]);
+  for(let t=u0;t<=u1;t+=8)pts.push([cx+r*Math.cos(t*d2r),cy-up+r*Math.sin(t*d2r)]);return pts};
+defN("lunamoon",48,{...P_LUNA,o:"#ffd76a",p:"#fff3c4"},[PG(crescent(24,19,17.4,15.2,5),"o"),DOT([[6,6],[7,5],[8,6],[7,7],[41,4],[42,3],[43,4],[42,5],[4,22],[44,20]],"p"),...lunaBody(false,"o"),DOT([[23,7],[24,6],[25,7],[24,8]],"p")]);
+SPR.lunapet=SPR.lunachibi;SPR.lunapet0=SPR.lunachibi;SPR.lunapet1=SPR.luna;SPR.lunapet2=SPR.lunamoon;
+for(const k of ["oriel","bloomlet"])for(const st of [0,1,2])SPR[k+st]=SPR[k];
+const MYTH={lunapet:{p:{a:"#f3f2ef",b:"#c9c6c2",c:"#ffffff",d:"#5a6478",e:"#363d4c",f:"#7d879a",k:"#aeb4c0",i:"#7fc4ff",o:"#cfe4ff",p:"#ffffff"}},hollow:{p:{a:"#e9e5f0",b:"#a9a0bb",h:"#c9c1d8",b2:"#16205a",d:"#2a6bff",e:"#8fe0ff",q:"#7a5cff",p:"#33207a",f:"#3fa0ff",g:"#001030"}},oriel:{p:{a:"#fff1d6",b:"#e3c48f",d:"#ffd36a",e:"#d9962a",f:"#ff6ad5"}},bloomlet:{p:{d:"#86b8ff",e:"#4a72d6",k:"#c9dcff",f:"#ffe27a",g:"#d9a531"}},embit:{h:-150},driplet:{h:150},sprigg:{h:-90},pebblo:{p:{a:"#f2a7c0",b:"#c06c8c",c:"#ffd9e6",d:"#b38cff",e:"#e0ccff"}},zapkit:{h:130},flexo:{p:{a:"#ffd56a",b:"#d9a032",c:"#fff2c4",d:"#2e6bff",f:"#1c1c30"}},lumo:{p:{a:"#ffb0d8",b:"#e46fae",c:"#fff0f8",e:"#7fe4ff",i:"#8a1f5c"}},gulpo:{p:{a:"#7fd3a0",b:"#4f9f70",d:"#ffd36a"}},umbrit:{h:-110,k:["a","b","c","f"]},snackub:{p:{a:"#e8609f",b:"#a8336a",k:"#ffd0e4"}},kettlet:{p:{a:"#d9a531",b:"#9c6c12",c:"#ffe08a",d:"#ffffff"}},rhinub:{h:5,s:3.5},dashkit:{h:-60},veelet:{h:120,k:["a","b","d"]}};
 
 
 /* ---------- Eggs and hatching ---------- */
@@ -3073,7 +3168,7 @@ const PETS={
  hollow:{el:"Shadow",r:5,price:0,origin:1,names:["Hollowpup","Hollowmaw","Hollowfang"]},
  oriel:{el:"Psychic",r:5,price:0,origin:1,one:1,names:["Oriel","Oriel","Oriel"]},
  bloomlet:{el:"Grass",r:5,price:0,origin:1,one:1,names:["Bloomlet","Bloomlet","Bloomlet"]},
- lunapet:{el:"Normal",r:5,price:0,origin:1,one:1,names:["Luna","Luna","Luna"],oneNote:"Luna doesn't evolve. She's already perfect."}
+ lunapet:{el:"Normal",r:5,price:0,origin:1,names:["Kitten Luna","Luna","Moon Luna"]}
 };
 const PET_DESC={
  embit:"A baby dragon whose crest burns hotter after every PR. It puffs warm air at you when it's proud.",
@@ -3093,7 +3188,7 @@ const PET_DESC={
  hollow:"The founder's own. A masked wraith that feeds on missed reps and grows a new crimson tendril for every hard session. Only the founder can give one away.",
  oriel:"A moon-crested spirit that drifts above people who train while everyone else sleeps. Its star gem glows on PR days.",
  bloomlet:"A shy flower fairy said to bloom only for people who never skip mobility. Gifted by the founder.",
- lunapet:"A seal-point Siamese with ice-blue eyes and a stare that sees straight through excuses. Loves sunbeams, judges skipped leg days. There is only one Luna."
+ lunapet:"A seal-point Siamese with ice-blue eyes and a stare that sees straight through excuses. Loves sunbeams, judges skipped leg days. She starts as a kitten and grows into her moon. There is only one Luna."
 };
 const MYTH_ODDS=256;
 const sprite=(id,st,size,myth)=>spriteImg(id+st+(myth?"m":""),size,PETS[id]?(myth?"Shiny ":"")+PETS[id].names[st]:"");
@@ -3124,6 +3219,7 @@ function gainPet(n,viaTreat){
     if(viaTreat)setTimeout(()=>evolveModal(id,petStage(b.L),petStage(a.L)),50);
     else toast("★",`${PETS[id].names[petStage(b.L)]} evolved`,`Say hello to ${PETS[id].names[petStage(a.L)]}.`,"")}
   else if(a.L>b.L&&!viaTreat)toast("▲",`${petName(id)} reached level ${a.L}`,"","");
+  const nw=learnset(id).filter(x=>x[0]>b.L&&x[0]<=a.L);if(nw.length)setTimeout(()=>toast("♪",`${petName(id)} learned ${nw.map(x=>MV[x[1]].n).join(" and ")}`,"Pick its four moves on its profile.",""),viaTreat?900:0);
 }
 function evolveModal(id,from,to){
   openModal(`<div class="buy"><span class="eyebrow">Evolution</span><div class="evo"><span>${sprite(id,from,72,petMyth(id))}</span><i>›</i><span class="bob">${sprite(id,to,112,petMyth(id))}</span></div>
@@ -3149,15 +3245,17 @@ function openPet(id){
       <div class="btnrow" style="justify-content:center">${rarTag({r:P.r})}${my?'<span class="shinyb">★ Shiny</span>':""}${act?'<span class="pill on">Active</span>':""}</div>
       <span class="muted">${P.el} type · Level ${lv.L}</span></div>
     <div style="display:flex;flex-direction:column;gap:6px"><span class="bar"><i style="width:${(lv.into/lv.need*100).toFixed(0)}%"></i></span><span class="muted num" style="font-size:.85rem">${lv.max?"Max level":`${lv.into} / ${lv.need} XP`}${PETS[id].one?"":nextAt?` · evolves at Lv ${nextAt}`:" · final form"}</span></div>
+    ${petBattleHTML({id,lv:lv.L,myth:my,moves:pt.moves||[],tm:pt.tm||[]},true)}
     <p class="pdesc">${esc(PET_DESC[id]||"")}</p>
     <div class="pfacts"><div><span class="eyebrow">Joined you</span><b>${pt.got?fmtD(pt.got):"Early days"}</b></div><div><span class="eyebrow">Found</span><b>${esc(VIA[pt.via]||(pt.via?"In a "+pt.via:"Your first pet"))}</b></div>
       ${my?`<div class="wide"><span class="eyebrow">Mythic</span><b>A 1 in ${MYTH_ODDS} shiny with its own colours</b></div>`:""}</div>
     ${P.one?`<p class="muted" style="text-align:center;font-size:.88rem;margin:0">${esc(P.oneNote||"A mythical spirit. It doesn't evolve; it just keeps getting stronger.")}</p>`:`<div class="evo">${[0,1,2].map(i=>`<span class="${i>stg?"lock":""}">${sprite(id,i,52,my)}<small>${i>stg?"???":esc(P.names[i])}<br>${i===0?"Lv 1":i===1?"Lv 8":"Lv 20"}</small></span>`).join('<i>›</i>')}</div>`}
     ${act?(snacks?`<button class="btn ghost" id="pp-feed">Feed a snack (${snacks} left)</button>`:""):`<button class="btn" id="pp-act">Make ${esc(P.names[stg])} my active pet</button>`}
-    <p class="muted" style="font-size:.85rem;text-align:center">Your active pet earns 5 XP a set, 25 a PR and 50 for each finished workout.</p>`);
+    <p class="muted" style="font-size:.85rem;text-align:center">Your active pet earns 5 XP a set, 25 a PR and 50 for each finished workout. Every pet in a battle earns XP too.</p>`);
   m.querySelector("#mh-back").onclick=closeModal;
   m.querySelector("#pp-act")?.addEventListener("click",()=>{state.pet=id;save();refresh();openPet(id);toast("✓",`${petName(id)} is now active`,"It earns XP as you train.","")});
   m.querySelector("#pp-feed")?.addEventListener("click",()=>{useItem("snack");openPet(id)});
+  m.querySelector("#pp-moves").onclick=()=>openMoves(id);m.querySelector("#pp-disc").onclick=()=>openDiscs(id);
 }
 const heroPet=()=>state.pet&&state.pets[state.pet]?`<span class="heropet bob">${sprite(state.pet,petStage(petLevel(state.pets[state.pet].xp).L),54,petMyth(state.pet))}</span>`:"";
 
@@ -3219,7 +3317,8 @@ $("#ph-in").addEventListener("change",e=>{
   const url=URL.createObjectURL(f),img=new Image();
   img.onload=async()=>{const M=1080,k=Math.min(1,M/Math.max(img.width,img.height)),cv=document.createElement("canvas");cv.width=Math.round(img.width*k);cv.height=Math.round(img.height*k);
     cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height);URL.revokeObjectURL(url);
-    try{await PH.put(key,cv.toDataURL("image/jpeg",.78));state.sessions[key].photo=1;save();toast("✓","Photo saved","Find it on your Profile calendar.","");
+    try{const du=cv.toDataURL("image/jpeg",.78),sh=$("#sum-share");await PH.put(key,du);state.sessions[key].photo=1;save();toast("✓","Photo saved","Find it on your Profile calendar.","");
+      if(sh&&sh.dataset.key===key?sh.checked:state.sessions[key].shared)sharePhoto(key,du);
       const date=state.sessions[key].date;refresh();if(phAfter==="day")openDay(date);else{const b=document.querySelector(".phbtn");if(b)b.textContent="Photo added ✓ · change it"}}
     catch(err){toast("!","Couldn't save the photo","This phone's storage may be full or private browsing is on.","")}};
   img.onerror=()=>{URL.revokeObjectURL(url);toast("!","That photo didn't work","Try a different picture.","")};img.src=url});
@@ -3238,7 +3337,7 @@ function openDay(date){
   m.querySelectorAll("[data-ph]").forEach(async el=>{const k=el.dataset.ph;if(!state.sessions[k]?.photo)return;
     try{const src=await PH.get(k);el.innerHTML=src?`<img class="wphoto" src="${src}" alt="Workout photo from ${fmtD(date)}">`:`<span class="muted">The photo is no longer on this phone.</span>`}catch(e){el.innerHTML=`<span class="muted">Couldn't load the photo.</span>`}});
   m.addEventListener("click",async e=>{const b=e.target.closest("[data-rmph]");if(!b)return;const k=b.dataset.rmph;
-    try{await PH.del(k)}catch(err){}delete state.sessions[k].photo;save();toast("✓","Photo removed","","");refresh();openDay(date)});
+    try{await PH.del(k)}catch(err){}if(state.sessions[k].shared)unsharePhoto(k);delete state.sessions[k].photo;save();toast("✓","Photo removed","","");refresh();openDay(date)});
 }
 
 /* ---------- Cloud: accounts and sync ---------- */
@@ -3395,7 +3494,7 @@ function publicStats(c){
     run:{step:c.cardio.step,t5:c.cardio.t5?Math.round(c.cardio.t5):null,best:Object.fromEntries(Object.entries(c.cardio.best).map(([k,b])=>[k,Math.round(b.sec)])),km:Math.round(c.cardio.runKm*10)/10,n:c.cardio.n},
     today:all.filter(s=>s.date===td&&doneSets(s).length).map(s=>({name:s.name||P(s.day).name,finished:!!s.finished,at:s.at||"",ex:exSummary(s)})),
     last:last?{date:last.date,name:last.name||P(last.day).name}:null,lifts,banner:state.equip.banner||"",plan:state.planName||"",
-    pet:pet?{id:state.pet,st:petStage(petLevel(pet.xp).L),lv:petLevel(pet.xp).L,myth:!!pet.myth}:null};
+    pet:pet&&PETS[state.pet]?{id:state.pet,st:petStage(petLevel(pet.xp).L),lv:petLevel(pet.xp).L,myth:!!pet.myth,moves:activeMoves({id:state.pet,lv:petLevel(pet.xp).L,tm:pet.tm||[],moves:pet.moves||[]})}:null};
 }
 function syncPill(){const el=$("#syncline");if(el)el.innerHTML=syncText()}
 function syncText(){
@@ -3554,7 +3653,7 @@ async function loadSocial(force){
     for(const r of [pr,st,gr])if(r.error)throw r.error;
     social.profiles=Object.fromEntries(pr.data.map(p=>[p.id,p]));social.stats=Object.fromEntries(st.data.map(s=>[s.id,{...s.stats,_at:s.updated_at}]));
     social.groups=gr.data.sort((a,b)=>a.name.localeCompare(b.name));
-    social.loaded=true;social.at=Date.now();social.err="";
+    social.loaded=true;social.at=Date.now();social.err="";loadBattles().then(()=>{if(pendingBattle){const b=pendingBattle;pendingBattle=null;openBattleId(b)}});
   }catch(e){social.err=sbErr(e)}
   social.loading=false;done();if(social.again){social.again=false;return loadSocial(true)}
   if(view==="friends"&&!chat.open)renderFriends();updateBadges();
@@ -3593,13 +3692,14 @@ function renderFriends(){
   if(social.err)h+=`<p class="formerr">${esc(social.err)}</p>`;
   if(!social.loaded){h+=`<div class="empty"><b>Loading…</b></div>`;el.innerHTML=h;return}
   h+=friendTab==="feed"?feedHTML():friendTab==="chats"?chatsHTML():friendTab==="friends"?friendsHTML():groupsHTML();
-  el.innerHTML=h;
+  el.innerHTML=h;hydratePhotos(el);
 }
 function feedHTML(){
   const items=social.feed;
   if(!items.length)return `<div class="empty"><b>Nothing here yet</b><span>Finished workouts, PRs, rank-ups and level-ups from you and your friends show up here.</span><button class="btn sm" data-ft="friends" style="align-self:center">Find friends</button></div>`;
   return `<div class="feed">${items.map(a=>{const p=social.profiles[a.user_id],nm=p?`<b>${a.user_id===me.id?"You":"@"+esc(p.username)}</b>`:"<b>Someone</b>",d=a.payload||{};let body="",side="";
-    if(a.kind==="workout"){body=`${nm} finished <b>${esc(d.name||"a workout")}</b>`;side=`<span class="fsub">${d.sets||0} sets · ${fmtNum(d.volume||0)} kg${d.prs&&d.prs.length?` · ${d.prs.length} PR${d.prs.length>1?"s":""}`:""}</span>${d.prs&&d.prs.length?`<span class="chips">${d.prs.slice(0,4).map(x=>`<span class="chip">PR · ${esc(x)}</span>`).join("")}</span>`:""}`}
+    if(a.kind==="workout"){body=`${nm} finished <b>${esc(d.name||"a workout")}</b>`;side=`<span class="fsub">${d.sets||0} sets · ${fmtNum(d.volume||0)} kg${d.prs&&d.prs.length?` · ${d.prs.length} PR${d.prs.length>1?"s":""}`:""}</span>${d.prs&&d.prs.length?`<span class="chips">${d.prs.slice(0,4).map(x=>`<span class="chip">PR · ${esc(x)}</span>`).join("")}</span>`:""}${d.ex&&d.ex.length?`<span class="fex">${exLines(d.ex,3)}${d.ex.length>3?`<span>+ ${d.ex.length-3} more · tap to see everything</span>`:""}</span>`:""}${d.photo?`<img class="fphoto" data-php="${esc(d.photo)}" alt="Workout photo">`:""}`}
+    else if(a.kind==="battle"){body=`${nm} won a <b>${d.fmt} v ${d.fmt} pet battle</b> against @${esc(d.vs||"a friend")}`}
     else if(a.kind==="pr"){body=`${nm} set a PR on <b>${esc(d.x)}</b>`;side=`<span class="fsub">${d.k==="time"?fmtDur(d.sec):d.k==="reps"?`${d.r} reps`:`${d.k==="bw"?"+":""}${kg(d.w)} kg × ${d.r}`}</span>`}
     else if(a.kind==="cardio"&&CTYPES[d.type]){const T=CTYPES[d.type];body=`${nm} ${T.verb} ${d.dist?`<b>${fmtKm(d.dist)} km</b>`:d.reps?`<b>${d.reps} × ${d.each} m</b>`:""}${d.sec?` in <b>${fmtDur(d.sec)}</b>`:""}`;side=`<span class="fsub">${T.ico} ${esc(T.n)}${d.dist&&d.sec?" · "+fmtPace(d.sec,d.dist):""}</span>${d.pr&&d.pr.length?`<span class="chips">${d.pr.map(x=>`<span class="chip">PB · ${esc(x)}</span>`).join("")}</span>`:""}`}
     else if(a.kind==="rank"){body=`${nm} reached <b style="color:var(${tierVar(d.step)})">${stepName(d.step)}</b> on ${esc(d.x)}`;side=emblem(d.step,26)}
@@ -3610,7 +3710,7 @@ function feedHTML(){
     else if(a.kind==="chest"){body=`${nm} found <b style="color:var(${RAR[d.r||0].v})">${esc(d.name)}</b> in a ${esc(d.chest||"chest")}`}
     else if(a.kind==="pet"&&PETS[d.id]){body=`${nm}${a.user_id===me.id?"r":"'s"} ${esc(PETS[d.id].names[d.from])} evolved into <b>${esc(PETS[d.id].names[d.to])}</b>`;side=`<span class="bob">${sprite(d.id,d.to,34,d.myth)}</span>`}
     else body=`${nm} was active`;
-    return `<button class="fitem" data-user="${a.user_id}">${avHTML(p,38)}<span class="ftxt"><span>${body}</span>${a.kind==="rank"||a.kind==="pet"||a.kind==="mythic"||a.kind==="origin"?"":side}<span class="ftime">${ago(a.created_at)}</span></span>${a.kind==="rank"||a.kind==="pet"||a.kind==="mythic"||a.kind==="origin"?side:""}</button>`}).join("")}</div>`;
+    return `<button class="fitem" ${a.kind==="workout"&&(d.ex||d.photo)?`data-post="${a.id}"`:`data-user="${a.user_id}"`}>${avHTML(p,38)}<span class="ftxt"><span>${body}</span>${a.kind==="rank"||a.kind==="pet"||a.kind==="mythic"||a.kind==="origin"?"":side}<span class="ftime">${ago(a.created_at)}</span></span>${a.kind==="rank"||a.kind==="pet"||a.kind==="mythic"||a.kind==="origin"?side:""}</button>`}).join("")}</div>`;
 }
 function relButton(id){
   if(id===me.id)return `<span class="pill">You</span>`;
@@ -3661,6 +3761,7 @@ $("#v-friends").addEventListener("click",async e=>{
   const dec=e.target.closest("[data-declinef],[data-cancelf]");
   if(dec){dec.disabled=true;const {error}=await sb.from("friendships").delete().eq("id",+(dec.dataset.declinef||dec.dataset.cancelf));
     if(error)toast("!","Something went wrong",sbErr(error),"");await loadSocial(true);return}
+  const po=e.target.closest("[data-post]");if(po){openPost(po.dataset.post);return}
   const u=e.target.closest("[data-user]");if(u){openPerson(u.dataset.user);return}
   const g=e.target.closest("[data-group]");if(g){openGroup(g.dataset.group);return}
   if(e.target.closest("#g-create")){openGroupForm("create");return}
@@ -3687,15 +3788,17 @@ function openPerson(id){
         <div class="hist">${s.ex.map(x=>`<div class="hrow" style="grid-template-columns:minmax(0,1fr)"><span class="s"><b>${esc(x.n)}</b><br><span class="muted">${x.s.map(v=>(v[2]==="w"?"W ":v[2]==="d"?"D ":"")+fmtSet(x.k,v)).join(", ")}</span></span></div>`).join("")}</div></div>`).join(""):`<p class="muted">No training logged today${st.last?`. Last workout: ${esc(st.last.name)}, ${ago(st.last.date+"T12:00:00")}.`:"."}</p>`}
       ${Object.keys(ms).length?`<h3>Muscle ranks</h3><div class="bodymap"><figure>${bodySVG("front",ms,null)}<figcaption>Front</figcaption></figure><figure>${bodySVG("back",ms,null)}<figcaption>Back</figcaption></figure></div>`:""}
       ${st.lifts&&st.lifts.length?`<h3>Top lifts</h3><div class="hist">${st.lifts.map(l=>`<div class="hrow" style="grid-template-columns:minmax(0,1fr) auto"><span class="s"><b>${esc(l.n)}</b><br><span class="muted">${l.k==="reps"?`${l.best} reps best`:`Est. max ${kg(l.best)} kg`}</span></span><span class="rank" style="--tier:var(${tierVar(l.step)})">${stepName(l.step)}</span></div>`).join("")}</div>`:""}
-      ${st.pet&&PETS[st.pet.id]&&(!PETS[st.pet.id].origin||hasGrant(id,st.pet.id))?`<div class="petcard panel" style="box-shadow:none;background:var(--surface-2)"><div class="pet-l"><span class="eyebrow">Pet</span><b>${esc(PETS[st.pet.id].names[st.pet.st])} · Lv ${st.pet.lv}</b>${st.pet.myth?'<span class="shinyb" style="align-self:flex-start">★ Shiny</span>':""}<span class="muted" style="font-size:.85rem">${esc(PET_DESC[st.pet.id]||"")}</span></div><span class="bob">${sprite(st.pet.id,st.pet.st,64,st.pet.myth)}</span></div>`:""}`
+      ${st.pet&&PETS[st.pet.id]&&(!PETS[st.pet.id].origin||hasGrant(id,st.pet.id))?`<button class="petcard panel" id="pp-pet" style="box-shadow:none;background:var(--surface-2);border:0;text-align:left;color:var(--fg);font-family:var(--body);cursor:pointer;width:100%"><div class="pet-l"><span class="eyebrow">Pet · tap for stats and moves</span><b>${esc(PETS[st.pet.id].names[st.pet.st])} · Lv ${st.pet.lv}</b><span class="btnrow">${typesOf(st.pet.id,st.pet.lv).map(typeChip).join("")}${st.pet.myth?'<span class="shinyb">★ Shiny</span>':""}</span><span class="muted" style="font-size:.85rem">${esc(PET_DESC[st.pet.id]||"")}</span></div><span class="bob">${sprite(st.pet.id,st.pet.st,64,st.pet.myth)}</span></button>`:""}`
       :`<p class="muted">Add @${esc(p.username)} as a friend to see their workouts and ranks.</p>`}
-    ${isMe?"":`<div class="btnrow">${!r?`<button class="btn" data-addf2="${id}">Add friend</button>`:r.status==="accepted"?`<button class="btn" id="pp-msg">Message</button><button class="btn ghost" id="pp-remove">Remove friend</button>`:r.requester===me.id?`<span class="muted">Friend request sent</span>`:`<button class="btn" data-accept2="${r.id}">Accept friend request</button>`}</div>`}`);
+    ${isMe?"":`<div class="btnrow">${!r?`<button class="btn" data-addf2="${id}">Add friend</button>`:r.status==="accepted"?`<button class="btn" id="pp-msg">Message</button><button class="btn ghost" id="pp-btl">⚔ Battle</button><button class="btn ghost" id="pp-remove">Remove friend</button>`:r.requester===me.id?`<span class="muted">Friend request sent</span>`:`<button class="btn" data-accept2="${r.id}">Accept friend request</button>`}</div>`}`);
   m.querySelector("#mh-back").onclick=closeModal;
   m.querySelector("[data-addf2]")?.addEventListener("click",async()=>{const {error}=await sb.from("friendships").insert({requester:me.id,addressee:id});
     if(error)toast("!","Couldn't send the request",sbErr(error),"");else toast("✓","Request sent","","");closeModal();await loadSocial(true)});
   m.querySelector("[data-accept2]")?.addEventListener("click",async()=>{const {error}=await sb.from("friendships").update({status:"accepted"}).eq("id",r.id);
     if(error)toast("!","Couldn't accept",sbErr(error),"");else toast("✓","Friend added","","");closeModal();await loadSocial(true)});
   m.querySelector("#pp-msg")?.addEventListener("click",()=>openChat("dm:"+id));
+  m.querySelector("#pp-pet")?.addEventListener("click",()=>openPetView(st.pet,p.username,()=>openPerson(id)));
+  m.querySelector("#pp-btl")?.addEventListener("click",()=>openChallenge(id));
   m.querySelector("#pp-remove")?.addEventListener("click",()=>confirmBox(`Remove @${p.username} as a friend? You'll stop seeing each other's progress.`,"Remove friend",async()=>{
     const {error}=await sb.from("friendships").delete().eq("id",r.id);closeModal();if(error)toast("!","Couldn't remove",sbErr(error),"");else toast("✓","Friend removed","","");await loadSocial(true)}));
 }
@@ -3780,8 +3883,8 @@ async function pollMsgs(){
 }
 setInterval(pollMsgs,4000);
 function updateBadges(){
-  const n=me&&social.loaded?incoming().length+unreadCount():0,tb=$("#tb-friends")||$("#tb-more");
-  document.querySelectorAll(".tbadge").forEach(x=>{if(x!==tb)x.hidden=true});if(!tb)return;tb.hidden=!n;tb.textContent=n;
+  const nf=me&&social.loaded?incoming().length+unreadCount():0,nb=battleBadge(),pins=barPins(),set=(el,n)=>{if(el){el.hidden=!n;el.textContent=n}};
+  set($("#tb-friends"),nf);set($("#tb-battle"),nb);set($("#tb-more"),(pins.includes("friends")?0:nf)+(pins.includes("battle")?0:nb));
   const cb=document.querySelector("#ft-chats .nbadge"),u=unreadCount();if(cb){cb.hidden=!u;cb.textContent=u}
 }
 function chatsHTML(){
@@ -3801,7 +3904,7 @@ function chatHead(k){
 async function openChat(k){
   if(!me||!convOK(k)){toast("!","Chat not available",k.startsWith("dm:")?"You can only message friends.":"You're not in that group.","");return}
   closeModal();chat.open=k;const el=$("#chat");el.hidden=false;document.body.classList.add("chatting");
-  $("#chat-who").innerHTML=chatHead(k);$("#chat-list").innerHTML=chat.msgs[k]?"":`<div class="empty"><b>Loading…</b></div>`;fitChat();
+  $("#chat-who").innerHTML=chatHead(k);$("#chat-btl").hidden=!k.startsWith("dm:");$("#chat-list").innerHTML=chat.msgs[k]?"":`<div class="empty"><b>Loading…</b></div>`;fitChat();
   if(chat.msgs[k])renderChatMsgs(true);
   const id=k.slice(k.indexOf(":")+1);
   let q=sb.from("messages").select("*");q=k.startsWith("dm:")?q.in("sender",[me.id,id]).in("to_user",[me.id,id]):q.eq("group_id",id);
@@ -3839,7 +3942,7 @@ async function sendChat(body,retry){
 function fitChat(){const el=$("#chat"),vv=window.visualViewport;if(!el||el.hidden||!vv)return;el.style.height=vv.height+"px";el.style.top=vv.offsetTop+"px"}
 if(window.visualViewport){visualViewport.addEventListener("resize",fitChat);visualViewport.addEventListener("scroll",fitChat)}
 (()=>{const el=document.createElement("div");el.className="chat";el.id="chat";el.hidden=true;el.setAttribute("role","dialog");el.setAttribute("aria-label","Chat");
-  el.innerHTML=`<div class="chat-h"><button class="mh-b" id="chat-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Back</button><button class="chat-who" id="chat-who"></button></div>
+  el.innerHTML=`<div class="chat-h"><button class="mh-b" id="chat-back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Back</button><button class="chat-who" id="chat-who"></button><button class="chat-btl" id="chat-btl" hidden>⚔ Battle</button></div>
     <div class="chat-list" id="chat-list"></div>
     <form class="chat-in" id="chat-form"><textarea id="chat-txt" rows="1" maxlength="500" placeholder="Message" aria-label="Message"></textarea><button class="btn sm" type="submit" id="chat-send">Send</button></form>`;
   document.body.appendChild(el);
@@ -3848,6 +3951,7 @@ if(window.visualViewport){visualViewport.addEventListener("resize",fitChat);visu
   tx.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing&&matchMedia("(hover:hover)").matches){e.preventDefault();el.querySelector("#chat-form").requestSubmit()}});
   el.querySelector("#chat-form").addEventListener("submit",e=>{e.preventDefault();const v=tx.value;tx.value="";grow();sendChat(v);tx.focus()});
   el.querySelector("#chat-back").addEventListener("click",()=>{closeChatView();if(view==="friends")renderFriends()});
+  el.querySelector("#chat-btl").addEventListener("click",()=>{const k=chat.open;if(!k||!k.startsWith("dm:"))return;closeChatView();openChallenge(k.slice(3))});
   el.querySelector("#chat-who").addEventListener("click",()=>{const k=chat.open;if(!k)return;if(k.startsWith("dm:"))openPerson(k.slice(3));else openGroup(k.slice(2))});
   el.querySelector("#chat-list").addEventListener("click",e=>{const b=e.target.closest("[data-mid]");if(!b)return;const k=chat.open,m=(chat.msgs[k]||[]).find(x=>String(x.id)===b.dataset.mid);if(!m||m.sender!==me.id)return;
     if(m.failed){sendChat(m.body,m);return}if(m.temp)return;
@@ -3858,9 +3962,10 @@ if(window.visualViewport){visualViewport.addEventListener("resize",fitChat);visu
 // Opening the app from a notification: "#chat=dm:<id>", "#friends" or "#train".
 let pendingRoute=null;
 function routeTo(url){
-  if(!url)return;try{if(location.hash&&/^#(chat=|friends|train)/.test(location.hash))history.replaceState(null,"",location.pathname+location.search)}catch(e){}
+  if(!url)return;try{if(location.hash&&/^#(chat=|friends|train|battle)/.test(location.hash))history.replaceState(null,"",location.pathname+location.search)}catch(e){}
   if(url.startsWith("#chat=")){const k=decodeURIComponent(url.slice(6));friendTab="chats";go("friends");if(me&&social.loaded)openChat(k);else pendingRoute=k;return}
   if(url==="#friends"){friendTab="friends";go("friends");return}
+  if(url.startsWith("#battle")){const id=url.split("=")[1];go("battle");if(id){if(me&&social.loaded&&bt.loaded)openBattleId(id);else pendingBattle=id}return}
   if(url==="#train")go("train");
 }
 if("serviceWorker" in navigator)navigator.serviceWorker.addEventListener("message",e=>{if(e.data&&e.data.type==="open")routeTo(e.data.url)});
@@ -4172,23 +4277,648 @@ $("#v-today").addEventListener("click",e=>{
   if(e.target.closest("#td-goals"))openGoals();
 });
 
+/* ---------- Battles: types, stats, moves and the turn engine ---------- */
+const TYPES=["Normal","Fire","Water","Grass","Electric","Rock","Fighting","Steel","Sky","Psychic","Shadow","Mystic"];
+const TCOL={Normal:"#a8a495",Fire:"#f0803c",Water:"#4f9be8",Grass:"#5fbf62",Electric:"#e9bb2e",Rock:"#b59a5e",Fighting:"#d0503f",Steel:"#8fa3b8",Sky:"#6fb4ee",Psychic:"#ef6fa4",Shadow:"#7c68b8",Mystic:"#b07ae8"};
+const TSTRONG={Normal:[],Fire:["Grass","Steel"],Water:["Fire","Rock"],Grass:["Water","Rock"],Electric:["Water","Sky"],Rock:["Fire","Sky","Electric"],Fighting:["Normal","Rock","Steel","Shadow"],Steel:["Rock","Mystic"],Sky:["Grass","Fighting"],Psychic:["Fighting"],Shadow:["Psychic","Mystic"],Mystic:["Shadow","Fighting"]};
+const TWEAK={Normal:["Rock","Steel"],Fire:["Water","Rock","Fire"],Water:["Water","Grass"],Grass:["Fire","Grass","Sky","Steel"],Electric:["Grass","Electric","Rock"],Rock:["Fighting","Steel","Rock"],Fighting:["Sky","Psychic","Mystic"],Steel:["Fire","Water","Electric","Steel"],Sky:["Electric","Rock","Steel"],Psychic:["Psychic","Steel","Shadow"],Shadow:["Fighting","Normal","Shadow"],Mystic:["Steel","Fire","Mystic"]};
+const typeMult=(t,def)=>def.reduce((m,d)=>m*(TSTRONG[t].includes(d)?2:TWEAK[t].includes(d)?.5:1),1);
+// Second type (from Lv 8) and base stats: HP, Attack, Defense, Sp. Attack, Speed.
+const BDATA={
+ embit:{t2:"Sky",b:[48,58,42,66,62]},driplet:{t2:"Mystic",b:[56,45,55,62,50]},sprigg:{t2:"Rock",b:[58,52,60,52,42]},
+ pebblo:{t2:"Steel",b:[72,68,95,35,28]},zapkit:{t2:"Sky",b:[48,50,42,78,95]},flexo:{t2:"Steel",b:[62,95,60,35,65]},kettlet:{t2:"Fighting",b:[65,80,92,35,40]},dashkit:{t2:"Normal",b:[50,72,45,50,105]},
+ lumo:{t2:"Psychic",b:[70,45,65,105,85]},gulpo:{t2:"Water",b:[110,75,70,55,45]},snackub:{t2:"Fighting",b:[125,90,65,45,30],sig:"honeyslam"},rhinub:{t2:"Fighting",b:[85,105,95,40,50]},
+ umbrit:{t2:"Fire",b:[70,85,65,105,100]},veelet:{t2:"Psychic",b:[75,95,65,85,110],sig:"vcutter"},
+ hollow:{t2:"Psychic",b:[85,115,75,110,100],sig:"hollowfang"},oriel:{t2:"Mystic",b:[85,60,85,125,105],sig:"stargem"},bloomlet:{t2:"Mystic",b:[100,65,95,110,90],sig:"petalstorm"},lunapet:{t2:"Mystic",b:[85,100,80,95,120],sig:"moonpounce"}
+};
+const STATN={hp:"HP",atk:"Attack",def:"Defense",spa:"Sp. Attack",spe:"Speed"};
+const typesOf=(id,L)=>L>=8&&BDATA[id].t2!==PETS[id].el?[PETS[id].el,BDATA[id].t2]:[PETS[id].el];
+function statsOf(id,L){const b=BDATA[id].b,m=[1,1.15,1.3][petStage(L)],f=x=>Math.floor(x*m*2*L/100);
+  return {hp:Math.floor(b[0]*m*5*L/100)+L+10,atk:f(b[1])+5,def:f(b[2])+5,spa:f(b[3])+5,spe:f(b[4])+5}}
+// c: p physical (Attack), s special (Sp. Attack), x status. st: [who,stat,stages] with who s=self, f=foe.
+const MV={
+ bump:{n:"Shoulder Bump",t:"Normal",c:"p",pw:40},bodycheck:{n:"Body Check",t:"Normal",c:"p",pw:70},fullsend:{n:"Full Send",t:"Normal",c:"p",pw:95,acc:90},maxeffort:{n:"Max Effort",t:"Normal",c:"p",pw:120,acc:85,recoil:.25},
+ stare:{n:"Cold Stare",t:"Normal",c:"x",st:[["f","atk",-1]],d:"Lowers the foe's Attack."},
+ pumpup:{n:"Pump Up",t:"Fighting",c:"x",st:[["s","atk",2]],d:"Sharply raises Attack."},focus:{n:"Deep Focus",t:"Psychic",c:"x",st:[["s","spa",2]],d:"Sharply raises Sp. Attack."},
+ brace:{n:"Brace",t:"Steel",c:"x",st:[["s","def",2]],d:"Sharply raises Defense."},quickfeet:{n:"Quick Feet",t:"Electric",c:"x",st:[["s","spe",2]],d:"Sharply raises Speed."},
+ rest:{n:"Rest Day",t:"Normal",c:"x",heal:.5,d:"Restores half of max HP."},
+ spark:{n:"Spark Flick",t:"Fire",c:"s",pw:40,burn:10},flamedash:{n:"Flame Dash",t:"Fire",c:"p",pw:65},scorch:{n:"Scorch Lap",t:"Fire",c:"s",pw:90,burn:10},inferno:{n:"Inferno Set",t:"Fire",c:"s",pw:120,acc:85},
+ splash:{n:"Splash Jab",t:"Water",c:"s",pw:40},tideroll:{n:"Tide Roll",t:"Water",c:"p",pw:65},surge:{n:"Surge",t:"Water",c:"s",pw:90},riptide:{n:"Riptide Slam",t:"Water",c:"p",pw:115,acc:85},
+ leafflick:{n:"Leaf Flick",t:"Grass",c:"s",pw:40},rootsnare:{n:"Root Snare",t:"Grass",c:"p",pw:60,st:[["f","spe",-1]]},sapdrain:{n:"Sap Drain",t:"Grass",c:"s",pw:60,drain:.5},bloomburst:{n:"Bloom Burst",t:"Grass",c:"s",pw:90},overgrowth:{n:"Overgrowth",t:"Grass",c:"s",pw:120,acc:85},
+ staticjab:{n:"Static Jab",t:"Electric",c:"p",pw:40,stun:10},voltdash:{n:"Volt Dash",t:"Electric",c:"p",pw:65},arcbeam:{n:"Arc Beam",t:"Electric",c:"s",pw:90,stun:10},overload:{n:"Overload",t:"Electric",c:"s",pw:120,acc:85},
+ pebbletoss:{n:"Pebble Toss",t:"Rock",c:"p",pw:40},rockroll:{n:"Rock Roll",t:"Rock",c:"p",pw:65},boulderdrop:{n:"Boulder Drop",t:"Rock",c:"p",pw:95,acc:90},landslide:{n:"Landslide",t:"Rock",c:"p",pw:115,acc:85},
+ jab:{n:"Quick Jab",t:"Fighting",c:"p",pw:40,pri:1},cleanjerk:{n:"Clean and Jerk",t:"Fighting",c:"p",pw:70},deadlift:{n:"Deadlift Slam",t:"Fighting",c:"p",pw:95},onerep:{n:"One-Rep Max",t:"Fighting",c:"p",pw:130,acc:80,recoil:.25},
+ plateclap:{n:"Plate Clap",t:"Steel",c:"p",pw:40},ironswing:{n:"Iron Swing",t:"Steel",c:"p",pw:70},barcrash:{n:"Barbell Crash",t:"Steel",c:"p",pw:95,acc:90},anvil:{n:"Anvil Drop",t:"Steel",c:"p",pw:115,acc:85},
+ gust:{n:"Gust Flap",t:"Sky",c:"s",pw:40},dive:{n:"Nose Dive",t:"Sky",c:"p",pw:70},skysplit:{n:"Sky Splitter",t:"Sky",c:"p",pw:95},cyclone:{n:"Cyclone",t:"Sky",c:"s",pw:115,acc:85},
+ mindpoke:{n:"Mind Poke",t:"Psychic",c:"s",pw:40},focusbeam:{n:"Focus Beam",t:"Psychic",c:"s",pw:70},zencrush:{n:"Zen Crush",t:"Psychic",c:"s",pw:95},mindover:{n:"Mind Over Matter",t:"Psychic",c:"s",pw:120,acc:85},
+ shadenip:{n:"Shade Nip",t:"Shadow",c:"p",pw:40},nightclaw:{n:"Night Claw",t:"Shadow",c:"p",pw:70,crit:1},dreadpulse:{n:"Dread Pulse",t:"Shadow",c:"s",pw:90},eclipse:{n:"Eclipse",t:"Shadow",c:"s",pw:120,acc:85},
+ glimmer:{n:"Glimmer",t:"Mystic",c:"s",pw:40},starshot:{n:"Star Shot",t:"Mystic",c:"s",pw:70},lunarray:{n:"Lunar Ray",t:"Mystic",c:"s",pw:95},supernova:{n:"Supernova",t:"Mystic",c:"s",pw:125,acc:80},
+ // signature moves
+ hollowfang:{n:"Hollow Fang",t:"Shadow",c:"p",pw:100,drain:.33,sig:1},moonpounce:{n:"Moonlit Pounce",t:"Mystic",c:"p",pw:85,pri:1,sig:1},honeyslam:{n:"Honey Slam",t:"Normal",c:"p",pw:95,drain:.33,sig:1},
+ stargem:{n:"Star Gem",t:"Psychic",c:"s",pw:100,st:[["f","spa",-1]],sig:1},petalstorm:{n:"Petal Storm",t:"Grass",c:"s",pw:100,st:[["f","spe",-1]],sig:1},vcutter:{n:"V-Cutter",t:"Sky",c:"p",pw:95,crit:1,sig:1},
+ // disc-only moves
+ secondwind:{n:"Second Wind",t:"Sky",c:"x",heal:.5,st:[["s","spe",1]],d:"Restores half of max HP and raises Speed.",disc:1},sprintburst:{n:"Sprint Burst",t:"Normal",c:"p",pw:55,pri:1,disc:1},
+ chalkup:{n:"Chalk Up",t:"Rock",c:"x",st:[["s","atk",1],["s","def",1]],d:"Raises Attack and Defense.",disc:1},cooldown:{n:"Cool Down",t:"Water",c:"x",heal:.33,cure:1,d:"Cures burns and stuns and restores a third of max HP.",disc:1},
+ superset:{n:"Superset",t:"Fighting",c:"p",pw:80,st:[["s","spe",1]],disc:1},flashfreeze:{n:"Ice Bath",t:"Water",c:"s",pw:80,stun:20,disc:1},
+ afterburn:{n:"Afterburn",t:"Fire",c:"p",pw:80,burn:30,disc:1},thunderclap:{n:"Thunderclap",t:"Electric",c:"p",pw:90,stun:20,disc:1},
+ moonveil:{n:"Moon Veil",t:"Mystic",c:"x",st:[["s","spa",1],["s","def",1]],d:"Raises Sp. Attack and Defense.",disc:1},nightmare:{n:"Bad Dream",t:"Shadow",c:"s",pw:80,st:[["f","atk",-1]],disc:1},
+ mindgames:{n:"Mind Games",t:"Psychic",c:"x",st:[["f","atk",-1],["f","spa",-1]],d:"Lowers the foe's Attack and Sp. Attack.",disc:1},ironplate:{n:"Iron Plate",t:"Steel",c:"p",pw:80,st:[["s","def",1]],disc:1},
+ rootdown:{n:"Root Down",t:"Grass",c:"x",heal:.5,st:[["s","def",1]],d:"Restores half of max HP and raises Defense.",disc:1},tailwind:{n:"Tailwind",t:"Sky",c:"p",pw:75,pri:1,disc:1}
+};
+const TLINE={Normal:["bump","bodycheck","fullsend","maxeffort"],Fire:["spark","flamedash","scorch","inferno"],Water:["splash","tideroll","surge","riptide"],Grass:["leafflick","sapdrain","bloomburst","overgrowth"],
+ Electric:["staticjab","voltdash","arcbeam","overload"],Rock:["pebbletoss","rockroll","boulderdrop","landslide"],Fighting:["jab","cleanjerk","deadlift","onerep"],Steel:["plateclap","ironswing","barcrash","anvil"],
+ Sky:["gust","dive","skysplit","cyclone"],Psychic:["mindpoke","focusbeam","zencrush","mindover"],Shadow:["shadenip","nightclaw","dreadpulse","eclipse"],Mystic:["glimmer","starshot","lunarray","supernova"]};
+const DISCS=Object.keys(MV).filter(k=>MV[k].disc);
+// The moves a pet learns as it levels up: [[level, move], ...]
+const LSET={};
+function learnset(id){
+  if(LSET[id])return LSET[id];
+  const D=BDATA[id],a=TLINE[PETS[id].el],b=TLINE[D.t2],phys=D.b[1]>=D.b[3],out=[],add=(l,m)=>{if(m&&!out.some(x=>x[1]===m))out.push([l,m])};
+  add(1,"bump");add(1,PETS[id].el==="Normal"?"stare":a[0]);add(5,phys?"pumpup":"focus");add(8,a[1]);add(12,b[0]);add(16,"rest");add(20,a[2]);add(26,b[1]);
+  add(32,D.sig||(D.b[4]>=70?"quickfeet":"brace"));add(40,b[2]);add(50,a[3]);add(65,b[3]);
+  return LSET[id]=out;
+}
+// p: {id,lv,tm?,moves?}
+const knownMoves=p=>learnset(p.id).filter(x=>x[0]<=p.lv).map(x=>x[1]).concat((p.tm||[]).filter(m=>MV[m]));
+function activeMoves(p){const k=[...new Set(knownMoves(p))],sel=(p.moves||[]).filter((m,i,a)=>k.includes(m)&&a.indexOf(m)===i).slice(0,4);
+  if(sel.length)return sel;const lv=learnset(p.id).filter(x=>x[0]<=p.lv).map(x=>x[1]);return lv.slice(-4)}
+const monOf=(id,pt)=>{const lv=petLevel(pt.xp||0).L,p={id,lv,tm:pt.tm||[],moves:pt.moves||[]};return {id,lv,myth:!!pt.myth,moves:activeMoves(p)}};
+// ---- engine ----
+function mulberry(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const strHash=s=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
+const stgMult=n=>n>=0?(2+n)/2:2/(2-n);
+function bNew(teams,seed){
+  return {seed,turn:0,over:false,winner:null,sides:teams.map(t=>({act:0,stg:{atk:0,def:0,spa:0,spe:0},mons:t.filter(m=>PETS[m.id]&&BDATA[m.id]).slice(0,6).map(m=>{const lv=Math.max(1,Math.min(100,m.lv|0)),s=statsOf(m.id,lv);
+    return {id:m.id,lv,myth:!!m.myth,name:PETS[m.id].names[petStage(lv)],moves:(m.moves||[]).filter(x=>MV[x]).slice(0,4),max:s.hp,hp:s.hp,stats:s,types:typesOf(m.id,lv),status:null}})}))};
+}
+const bAct=(B,s)=>B.sides[s].mons[B.sides[s].act];
+const bAlive=(B,s)=>B.sides[s].mons.filter(m=>m.hp>0).length;
+// Actions: {m:moveIndex} | {s:teamIndex} | {f:1}. Returns the list of events for playback.
+function bTurn(B,a0,a1){
+  const ev=[],acts=[a0||{},a1||{}],rng=mulberry(strHash(B.seed+"|"+B.turn+"|"+JSON.stringify(acts)));
+  const nm=s=>`{${s}}${bAct(B,s).name}`,msg=t=>ev.push({k:"msg",t}),hp=s=>ev.push({k:"hp",s,i:B.sides[s].act,hp:bAct(B,s).hp});
+  const end=w=>{B.over=true;B.winner=w;ev.push({k:"end",w})};
+  B.turn++;
+  for(const s of [0,1])if(acts[s].f){msg(`{${s}}@ gave up.`);end(1-s);return ev}
+  const sendIn=(s,i,why)=>{const S=B.sides[s];S.act=i;S.stg={atk:0,def:0,spa:0,spe:0};ev.push({k:"in",s,i});msg(why||`{${s}}@ sent in ${S.mons[i].name}.`)};
+  for(const s of [0,1]){const to=acts[s].s,S=B.sides[s];if(to!=null&&S.mons[to]&&S.mons[to].hp>0&&to!==S.act){msg(`{${s}}@ called ${bAct(B,s).name} back.`);sendIn(s,to)}}
+  const eff=(s,k)=>{const m=bAct(B,s);let v=m.stats[k]*stgMult(B.sides[s].stg[k]);if(k==="spe"&&m.status==="stun")v*=.5;return v};
+  const mvOf=s=>{const m=bAct(B,s),a=acts[s];if(a.m==null||a.s!=null)return null;return MV[m.moves[a.m]]||MV.bump};
+  const order=[0,1].filter(s=>mvOf(s)).map(s=>({s,pri:mvOf(s).pri||0,spe:eff(s,"spe"),r:rng()})).sort((x,y)=>y.pri-x.pri||y.spe-x.spe||y.r-x.r);
+  const wiped=[];
+  const faint=s=>{ev.push({k:"faint",s,i:B.sides[s].act});msg(`${nm(s)} fainted!`);if(!bAlive(B,s)&&!wiped.includes(s))wiped.push(s)};
+  const stat=(s,k,n)=>{const g=B.sides[s].stg,o=g[k];g[k]=Math.max(-6,Math.min(6,o+n));
+    msg(g[k]===o?`${nm(s)}'s ${STATN[k]} can't go any ${n>0?"higher":"lower"}.`:`${nm(s)}'s ${STATN[k]} ${n>0?(n>1?"rose sharply":"rose"):(n<-1?"fell sharply":"fell")}.`)};
+  for(const o of order){
+    const s=o.s,f=1-s,A=bAct(B,s),D=bAct(B,f),mv=mvOf(s);
+    if(A.hp<=0||B.over)continue;
+    if(A.status==="stun"&&rng()<.25){msg(`${nm(s)} is stunned and can't move.`);continue}
+    ev.push({k:"use",s,t:mv.t});msg(`${nm(s)} used ${mv.n}!`);
+    if(mv.c!=="x"&&D.hp<=0){msg("But there was nothing to hit.");continue}
+    if(mv.acc&&rng()*100>=mv.acc){msg("It missed!");continue}
+    if(mv.c!=="x"){
+      const tm=typeMult(mv.t,D.types),crit=rng()<(mv.crit?.25:.0625),stab=A.types.includes(mv.t)?1.5:1;
+      let atk=eff(s,mv.c==="p"?"atk":"spa");if(mv.c==="p"&&A.status==="burn")atk*=.75;
+      let dmg=Math.floor((((2*A.lv/5+2)*mv.pw*atk/eff(f,"def"))/50+2)*.7*stab*tm*(crit?1.5:1)*(.85+rng()*.15));dmg=Math.max(1,Math.min(D.hp,dmg));
+      D.hp-=dmg;ev.push({k:"hit",s:f,tm});hp(f);
+      if(crit)msg("A critical hit!");if(tm>1)msg("It's super effective!");else if(tm<1)msg("It's not very effective…");
+      if(mv.drain&&A.hp<A.max){A.hp=Math.min(A.max,A.hp+Math.max(1,Math.floor(dmg*mv.drain)));hp(s);msg(`${nm(s)} drained some energy.`)}
+      if(mv.recoil){A.hp=Math.max(0,A.hp-Math.max(1,Math.floor(dmg*mv.recoil)));hp(s);msg(`${nm(s)} was hurt by the recoil.`)}
+      if(D.hp<=0)faint(f);
+      else{
+        if(mv.burn&&!D.status&&!D.types.includes("Fire")&&rng()*100<mv.burn){D.status="burn";ev.push({k:"status",s:f,i:B.sides[f].act,v:"burn"});msg(`${nm(f)} was burned!`)}
+        if(mv.stun&&!D.status&&!D.types.includes("Electric")&&rng()*100<mv.stun){D.status="stun";ev.push({k:"status",s:f,i:B.sides[f].act,v:"stun"});msg(`${nm(f)} was stunned!`)}
+      }
+      if(A.hp<=0)faint(s);
+    }
+    if(mv.heal&&A.hp>0){if(A.hp>=A.max&&!mv.cure&&!mv.st)msg("But its HP is already full.");else{A.hp=Math.min(A.max,A.hp+Math.floor(A.max*mv.heal));hp(s);msg(`${nm(s)} recovered HP.`)}}
+    if(mv.cure&&A.status){A.status=null;ev.push({k:"status",s,i:B.sides[s].act,v:null});msg(`${nm(s)} shook it off.`)}
+    for(const [who,k,n] of mv.st||[]){const t=who==="s"?s:f;if(bAct(B,t).hp>0)stat(t,k,n)}
+  }
+  for(const s of [0,1]){const m=bAct(B,s);if(m.hp>0&&m.status==="burn"){m.hp=Math.max(0,m.hp-Math.max(1,Math.floor(m.max/12)));hp(s);msg(`${nm(s)} was hurt by its burn.`);if(m.hp<=0)faint(s)}}
+  if(wiped.length){end(wiped.length===2?wiped[1]:1-wiped[0]);return ev}
+  for(const s of [0,1])if(bAct(B,s).hp<=0){const i=B.sides[s].mons.findIndex(m=>m.hp>0);sendIn(s,i)}
+  return ev;
+}
+function bReplay(teams,seed,turns){const B=bNew(teams,seed);let last=[];for(const t of turns||[]){if(B.over)break;last=bTurn(B,t[0],t[1])}return {B,last}}
+// Computer opponent: mostly the hardest-hitting move, heals when low.
+function bAI(B,s,rand){
+  const A=bAct(B,s),D=bAct(B,1-s),r=rand||Math.random;let best=0,bs=-1;
+  A.moves.forEach((id,i)=>{const mv=MV[id];let sc;
+    if(mv.c==="x")sc=mv.heal?(A.hp<A.max*.4?140:0):(B.sides[s].stg[(mv.st[0]||[])[1]]||0)<2&&A.hp>A.max*.6?45:5;
+    else sc=mv.pw*(A.types.includes(mv.t)?1.5:1)*typeMult(mv.t,D.types)*(mv.acc||100)/100*(A.stats[mv.c==="p"?"atk":"spa"]/Math.max(A.stats.atk,A.stats.spa));
+    sc*=.85+r()*.3;if(sc>bs){bs=sc;best=i}});
+  return {m:best};
+}
+
+/* ---------- Bonus XP from battles and puzzles (capped per day) ---------- */
+const CAPS={b:300,p:200,g:60,x:600};
+const capDay=()=>{if(!state.capd||state.capd.d!==today())state.capd={d:today(),b:0,p:0,g:0,x:0};return state.capd};
+function awardXP(kind,n){const c=capDay(),give=Math.max(0,Math.min(Math.round(n),CAPS[kind]-(c[kind]||0)));c[kind]=(c[kind]||0)+give;state.bx=(state.bx||0)+give;return give}
+function awardGems(n){const c=capDay(),give=Math.max(0,Math.min(n,CAPS.g-(c.g||0)));c.g=(c.g||0)+give;state.gemsEarned=(state.gemsEarned||0)+give;return give}
+function petXpAdd(id,n){const pt=state.pets[id];if(!pt||n<=0)return;const b=petLevel(pt.xp);pt.xp+=n;const a=petLevel(pt.xp);
+  if(petStage(a.L)>petStage(b.L)){postActivity("pet",{id,from:petStage(b.L),to:petStage(a.L),myth:!!pt.myth});toast("★",`${PETS[id].names[petStage(b.L)]} evolved`,`Say hello to ${PETS[id].names[petStage(a.L)]}.`,"")}
+  const nw=learnset(id).filter(x=>x[0]>b.L&&x[0]<=a.L);if(nw.length)toast("♪",`${PETS[id].names[petStage(a.L)]} learned ${nw.map(x=>MV[x[1]].n).join(" and ")}`,"Pick its four moves on its profile.","")}
+
+/* ---------- Pet types, stats and moves on the pet profile ---------- */
+const typeChip=t=>`<span class="tchip" style="--tc:${TCOL[t]}">${t}</span>`;
+const CATN={p:"Physical",s:"Special",x:"Status"};
+function mvFx(m){
+  if(m.c==="x")return m.d||"";const o=[];
+  if(m.pri)o.push("Always goes first");if(m.acc)o.push(`${m.acc}% accurate`);if(m.crit)o.push("Often lands a critical hit");if(m.drain)o.push("Heals you for part of the damage");
+  if(m.recoil)o.push("Hurts you with recoil");if(m.burn)o.push(`${m.burn}% chance to burn`);if(m.stun)o.push(`${m.stun}% chance to stun`);
+  for(const [w,k,n] of m.st||[])o.push(`${n>0?"Raises":"Lowers"} ${w==="s"?"your":"the foe's"} ${STATN[k]}`);return o.join(" · ")}
+const mvRow=(id,extra,tag)=>{const m=MV[id],fx=mvFx(m);return `<${tag||"div"} class="bmv" style="--tc:${TCOL[m.t]}" ${extra||""}><span class="mv-n"><b>${esc(m.n)}</b><small>${m.t} · ${CATN[m.c]}${fx?" · "+esc(fx):""}</small></span><span class="mv-p">${m.c==="x"?"—":m.pw}</span></${tag||"div"}>`};
+// p: {id,lv,myth,moves,tm}
+function petBattleHTML(p,own){
+  const st=statsOf(p.id,p.lv),ty=typesOf(p.id,p.lv),mv=activeMoves(p),b=BDATA[p.id],m=[1,1.15,1.3][petStage(p.lv)],keys=["hp","atk","def","spa","spe"];
+  const nx=learnset(p.id).find(x=>x[0]>p.lv),locked=p.lv<8&&b.t2!==PETS[p.id].el,nd=own?Object.values(state.discs||{}).reduce((a,n)=>a+n,0):0;
+  return `<div class="pbt"><div class="btnrow" style="justify-content:center">${ty.map(typeChip).join("")}${locked?`<span class="tchip lock">+ ${b.t2} at Lv 8</span>`:""}</div>
+    <div class="statgrid">${keys.map((k,i)=>`<span>${STATN[k]}</span><b class="num">${st[k]}</b><div class="stb"><div style="width:${Math.min(100,b.b[i]*m/1.65).toFixed(0)}%"></div></div>`).join("")}</div>
+    <div class="ph"><h3>Moves</h3>${own?`<button class="link" id="pp-moves">Change</button>`:""}</div>
+    <div class="mvlist">${mv.map(id=>mvRow(id)).join("")}</div>
+    ${nx?`<p class="note" style="padding:0">Learns ${esc(MV[nx[1]].n)} at level ${nx[0]}.</p>`:""}
+    ${own?`<button class="btn ghost sm" id="pp-disc">${nd?`Teach a move disc (${nd})`:"Move discs"}</button>`:""}</div>`;
+}
+function openMoves(id){
+  const pt=state.pets[id],p={id,lv:petLevel(pt.xp).L,tm:pt.tm||[],moves:pt.moves||[]},known=[...new Set(knownMoves(p))];let sel=activeMoves(p).slice();
+  const m=openModal(`${mhead("Moves","Save")}<h2>${esc(petName(id))}'s moves</h2><p class="muted" style="font-size:.9rem">Pick up to four to take into battle. The number is the move's power.</p><div class="mvlist" id="mv-pick"></div>
+    <p class="note" style="padding:0">New moves arrive as it levels up. Move discs from the shop, chests and puzzles teach extra ones.</p>`);
+  const draw=()=>{m.querySelector("#mv-pick").innerHTML=known.map(k=>mvRow(k,`data-mv="${k}" aria-pressed="${sel.includes(k)}"`,"button")).join("")};draw();
+  m.querySelector("#mv-pick").onclick=e=>{const b=e.target.closest("[data-mv]");if(!b)return;const k=b.dataset.mv;
+    if(sel.includes(k))sel=sel.filter(x=>x!==k);else if(sel.length>=4){toast("!","Four moves at most","Take one off first.","");return}else sel.push(k);draw()};
+  m.querySelector("#mh-back").onclick=()=>openPet(id);
+  m.querySelector("#mh-save").onclick=()=>{if(!sel.length){toast("!","Pick at least one move","","");return}pt.moves=sel;save();openPet(id);toast("✓","Moves saved","","")};
+}
+const discPic=(mv,size)=>`<span class="disc" style="--tc:${TCOL[MV[mv].t]};--ds:${size||44}px" aria-hidden="true"></span>`;
+function addDisc(mv,n=1){state.discs=state.discs||{};state.discs[mv]=(state.discs[mv]||0)+n}
+const randDisc=r=>DISCS[Math.floor((r||rnd)()*DISCS.length)];
+function openDiscs(id){
+  const pt=state.pets[id],p={id,lv:petLevel(pt.xp).L,tm:pt.tm||[]},known=knownMoves(p),own=Object.entries(state.discs||{}).filter(([k,n])=>n>0&&MV[k]);
+  const m=openModal(`${mhead("Move discs")}<h2>Teach ${esc(petName(id))} a move</h2>
+    ${own.length?`<p class="muted" style="font-size:.9rem">A disc is used up when you teach it. Any pet can learn any disc.</p><div class="mvlist">${own.map(([k,n])=>`<div class="discrow">${discPic(k,34)}${mvRow(k)}<button class="btn sm" data-teach="${k}" ${known.includes(k)?"disabled":""}>${known.includes(k)?"Known":`Teach · ${n}`}</button></div>`).join("")}</div>`
+      :`<div class="empty"><b>No move discs yet</b><span>Buy them in the Shop, find them in chests, or finish all three daily puzzles for a free one.</span></div>`}`);
+  m.querySelector("#mh-back").onclick=()=>openPet(id);
+  m.querySelectorAll("[data-teach]").forEach(b=>b.onclick=()=>{const k=b.dataset.teach;if(!(state.discs[k]>0))return;state.discs[k]--;pt.tm=(pt.tm||[]).concat(k);
+    const cur=activeMoves({id,lv:p.lv,tm:pt.tm,moves:pt.moves||[]});if(cur.length<4&&!cur.includes(k))pt.moves=cur.concat(k);save();toast("♪",`${petName(id)} learned ${MV[k].n}`,cur.length<4?"It's ready to use.":"Swap it in with Change on its profile.","");openPet(id)});
+}
+// A pet that belongs to someone else: read-only.
+function openPetView(p,owner,back){
+  if(!PETS[p.id]||!BDATA[p.id])return;const P=PETS[p.id],lv=Math.max(1,Math.min(100,p.lv|0)),stg=petStage(lv),my=!!p.myth;
+  const m=openModal(`${mhead(owner?`@${owner}'s pet`:"Pet")}<div class="petprof${my?" myth":""}${P.origin?" origin":""}" style="--rc:var(${RAR[my?4:P.r].v})"><span class="bob">${sprite(p.id,stg,132,my)}</span></div>
+    <div class="buy"><h2>${my?"✦ ":""}${esc(P.names[stg])}</h2><div class="btnrow" style="justify-content:center">${rarTag({r:P.r})}${my?'<span class="shinyb">★ Shiny</span>':""}</div><span class="muted">Level ${lv}</span></div>
+    ${petBattleHTML({id:p.id,lv,myth:my,moves:p.moves||[],tm:p.moves||[]},false)}<p class="pdesc">${esc(PET_DESC[p.id]||"")}</p>
+    <div class="evo">${[0,1,2].map(i=>`<span class="${i>stg?"lock":""}">${sprite(p.id,i,52,my)}<small>${i>stg?"???":esc(P.names[i])}<br>${i===0?"Lv 1":i===1?"Lv 8":"Lv 20"}</small></span>`).join('<i>›</i>')}</div>`);
+  m.querySelector("#mh-back").onclick=back||closeModal;
+}
+
+/* ---------- Battle teams ---------- */
+const ownedPets=()=>Object.keys(state.pets).filter(id=>PETS[id]&&BDATA[id]);
+function teamOrder(){const own=ownedPets(),t=(state.team||[]).filter((id,i,a)=>own.includes(id)&&a.indexOf(id)===i);
+  return t.concat(own.filter(id=>!t.includes(id)).sort((a,b)=>(a===state.pet?-1:b===state.pet?1:0)||state.pets[b].xp-state.pets[a].xp))}
+const myTeam=n=>teamOrder().slice(0,n).map(id=>monOf(id,state.pets[id]));
+const monChip=(mn,sz)=>`<span class="monchip">${sprite(mn.id,petStage(mn.lv),sz||44,mn.myth)}<small>Lv ${mn.lv}</small></span>`;
+function openTeam(back){
+  let order=teamOrder();
+  const m=openModal(`${mhead("Your team")}<h2>Battle order</h2><p class="muted" style="font-size:.9rem">The top pet goes out first. A 1 v 1 uses the first pet, a 3 v 3 the first three, a 6 v 6 the first six. When a pet faints the next one down steps in.</p><div id="tm-list"></div>`);
+  const draw=()=>{m.querySelector("#tm-list").innerHTML=order.map((id,i)=>{const mn=monOf(id,state.pets[id]);return `<div class="berow${i>=6?" off":""}"><b class="lbn">${i+1}</b><button class="be-i petbtn" data-pv="${id}">${sprite(id,petStage(mn.lv),40,mn.myth)}</button><b>${esc(PETS[id].names[petStage(mn.lv)])}<br><span class="muted" style="font-weight:600;font-size:.8rem">Lv ${mn.lv} · ${typesOf(id,mn.lv).join(" / ")}</span></b>
+    <button class="btn sm ghost" data-up="${i}" ${i?"":"disabled"} aria-label="Move up">▲</button><button class="btn sm ghost" data-dn="${i}" ${i<order.length-1?"":"disabled"} aria-label="Move down">▼</button></div>`}).join("")};draw();
+  m.querySelector("#tm-list").onclick=e=>{const u=e.target.closest("[data-up]"),d=e.target.closest("[data-dn]"),pv=e.target.closest("[data-pv]");
+    if(pv){openPet(pv.dataset.pv);return}if(!u&&!d)return;const i=+(u||d).dataset[u?"up":"dn"],j=u?i-1:i+1;[order[i],order[j]]=[order[j],order[i]];state.team=order.slice();save();draw()};
+  m.querySelector("#mh-back").onclick=()=>{closeModal();if(back)back();else refresh()};
+}
+
+/* ---------- Battle tab ---------- */
+const bt={list:[],ratings:{},loaded:false,at:0,err:"",cur:null,timer:null};
+const BTIERS=[[0,"Bronze","#c98a52"],[1100,"Silver","#b9c4d0"],[1200,"Gold","#ffc53d"],[1300,"Platinum","#5fe0cf"],[1400,"Diamond","#7fb8ff"],[1500,"Champion","#ff5fd2"]];
+const tierOfR=r=>[...BTIERS].reverse().find(t=>r>=t[0]);
+const btSide=row=>row.p1===me.id?0:1,btOpp=row=>row.p1===me.id?row.p2:row.p1,uname=id=>social.profiles[id]?"@"+social.profiles[id].username:"your friend";
+const btMoved=row=>btSide(row)===0?row.moved1:row.moved2;
+const btNeeds=row=>row.status==="pending"?row.p2===me.id:row.status==="active"?!btMoved(row):row.status==="done"&&!(state.bdone||{})[row.id]&&Date.now()-new Date(row.updated_at)<7*864e5;
+const battleBadge=()=>me&&bt.loaded?bt.list.filter(btNeeds).length:0;
+async function loadBattles(force){
+  if(!sb||!me||!myProfile)return;if(!force&&bt.loaded&&Date.now()-bt.at<8000)return;
+  const [b,r]=await Promise.all([sb.from("battles").select("*").order("updated_at",{ascending:false}).limit(40),sb.from("battle_ratings").select("*").in("user_id",[me.id,...friendIds()])]);
+  if(b.error){bt.err=/battles|schema cache|does not exist/i.test(b.error.message||"")?"setup":sbErr(b.error);bt.loaded=false}
+  else{bt.err="";bt.list=b.data;bt.ratings=Object.fromEntries((r.data||[]).map(x=>[x.user_id,x]));bt.loaded=true}
+  bt.at=Date.now();updateBadges();if(view==="battle"&&!bt.cur)renderBattle();
+}
+function renderBattle(){
+  const el=$("#v-battle"),own=ownedPets(),team=teamOrder().slice(0,6).map(id=>monOf(id,state.pets[id]));
+  if(!own.length){el.innerHTML=`<div class="empty"><b>You need a pet to battle</b><span>Your first pet is free. It learns moves as it levels up from your training.</span><button class="btn" data-goto="shop" style="align-self:center">Choose a pet</button></div>`;return}
+  const rt=bt.ratings[me?.id]||{rating:1000,wins:0,losses:0},T=tierOfR(rt.rating),nxt=BTIERS[BTIERS.indexOf(T)+1],c=capDay();
+  let h=`<div class="panel btrank" style="--tc:${T[2]}"><span class="shield"><b>${T[1][0]}</b></span><div class="pet-l"><span class="eyebrow">Battle rank</span><h3>${T[1]} <span class="muted num">${rt.rating}</span></h3>
+      <span class="muted" style="font-size:.85rem">${rt.wins} won · ${rt.losses} lost${nxt?` · ${nxt[1]} at ${nxt[0]}`:""}</span></div></div>
+    <div class="panel"><div class="ph"><h3>Your team</h3><button class="link" id="bt-team">Change order</button></div><div class="teamrow">${team.map(mn=>`<button class="petbtn" data-pv="${mn.id}">${monChip(mn,48)}</button>`).join("")}</div>
+      <p class="note" style="padding:0">Tap a pet to see its type, stats and moves.</p></div>
+    <div class="btgrid"><button class="btn" id="bt-friend">Challenge a friend</button><button class="btn ghost" id="bt-cpu">Practice</button></div>`;
+  if(!me||!myProfile)h+=`<p class="note">Sign in on your Profile to battle friends and climb the ladder. Practice works without an account.</p>`;
+  else if(bt.err==="setup")h+=`<div class="empty"><b>Friend battles need one more setup step</b><span>Run the latest supabase-run-this.sql in Supabase, then come back. Practice battles work already.</span></div>`;
+  else if(bt.err)h+=`<p class="formerr">${esc(bt.err)}</p>`;
+  else if(bt.loaded){
+    const inc=bt.list.filter(r=>r.status==="pending"&&r.p2===me.id),act=bt.list.filter(r=>r.status==="active"),sent=bt.list.filter(r=>r.status==="pending"&&r.p1===me.id),done=bt.list.filter(r=>r.status==="done").slice(0,6);
+    const row=(r,sub,btn)=>`<div class="prow"><button class="prow-main" data-bopen="${r.id}">${avHTML(social.profiles[btOpp(r)],40)}<span class="prow-t"><b>${esc(uname(btOpp(r)))}</b><span class="muted">${r.format} v ${r.format} · ${sub}</span></span></button>${btn||""}</div>`;
+    if(inc.length)h+=`<div class="panel"><h3>Challenges <span class="nbadge">${inc.length}</span></h3>${inc.map(r=>row(r,"wants to battle",`<button class="btn sm" data-bopen="${r.id}">Answer</button>`)).join("")}</div>`;
+    if(act.length)h+=`<div class="panel"><h3>Battles</h3>${act.map(r=>row(r,btMoved(r)?"waiting for their move":"your turn",`<button class="btn sm${btMoved(r)?" ghost":""}" data-bopen="${r.id}">${btMoved(r)?"Open":"Play"}</button>`)).join("")}</div>`;
+    if(sent.length)h+=`<div class="panel"><h3>Sent</h3>${sent.map(r=>row(r,"waiting for an answer",`<button class="btn sm ghost" data-bcancel="${r.id}">Cancel</button>`)).join("")}</div>`;
+    if(done.length)h+=`<div class="panel"><h3>Results</h3>${done.map(r=>row(r,`${r.winner===me.id?"you won":"you lost"} · ${r.winner===me.id?"+":"−"}${r.delta} · ${ago(r.updated_at)}`,btNeeds(r)?`<button class="btn sm" data-bopen="${r.id}">Collect</button>`:"")).join("")}</div>`;
+    const lad=[me.id,...friendIds()].map(id=>({id,r:bt.ratings[id]||{rating:1000,wins:0,losses:0}})).sort((a,b)=>b.r.rating-a.r.rating);
+    if(lad.length>1)h+=`<div class="panel"><h3>Ladder</h3><div class="lb">${lad.map((x,i)=>{const p=social.profiles[x.id],t=tierOfR(x.r.rating);return p?`<div class="lbrow"><b class="lbn">${i+1}</b>${avHTML(p,34)}<span class="prow-t"><b>${x.id===me.id?"You":"@"+esc(p.username)}</b><span class="muted">${x.r.wins} won · ${x.r.losses} lost</span></span><b class="num" style="color:${t[2]}">${t[1]} ${x.r.rating}</b></div>`:""}).join("")}</div></div>`;
+  }else h+=`<p class="note">Loading your battles…</p>`;
+  h+=`<div class="panel"><h3>Rewards</h3><p class="muted" style="font-size:.9rem">Every battle gives you and your pets XP, more for a win. Wins also pay gems. Friend battles move your rank; practice doesn't.</p>
+      <div class="capgrid"><span>Battle XP today</span><b class="num">${c.b||0} / ${CAPS.b}</b><span>Gems today</span><b class="num">${c.g||0} / ${CAPS.g}</b><span>Pet XP today</span><b class="num">${c.x||0} / ${CAPS.x}</b></div></div>
+    <div class="btgrid"><button class="btn ghost sm" id="bt-types">Type chart</button><button class="btn ghost sm" id="bt-how">How battles work</button></div>`;
+  el.innerHTML=h;
+}
+function openTypes(){
+  const m=openModal(`${mhead("Type chart")}<p class="muted" style="font-size:.9rem">A move does double damage to types it's strong against and half to types that resist it. Pets gain a second type at level 8. A move that matches its user's type hits 50% harder.</p>
+    ${TYPES.map(t=>`<div class="tcrow">${typeChip(t)}<div><small>Strong against</small><span>${TSTRONG[t].map(typeChip).join("")||'<span class="muted">nothing</span>'}</span><small>Resisted by</small><span>${TWEAK[t].map(typeChip).join("")}</span></div></div>`).join("")}`);
+  m.querySelector("#mh-back").onclick=closeModal;
+}
+function openHow(){
+  openModal(`${mhead("How battles work")}<ul class="howl"><li>Each turn you and your opponent both pick a move. The faster pet goes first.</li><li>Play live, or take your turn whenever you like. You get a notification when it's your turn.</li>
+    <li>Pick 1, 3 or 6 pets a side. You can switch pets instead of attacking. When one faints, the next in your order steps in.</li><li>Level matters most. Stats grow with every level and jump when a pet evolves.</li>
+    <li>Pets learn moves as they level up. Choose four on the pet's profile. Move discs teach extra moves.</li><li>Burned pets lose a little HP each turn and hit softer. Stunned pets are slower and sometimes can't move.</li>
+    <li>Beat friends to climb from Bronze to Champion.</li></ul><button class="btn" data-close>Got it</button>`).querySelector("#mh-back").onclick=closeModal;
+}
+const fmtPick=(sel,n)=>`<div class="seg3" id="bf-fmt">${[1,3,6].map(f=>`<button data-f="${f}" aria-pressed="${sel===f}" ${f>1&&n<2?"disabled":""}>${f} v ${f}</button>`).join("")}</div>`;
+function openChallenge(uid){
+  if(!me||!myProfile){toast("!","Sign in first","Create an account on your Profile to battle friends.","");return}
+  if(!ownedPets().length){toast("!","You need a pet first","Pick one in the Shop.","");return}
+  if(!uid){const fs=friendIds();
+    const m=openModal(`${mhead("Challenge")}<h2>Who do you want to battle?</h2>${fs.length?fs.map(id=>{const p=social.profiles[id];return p?`<div class="prow"><button class="prow-main" data-ch="${id}">${avHTML(p,42)}<span class="prow-t"><b>@${esc(p.username)}</b><span class="muted">${tierOfR((bt.ratings[id]||{rating:1000}).rating)[1]} · Lv ${p.level}</span></span></button><button class="btn sm" data-ch="${id}">Battle</button></div>`:""}).join(""):`<div class="empty"><b>No friends yet</b><span>Add friends on the Friends tab, then challenge them here.</span></div>`}`);
+    m.querySelector("#mh-back").onclick=closeModal;m.querySelectorAll("[data-ch]").forEach(b=>b.onclick=()=>openChallenge(b.dataset.ch));return}
+  let fmt=Math.min(3,ownedPets().length)>=3?3:1;
+  const m=openModal(`${mhead("Challenge")}<h2>Battle ${esc(uname(uid))}</h2><span class="eyebrow">Pets a side</span>${fmtPick(fmt,ownedPets().length)}<div class="ph"><span class="eyebrow">Your team</span><button class="link" id="bf-team">Change order</button></div><div class="teamrow" id="bf-teamrow"></div>
+    <p class="note" style="padding:0">They pick their team when they accept. You'll both get a notification on each turn.</p><button class="btn" id="bf-send">Send challenge</button>`);
+  const draw=()=>{m.querySelectorAll("#bf-fmt button").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.f===fmt));m.querySelector("#bf-teamrow").innerHTML=myTeam(fmt).map(x=>monChip(x,48)).join("")};draw();
+  m.querySelector("#bf-fmt").onclick=e=>{const b=e.target.closest("[data-f]");if(b&&!b.disabled){fmt=+b.dataset.f;draw()}};
+  m.querySelector("#mh-back").onclick=closeModal;m.querySelector("#bf-team").onclick=()=>openTeam(()=>openChallenge(uid));
+  m.querySelector("#bf-send").onclick=async e=>{e.target.disabled=true;const {error}=await sb.rpc("battle_challenge",{p_opponent:uid,p_format:fmt,p_team:myTeam(fmt)});
+    if(error){e.target.disabled=false;toast("!","Couldn't send the challenge",/battle_challenge|schema cache/i.test(error.message||"")?"Battles aren't set up on the server yet.":sbErr(error),"");return}
+    closeModal();toast("⚔","Challenge sent",`${uname(uid)} will get a notification.`,"");await loadBattles(true);if(view!=="battle")go("battle")};
+}
+function openIncoming(row){
+  const m=openModal(`${mhead("Challenge")}<div class="buy">${avHTML(social.profiles[row.p1],64)}<h2>${esc(uname(row.p1))} wants to battle</h2><span class="muted">${row.format} v ${row.format} · their team</span><div class="teamrow">${(row.team1||[]).filter(x=>PETS[x.id]).map(x=>monChip(x,44)).join("")}</div></div>
+    <div class="ph"><span class="eyebrow">Your team</span><button class="link" id="bi-team">Change order</button></div><div class="teamrow">${myTeam(row.format).map(x=>monChip(x,48)).join("")}</div>
+    <div class="btnrow"><button class="btn" id="bi-yes" style="flex:1">Accept</button><button class="btn ghost" id="bi-no">Decline</button></div>`);
+  m.querySelector("#mh-back").onclick=closeModal;m.querySelector("#bi-team").onclick=()=>openTeam(()=>openIncoming(row));
+  m.querySelector("#bi-yes").onclick=async e=>{if(!ownedPets().length){toast("!","You need a pet first","Pick one in the Shop.","");return}e.target.disabled=true;
+    const {error}=await sb.rpc("battle_accept",{p_id:row.id,p_team:myTeam(row.format)});if(error){e.target.disabled=false;toast("!","Couldn't accept",sbErr(error),"");return}
+    await loadBattles(true);openBattleId(row.id)};
+  m.querySelector("#bi-no").onclick=async()=>{await sb.rpc("battle_decline",{p_id:row.id});closeModal();await loadBattles(true)};
+}
+async function openBattleId(id){
+  if(!me)return;let row=bt.list.find(r=>String(r.id)===String(id));
+  if(!row){const {data}=await sb.from("battles").select("*").eq("id",id).maybeSingle();row=data;if(row&&!social.profiles[btOpp(row)])await loadSocial(true)}
+  if(!row){toast("!","That battle is gone","","");return}
+  if(row.status==="pending"){if(row.p2===me.id)openIncoming(row);else toast("⚔","Waiting for an answer",`${uname(row.p2)} hasn't accepted yet.`,"");return}
+  if(row.status==="declined"){toast("!","That challenge was declined","","");return}
+  openBattle({mode:"pvp",row,me:btSide(row),teams:[row.team1,row.team2],seed:row.seed,oppName:uname(btOpp(row)),format:row.format});
+}
+function openPractice(){
+  let fmt=ownedPets().length>=3?3:1,diff="even";
+  const m=openModal(`${mhead("Practice")}<h2>Practice battle</h2><p class="muted" style="font-size:.9rem">Battle a computer team matched to your pets' levels. It doesn't change your rank.</p>
+    <span class="eyebrow">Pets a side</span>${fmtPick(fmt,ownedPets().length)}<span class="eyebrow">Opponent</span><div class="seg3" id="bp-diff">${[["easy","Easy"],["even","Even"],["hard","Hard"]].map(([k,n])=>`<button data-d="${k}" aria-pressed="${k===diff}">${n}</button>`).join("")}</div>
+    <button class="btn" id="bp-go">Start battle</button>`);
+  m.querySelector("#mh-back").onclick=closeModal;
+  m.querySelector("#bf-fmt").onclick=e=>{const b=e.target.closest("[data-f]");if(b&&!b.disabled){fmt=+b.dataset.f;m.querySelectorAll("#bf-fmt button").forEach(x=>x.setAttribute("aria-pressed",x===b))}};
+  m.querySelector("#bp-diff").onclick=e=>{const b=e.target.closest("[data-d]");if(b){diff=b.dataset.d;m.querySelectorAll("#bp-diff button").forEach(x=>x.setAttribute("aria-pressed",x===b))}};
+  m.querySelector("#bp-go").onclick=()=>startCpu(fmt,diff);
+}
+function startCpu(fmt,diff){
+  const mine=myTeam(fmt),k={easy:.75,even:1,hard:1.15}[diff],pool=shuffled(Object.keys(PETS).filter(id=>!PETS[id].origin&&!PETS[id].code),"cpu"+rnd()).slice(0,mine.length);
+  const foe=pool.map((id,i)=>{const lv=Math.max(1,Math.min(100,Math.round(mine[i].lv*k+(diff==="easy"?0:rnd()*2))));return {id,lv,myth:false,moves:activeMoves({id,lv})}});
+  openBattle({mode:"cpu",me:0,teams:[mine,foe],seed:Math.floor(rnd()*2147483647),oppName:"Coach Bot",format:fmt,diff});
+}
+
+/* ---------- The battle screen ---------- */
+const btSnap=B=>({act:B.sides.map(s=>s.act),hp:B.sides.map(s=>s.mons.map(m=>m.hp)),status:B.sides.map(s=>s.mons.map(m=>m.status))});
+const btTxt=(ctx,t)=>t.replace(/\{(\d)\}(@?)/g,(_,s,at)=>at?(+s===ctx.me?"You":ctx.oppName):(+s===ctx.me?"":"Foe "));
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+function openBattle(ctx){
+  ctx.B=bNew(ctx.teams,ctx.seed);ctx.applied=0;ctx.sent=-1;ctx.playing=false;ctx.fast=false;ctx.ended=false;
+  if(ctx.mode==="pvp")for(const t of ctx.row.turns||[]){if(ctx.B.over)break;bTurn(ctx.B,t[0],t[1]);ctx.applied++}
+  ctx.V=btSnap(ctx.B);bt.cur=ctx;
+  const m=openModal(`<div class="bt" id="bt"><div class="bt-top"><button class="mh-b" id="bt-x"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Leave</button><b>You vs ${esc(ctx.oppName)}</b><span class="muted num" id="bt-turn"></span></div>
+    <div class="bt-field"><div class="bt-row foe"><div class="bt-info" id="bi-f"></div><span class="bt-spr" id="bs-f"></span></div><div class="bt-row me"><span class="bt-spr" id="bs-m"></span><div class="bt-info" id="bi-m"></div></div></div>
+    <button class="bt-log" id="bt-log" aria-live="polite"></button><div class="bt-acts" id="bt-acts"></div></div>`);
+  m.classList.add("btsheet");
+  m.querySelector("#bt-x").onclick=()=>btClose();
+  m.querySelector("#bt-log").onclick=()=>{ctx.fast=true};
+  m.querySelector("#bt-acts").onclick=e=>btClick(ctx,e);
+  btDraw(ctx);
+  const done=ctx.mode==="pvp"&&ctx.row.status==="done";
+  if(ctx.B.over||done)btEnd(ctx,done?(ctx.row.winner===me.id?ctx.me:1-ctx.me):ctx.B.winner,done&&!ctx.B.over);
+  else{btLog(ctx,ctx.applied?"Pick your next move.":`${ctx.oppName} sent out ${bAct(ctx.B,1-ctx.me).name}. Go, ${bAct(ctx.B,ctx.me).name}!`);btActs(ctx)}
+  if(ctx.mode==="pvp"){clearInterval(bt.timer);bt.timer=setInterval(()=>btPoll(ctx),2500)}
+}
+function btClose(){clearInterval(bt.timer);bt.cur=null;closeModal();loadBattles(true);refresh()}
+const btLive=ctx=>bt.cur===ctx&&!!document.getElementById("bt");
+function btLog(ctx,t){const el=$("#bt-log");if(el)el.textContent=t}
+function btDraw(ctx,only){
+  const B=ctx.B,V=ctx.V;if(!btLive(ctx))return;
+  for(const s of [0,1]){if(only!=null&&only!==s)continue;const mine=s===ctx.me,i=V.act[s],mn=B.sides[s].mons[i],hp=V.hp[s][i],pc=Math.max(0,hp/mn.max*100),sfx=mine?"m":"f";
+    $("#bs-"+sfx).innerHTML=`<span class="${hp>0?"bob":"down"}">${sprite(mn.id,petStage(mn.lv),mine?132:112,mn.myth)}</span>`;
+    $("#bi-"+sfx).innerHTML=`<div class="bi-n"><b>${esc(mn.name)}</b><span class="muted num">Lv ${mn.lv}</span></div><div class="bi-t">${mn.types.map(typeChip).join("")}${V.status[s][i]?`<span class="tchip st-${V.status[s][i]}">${V.status[s][i]==="burn"?"Burned":"Stunned"}</span>`:""}</div>
+      <span class="hpbar"><i id="hp-${sfx}" class="${pc<=20?"low":pc<=50?"mid":""}" style="width:${pc.toFixed(1)}%"></i></span><div class="bi-b"><span class="num muted" id="hpn-${sfx}">${mine?`${hp} / ${mn.max}`:`${Math.ceil(pc)}%`}</span><span class="tdots">${B.sides[s].mons.map((x,j)=>`<i class="${V.hp[s][j]<=0?"out":j===i?"on":""}"></i>`).join("")}</span></div>`}
+  const tn=$("#bt-turn");if(tn)tn.textContent=`Turn ${ctx.applied+1}`;
+}
+function btHp(ctx,s){const mine=s===ctx.me,i=ctx.V.act[s],mn=ctx.B.sides[s].mons[i],hp=ctx.V.hp[s][i],pc=Math.max(0,hp/mn.max*100),sfx=mine?"m":"f",b=$("#hp-"+sfx),n=$("#hpn-"+sfx);
+  if(b){b.style.width=pc.toFixed(1)+"%";b.className=pc<=20?"low":pc<=50?"mid":""}if(n)n.textContent=mine?`${hp} / ${mn.max}`:`${Math.ceil(pc)}%`}
+async function btPlay(ctx,ev){
+  ctx.playing=true;ctx.fast=false;const anim=(s,cls)=>{const el=$("#bs-"+(s===ctx.me?"m":"f"));if(el){el.classList.remove("lunge","hit","hit2");void el.offsetWidth;el.classList.add(cls)}};
+  for(const e of ev){if(!btLive(ctx))return;
+    if(e.k==="msg"){btLog(ctx,btTxt(ctx,e.t));await wait(ctx.fast?260:900)}
+    else if(e.k==="use")anim(e.s,"lunge");
+    else if(e.k==="hit"){anim(e.s,e.tm>1?"hit2":"hit");try{navigator.vibrate&&navigator.vibrate(e.tm>1?40:15)}catch(x){}}
+    else if(e.k==="hp"){ctx.V.hp[e.s][e.i]=e.hp;btHp(ctx,e.s);await wait(ctx.fast?120:380)}
+    else if(e.k==="status"){ctx.V.status[e.s][e.i]=e.v;btDraw(ctx,e.s)}
+    else if(e.k==="faint"){ctx.V.hp[e.s][e.i]=0;btDraw(ctx,e.s)}
+    else if(e.k==="in"){ctx.V.act[e.s]=e.i;btDraw(ctx,e.s)}}
+  ctx.V=btSnap(ctx.B);ctx.playing=false;if(btLive(ctx))btDraw(ctx);
+}
+function btActs(ctx,mode){
+  const el=$("#bt-acts");if(!el||!btLive(ctx))return;const B=ctx.B,A=bAct(B,ctx.me),D=bAct(B,1-ctx.me);
+  if(ctx.ended)return;
+  if(ctx.mode==="pvp"&&(ctx.sent===ctx.applied||(btMoved(ctx.row)&&ctx.row.turns.length===ctx.applied))){
+    el.innerHTML=`<div class="bt-wait"><span class="spin"></span><b>Waiting for ${esc(ctx.oppName)}</b><span class="muted">You've locked in your move. You can leave; you'll get a notification when the turn plays.</span></div>`;return}
+  if(mode==="switch"){el.innerHTML=`<div class="bt-sw">${B.sides[ctx.me].mons.map((mn,i)=>`<button class="swbtn" data-sw="${i}" ${mn.hp<=0||i===B.sides[ctx.me].act?"disabled":""}>${sprite(mn.id,petStage(mn.lv),40,mn.myth)}<span><b>${esc(mn.name)}</b><small>Lv ${mn.lv} · ${mn.hp<=0?"Fainted":i===B.sides[ctx.me].act?"In battle":`${mn.hp} / ${mn.max} HP`}</small></span></button>`).join("")}</div><button class="btn ghost sm" data-back>Back to moves</button>`;return}
+  if(mode==="quit"){el.innerHTML=`<div class="bt-wait"><b>Give up this battle?</b><span class="muted">${ctx.mode==="pvp"?"It counts as a loss on the ladder.":"You'll get the XP for a loss."}</span></div><div class="btgrid"><button class="btn danger" data-quit>Give up</button><button class="btn ghost" data-back>Keep fighting</button></div>`;return}
+  const alive=bAlive(B,ctx.me);
+  el.innerHTML=`<div class="bt-moves">${A.moves.map((id,i)=>{const mv=MV[id],tm=mv.c==="x"?1:typeMult(mv.t,D.types);return `<button class="mvbtn" data-m="${i}" style="--tc:${TCOL[mv.t]}"><b>${esc(mv.n)}</b><small>${mv.t}${mv.c==="x"?" · Status":" · "+mv.pw}${tm>1?' · <em class="se">Strong</em>':tm<1?' · <em class="nve">Weak</em>':""}</small></button>`}).join("")}</div>
+    <div class="btgrid"><button class="btn ghost sm" data-swopen ${alive>1?"":"disabled"}>Switch pet</button><button class="btn ghost sm" data-quitopen>Give up</button></div>`;
+}
+function btClick(ctx,e){
+  if(ctx.playing||!btLive(ctx))return;const t=e.target.closest("button");if(!t||t.disabled)return;
+  if(t.dataset.m!=null)btChoose(ctx,{m:+t.dataset.m});else if(t.dataset.sw!=null)btChoose(ctx,{s:+t.dataset.sw});
+  else if(t.dataset.swopen!=null)btActs(ctx,"switch");else if(t.dataset.quitopen!=null)btActs(ctx,"quit");else if(t.dataset.back!=null)btActs(ctx);
+  else if(t.dataset.quit!=null)btQuit(ctx);else if(t.dataset.done!=null)btClose();else if(t.dataset.again!=null){closeModal();bt.cur=null;startCpu(ctx.format,ctx.diff)}
+}
+async function btRun(ctx,turn){
+  const ev=bTurn(ctx.B,turn[0],turn[1]);ctx.applied++;$("#bt-acts").innerHTML="";await btPlay(ctx,ev);if(!btLive(ctx))return;
+  if(ctx.B.over)btEnd(ctx,ctx.B.winner);else{btLog(ctx,`What will ${bAct(ctx.B,ctx.me).name} do?`);btActs(ctx)}
+}
+async function btChoose(ctx,a){
+  if(ctx.mode==="cpu"){await btRun(ctx,[a,bAI(ctx.B,1,rnd)]);return}
+  ctx.sent=ctx.applied;btActs(ctx);btLog(ctx,"Move locked in.");
+  const {error}=await sb.rpc("battle_move",{p_id:ctx.row.id,p_turn:ctx.applied,p_action:a});
+  if(error){ctx.sent=-1;if(/already been played/.test(error.message||""))btPoll(ctx);else{toast("!","Couldn't send your move",sbErr(error),"");btActs(ctx)}return}
+  btPoll(ctx);
+}
+async function btPoll(ctx){
+  if(!btLive(ctx)){clearInterval(bt.timer);return}if(ctx.playing||ctx.polling||ctx.ended)return;ctx.polling=true;
+  const {data,error}=await sb.from("battles").select("*").eq("id",ctx.row.id).maybeSingle();ctx.polling=false;
+  if(error||!data||!btLive(ctx)||ctx.playing)return;const was=btMoved(ctx.row);ctx.row=data;
+  if(data.turns.length>ctx.applied){while(ctx.applied<data.turns.length&&btLive(ctx)&&!ctx.B.over){const t=data.turns[ctx.applied];await btRun(ctx,t)}return}
+  if(data.status==="done"&&!ctx.B.over){btLog(ctx,data.winner===me.id?`${ctx.oppName} gave up.`:"You gave up.");btEnd(ctx,data.winner===me.id?ctx.me:1-ctx.me,true);return}
+  if(was!==btMoved(data))btActs(ctx);
+}
+async function btQuit(ctx){
+  if(ctx.mode==="cpu"){btLog(ctx,"You gave up.");btEnd(ctx,1-ctx.me,true);return}
+  const {error}=await sb.rpc("battle_forfeit",{p_id:ctx.row.id});if(error){toast("!","Couldn't give up",sbErr(error),"");return}
+  ctx.row={...ctx.row,status:"done",winner:btOpp(ctx.row)};btLog(ctx,"You gave up.");btEnd(ctx,1-ctx.me,true);
+}
+async function btEnd(ctx,winner,quiet){
+  if(ctx.ended)return;ctx.ended=true;clearInterval(bt.timer);const won=winner===ctx.me,pvp=ctx.mode==="pvp",el=$("#bt-acts");let delta=pvp?ctx.row.delta||0:0;
+  if(!quiet)btLog(ctx,won?`You beat ${ctx.oppName}!`:`${ctx.oppName} won this one.`);
+  if(el)el.innerHTML=`<div class="bt-wait"><span class="spin"></span></div>`;
+  if(pvp&&ctx.row.status!=="done"){const r=await sb.rpc("battle_finish",{p_id:ctx.row.id,p_winner:winner===0?ctx.row.p1:ctx.row.p2,p_turns:ctx.applied});if(!r.error)delta=r.data||0}
+  else if(pvp&&!delta){const r=await sb.from("battles").select("delta").eq("id",ctx.row.id).maybeSingle();delta=r.data?.delta||0}
+  const claimed=pvp&&(state.bdone||{})[ctx.row.id],rw=claimed?null:btReward(ctx,won);
+  if(!btLive(ctx))return;
+  $("#bt-acts").innerHTML=`<div class="bt-res ${won?"win":"lose"}"><h2>${won?"Victory":"Defeat"}</h2>
+      ${rw?`<div class="sumgrid"><div><b style="color:var(--xp)">+${rw.xp}</b><span>XP</span></div><div><b>+${rw.pxp}</b><span>XP per pet</span></div><div><b>${rw.g?"+"+rw.g:"0"}</b><span>Gems</span></div></div>${rw.capped?`<p class="note" style="padding:0;text-align:center">You've hit today's battle reward cap. Battles still count.</p>`:""}`:`<p class="muted">Rewards already collected.</p>`}
+      ${pvp&&delta?`<p class="num" style="text-align:center;font-weight:800;color:${won?"var(--xp)":"var(--push)"}">${won?"+":"−"}${delta} rank points</p>`:""}</div>
+    <div class="btgrid">${pvp?"":`<button class="btn ghost" data-again>Battle again</button>`}<button class="btn" data-done style="${pvp?"grid-column:1/-1":""}">Done</button></div>`;
+  if(won)try{navigator.vibrate&&navigator.vibrate([30,40,80])}catch(x){}
+}
+function btReward(ctx,won){
+  const pvp=ctx.mode==="pvp",f={1:1,3:1.5,6:2}[ctx.format]||1,d=pvp?1:{easy:.6,even:1,hard:1.25}[ctx.diff]||1;let xp=0,g=0,pxp=0,capped=false;
+  commit(()=>{const want=(pvp?(won?60:25):(won?25:10))*f*d;xp=awardXP("b",want);capped=xp<Math.round(want);if(won)g=awardGems(pvp?15:5);
+    const c=capDay(),pw=Math.round((pvp?(won?80:40):(won?40:20))*f*d);pxp=Math.max(0,Math.min(pw,CAPS.x-(c.x||0)));c.x=(c.x||0)+pxp;
+    for(const mn of ctx.teams[ctx.me])petXpAdd(mn.id,pxp);
+    if(pvp){state.bdone=state.bdone||{};state.bdone[ctx.row.id]=1;const ks=Object.keys(state.bdone);if(ks.length>80)for(const k of ks.slice(0,ks.length-80))delete state.bdone[k]}
+    state.bwins=(state.bwins||0)+(won?1:0)});
+  if(pvp&&won)postActivity("battle",{vs:ctx.oppName.replace(/^@/,""),fmt:ctx.format});
+  return {xp,g,pxp,capped};
+}
+document.addEventListener("click",e=>{
+  if(view!=="battle"||!e.target.closest("#v-battle"))return;const t=e.target.closest("button");if(!t)return;
+  if(t.id==="bt-team")openTeam();else if(t.id==="bt-friend")openChallenge();else if(t.id==="bt-cpu")openPractice();else if(t.id==="bt-types")openTypes();else if(t.id==="bt-how")openHow();
+  else if(t.dataset.pv)openPet(t.dataset.pv);else if(t.dataset.bopen)openBattleId(t.dataset.bopen);else if(t.dataset.goto)go(t.dataset.goto);
+  else if(t.dataset.bcancel)sb.rpc("battle_decline",{p_id:+t.dataset.bcancel}).then(()=>loadBattles(true));
+});
+const W5="aahedaaliiaarghaartiabacaabaciabackabacsabaftabakaabampabandabaseabashabaskabateabayaabbasabbedabbesabbeyabbotabceeabeamabearabeleabetsabhorabideabiesabledablerablesabletablowabmhoabodeabohmaboilabomaaboonabordaboreabortaboutaboveabramabrayabrimabrinabrisabseyabsitabunaabuneabuseabutsabuzzabyesabysmabyssacaisacariaccasaccoyacerbacersacetaacharachedachesachooacidsacidyacingaciniackeeackeracmesacmicacnedacnesacockacoldacornacredacresacridactedactinactonactoracuteacylsadageadaptadawsadaysaddaxaddedadderaddioaddleadeemadeptadhanadieuadiosaditsadmanadmenadminadmitadmixadobeadoboadoptadoreadornadownadozeadradadredadsumadukiadultaduncadustadvewadytaadzedadzesaeciaaedesaegisaeonsaerieaerosaesirafaldafaraafarsafearaffixafireaflajafootaforeafoulafritafrosafteragainagamaagamiagapeagarsagastagateagaveagazeageneagentagersaggeraggieaggriaggroaggryaghasagilaagileagingagiosagismagistagitaagleeagletagleyaglooaglowaglusagmasagogeagoneagonsagonyagoodagoraagreeagriaagrinaguedaguesagunaagutiaheadaheapahentahighahindahingahintaholdahullahuruaidasaidedaideraidesaidoiaidosaieryaigasaightailedaimedaimeraineeaingaaioliairedairerairnsairthairtsaisleaitchaitusaiveraizleajivaajugaajwanakeesakelaakeneakingakitaakkasalaapalackalamoalandalanealangalansalantalapaalapsalarmalaryalatealaysalbasalbeealbumalcidalcosaldeaalderaldolaleckalecsalefsaleftalephalertalewsaleyealfasalgaealgalalgasalgidalginalgoralgumaliasalibialienalifsalignalikealinealistalivealiyaalkiealkosalkydalkylallayalleeallelalleyallisallodallotallowalloyallylalmahalmasalmehalmesalmudalmugalodsaloedaloesaloftalohaaloinalonealongaloofaloosaloudalowealphaaltaralteralthoaltosalulaalumsalurealwayamahsamainamassamateamautamazeambanamberambitambleambosambryamebaameeramendameneamensamentamiasamiceamiciamideamidoamidsamiesamigaamigoamineaminoaminsamirsamissamityamlasammanammonammosamniaamnicamnioamoksamoleamongamortamouramoveamowtampedampleamplyampulamritamuckamuseamylsananaanataanchoancleanconandroanearaneleanentangasangelangerangleangloangryangstanighanileanilsanimaanimeanimianionaniseankerankhsankleankusanlasannalannasannatannexannoyannulanoasanodeanoleanomyansaeantaeantarantasantedantesanticantisantraantreantsyanvilanyonaortaapaceapageapaidapartapaydapaysapeakapeekapersapertaperyapgaraphidaphisapianapingapiolapishapismapneaapodeapodsapoopaportappalappayappelappleapplyapproappuiappuyapresapronapsesapsisapsosaptedapteraptlyaquaeaquasarabaaraksarameararsarbasarborarcedarcosarcusardebardorardriareadareaearealarearareasarecaareddaredearefyareicarenaarenearepaarerearetearetsarettargalarganargilargleargolargonargotargueargusarhatariasarielarikiarilsariotarisearisharkedarledarlesarmedarmerarmetarmilarmorarnasarnutarobaarohaaroidaromaarosearpasarpenarraharrasarrayarretarrisarrowarsedarsesarseyarsisarsonartalartelarticartisartsyaruhearumsarvalarvosarylsasanaascotascusasdicashedashenashesashetasideaskedaskeraskewaskoiaskosaspenasperaspicaspisasproassaiassamassayassesassetassezassotasterastirastunaswayaswimasylaatapsataxyatigiatiltatimyatlasatmanatmasatocsatokeatoksatollatomsatomyatoneatonyatopyatriaatripattapattaratticatuasaudadaudioauditaugeraughtauguraulasaulicauloiaulosaumilaunesauntsauntyauraeauralauraraurasaureiauresauricaurisaurumautosauxinavailavaleavantavastavelsavensaversavertavgasavianavineavionaviseavisoavizeavoidavowsavyzeawaitawakeawardawareawarnawashawatoawaveawaysawdlsaweelawetoawfulawingawmryawnedawnerawokeawolsaworkaxelsaxialaxileaxilsaxingaxiomaxionaxiteaxledaxlesaxmanaxmenaxoidaxoneaxonsayahsayelpaygreayinsayontayresayrieazansazideazidoazineazlonazoicazoleazonsazoteazothazukiazureazurnazuryazygyazymeazymsbaaedbaalsbabasbabelbabesbabkababoobabulbabusbaccabaccobaccybachabachsbacksbaconbaddybadgebadlybaelsbaffsbaffybaftsbagelbaggybaghsbagiebahtsbahusbahutbailsbairnbaithbaitsbaizabaizebajanbajrabajribajusbakedbakenbakerbakesbakrabalasbaldsbaldybaledbalerbalesbalksbalkyballsballybalmsbalmybaloobalsabaltibalunbalusbambibanakbanalbancobancsbandabandhbandsbandybanedbanesbangsbaniabanjobanksbannsbantsbantubantybanyabapusbarbebarbsbarbybarcabardebardobardsbardybaredbarerbaresbarfsbargebaricbarksbarkybarmsbarmybarnsbarnybaronbarpsbarrabarrebarrobarrybaryebasalbasanbasedbasenbaserbasesbashobasicbasijbasilbasinbasisbasksbasonbassebassibassobassybastabastebastibastobastsbatchbatedbatesbathebathsbatikbatonbattabattsbattubattybaudsbauksbaulkbaursbavinbawdsbawdybawlsbawnsbawrsbawtybayedbayesbaylebayoubaytsbazarbazoobeachbeadsbeadybeaksbeakybeamsbeamybeanobeansbeanybeardbearebearsbeastbeathbeatsbeatybeausbeautbeauxbebopbecapbeckebecksbedadbedelbedesbedewbedimbedyebeechbeedibeefsbeefybeepsbeersbeerybeetsbefitbefogbegadbeganbegarbegatbegembegetbeginbegotbegumbegunbeigebeigybeingbekahbelahbelarbelaybelchbeleebelgabeliebellebellsbellybelonbelowbeltsbemadbemasbemixbemudbenchbendsbendybenesbenetbengabenisbennebennibennybentobentsbentybepatberayberesberetbergsberkoberksbermebermsberobberryberthberylbesatbesawbeseebesesbesetbesitbesombesotbestibestsbetasbetedbetelbetesbethsbetidbetonbettabettybevelbeverbevorbevuebevvybewetbewigbezelbezesbezilbhaisbhajibhangbhelsbhootbhunabhutsbiachbialibialybibbsbiblebiccybicepbicesbiddybidedbiderbidesbidetbidisbidonbieldbiersbiffobiffsbiffybifidbigaebiggsbiggybighabightbiglybigosbigotbijoubikedbikerbikesbikiebilbobilbybiledbilesbilgebilgybilksbillsbillybimahbimasbimbobinalbindibindsbinerbinesbingebingobingsbingybinitbinksbintsbiogsbiomebiontbiotabipedbipodbirchbirdsbirksbirlebirlsbirosbirrsbirsebirsybirthbisesbisksbisombisonbitchbiterbitesbitosbitoubitsybittebittsbittybiviabivvybizesbizzobizzyblabsblackbladebladsbladyblaerblaesblaffblagsblahsblainblameblamsblandblankblareblartblaseblashblastblateblatsblattblaudblawnblawsblaysblazebleakblearbleatblebsbleedbleepbleesblendblentblertblessblestbletsbleysblimpblimyblindblingbliniblinkblinsblinyblipsblissblistbliteblitsblitzblivebloatblobsblockblocsblogsblokeblondbloodblookbloombloopbloreblotsblownblowsblowyblubsbludebludybluedbluerbluesbluetblueybluffbluidblumeblunkbluntblurbblursblurtblushblypeboabsboaksboardboarsboartboastboatsbobacbobakbobasbobbybobolboccabocceboccibochebocksbodedbodesbodgebodhibodleboepsboetsboeufboffoboffsboganbogeyboggybogieboglebogusboheabohosboilsboingboinkboitebokedbokehbokesbokosbolarbolasboldsbolesbolixbollsbolosboltsbolusbomasbombebombobombsboncebondsbonedbonerbonesboneybongobongsboniebonksbonnebonnybonusbonzabonzebooaibooayboobsboobyboodybooedboofyboogyboohsbooksbookyboolsboomsboomyboongboonsboordboorsbooseboostboothbootsbootyboozeboozyborakboralborasboraxbordebordsboredboreeborelborerboresborgoboricborksbormsbornaborneboronbortsbortybortzbosiebosksboskybosombosonbossybosunbotasbotchbotelbotesbothybottebottsbottybougeboughbouksbouleboultboundbounsbourdbourgbournbousebousyboutsbovidbowatbowedbowelbowerbowesbowetbowiebowlsbownebowrsbowseboxedboxenboxerboxesboxtyboyarboyauboyedboyfsboygsboylaboyosboysybozosbraaibracebrachbrackbractbradsbraesbragsbraidbrailbrainbrakebraksbrakybramebrandbranebrankbransbrantbrashbrassbrastbratsbravabravebravibravobrawlbrawnbrawsbraxybraysbrazabrazebreadbreakbreambredebredsbreedbreembreerbreesbreidbreisbremebrensbrentbrerebrersbrevebrewsbreysbriarbribebrickbridebriefbrierbriesbrigsbrikibriksbrillbrimsbrinebringbrinkbrinsbrinybriosbrisebriskbrissbrithbritsbrittbrizebroadbrochbrockbrodsbroghbrogsbroilbrokebromebromobroncbrondbroodbrookbroolbroombroosbrosebrosybrothbrownbrowsbrughbruinbruitbrulebrumebrungbruntbrushbruskbrustbrutebrutsbuatsbuazebubalbubasbubbabubbybubusbuchubuckobucksbuckubudasbuddybudgebudisbudosbuffabuffebuffibuffobuffsbuffybufosbuftybuggybuglebuhlsbuhrsbuiksbuildbuiltbuistbukesbulbsbulgebulgybulksbulkybullabullsbullybulsebumbobumfsbumphbumpsbumpybunasbuncebunchbuncobundebundhbundsbundtbundubundybungsbungybuniabunjebunjybunkobunksbunnsbunnybuntsbuntybunyabuoysbuppyburanburasburbsburdsburetburghburgsburinburkaburkeburksburlsburlyburnsburntburooburpsburqaburroburrsburrybursaburseburstbusbybusedbusesbushybusksbuskybussubustibustsbustybutchbuteobutesbutlebuttebuttsbuttybututbutylbuxombuyerbuzzybwanabwazibydedbydesbykedbykesbylawbyresbyrlsbyssibytesbywaycaaedcabalcabascabbycabercabincablecabobcaboccabrecacaocacascachecackscackycacticaddycadeecadescadetcadgecadgycadiecadiscadrecaecacaesecafescaffscagedcagercagescageycagotcahowcaidscainscairdcairncajoncajuncakedcakescakeycalfscalidcalifcalixcalkscallacallscalmscalmycaloscalpacalpscalvecalyxcamancamascamelcameocamescamiscamoscampicampocampscampycamuscanalcandycanedcanehcanercanescangscanidcannacannscannycanoecanoncansocanstcantocantscantycapascapedcapercapescapexcaphscapizcaplecaponcaposcapotcapulcaputcarapcaratcarbocarbscarbycardicardscardycaredcarercarescaretcarexcargocarkscarlecarlscarnscarnycarobcarolcaromcaroncarpicarpscarrscarrycarsecartacartecartscarvecarvycasascascocasedcasescaskscaskycastecastscasuscatchcatercatescattycaudacaukscauldcaulkcaulscaumscaupscausacausecavascavedcavelcavercavescaviecavilcawedcawkscaxonceaseceazecebidcecalcecumcedarcededcedercedescedisceibaceiliceilscelebcellacellicellocellscelomceltscensecentocentscentuceorlcepescerciceredcerescergeceriacericcerneceroscertscertycessecestacesticetescetylcezvechacechackchacochadochadschafechaffchaftchainchairchaischalkchalschampchamschanachangchankchantchaoschapechapschaptcharachardcharecharkcharmcharrcharschartcharychasechasmchatschavechavschawkchawschayachayscheapcheatcheckcheekcheepcheerchefschekachelachelpchemocherechertchesschestchethchevychewschewychiaochiaschibschicachichchickchicochicschidechiefchielchikschildchilechilichillchimbchimechimochimpchinachinechinkchinochinschipschirkchirlchirmchirochirpchirrchirtchiruchitschivechivschivychizzchockchocochocschodechogschoirchokechokochokycholacholicholochompchoofchookchoomchoonchopschordchorechosechotachottchoutchouxchowkchowschubschuckchufachuffchugschumpchumschunkchurlchurnchurrchusechutechylechymechyndcibolcidedcidercidescielscigarciggyciliacillscimarcimexcinchcinctcinescionscippicircacircscirescirlscirriciscocissycistscitalcitedcitercitescivescivetcivicciviecivilcivvyclachclackcladecladsclaesclagsclaimclameclampclamsclangclankclansclapsclaptclaroclartclaryclashclaspclassclastclatsclautclaveclaviclawsclayscleanclearcleatcleckcleekcleepclefscleftclegscleikclemsclepecleptclerkcleveclewsclickcliedcliescliffcliftclimbclimeclineclingclinkclintclipeclipscliptclitscloakcloamclockclodscloffclogsclokeclombclompcloneclonkclonscloopclootclopsclosecloteclothclotscloudclourclouscloutcloveclownclowscloyecloysclozeclubscluckcluedcluesclumpclungclunkclypecnidacoachcoactcoalacoalscoalycoaptcoarbcoastcoatecoaticoatscobbscobbycobiacoblecobracobzacocascoccicoccocockscockycocoacocoscodascodeccodedcodencodercodescodexcodoncoedscoffscogiecogoncoguecohabcohencohoecohogcohoscoifscoigncoilscoinscoirscoitscokedcokescolascolbycoldscoledcolescoleycoliccolincollscollycologcoloncolorcoltscolzacomaecomalcomascombecombicombocombscombycomercomescometcomfycomiccomixcommacommocommscommycompocompscomptcomtecomusconchcondoconedconesconeyconfscongacongecongoconiaconicconinconksconkyconneconnscontecontoconusconvocoochcooedcooeecooercooeycoofscookscookycoolscoolycoombcoomscoomycoonscoopscooptcoostcootscoozecopalcopaycopedcopencopercopescoppycopracopsecopsycoralcoramcorbecorbycordscoredcorercorescoreycorgicoriacorkscorkycormscornicornocornscornucornycorpscorsecorsocoseccosedcosescosetcoseycosiecostacostecostscotancotedcotescothscottacottscouchcoudecoughcouldcountcoupecoupscourbcourdcourecourscourtcoutacouthcovedcovencovercovescovetcoveycovincowalcowancowedcowercowkscowlscowpscowrycoxaecoxalcoxedcoxescoxibcoyedcoyercoylycoypucozedcozencozescozeycoziecraalcrabscrackcraftcragscraiccraigcrakecramecrampcramscranecrankcranscrapecrapscrapycrarecrashcrasscratecravecrawlcrawscrayscrazecrazycreakcreamcredocredscreedcreekcreelcreepcreescremecremscrenacrepecrepscreptcrepycresscrestcrewecrewscriascribscrickcriedcriercriescrimecrimpcrimscrinecrioscripecrisecrispcrithcritscroakcrocicrockcrocscroftcrogscrombcromecronecronkcronycrookcroolcrooncropscrorecrosscrostcroupcroutcrowdcrowncrowscrozecruckcrudecrudscrudycruelcruescruetcruftcrumbcrumpcrunkcruorcruracrusecrushcrustcrusycruvecrwthcryptctenecubbycubebcubedcubercubescubiccubitcuddycuffocuffscuifscuingcuishcuitscukesculchculetculexcullscullyculmsculpaculticultscultycumeccumincundycuneicuntscuntycupelcupidcuppacuppycuratcurbscurchcurdscurdycuredcurercurescuretcurfscuriacuriecuriocurlicurlscurlycurnscurnycurrscurrycursecursicurstcurvecurvycuseccushycuskscuspscuspycussocusumcutchcutercutescuteycutiecutincutiscuttocuttycutupcuveecwtchcyanocyanscybercycadcycascyclecyclocydercylixcymaecymarcymascymescymolcyniccystscytescytonczarsdaalsdabbadacesdachadacksdadahdadasdaddydadosdaffsdaffydaggadaggydagosdahlsdaikodailydainedaintdairydaisydakerdaleddalesdalisdalledallydaltsdamandamardamesdammedamnsdampsdampydancedancydandydangsdaniodanksdannydantsdarafdarbsdarcydareddarerdaresdargadargsdaricdarisdarksdarkydarnsdarredartsdarzidashidashydataldateddaterdatesdatosdattodatumdaubedaubsdaubydaudsdaultdauntdaursdautsdavendavitdawahdawdsdaweddawendawksdawnsdawtsdayandaychdayntdazeddazerdazesdeadsdeairdealsdealtdeansdearedearndearsdearydeashdeathdeavedeawsdeawydebagdebardebbydebeldebesdebitdebtsdebuddebugdeburdebusdebutdebyedecaddecafdecaldecaydeckodecksdecordecosdecoydecrydedaldeedsdeedydeelydeemsdeensdeepsdeeredeersdeetsdeevedeevsdefatdeferdeffodefisdefogdegasdegumdegusdeicedeidsdeifydeigndeilsdeismdeistdeitydekeddekesdekkodelaydeleddelesdelfsdelftdelisdellsdellydelosdelphdeltadeltsdelvedemandemesdemicdemitdemobdemondemosdemptdemurdenardenaydenesdenetdenimdenisdensedentsdeoxydepotdepthderatderayderbyderedderesderigdermadermsdernsderosderroderryderthdervsdesexdeshidesksdessedeterdetoxdeucedevasdeveldevildevondevotdewandewardewaxdeweddexesdexiedhaksdhalsdhobidholedholldholsdhotidhowsdhutidiactdialsdianediarydiazodibbsdiceddicerdicesdiceydichtdicksdickydicotdictadictsdictydiddydidiedidosdidstdiebsdienedietsdiffsdightdigitdikasdikeddikerdikesdikeydildodillidillsdillydimerdimesdimlydimpsdinardineddinerdinesdingedingodingsdingydinicdinksdinkydinnadinosdintsdiodediolsdiotadippydipsodiramdirerdirgedirkedirksdirlsdirtsdirtydisasdiscidiscodiscsdishydisksdismeditalditasditchditedditesditsydittodittsdittyditzydivandivasdiveddiverdivesdivisdivnadivosdivotdivvydiwandixiedixitdiyasdizendizzydjinndjinsdoabsdoatsdobbydobiedobladobradobrodochtdocksdocosdoddydodgedodgydodosdoeksdoersdoestdoethdoffsdogesdogeydoggodoggydogiedogmadohyodoiltdoilydoingdoitsdojosdolcedolcidoleddolesdoliadollsdollydolmadolordolosdoltsdomaldomeddomesdomicdonahdonasdoneedonerdongadongsdonkodonnadonnedonnydonordonsydonutdoobsdoocedoodydooksdooledoolsdoolydoomsdoomydoonadoorndoorsdoozydopasdopeddoperdopesdopeydoraddorbadorbsdoreedoresdoricdorisdorksdorkydormsdormydorpsdorrsdorsadorsedortsdortydoseddosehdoserdosesdotaldoteddoterdotesdottydouardoubtdoucedoucsdoughdouksdouladoumadoumsdoupsdouradousedoutsdoveddovendoverdovesdoviedowardowdsdowdydoweddoweldowerdowiedowledowlsdowlydownadownsdownydowpsdowrydowsedowtsdoxiedoyendoylydozeddozendozerdozesdrabsdrackdracodraffdraftdragsdraildraindrakedramadramsdrankdrantdrapedrapsdratsdravedrawldrawndrawsdraysdreaddreamdreardreckdreeddreesdregsdreksdrentdreredressdrestdreysdribsdricedrieddrierdriesdriftdrilldrilydrinkdripsdriptdrivedroiddroildroitdroledrolldromedronedronydroobdroogdrookdrooldroopdropsdroptdrossdroukdrovedrowndrowsdrubsdrugsdruiddrumsdrunkdrupedrusedrusydruxydryaddryerdrylydsobodsomoduadsdualsduansduarsdubboducalducatducesduchyducksduckyductsduddydudeddudesduelsduetsduettduffsdufusduingduitsdukasdukeddukesdukkadulesduliadullsdullydulsedumasdumbodumbsdumkadumkydummydumpsdumpydunamduncedunchdunesdungsdungydunksdunnodunnydunshduntsduomiduomodupedduperdupesdupleduplyduppyduraldurasduredduresdurgydurnsdurocdurosduroydurradurrsdurrydurstdurumdurzidusksduskydustsdustydutchduvetduxesdwaaldwaledwalmdwamsdwangdwarfdwaumdweebdwelldweltdwiledwinedyadsdyersdyingdykeddykesdykeydykondyneldynesdzhoseagereagleeagreealeseanedeardsearedearlsearlyearnsearsteartheasedeaseleasereaseseasleeastseateneatereatheeavedeavesebbedebbetebonsebonyebookecadsechedechesechoseclatecrusedemaedgededgeredgesedictedifyedileeditseduceeducteejiteerieeeveneevnseffedegadsegersegesteggareggedeggeregmasegretehingeidereidoseighteigneeikedeikoneildseiselejectekingekkaselainelandelanselateelbowelchieldereldinelectelegyelemielfedelfineliadelideelinteliteelmenelogeelogyeloinelopeelopselpeeelsineludeeluteelvanelverelvesemacsemailembarembayembedemberembogembowemboxembusemceeemeeremendemeryemeusemirsemitsemmasemmeremmetemmewemmysemongemoteemoveemptsemptyemuleemureemydeemydsenactenarmenateendedenderendewendowendueenemaenemyenewsenfixeniacenjoyenlitenmewennogennuienokienolsenormenowsenrolensewenskyensueenterentiaentryenureenurnenvoienvoyenzymeorlseosinepactepeesephahephasephodephorepicsepochepodeepoptepoxyeprisequalequidequiperaseerbiaerecterevsergonergosergoterhusericaerickericseringernederneserodeeroseerrederrorerseseructerugoerupteruvservenervilescarescotesileeskareskeresnesessayessesesterestocestopestroetageetapeetatsetensethaletherethicethosethyletnasettinettleetudeetuisetweeetymaeughseukedeupadeuroseusolevadeevenseventeverteveryevetsevhoeevictevilseviteevoheevokeewersewestewhowewkedexactexaltexamsexcelexeatexecsexeemexemeexertexiesexileexineexingexistexitsexodeexonsexpatexpelexposextolextraexudeexulsexultexurbeyasseyerseyingeyotseyraseyreseyrieeyrirfabbyfablefacedfacerfacesfacetfaciafactsfaddyfadedfaderfadesfadgefadosfaenafaeryfaffsfaggyfaginfagotfaiksfailsfainefainsfaintfairsfairyfaithfakedfakerfakesfakeyfakiefakirfalajfallsfalsefamedfamesfanalfancyfandsfanesfangafangofangsfanksfannyfanonfanosfanumfaqirfaradfarcefarcifarcyfardsfaredfarerfaresfarlefarlsfarmsfarosfarsefartsfascifastifastsfatalfatedfatesfatlyfatsofattyfatwafaughfauldfaultfaunafaunsfaurdfautsfauvefavasfavelfaverfavesfavorfavusfawnsfawnyfaxedfaxesfayedfayerfaynefayrefazedfazesfealsfearefearsfeartfeasefeastfeatsfeazefecalfecesfechtfecitfecksfedexfeebsfeedsfeelsfeensfeersfeesefeezefehmefeignfeintfeistfelchfelidfellafellsfellyfelonfeltsfeltyfemalfemesfemmefemmyfemurfencefendsfendyfenisfenksfennyfentsfeodsfeoffferalfererferesferiaferlyfermifermsfernsfernyferryfessefestafestsfestyfetalfetasfetchfetedfetesfetidfetorfettafettsfetusfetwafeuarfeudsfeuedfeverfewerfeyedfeyerfeylyfezesfezzyfiarsfiatsfiberfibrefibroficesfichefichuficinficosficusfidesfidgefidosfiefsfieldfiendfientfierefiersfieryfiestfifedfiferfifesfifthfiftyfightfigosfikedfikesfilarfilchfiledfilerfilesfiletfiliifillefillofillsfillyfilmifilmsfilmyfilosfilthfilumfinalfincafinchfindsfinedfinerfinesfinisfinksfinnyfinosfiordfiqhsfiquefiredfirerfiresfiriefirksfirmsfirnsfirryfirstfirthfiscsfishyfisksfistsfistyfitchfitlyfitnafittefittsfiverfivesfixedfixerfixesfixitfizzyfjeldfjordflabsflackflaffflagsflailflairflakeflaksflakyflameflammflamsflamyflankflansflapsflareflaryflashflaskflatsflavaflawnflawsflawyflaxyflaysfleamfleasfleckfleerfleesfleetflegsflemefleshflewsflexofleysflickflicsfliedflierfliesflimpflimsflingflintflipsflirsflirtfliskfliteflitsflittfloatflobsflockflocsfloesflogsflongfloodfloorflopsfloraflorsfloryfloshflossflotafloteflourfloutflownflowsflubsfluedfluesflueyflufffluidflukeflukyflumeflumpflungflunkfluorflurrflushfluteflutyfluytflybyflyerflypeflytefoalsfoamsfoamyfocalfocusfoehnfogeyfoggyfogiefoglefogoufohnsfoidsfoilsfoinsfoistfoldsfoleyfoliafolicfoliefoliofolksfolkyfollyfomesfondafondsfondufonlyfontsfoodsfoodyfoolsfootsfootyforamforayforbsforbyforcefordofordsforelforesforexforgeforgoforksforkyformeformsforteforthfortsfortyforumforzaforzefossafossefouatfoudsfouerfouetfoulefoulsfoundfountfoursfouthfoveafowlsfowthfoxedfoxesfoxiefoyerfoylefoynefrabsfrackfractfragsfrailfraimframefrancfrankfrapefrapsfrassfratefratifratsfraudfrausfraysfreakfreedfreerfreesfreetfreitfremdfrenafrerefreshfretsfriarfribsfriedfrierfriesfrigsfrillfrisefriskfristfrithfritsfrittfritzfrizefrizzfrockfroesfrogsfrondfronsfrontfrorefrornfroryfroshfrostfrothfrownfrowsfrowyfrozefrugsfruitfrumpfrushfrustfryerfubarfubbyfubsyfucksfucusfuddyfudgefuelsfuerofuffsfuffyfugalfuggyfugiefugiofuglefuglyfuguefugusfujisfullsfullyfumedfumerfumesfumetfundifundsfundyfungifungofungsfunksfunkyfunnyfuralfuranfurcafurlsfurolfurorfurrsfurryfurthfurzefurzyfusedfuseefuselfusesfusilfussyfustsfustyfutonfuzedfuzeefuzesfuzilfuzzyfycesfykedfykesfylesfyrdsfyttegabbagabbygablegaddigadesgadgegadidgadisgadjegadjogadsogaffegaffsgagedgagergagesgaidsgailygainsgairsgaitagaitsgaittgajosgalahgalasgalaxgaleagalesgallsgallygalopgalutgalvogamasgamaygambagambegambogambsgamedgamergamesgameygamicgamingammagammegammygampsgamutganchgandyganefganevgangsganjaganofgantsgaolsgapedgapergapesgaposgappygarbegarbogarbsgardagarisgarnigarregarthgarumgasesgaspsgaspygassygastsgatedgatergatesgathsgatorgaucygaudsgaudygaugegaujegaultgaumsgaumygauntgaupsgaursgaussgauzegauzygavelgavotgawcygawdsgawksgawkygawpsgawsygayalgayergaylygazalgazargazedgazergazesgazongazoogealsgeansgearegearsgeatsgeburgeckogecksgeeksgeekygeepsgeesegeestgeistgeitsgeldsgeleegelidgellygeltsgemelgemmagemmygemotgenalgenasgenesgenetgenicgeniegeniigenipgennygenoagenomgenregenrogentsgentygenuagenusgeodegeoidgerahgerbegeresgerlegermsgermygernegessegessogestegestsgetasgetupgeumsgeyangeyerghastghatsghautghazigheesghestghostghoulghyllgiantgibedgibelgibergibesgibligibusgiddygiftsgigasgighegigotgiguegilasgildsgiletgillsgillygilpygiltsgimelgimmegimpsgimpygingegingsginksginnyginzogipongippogippygipsygirdsgirlsgirlygirnsgirongirosgirrsgirshgirthgirtsgismogismsgistsgitesgiustgivedgivengivergivesgizmoglacegladegladsgladyglaikglairglamsglandglansglareglaryglassglaumglaurglazeglazygleamgleanglebaglebeglebygledegledsgleedgleekgleesgleetgleisglensglentgleysglialgliasglibsglidegliffgliftglikeglimeglimsglintgliskglitsglitzgloamgloatglobeglobiglobsglobyglodegloggglomsgloomgloopglopsgloryglossglostgloutgloveglowsglozegluedgluergluesglueyglugsglumeglumsgluongluteglutsglyphgnarlgnarrgnarsgnashgnatsgnawngnawsgnomegnowsgoadsgoafsgoalsgoarygoatsgoatygobangobargobbigobbogobbygobisgobosgodetgodlygodsogoelsgoersgoestgoethgoetygofergoffsgoggagogosgoiergoinggojisgoldsgoldygolemgolesgolfsgollygolpegolpsgombogomergompagonadgonefgonergongsgoniagonifgonksgonnagonofgonysgonzogoobygoodsgoodygooeygoofsgoofygoogsgooksgookygooldgoolsgoolygoonsgoonygoopsgoopygoorsgoorygoosegoosygopakgopikgoralgorasgoredgoresgorgegorisgormsgormygorpsgorsegorsygoshtgossegothsgottagouchgougegouksgouragourdgoutsgoutygowangowdsgowfsgowksgowlsgownsgoxesgoyimgoylegraalgrabsgracegradegradsgraffgraftgrailgraingraipgramagramegrampgramsgranagrandgransgrantgrapegraphgrapygraspgrassgrategravegravsgravygraysgrazegreatgrebegrebogrecegreedgreekgreengreesgreetgregegregogreingrensgresegrevegrewsgreysgricegridegridsgriefgriffgriftgrigsgrikegrillgrimegrimygrindgrinsgriotgripegripsgriptgripygrisegristgrisygrithgritsgrizegroangroatgrodygrogsgroingroksgromagronegroofgroomgropegrossgroszgrotsgroufgroupgroutgrovegrowlgrowngrowsgrrlsgrrrlgrubsgruedgruelgruesgrufegruffgrumegrumpgrundgruntgrycegrydegrykegrypegryptguacoguanaguanoguansguardguarsguavagucksguckygudesguessguestguffsgugasguideguidsguildguileguiltguimpguiroguisegulaggulargulasgulchgulesguletgulfsgulfygullsgullygulphgulpsgulpygumbogummagummygumpsgundygungegungygunksgunkygunnyguppyguqingurgegurlsgurlygurnsgurrygurshgurusgushyguslaguslegusligussygustogustsgustygutsyguttaguttyguyedguyleguyotguysegwinegyalsgybedgybesgyeldgympsgynaegyniegynnygyozagyppogyppygypsygyralgyredgyresgyrongyrosgyrusgytesgyvedgyveshaafshaarshabithablehabushacekhackshadalhadedhadeshadjihadsthaemshaetshaffshafishafizhaftshaggshahashaickhaikahaikshaikuhailshailyhainshainthairshairyhaithhajeshajishajjihakamhakashakeahakeshakimhakushalalhaledhalerhaleshalfahalfshalidhallohallshalmahalmshalonhaloshalsehaltshalvahalvehamalhambahamedhameshammyhamzahanaphancehanchhandshandyhangihangshankshankyhansahansehantshaolehaomahapaxhaplyhappyhapusharamhardshardyharedharemharesharimharksharlsharmsharnsharosharpsharpyharryharshhartshashyhaskshaspshastahastehastyhatchhatedhaterhateshathahaudshaufshaughhauldhaulmhaulshaulthaunthausehautehavenhaverhaveshavochawedhawkshawmshawsehayedhayerhayeyhaylehazanhazedhazelhazerhazesheadsheadyhealdhealsheameheapsheapyheardhearehearsheartheastheathheatsheaveheavyhebenhebeshechtheckshederhedgehedgyheedsheedyheelsheezehefteheftsheftyheidsheighheilsheirsheisthejabhejraheledhelesheliohelixhellohellshelmsheloshelothelpshelvehemalhemeshemicheminhempshempyhencehendshengehennahennyhenryhentsheparherbsherbyherdsheresherlshermahermshernsheronherosherryhersehertzheryehespshestsheteshethsheuchheughheveahewedhewerhewghhexadhexedhexerhexeshexylheyedhianthickshidedhiderhideshiemshighshighthijabhijrahikedhikerhikeshikoihilarhilchhillohillshillyhiltshilumhilushimbohinauhindshingehingshinkyhinnyhintshioishiplyhippohippyhiredhireehirerhireshissyhistshitchhithehivedhiverhiveshizenhoaedhoagyhoardhoarshoaryhoasthobbyhoboshockshocushodadhodjahoershoganhogenhoggshoghshohedhoickhoikshoinghoisehoisthokashokedhokeshokeyhokishokkuhokumholdsholedholesholeyholkshollahollohollyholmsholonholtshomashomedhomerhomeshomeyhomiehommehomoshonanhondahondshonedhonerhoneshoneyhongihongshonkshonkyhonorhoochhoodshoodyhooeyhoofshookahookshookyhoolyhoonshoopshoordhoorshooshhootshootyhoovehopedhoperhopeshoppyhorahhoralhorashordehorishormehornshornyhorsehorsthorsyhosedhoselhosenhoserhoseshoseyhostahostshotchhotelhotenhotlyhottyhouffhoufshoughhoundhourihourshousehoutshoveahovedhovelhovenhoverhoveshowbehowdyhoweshowffhowfshowkshowlshowrehowsohoxedhoxeshoyashoyedhoylehubbyhuckshudnahududhuershuffshuffyhugerhuggyhuhushuiashulashuleshulkshulkyhullohullshullyhumanhumashumfshumichumidhumorhumphhumpshumpyhumushunchhunkshunkyhuntshurdshurlshurlyhurrahurryhursthurtshushyhuskshuskyhusoshussyhutchhutiahuzzahuzzyhwylshydrahydrohyenahyenshyinghykeshylashyleghyleshylichymenhymnshyndehyoidhypedhyperhypeshyphahyphyhyposhyraxhysonhytheiambiiambsibrikicersichedichesichoriciericilyicingickerickleiconsictalicticictusidantidealideasideesidentidiomidiotidledidleridlesidolaidolsidyllidylsiftarigapoiggediglooiglusihramikansikatsikonsileacilealileumileusiliaciliadilialiliumillerillthimageimagoimamsimariimaumimbarimbedimbueimideimidoimidsimineiminoimmewimmitimmiximpedimpelimpisimplyimpotimshiimshyinaneinaptinarminboxinbyeincleincogincurincusincutindewindexindiaindieindolindowindriindueineptinerminertinferinfixinfosinfrainganingleingotinioninkedinkerinkleinlayinletinnedinnerinnitinorbinputinruninsetintelinterintilintisintraintroinulainureinurninustinvarinwitiodiciodidiodinioniciotasipponiradeirateiridsiringirkedirokoironeironsironyisbasishesisledislesisletisnaeisseiissueistleitchyitemsitheriviediviesivoryixiasixoraixtleizardizarsizzatjaapsjabotjacaljacksjackyjadedjadesjafasjaffajagasjagerjaggsjaggyjagirjagrajailsjakesjakeyjalapjalopjambejambojambsjambujamesjammyjamonjanesjannsjannyjantyjapanjapedjaperjapesjarksjarlsjarpsjartajaruljaseyjaspejaspsjatosjauksjauntjaupsjavasjaveljawanjawedjaxiejazzyjeansjeatsjebeljedisjeelsjeelyjeepsjeersjefesjeffsjehadjehusjelabjellojellsjellyjembejemmyjennyjeridjerksjerkyjerryjessejestsjesusjetesjetonjettyjeunejewedjeweljewiejhalajiaosjibbajibbsjibedjiberjibesjiffsjiffyjiggyjigotjihadjillsjiltsjimmyjimpyjingojinksjinnejinnijinnsjirdsjirgajirrejismsjivedjiverjivesjiveyjnanajobedjobesjockojocksjodeljoeysjohnsjoinsjointjoistjokedjokerjokesjokeyjokoljoledjolesjollsjollyjoltsjoltyjomonjomosjonesjongsjontyjooksjoramjorumjotasjottyjotunjoualjougsjouksjoulejoursjoustjowarjowedjowlsjowlyjoyedjubasjubesjucosjudasjudgejudosjugaljugumjuicejuicyjujusjukedjukesjukusjulepjumarjumbojumbyjumpsjumpyjuncojunksjunkyjuntajuntojupesjuponjuraljuratjureljurorjustsjutesjuttyjuvesjuviekaamakababkabarkabobkachakackskadeskadiskafirkagoskaguskahalkaiakkaidskaieskaifskaikakaikskailskaimskaingkainskakaskakiskalamkaleskalifkaliskalpakamaskameskamikkamiskammekanaekanaskandykanehkaneskangakangskanjikantskanzukaonskapaskaphskapokkappakaputkaraskaratkarkskarmakarnskarookaroskarrikarstkarsykartskarzykashakasmekatalkataskatiskattikaughkaurikaurukaurykavalkavaskawaskawaukawedkayakkaylekayoskaziskazookbarskebabkebarkebobkeckskedgekedgykeechkeefskeekskeelskeemakeenokeenskeepskeetskeevekefirkehuakeirskelepkelimkellskellykelpskelpykeltskeltykembokembskempskemptkempykenafkenchkendokenoskentekentskepiskerbskerelkerfskerkykermakernekernskeroskerrykervekesarkestsketasketchketesketolkevelkevilkexeskeyedkhadikhafskhakikhanskhaphkhatskhayakhazikhedakhethkhetskhojakhorskhoumkhudskiaatkiangkibbekibbikibeikibeskiblakickskickykiddokiddykidelkidgekiefskierskievekievskightkikeskikoikileykilimkillskilnskiloskilpskiltskiltykimbokinaskindakindskindykineskingskininkinkskinkykinoskiorekioskkipeskippakippskirbykirkskirnskirrikisankissykistskitedkiterkiteskithekithskittykitulkivaskiwisklangklapsklettklickkliegkliksklongkloofklugeklutzknackknagsknapsknarlknarsknaurknaveknawekneadkneedkneelkneesknellkneltknifeknishknitskniveknobsknockknollknopsknospknotsknoutknoweknownknowsknubsknurlknurrknursknutskoalakoanskoapskobankoboskoelskoffskoftakogalkohaskohenkohlskoinekojiskokaskokerkokrakokumkolaskoloskombukonbukondokonkskookskookykoorikopekkophskopjekoppakoraikoraskoratkoreskormakoroskorunkoruskoseskotchkotoskotowkourakraalkrabskraftkraitkrangkranskranzkrautkreepkrengkrewekrillkronakronekroonkrubikrunkksarskudoskuduskudzukufiskugelkuiaskukrikukuskulakkulankulaskulfikumyskuriskurrekurtakuruskussokutaskutchkutiskutuskuzuskvasskvellkwelakyackkyakskyangkyarskyatskyboskydstkyleskyliekylinkylixkyloekyndekyndskypeskyriekyteskythelaarilabdalabellabialabislaborlabralacedlacerlaceslacetlaceylacksladedladenladerladesladlelaerslaevolaganlagerlaharlaichlaicslaidslaighlaikalaikslairdlairslairylaithlaitylakedlakerlakeslakhslakinlaksalaldylallslamaslambslambylamedlamerlameslamialammylampslanailanaslancelanchlandelandslaneslankslankylantslapellapinlapislapjelapselarchlardslardylareelareslargelargolarislarkslarkylarnslarumlarvalasedlaserlaseslassilassolassulastslatahlatchlatedlatenlaterlatexlathelathilathslathylatkelattelauanlauchlaudslaufslaughlaundlauralavaslavedlaverlaveslavralavvylawedlawerlawinlawkslawnslawnylaxerlaxeslaxlylayedlayerlayinlayuplazarlazedlazeslazoslazzilazzoleachleadsleadyleafsleafyleaksleakyleamsleansleantleanyleapsleaptlearelearnlearslearyleaseleashleastleatsleaveleavyleazelebenleccyledgeledgyledumleearleechleeksleepsleersleeryleeseleetsleezelefteleftsleftylegallegerlegesleggeleggylegitlehrslehualeirsleishlemanlemedlemellemeslemmalemonlemurlendsleneslengslenislenoslenselentilentoleoneleperlepidlepraleptaleredlereslerpslesboleseslestsletchletheletupleuchleucoleudsleughleveelevelleverleveslevinlevislewislexeslexislezeslezzalezzylianalianeliangliardliarsliartlibelliberlibralibrilichilichtlicitlickslidarlidosliefsliegelienslierslieuslieveliferlifesliftsliganligerliggelightlignelikedlikenlikerlikeslikinlilaclillslilosliltslimanlimaslimaxlimbalimbilimbolimbslimbylimedlimenlimeslimeylimitlimmalimnslimoslimpalimpslinaclinchlindslindylinedlinenlinerlineslineylingalingolingslingylininlinkslinkylinnslinnylinoslintslintylinumlinuxlionslipaslipidlipinliposlippyliraslirkslirotliskslislelispslistslitailitaslitedliterliteslithelitholithslitrelivedlivenliverliveslividlivorlivrellamallanoloachloadsloafsloamsloamyloansloastloathloavelobarlobbylobedlobesloboslobuslocallochslockslocoslocumlocuslodenlodeslodgeloessloftsloftyloganlogesloggylogialogiclogieloginlogoilogonlogoslohanloidsloinsloipeloirslokeslollslollylologlomaslomedlomeslonerlongalongelongsloobylooedlooeyloofaloofslooielooksloomsloonsloonyloopsloopyloordlooselootslopedloperlopesloppyloralloranlordslordylorelloresloriclorislorrylosedlosellosenloserloseslossylotahlotaslotesloticlotoslottelottolotuslouedloughlouielouisloumaloundlounsloupeloupslourelourslourylouselousyloutslovatlovedloverlovesloveylowanlowedlowerloweslowlylowndlownelownslowpslowrylowselowtsloxedloxesloyallozenluachluauslubedlubeslubraluceslucidlucksluckylucreludesludicludosluffaluffslugedlugerlugeslullsluluslumaslumenlummelummylumpslumpylunarlunaslunchluneslunetlungelungilungslunksluntslupinlupuslurchluredlurerlureslurexlurgilurgyluridlurkslurrylurveluserlushyluskslustslustylususlutealutedluterlutesluvvyluxeslweislyamslyardlyartlyaselycealyceelycralyinglymeslymphlynchlyneslyreslyriclysedlyseslysinlysislysollyssalytedlyteslythelyticlyttamaaedmaaremaarsmabesmacawmacedmacermacesmachemachimachomachsmacksmaclemaconmacromadammadgemadidmadlymadremaerlmafiamaficmagesmaggsmagicmagmamagotmagusmahoemahuamahwamaidsmaikomaiksmailemaillmailsmaimsmainsmairemairsmaisemaistmaizemajormakarmakermakesmakismakosmalammalarmalasmalaxmalesmalicmalikmalismallsmalmsmalmymaltsmaltymalvamalwamamasmambamambomameemameymamiemammamammymanasmanatmandimanedmanehmanesmanetmangamangemangomangsmangymaniamanicmanismankymanlymannamanormanosmansemantamantomantymanulmanusmapaumaplemaquimaraemarahmarasmarchmarcsmardymaresmargemargsmariamaridmarkamarksmarlemarlsmarlymarmsmaronmarormarrimarrymarsemarshmartsmarvymasasmasedmasermasesmashymasksmasonmassamassemassymastsmastymasusmataimatchmatedmatermatesmateymathsmatinmatlomattemattsmatzamatzomaubymaudsmaulsmaundmaurimautsmauvemavenmaviemavinmavismawedmawksmawkymawrsmaxedmaxesmaximmaxismayanmayasmaybemayedmayormayosmaystmazedmazermazesmazeymazutmbirameadsmealsmealymeanemeansmeantmeanymearemeasemeathmeatsmeatymebosmeccamecksmedalmediamedicmediimedlemeedsmeersmeetsmeffsmeinsmeintmeinymeithmekkamelasmelbameldsmeleemelicmelikmellsmelonmeltsmeltymemesmemosmenadmendsmenedmenesmengemengsmensamensemenshmentamentomenusmeousmeowsmerchmercsmercymerdemeredmerelmerermeresmergemerilmerismeritmerksmerlemerlsmerrymersemesalmesasmeselmesesmeshymesicmesnemesonmessymestometalmetedmetermetesmethomethsmeticmetifmetismetolmetremetromeusemevedmevesmewedmewlsmeyntmezesmezzemezzomhorrmiaoumiaowmiasmmiaulmicasmichemichtmicksmickymicosmicramicromiddymidgemidgymidismidstmiensmievemiffsmiffymiftymiggsmightmihasmihismikedmikesmikramilchmildsmilermilesmilfsmiliamilkomilksmilkymillemillsmilormilosmilpamiltsmiltymiltzmimedmimeomimermimesmimicmimsyminaeminarminasmincemincymindsminedminerminesmingemingsmingyminimminisminkeminksminnyminorminosmintsmintyminusmiredmiresmirexmirinmirksmirkymirlymirosmirthmirvsmirzamischmisdomisermisesmisgomisosmissamissymistsmistymitchmitermitesmitismitremittsmixedmixenmixermixesmixtemixupmizenmizzymnememoansmoatsmobbymobesmobeymobiemoblemochamochsmochymocksmodalmodelmodemmodermodesmodgemodiimodusmoersmofosmoggymogulmohelmohrsmohuamohurmoilsmoiramoiremoistmoitsmojosmokesmokismokosmolalmolarmolasmoldsmoldymolesmollamollsmollymoltomoltsmomesmommamommymomusmonadmonalmonasmondemondomonermoneymongomongsmoniemonksmonosmontemonthmontymoobsmoochmoodsmoodymooedmooksmoolamoolimoolsmoolymoongmoonsmoonymoopsmoorsmoorymoosemootsmoovemopedmopermopesmopeymoppymopsymopusmoraemoralmorasmoratmoraymorelmoresmoriamornemornsmoronmorphmorramorromorsemortsmosedmosesmoseymosksmossomossymostemostsmotedmotelmotenmotesmotetmoteymothsmothymotifmotismotormottemottomottsmottymotusmotzamouchmouesmouldmoulsmoultmoundmountmoupsmournmousemoustmousymouthmovedmovermovesmoviemowasmowedmowermowramoxasmoxiemoyasmoylemoylsmozedmozesmozosmpretmuchomucicmucidmucinmucksmuckymucormucromucusmuddymudgemudirmudramuffsmuftimuggamuggsmuggymuhlymuidsmuilsmuirsmuistmujikmulchmulctmuledmulesmuleymulgamullamullsmulsemulshmummsmummymumpsmumsymumusmunchmungamungemungomungsmunismuntsmuntumuonsmuralmurasmuredmuresmurexmuridmurksmurkymurlsmurlymurramurremurrimurrsmurrymurtimurvamusarmuscamusedmusermusesmusetmushamushymusicmusitmusksmuskymusosmussemussymusthmustsmustymutchmutedmutermutesmuthamutismutonmuttsmuxedmuxesmuzzymvulemyallmylarmynahmynasmyoidmyomamyopemyopsmyopymyrrhmysidmythimythsmythymyxosmzeesnaamsnaansnabesnabisnabksnablanabobnachenachonacrenadasnadirnaevenaevinaffsnagasnaggynagornahalnaiadnaifsnaiksnailsnairanairunaivenakednakernakfanalasnalednallanamednamernamesnammanamusnanasnancenancynandunannanannynanuanapasnapednapesnapoonappanappenappynarasnarconarcsnardsnaresnaricnarisnarksnarkynarrenasalnashinastynatalnatchnatesnatisnattynauchnauntnavalnavarnavelnavesnavewnavvynawabnazesnazirnazisneafenealsneapsnearsneathneatsnebeknebelnecksneddyneedsneedyneeldneeleneembneemsneepsneeseneezenegronegusneifsneighneistneivenelisnellynemasnemnsnemptnenesneonsnepernepitneralnerdsnerdynerkanerksnerolnertsnertznervenervynestsnetesnetopnettsnettyneuksneumeneumsnevelnevernevesnevusnewednewelnewernewienewlynewsynewtsnextsnexusngaionganangatingomangweenicadnicernichenichtnicksnicolnidalnidednidesnidornidusnieceniefsnievenifesniffsniffyniftynigernighsnightnihilnikabnikahnikaunillsnimbinimbsnimpsninesninjaninnyninonninthnipasnippyniqabnirlsnirlyniseinissenisusniternitesnitidnitonnitrenitronitrynittynivalnixednixernixesnixienizamnkosinoahsnobbynoblenoblynocksnodalnoddynodesnodusnoelsnoggsnohownoilsnoilynointnoirsnoisenoisynolesnollsnolosnomadnomasnomennomesnomicnomoinomosnonasnoncenonesnonetnongsnonisnonnynonylnoobsnooitnooksnookynoonsnoopsnoosenopalnorianorisnorksnormanormsnorthnosednosernosesnoseynotalnotchnotednoternotesnotumnouldnoulenoulsnounsnounynoupsnovaenovasnovelnovumnowaynowednowlsnowtsnowtynoxalnoxesnoyaunoyednoyesnubbynubianuchanuddynudernudesnudgenudienudzhnuffsnugaenukednukesnullanullsnumbsnumennunnynurdsnurdynurlsnurrsnursenutsonutsynuttynyaffnyalanyingnylonnymphnyssaoakedoakenoakeroakumoaredoasesoasisoastsoatenoateroathsoavesobangobeahobeliobeseobeysobiasobiedobiitobitsobjetoboesoboleoboliobolsoccamoccuroceanocherochesochreochryockerocreaoctadoctaloctanoctasoctetoctyloculiodahsodalsodderoddlyodeonodeumodismodistodiumodorsodourodyleodylsofaysoffaloffedofferoffieoflagoftenofterogamsogeedogeesogginoghamogiveogledogleroglesogmicogresohiasohingohmicohoneoidiaoiledoileroinksointsojimeokapiokaysokehsokrasoktasoldenolderoldieoleicoleinolentoleosoleumoliosoliveollasollavollerollieologyolpaeolpesomasaomberombreombusomegaomensomersomitsomlahomovsomrahonceroncesoncetoncusonelyonersoneryoniononiumonkusonlayonnedonsetonticoobitoohedoomphoontsoopedoorieoosesootidoozedoozesopahsopalsopensopepeoperaopineopingopiumopposopsinoptedopteropticorachoracyoralsorangorantorateorbedorbitorcasorcinorderordosoreadorfesorganorgiaorgicorgueoribiorielorixaorlesorlonorlopormerornisorpinorrisorthoorvalorzososcaroshacosierosmicosmolossiaostiaotakuotaryotherottarotterottosoubitouchtouensoughtouijaoulksoumasounceoundyoupasoupedoupheouphsourieouseloustsoutbyoutdooutedouteroutgooutreoutroouzelouzosovalsovaryovateovelsovensoversovertovineovistovoidovoliovoloovuleowcheowingowledowlerowletownedownerowresowrieowsenoxbowoxersoxeyeoxideoxidsoxiesoximeoximsoxlipoxteroyersozekiozoneozziepaalspaanspacaspacedpacerpacespaceypachapackspacospactapactspaddypadispadlepadmapadrepadripaeanpaedopaeonpaganpagedpagerpagespaglepagodpagripaikspailspainspaintpairepairspaisapaisepakkapalaspalaypaleapaledpalerpalespaletpalkipallapallspallypalmspalmypalpipalpspalsypampapanaxpancepandapandspandypanedpanelpanespangapangspanicpanimpankopannepansypantopantspantypaolipaolopapalpapaspapawpaperpapespappipappyparaeparasparchpardipardspardyparedpareoparerparespareuparevpargepargoparisparkaparkiparksparkyparleparlyparolparpsparraparrsparryparsepartipartspartyparveparvopaseopasespashapashmpaspypassepastapastepastspastypatchpatedpatenpaterpatespathspatinpatiopatkapatlypatsypattepattypatuspauaspaulspausepavanpavedpavenpaverpavespavidpavinpavispawaspawawpawedpawerpawkspawkypawlspawnspaxespayedpayeepayerpayorpaysdpeacepeachpeagepeagspeakspeakypealspeanspearepearlpearspeartpeasepeatspeatypeavypeazepebaspecanpechspeckepeckspeckypedalpedespedropeecepeekspeelspeenspeeoypeepepeepspeerspeerypeevepeggypeghspeinspeisepeizepekanpekespekinpekoepelaspelespelfspellspelmapelonpeltapeltspenalpencependspendupenedpenespengopeniepenispenkspennapennepennipennypentspeonspeonypeplapepospeppyperaiperceperchperduperdypereaperesperilperisperksperkypermspernsperpsperryperseperstpertspervepervspervypeskypesospestopestspestypetalpetarpeterpetitpetrepetripettipettopettypeweepewitpeysephagephangpharepharmphasepheerphenepheonphesephialphloxphocaphonephonophonsphonyphotophotsphphtphutsphylaphylepianipianopianspibalpicalpicaspiccypickspickypicotpicrapiculpiecepiendpierspiertpietapietspietypiezopiggypightpigmypiingpikaspikaupikedpikerpikespikeypikispikulpilafpilaopilarpilaupilawpilchpileapiledpileipilerpilespilispillspilotpilowpilumpiluspimaspimpspinaspinchpinedpinespineypingopingspinkopinkspinkypinnapinnypinonpinotpintapintopintspinuppionspionypiouspioyepioyspipalpipaspipedpiperpipespipetpipispipitpippypipulpiquepiraipirlspirnspirogpiscopisespiskypisospissypistepitaspitchpithspithypitonpittapiumspivotpixelpixespixiepizedpizespizzaplaasplaceplackplageplaidplainplaitplaneplankplansplantplapsplashplasmplastplateplatsplatyplayaplaysplazapleadpleaspleatplebeplebsplenapleonpleshplewsplicapliedplierpliesplimsplingplinkploatplodsplongplonkplookplopsplotsplotzploukplowsployspluckpluespluffplugsplumbplumeplumpplumsplumyplunkplushplyerpoachpoakapoakepoboypockspockypodalpoddypodexpodgepodgypodiapoemspoepspoesypoetspogeypoggepogospoilupoindpointpoisepokalpokedpokerpokespokeypokiepolarpoledpolerpolespoleypoliopolispoljepolkapolkspollspollypolospoltspolyppolyspombepomespommypomospompsponceponcypondsponesponeypongapongopongspongyponkspontspontyponzupoochpoodspooedpoofspoofypoohspoojapookapookspoolspoonspoopspooripoortpootspoovepoovypopespoppapoppypopsyporaeporalporchporedporerporesporgeporgyporksporkypornopornspornyportaportsportyposedposerposesposeyposhopositpossepostspotaepotchpotedpotespotinpotoopotsypottopottspottypouchpouffpoufspoukepoukspoulepoulppoultpoundpoupepouptpourspoutspoutypowanpowerpowinpowndpownspownypowrepoxedpoxespoyntpoyoupoysepozzypraampradsprahupramspranaprangprankpraosprasepratepratsprattpratyprausprawnprayspredypreedpreenpreespreifpremspremyprentpreonpreopprepspresapresepressprestpreveprexypreysprialpriceprickpricypridepriedpriefprierpriesprigsprillprimaprimeprimiprimoprimpprimsprimyprinkprintprionpriorpriseprismprissprivyprizeproasprobeprobsprodsproemprofsprogsproinprokeproleprollpromopromsproneprongpronkproofpropsproreproseprosoprossprostprosyprotoproudproulproveprowlprowsproxyproynprudeprunepruntprutapryerprysepsalmpseudpshawpsionpsoaepsoaipsoaspsorapsychpsyoppubcopubespubicpubispucanpucerpucespuckapuckspuddypudgepudgypudicpudorpudsypuduspuerspuffspuffypuggypugilpuhaspujahpujaspukaspukedpukerpukespukeypukkapukuspulaopulaspuledpulerpulespulikpulispulkapulkspullipullspulmopulpspulpypulsepuluspumaspumiepumpspunaspuncepunchpungapungspunjipunkapunkspunkypunnypuntopuntspuntypupaepupalpupaspupilpuppypupuspurdapuredpureepurerpurespurgepurinpurispurlspurpypurrspursepursypurtypusespushypuslepussyputidputonputtiputtoputtsputtypuzelpyatspyetspygalpygmypyinspylonpynedpynespyoidpyotspyralpyranpyrespyrexpyricpyrospyxedpyxespyxiepyxispzazzqadisqaidsqanatqiblaqophsqormaquackquadsquaffquagsquailquairquaisquakequakyqualequalmquantquarequarkquartquashquasiquassquatequatsquaydquaysqubitqueanqueenqueerquellquemequenaquernqueryquestqueuequeynqueysquichquickquidsquietquiffquillquiltquimsquinaquinequinoquinsquintquipoquipsquipuquirequirkquirtquistquitequitsquoadquodsquoifquoinquoitquollquonkquopsquotaquotequothqurshquyterabatrabbirabicrabidrabisracedracerracesracheracksraconradarradgeradiiradioradixradonraffsraftsragasragderagedrageeragerragesraggaraggsraggyragisragusrahedrahuiraiasraidsraiksrailerailsrainerainsrainyrairdraiseraitaraitsrajahrajasrajesrakedrakeerakerrakesrakiarakisrakusralesrallyralphramalrameeramenrametramieraminramisrammyrampsramusranasranceranchrandsrandyraneerangarangerangirangyranidranisrankeranksrantsrapedraperrapesrapherapidrapperaredrareerarerraresrarksrasedraserrasesraspsraspyrasserastaratalratanratasratchratedratelraterratesratharatherathsratioratooratosrattyratusraunsrauporavedravelravenraverravesravinrawerrawinrawlyrawnsraxedraxesrayahrayasrayedrayleraynerayonrazedrazeerazerrazesrazoorazorreachreactreaddreadsreadyreaksrealmrealorealsreamereamsreamyreansreapsrearmrearsreastreatareatereaverebarrebberebecrebelrebidrebitreboprebusrebutrebuyrecalrecapreccereccoreccyrecitrecksreconrectarectirectorecurrecutredanreddsreddyrededredesrediaredidredipredlyredonredosredoxredryredubreduxredyereechreedereedsreedyreefsreefyreeksreekyreelsreensreestreeverefedrefelreferrefforefitrefixreflyrefryregalregarregesreggoregieregmaregnaregosregurrehabrehemreifsreifyreignreikireiksreinkreinsreirdreistreiverejigrejonrekedrekesrekeyrelaxrelayreletrelicrelierelitremanremapremenremetremexremitremixrenalrenayrendsrenewreneyrengarenigreninrennerenterentsreoilrepayrepegrepelrepinreplareplyreposrepotreppsreproreranrerigrerunresatresawresayreseeresesresetresewresidresinresitresodresowrestorestsrestyretagretaxretchretemretiaretieretroretryreuserevelrevetrevierevuerewanrewaxrewedrewetrewinrewonrewthrexesrheasrhemerheumrhiesrhimerhinerhinorhodyrhombrhonerhumbrhymerhynerhytariadsrialsriantriataribasribbyribesricedricerricesriceyrichtricinricksriderridesridgeridgyrielsriemsrieveriferriffsriflerifteriftsriftyriggsrightrigidrigolrigorriledrilesrileyrillerillsrimaerimedrimerrimesrimusrindsrindyrinesringsrinksrinseriojariotsripedripenriperripesrippsrisenriserrisesrishirisksriskyrispsrisusritesrittsritzyrivalrivasrivedrivelrivenriverrivesrivetriyalrizasroachroadsroamsroansroarsroaryroastroaterobedrobesrobinroblerobotrocksrockyrodedrodeorodesrogerrogueroguyroilsroilyroinsroistrojakrojisrokedrokerrokesrolagrolesrolfsrollsromalromanromeorompsronderondoroneoronesroninronneronterontsroodsroofsroofyrooksrookyroomsroomyroonsroopsroopyroosarooseroostrootsrootyropedroperropesropeyroqueroralroresroricroridrorierortsrortyrosedrosesrosetroshirosinrositrostirostsrotalrotanrotasrotchrotedrotesrotisrotlsrotonrotorrotosrotterouenrouesrougeroughrouleroulsroumsroundroupsroupyrouseroustrouterouthroutsrovedrovenroverrovesrowanrowdyrowedrowelrowenrowerrowmerowndrowthrowtsroyalroyneroystrozetrozitruanarubairubbyrubelrubesrubinrublerubusrucherucksrudasruddsruddyruderrudesrudieruedaruersrufferuffsrugaerugalrugbyruggyruingruinsrukhsruledrulerrulesrumalrumbarumborumenrumesrumlyrummyrumorrumporumpsrumpyrunchrundsrunedrunesrungsrunicrunnyruntsruntyrupeerupiaruralrurpsrurusrusasrusesrushyrusksrusmarusserustsrustyruthsrutinruttyryalsrybatrykedrykesrymmeryndsryotsrypersaagssabalsabedsabersabessabhasabinsabirsablesabotsabrasabresackssacrasaddosadessadhesadhusadissadlysadossadzasafedsafersafessagassagersagessaggysagossagumsahebsahibsaicesaicksaicssaidssaigasailssaimssainesainssaintsairssaistsaithsajousakaisakersakessakiasakissaladsalalsalepsalessaletsalicsalixsallesallysalmisalolsalonsalopsalpasalpssalsasalsesaltosaltssaltysaluesalvesalvosamansamassambasambosameksamelsamensamessameysamfusammysampisampssandssandysanedsanersanessangasanghsangosangssankosansasantosantssaolasapansapidsaporsappysaransardssaredsareesargesargosarinsarissarkssarkysarodsarossarussasersasinsassesassysataisataysatedsatemsatessatinsatissatyrsaubasaucesauchsaucysaughsaulssaultsaunasauntsaurysautesautssavedsaversavessaveysavinsavorsavoysavvysawahsawedsawersaxessayedsayersayidsaynesayonsaystsazesscabsscadsscaffscagsscailscalascaldscalescallscalpscalyscampscamsscandscansscantscapascapescapiscarescarfscarpscarsscartscaryscathscatsscattscaudscaupscaurscawssceatscenascendscenescentschavschmoschulschwascionsclimscodyscoffscogsscoldsconescoogscoopscootscopascopescopsscorescornscotsscougscoupscourscoutscowlscowpscowsscrabscraescragscramscranscrapscratscrawscrayscreescrewscrimscripscrodscrogscrowscrubscrumscubascudiscudoscudsscuffscuftscugssculkscullsculpsculsscumsscupsscurfscursscusescutascutescutsscuzzscyessdaynsdeinsealsseameseamsseamyseanssearesearsseaseseatsseazesebumseccosechssectssedansedersedessedgesedgysedumseedsseedyseeksseeldseelsseelyseemsseepsseepyseerssefersegarsegnisegnosegolsegosseguesehriseifsseilsseineseirsseiseseismseityseizesekossektsselahselesselfssellasellesellsselvasemeesemensemessemiesemissenassendssenessengisennasenorsensasensesensisentesentisentssenvysenzasepadsepalsepiasepicsepoyseptaseptsseracseraiseralseredsererseresserfssergesericserifserinserksseronserowserraserreserrsserryserumserveservoseseysessasetaesetalsetonsettssetupsevenseversewansewarsewedsewelsewensewersewinsexedsexersexessextosextsseyenshackshadeshadsshadyshaftshagsshahsshakeshakoshaktshakyshaleshallshalmshaltshalyshamashameshamsshandshankshansshapeshapsshardsharesharksharnsharpshartshashshaulshaveshawlshawmshawnshawsshayashaysshchisheafshealshearsheasshedssheelsheensheepsheersheetsheikshelfshellshendshentsheolsherdshereshetsshevashewnshewsshiaishiedshielshiershiesshiftshillshilyshimsshineshinsshinyshipsshireshirkshirrshirsshirtshishshisoshistshiteshitsshiurshivashiveshivsshlepshlubshmekshoalshoatshockshoedshoershoesshogishogsshojisholashoneshookshoolshoonshoosshootshopeshopsshoreshorlshornshortshoteshotsshottshoutshoveshowdshownshowsshowyshoyushredshrewshrisshrowshrubshrugshtikshtumshtupshuckshuleshulnshulsshunsshuntshurashushshuteshutsshwasshyershylysialssibbssibylsicessichtsickosickssidassidedsidersidessidhasidhesidlesiegesieldsienssientsiethsieursievesiftssighssightsigilsiglasigmasignasignssijossikassikersikessildssiledsilensilersilessilexsilkssilkysillssillysilossiltssiltysilvasimarsimassimbasimissimpssimulsincesindssinedsinessinewsingesingssinhssinkssinkysinussipedsipessippysiredsireesirensiressirihsirissirocsirrasirupsisalsisessissysistssitarsitedsitessithesitkasitupsitussiversixersixessixmosixtesixthsixtysizarsizedsizelsizersizesskagsskailskaldskankskartskateskatsskattskawsskeanskearskeedskeefskeenskeerskeesskeetskeggskegsskeinskelfskellskelmskelpskeneskensskeosskepsskerssketsskewsskidsskiedskierskiesskieyskiffskillskimoskimpskimsskinkskinsskintskiosskipsskirlskirrskirtskiteskitsskiveskivysklimskoalskoffskolsskoolskortskoshskranskrikskuasskugsskulkskullskunkskyedskyerskyeyskyfsskyreskyrsskyteslabsslacksladeslaesslagsslaidslainslakeslamsslaneslangslankslantslapsslartslashslateslatsslatyslaveslawsslaysslebssledssleeksleepsleersleetsleptslewssleyssliceslickslideslierslilyslimeslimsslimyslingslinkslipeslipssliptslishslitsslivesloanslobssloesslogssloidslojdsloomsloopslootslopeslopsslopyslormsloshslothslotssloveslowssloydslubbslubssluedsluessluffslugssluitslumpslumsslungslunkslurbslurpslurssluseslushslutsslyerslylyslypesmaaksmacksmaiksmallsmalmsmaltsmarmsmartsmashsmazesmearsmeeksmeessmeiksmekesmellsmeltsmerksmewssmilesmirksmirrsmirssmitesmithsmitssmocksmogssmokesmokosmokysmoltsmoorsmootsmoresmotesmoutsmowtsmugssmurssmushsmutssnabssnacksnafusnagssnailsnakesnakysnapssnaresnarfsnarksnarlsnarssnarysnashsnathsnawssneadsneaksneapsnebssnecksnedssneedsneersneessnellsnibssnicksnidesniessniffsniftsnigssnipesnipssnipysnirtsnitssnobssnodssnoeksnoepsnogssnokesnoodsnooksnoolsnoopsnootsnoresnortsnotssnoutsnowksnowssnowysnubssnucksnuffsnugssnushsnyessoakssoapssoapysoaresoarssoavesobassobersocassockosockssoclesodassoddysodicsodomsofarsofassoftasoftssoftysogersoggysohursoilssoilysojassokahsokensokessokolsolahsolansolarsolassoldesoldisoldosoldssoledsoleisolersolessolidsolonsolossolumsolussolvesomansomassonarsoncesondesonessongssonicsonlysonnesonnysonsesonsysooeysookssoolesoolssoomssoopssootesoothsootssootysophssophysoporsoppysoprasoralsorassorbosorbssordasordosordssoredsoreesorelsorersoressorexsorgosornssorrasorrysortasortssorussothssotolsoucesouctsoughsoukssoulssoumssoundsoupssoupysourssousesouthsoutssowarsowcesowedsowersowffsowfssowlesowlssowmssowndsownesowpssowsesowthsoyassoylesoyuzsozinspacespacyspadespadospaedspaerspaesspagsspahispailspainspaitspakespaldspalespallspaltspamsspanespangspankspansspardsparesparksparsspartspasmspatespatsspaulspawlspawnspawsspaydspaysspazaspazzspeakspealspeanspearspeatspeckspecsspeedspeelspeerspeilspeirspeksspeldspelkspellspeltspendspentspeosspermspetsspeugspewsspewyspialspicaspicespickspicsspicyspidespiedspielspierspiesspiffspifsspikespiksspikyspilespillspiltspimsspinaspinespinkspinsspinyspirespirtspiryspitespitsspitzspivssplatsplaysplitsplogspodespodsspoilspokespoofspookspoolspoomspoonspoorspootsporesporksportsposhspotsspoutspradspragspratsprayspredspreesprewsprigspritsprodsprogspruesprugspudsspuedspuerspuesspugsspulespumespumyspunkspurnspursspurtsputaspyalspyresquabsquadsquatsquawsquegsquibsquidsquitsquizstabsstackstadestaffstagestagsstagystaidstaigstainstairstakestalestalkstallstampstandstanestangstankstaphstapsstarestarkstarnstarrstarsstartstashstatestatsstaunstavestawsstayssteadsteakstealsteamsteanstearsteddstedestedssteedsteeksteelsteemsteensteepsteersteilsteinstelastelestellstemestemsstendstenostensstentstepssteptsteresternstetsstewsstewystichstickstiedstiesstiffstilbstilestillstiltstimestimsstimystingstinkstintstipastipestirestirkstirpstirsstivestivystoaestoaistoasstoatstobsstockstoepstogystoicstoitstokestolestolnstomastompstondstonestongstonkstonnstonystoodstookstoolstoopstoorstopestopsstoptstorestorkstormstorystossstotsstottstounstoupstourstoutstovestownstowpstowsstradstraestragstrakstrapstrawstraystrepstrewstriastrigstrimstripstropstrowstroystrumstrutstubsstuckstudestudsstudystuffstullstulmstummstumpstumsstungstunkstunsstuntstupastupesturesturtstyedstyesstylestylistylostymestymystyrestytesuavesubahsubassubbysubersubhasuccisuckssuckysucresuddssudorsudsysuedesuentsuerssuetssuetysugansugarsughssugossuhursuidssuingsuintsuitesuitssujeesukhssukuksulcisulfasulfosulkssulkysullysulphsulussumacsummasumossumphsumpssunissunkssunnasunnssunnysunupsupersupessuprasurahsuralsurassuratsurdssuredsurersuressurfssurfysurgesurgysurlysurrasusessushisusussutorsutrasuttaswabsswackswadsswageswagsswailswainswaleswalyswamiswampswamyswangswankswansswapsswaptswardswareswarfswarmswartswashswathswatsswaylswaysswealswearsweatswedesweedsweelsweepsweersweessweetsweirswellsweltsweptswerfsweysswiesswiftswigsswillswimsswineswingswinkswipeswireswirlswishswissswithswitsswiveswizzswobsswolnswoonswoopswopsswoptswordsworeswornswotsswounswungsybbesybilsyboesybowsyceesycessyenssykersykessylissylphsylvasymarsynchsyncssyndssynedsynessynodsynthsypedsypessyphssyrahsyrensyrupsysopsythesyvertaalstaatatabbytabertabestabidtablatabletabootabortabuntabustacantacestacettachetachotachstacittackstackytacostactstaelstaffytafiataggytagmatahastahrstaigataigstaikotailstainstainttairataishtaitstajestakastakentakertakestakhitakintakistalaktalaqtalartalastalcstalcytaleatalertalestalkstalkytallstallytalmatalontalpataluktalustamaltamedtamertamestamintamistammytampstanastangatangitangotangstangytanhstankatankstankytannatansytantitantotapastapedtapentapertapestapettapirtapistappatapustarastardotardytaredtarestargatargetarnstaroctaroktarostarottarpstarretarrytarsitartstartytasartasertaskstassetastetastytatartatertatestathstatietatoutattstattytatustaubetauldtaunttauontaupetautstavahtavastavertawaitawastawedtawertawietawnytawsetawtstaxedtaxertaxestaxistaxoltaxontaxortaxustayratazzatazzeteachteadeteadsteaedteakstealsteamstearstearyteaseteatsteazetechstechytectateddyteelsteemsteendteeneteensteenyteersteethteffsteggsteguategustehrsteiidteilsteindteinstelaetelcotelestelexteliatelictellstellyteloitelostemedtemestempitempotempstempttemsetenchtendstendutenestenettengeteniatennetennotennytenontenortensetenthtentstentytenuetepaltepastepeetepidtepoyteraiterasterceterekteresterfeterfstergatermsterneternsterraterrytersetertsteslatestatesteteststestytetestethstetratetriteuchteughtewedteweltewittexastexestextsthackthagithaimthalethalithanathanethangthankthanstharmtharsthawsthawythebethecatheedtheektheestheftthegntheictheintheirthelfthemathemethenstheowtherethermthesethespthetathetethewsthewythickthiefthighthigsthilkthillthinethingthinkthinsthiolthirdthirlthofttholetholithongthornthorothorpthosethousthowlthraethrawthreethrewthridthripthrobthroethrowthrumthudsthugsthujathumbthumpthunkthurlthuyathymethymithymytianstiaratiarstibiaticalticcaticedticestichytickstickytidaltiddytidedtidestierstiffstiftstigertigestighttigontikastikestikistikkatilaktildetiledtilertilestillstillytilthtiltstimbotimedtimertimestimidtimontimpstinastincttindstineatinedtinestingetingstinkstinnytintstintytipistippytipsytiredtirestirlstirostirrstitantitchtitertithetitistitletitretittytituptiyintizzytoadstoadytoasttoazetockstockytocostodaytoddetoddytoeastoffstoffytoftstofustogaetogastogedtogestoguetoiletoilstoingtoisetoitstokaytokedtokentokertokestokostolantolartolastoledtolestollstollytoltstolustolyltomantombstomestomiatommytomostonaltonditondotonedtonertonestoneytongatongstonictonkatonkstonnetonustoolstoomstoonstoothtootstopaztopedtopeetopektopertopestophetophitophstopictopistopoitopostoppytoquetorahtorantorastorchtorcstorestorictoriitorostorottorrstorsetorsitorsktorsotortatortetortstorustosastosedtosestoshytossytotaltotedtotemtotertotestottytouchtoughtoukstounstourstousetousytoutstouzetouzytowedtoweltowertowietownstownytowsetowsytowtstowzetowzytoxictoxintoyedtoyertoyontoyostozedtozestozietrabstracetracktracttradetradstragitraiktrailtraintraittramptramstranktranqtranstranttrapetrapstrapttrashtrasstratstratttravetrawltraystreadtreattrecktreedtreentreestrefatreiftrekstrematrendtresstresttretstrewstreystriactriadtrialtribetricetricktridetriedtriertriestrifftrigotrigstriketrildtrilltrimstrinetrinstrioltriortriostripetripstripytristtritetroadtroaktroattrocktrodetrodstrogstroistroketrolltromptronatronctronetronktronstrooptrooztropetrothtrotstrouttrovetrowstroystrucetrucktruedtruertruestrugotrugstrulltrulytrumptrunktrusstrusttruthtryertryketrymatrypstrysttsadetsaditsarstskedtsubatuanstuarttuathtubaetubaltubartubastubbytubedtubertubestuckstufastuffetuffstuftstuftytugratuinatuismtuktutulestuliptulletulpatumidtummytumortumpstumpytunastundstunedtunertunestungstunictunnytupektupiktupletuqueturboturdsturfsturfyturksturmeturmsturnsturpstushytuskstuskytuteetutortuttituttytutustuxestuyertwaestwaintwalstwangtwanktwatstwaystweaktweedtweeltweentweertweettwerktwerptwicetwiertwigstwilltwilttwinetwinktwinstwinytwiretwirltwirptwisttwitetwitstwixttwoertwyertyeestyerstyingtyiyntykestylertympstyndetynedtynestypaltypedtypestypeytypictypostyppstyptotyrantyredtyrestyrostythetzarsudalsudderudonsugaliuggeduhlanuhuruukaseulamaulansulcerulemaulminulnadulnaeulnarulnasulpanultraulvasulyieulzieumamiumbelumberumbleumbosumbraumbreumiacumiakumiaqummahummasummedumpedumpieumptyumrahumrasunaisunaptunarmunaryunausunbagunbanunbarunbedunbidunboxuncapuncesunciauncleuncosuncoyuncusuncutundamundeeunderundidundueundugunethunfedunfitunfixungagungetungodungotungumunhatunhipunifyunionuniteunitsunityunjamunkedunketunkidunlawunlayunledunletunlidunlitunmanunmetunmewunmixunpayunpegunpenunpinunredunridunrigunripunsayunsetunsewunsexunsoduntaxuntieuntiluntinunwedunwetunwitunwonunzipupbowupbyeupdosupdryupendupjetuplayupleduplituppedupperupranuprunupseeupsetupseyuptakupteruptieuraeiuraliuraosurareurariuraseurateurbanurbiaurdeeurealureasuredoureicurenaurenturgedurgerurgesurialurineuriteurmanurnalurnedurpedursaeursidursonurubuurvasusageusersusherusingusneausqueusualusureusurpusuryuteriutileutteruvealuveasuvulavacuavadedvadesvagalvaguevagusvailsvairevairsvairyvakasvakilvalesvaletvalidvalisvalorvalsevaluevalvevampsvampyvandavanedvanesvangsvantsvapidvaporvaranvarasvardyvarecvaresvariavarixvarnavarusvarvevasalvasesvastsvastyvaticvatusvauchvaultvauntvautevautsvawtevealevealsvealyveenaveepsveersveeryveganvegasvegesvegievegosvehmeveilsveilyveinsveinyvelarveldsveldtvelesvellsvelumvenaevenalvendsveneyvengeveninvenomventsvenuevenusverbsvergeverraverryverseversoverstvertsvertuvervevespavestavestsvetchvexedvexervexesvexilvezirvialsviandvibesvibexvibeyvicarvicedvicesvichyvideoviersviewsviewyvifdavigasvigiavigilvigorvildevilervillavillivillsvimenvinalvinasvincavinedvinervinesvinewvinicvinosvintsvinylviolavioldviolsviperviralviredvireoviresvirgavirgeviridvirlsvirtuvirusvisasvisedvisesvisievisitvisnevisonvisorvistavistovitaevitalvitasvitexvittavivasvivatvivdavivervivesvividvixenvizirvizorvleisvliesvlogsvoarsvocabvocalvocesvoddyvodkavodouvodunvoemavogievoguevoicevoidsvoilavoilevoipsvolaevolarvoledvolesvoletvolksvoltavoltevoltivoltsvolvavolvevomervomitvotedvotervotesvouchvougevouluvowedvowelvowervoxelvozhdvraicvrilsvroomvrousvrouwvrowsvuggsvuggyvughsvughyvulgovulnsvulvavuttyvyingwaacswackewackowackswackywaddswaddywadedwaderwadeswadiswadtswaferwaffswaftswagedwagerwageswaggawagonwagyuwahoowaidewaifswaiftwailswainswairswaistwaitewaitswaivewakaswakedwakenwakerwakeswakfswaldowaldswaledwalerwaleswaliswalkswallawallswallywaltywaltzwamedwameswamuswandswanedwaneswaneywangswankswankywanlewanlywannawantswantywanzewaqfswarbswarbywardswaredwareswarezwarkswarmswarnswarpswarrewarstwartswartywaseswashywaspswaspywastewastswatapwatchwaterwattswauffwaughwaukswaulkwaulswaurswavedwaverwaveswaveywawaswaweswawlswaxedwaxenwaxerwaxeswayedwazirwazoowealdwealsweambweanswearswearyweavewebbyweberwechtwedelwedgewedgyweedsweedyweekeweeksweelsweemsweensweenyweepsweepyweestweeteweetswefteweftsweidsweighweilsweirdweirsweiseweizewekaswelchweldswelkewelkswelktwellswellywelshweltswembswenchwendswengewennywentsweroswershwestswetaswetlywexedwexeswhackwhalewhamowhamswhangwhapswharewharfwhatawhatswhaupwhaurwhealwhearwheatwheelwheenwheepwheftwhelkwhelmwhelpwhenswherewhetswhewswheyswhichwhidswhiffwhiftwhigswhilewhilkwhimswhinewhinswhinywhioswhipswhiptwhirlwhirrwhirswhishwhiskwhisswhistwhitewhitswhitywhizzwholewhompwhoofwhoopwhootwhopswhorewhorlwhortwhosewhosowhumpwhupswiccawickswickywiddywidenwiderwideswidowwidthwieldwielswifedwifeswifeywifiewiftywiganwiggawiggywightwikiswilcowildswiledwileswilgawiliswiljawillswillywiltswimpswimpywincewinchwindswindywinedwineswineywingewingswingywinkswinnawinnswinoswinzewipedwiperwipeswiredwirerwireswirrawisedwiserwiseswishawishtwispswispywistswitanwitchwitedwiteswithewithswithywittywivedwiverwiveswizenwizeswoadswoaldwockswodgewofulwokenwokkawoldswolfswollywolvewomanwombswombywomenwomynwongawongiwonkswonkywontswoodswoodywooedwooerwoofswoofywooldwoolswoolywoonswoopswoosewooshwootzwoozywordswordyworksworldwormswormyworryworseworstworthwortswouldwoundwovenwowedwoweewoxenwrackwrangwrapswraptwrastwratewrathwrawlwreakwreckwrenswrestwrickwriedwrierwrieswringwristwritewritswrokewrongwrootwrotewrothwrungwryerwrylywuduswullswurstwuseswushuwussywuxiawyledwyleswyndswynnswytedwytesxebecxeniaxenicxenonxericxeroxxerusxoanaxraysxylanxylemxylicxylolxylylxystixystsyaarsyabasyabbayabbyyaccayachtyackayacksyaffsyageryagisyahooyairdyakkayakowyalesyamenyampyyamunyangsyanksyapokyaponyappsyappyyarcoyardsyareryarfayarksyarnsyarrsyartayartoyatesyaudsyauldyaupsyawedyaweyyawlsyawnsyawnyyawpsyboreycladycledycondydradydredyeadsyeahsyealmyeansyeardyearnyearsyeastyecchyechsyechyyedesyeedsyeggsyelksyellsyelmsyelpsyeltsyentayenteyerbayerdsyerksyesesyesksyestsyestyyetisyettsyeuksyeukyyevenyevesyewenyexedyexesyfereyieldyikedyikesyillsyinceyipesyippyyirdsyirksyirrsyirthyitesyitieylemsylikeylkesymoltympesyobboyocksyodelyodhsyodleyogasyogeeyoghsyogicyoginyogisyoickyojanyokedyokelyokeryokesyokulyolksyolkyyomimyompsyonicyonisyonksyoofsyoopsyoresyorksyorpsyouksyoungyournyoursyourtyouseyouthyowedyowesyowieyowlsyraptyrentyrivdyrnehysameytostyuansyucasyuccayucchyuckoyucksyuckyyuftsyugasyukedyukesyukkyyukosyulanyulesyummoyummyyumpsyuponyuppyyurtayurtsyuzuszabrazackszairezakatzamanzambozamiazanjazantezanzazanzezappyzarfszariszatiszaxeszayinzazenzealszebeczebrazebubzebuszeinszerdazerkszeroszestszestyzetaszexeszezeszhomozibetziffsziganzilaszilchzillazillszimbizimbszincozincszincyzinebzineszingszingyzinkezinkyzippozippyziramzitiszizelzizitzlotezlotyzoaeazoboszobuszoccozoeaezoealzoeaszoismzoistzombizonaezonalzondazonedzonerzoneszonkszooeazooeyzooidzookszoomszoonszootyzoppazoppozorilzoriszorrozoukszowiezuluszupanzupaszurfszuzimzygalzygonzymeszymic";
+
+/* ---------- Puzzles ---------- */
+const pz=()=>{state.pz=state.pz||{};state.pz.days=state.pz.days||{};state.pz.best=state.pz.best||{};return state.pz};
+const pzDay=()=>{const p=pz(),d=today();if(!p.days[d]){p.days[d]={};const ks=Object.keys(p.days).sort();for(const k of ks.slice(0,Math.max(0,ks.length-14)))delete p.days[k]}return p.days[d]};
+const PZ={crown:{n:"Crowns",ico:"♛",d:"Place one crown in every row, column and colour zone. Crowns can't touch, not even at the corners."},
+  word:{n:"Gym Word",ico:"🅰",d:"Guess the five-letter fitness word in six tries."},
+  block:{n:"Block Stack",ico:"▦",d:"Drag blocks onto the board. Fill a row or column to clear it."}};
+// Award XP (capped per day) and tick the daily. Returns {xp, bonus, disc}.
+function pzFinish(k,xp,daily,ok){
+  let got=0,bonus=0,disc=null;const day=pzDay(),first=daily&&ok&&!day[k];
+  commit(()=>{got=awardXP("p",xp);if(first){day[k]=1;bonus=awardXP("p",20);
+    if(["crown","word","block"].every(x=>day[x])&&!day.disc){day.disc=1;disc=randDisc();addDisc(disc)}}});
+  if(disc)setTimeout(()=>toast("💿","All three daily puzzles done",`You won a move disc: ${MV[disc].n}.`,""),600);
+  return {xp:got+bonus,bonus,disc,capped:got<xp};
+}
+const pzResult=(title,sub,r,again)=>`<div class="bt-res win"><h2>${title}</h2><p class="muted" style="text-align:center">${sub}</p><div class="sumgrid" style="grid-template-columns:1fr"><div><b style="color:var(--xp)">+${r.xp}</b><span>XP${r.bonus?" · includes the daily bonus":""}</span></div></div>
+  ${r.capped?`<p class="note" style="padding:0;text-align:center">You've reached today's puzzle XP cap of ${CAPS.p}. You can keep playing for fun.</p>`:""}</div><div class="btgrid"><button class="btn ghost" id="pz-again">${again||"Play another"}</button><button class="btn" id="pz-done">Done</button></div>`;
+function renderPuzzles(){
+  const day=pzDay(),c=capDay(),n=["crown","word","block"].filter(k=>day[k]).length;
+  $("#v-puzzles").innerHTML=`<div class="panel pzhead"><div class="pet-l"><span class="eyebrow">Daily puzzles</span><h3>${n} of 3 done</h3><span class="muted" style="font-size:.88rem">${day.disc?"Today's move disc collected. New puzzles tomorrow.":"Finish all three today for a free move disc."}</span>
+      <span class="bar"><i style="width:${n/3*100}%"></i></span></div>${discPic(day.disc?"secondwind":"thunderclap",54)}</div>
+    ${Object.entries(PZ).map(([k,p])=>`<div class="panel pzcard"><div class="pz-top"><span class="pz-ico">${p.ico}</span><div class="pet-l"><h3>${p.n}${day[k]?' <span class="pill on">Done</span>':""}</h3><span class="muted" style="font-size:.88rem">${p.d}</span></div></div>
+      <div class="btgrid"><button class="btn${day[k]?" ghost":""}" data-pz="${k}" data-daily="1">${day[k]?"Daily again":"Play daily"}</button><button class="btn ghost" data-pz="${k}">Free play</button></div></div>`).join("")}
+    <div class="panel"><h3>XP</h3><p class="muted" style="font-size:.9rem">Every puzzle you finish pays XP, as many times as you like, up to ${CAPS.p} a day. The first daily clear of each adds 20 more.</p>
+      <div class="capgrid"><span>Puzzle XP today</span><b class="num">${c.p||0} / ${CAPS.p}</b></div></div>`;
+}
+document.addEventListener("click",e=>{const b=e.target.closest("#v-puzzles [data-pz]");if(!b)return;const k=b.dataset.pz,d=!!b.dataset.daily;k==="crown"?openCrown(d):k==="word"?openWord(d):openBlock(d)});
+const pzClose=()=>{closeModal();refresh()};
+const fmtClock=s=>Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0");
+
+// ---- Crowns ----
+function crownCount(N,reg,limit){
+  let n=0;const cols=new Array(N).fill(false),regs=new Array(N).fill(false);
+  (function go(r,prev){if(n>=limit)return;if(r===N){n++;return}
+    for(let c=0;c<N;c++){const g=reg[r*N+c];if(cols[c]||regs[g]||(prev>=0&&Math.abs(prev-c)<=1))continue;cols[c]=regs[g]=true;go(r+1,c);cols[c]=regs[g]=false}})(0,-1);
+  return n;
+}
+function crownGen(N,rng){
+  for(let t=0;t<4000;t++){
+    const sol=[];const place=r=>{if(r===N)return true;const cs=[...Array(N).keys()];for(let i=N-1;i>0;i--){const j=Math.floor(rng()*(i+1));[cs[i],cs[j]]=[cs[j],cs[i]]}for(const c of cs){if(sol.includes(c)||(r&&Math.abs(sol[r-1]-c)<=1))continue;sol[r]=c;if(place(r+1))return true;sol.length=r}return false};
+    if(!place(0))continue;
+    const reg=new Array(N*N).fill(-1);sol.forEach((c,r)=>reg[r*N+c]=r);let left=N*N-N;const w=sol.map(()=>.6+rng()*.9);
+    while(left){const cand=[];for(let i=0;i<N*N;i++){if(reg[i]>=0)continue;const r=Math.floor(i/N),c=i%N;for(const [dr,dc] of [[1,0],[-1,0],[0,1],[0,-1]]){const rr=r+dr,cc=c+dc;if(rr<0||cc<0||rr>=N||cc>=N)continue;const g=reg[rr*N+cc];if(g>=0)cand.push([i,g,w[g]])}}
+      let x=rng()*cand.reduce((a,q)=>a+q[2],0),pick=cand[cand.length-1];for(const q of cand){if(x<q[2]){pick=q;break}x-=q[2]}reg[pick[0]]=pick[1];left--}
+    if(crownCount(N,reg,2)===1)return {N,reg,sol};
+  }
+  return null;
+}
+const CROWN_COL=["#e8a0a0","#9fc5e8","#b6d7a8","#f6d98b","#c9b3e6","#f4b183","#9fd9d0","#d5d0c4","#e6a8cf"];
+function openCrown(daily,size){
+  const N=daily?7:size||7,rng=daily?seedRand("crown"+today()):rnd,G=crownGen(N,rng)||crownGen(6,rnd),P=pz();
+  const saved=daily&&P.crown&&P.crown.d===today()&&P.crown.m.length===G.N*G.N?P.crown:null;
+  let marks=saved?saved.m.slice():new Array(G.N*G.N).fill(0),t0=Date.now()-(saved?saved.t*1000:0),done=false,drag=null,moved=false;
+  const m=openModal(`${mhead(daily?"Daily Crowns":"Crowns")}<div class="pzbar"><span class="muted">${esc(PZ.crown.d)}</span><b class="num" id="cr-time">0:00</b></div>
+    <div class="crgrid" id="cr-grid" style="--n:${G.N}"></div><div id="cr-foot"><div class="btgrid"><button class="btn ghost sm" id="cr-clear">Clear board</button>${daily?"":`<div class="seg3" id="cr-size">${[6,7,8].map(s=>`<button data-s="${s}" aria-pressed="${s===G.N}">${s}×${s}</button>`).join("")}</div>`}</div>
+    <p class="note" style="padding:0">Tap once for ✕, twice for a crown. Drag across tiles to cross them out quickly.</p></div>`);
+  m.classList.add("pzsheet");const grid=m.querySelector("#cr-grid"),n=G.N;
+  const bad=()=>{const b=new Set(),cr=[];marks.forEach((v,i)=>{if(v===2)cr.push(i)});
+    for(const a of cr)for(const c of cr){if(a>=c)continue;const ra=Math.floor(a/n),ca=a%n,rc=Math.floor(c/n),cc=c%n;if(ra===rc||ca===cc||G.reg[a]===G.reg[c]||(Math.abs(ra-rc)<=1&&Math.abs(ca-cc)<=1)){b.add(a);b.add(c)}}return {b,cr}};
+  const draw=()=>{const {b}=bad();grid.innerHTML=marks.map((v,i)=>{const r=Math.floor(i/n),c=i%n,g=G.reg[i],bw=(dr,dc)=>{const rr=r+dr,cc=c+dc;return rr<0||cc<0||rr>=n||cc>=n||G.reg[rr*n+cc]!==g?"3px":"1px"};
+    return `<button class="crc${b.has(i)?" bad":""}" data-i="${i}" style="background:${CROWN_COL[g%9]};border-width:${bw(-1,0)} ${bw(0,1)} ${bw(1,0)} ${bw(0,-1)}" aria-label="Row ${r+1}, column ${c+1}${v===2?", crown":v===1?", crossed":""}">${v===2?"♛":v===1?"✕":""}</button>`}).join("")};
+  const check=()=>{const {b,cr}=bad();if(daily){P.crown={d:today(),m:marks.slice(),t:Math.round((Date.now()-t0)/1000)};save()}
+    if(cr.length===n&&!b.size&&!done){done=true;clearInterval(iv);const sec=Math.round((Date.now()-t0)/1000),key="crown"+n,pb=!P.best[key]||sec<P.best[key];if(pb)P.best[key]=sec;
+      const r=pzFinish("crown",{6:30,7:40,8:50}[n]||40,daily,true);grid.classList.add("solved");
+      m.querySelector("#cr-foot").innerHTML=pzResult("Solved!",`${fmtClock(sec)}${pb?" · your best time":` · best ${fmtClock(P.best[key])}`}`,r);
+      m.querySelector("#pz-again").onclick=()=>openCrown(false,n);m.querySelector("#pz-done").onclick=pzClose}};
+  const iv=setInterval(()=>{const el=document.getElementById("cr-time");if(!el){clearInterval(iv);return}el.textContent=fmtClock((Date.now()-t0)/1000)},500);
+  draw();
+  const cellAt=e=>{const el=document.elementFromPoint(e.clientX,e.clientY),b=el&&el.closest(".crc");return b&&grid.contains(b)?+b.dataset.i:-1};
+  grid.addEventListener("pointerdown",e=>{if(done)return;drag=cellAt(e);moved=false});
+  grid.addEventListener("pointermove",e=>{if(done||drag==null||drag<0)return;const i=cellAt(e);if(i<0||i===drag&&!moved)return;if(!moved){moved=true;if(marks[drag]===0)marks[drag]=1}if(marks[i]===0){marks[i]=1;draw()}});
+  const up=e=>{if(done||drag==null)return;const i=drag;drag=null;if(i<0)return;if(!moved){marks[i]=(marks[i]+1)%3}draw();check()};
+  grid.addEventListener("pointerup",up);grid.addEventListener("pointercancel",()=>{drag=null});
+  m.querySelector("#cr-clear").onclick=()=>{marks.fill(0);draw();check()};
+  m.querySelector("#cr-size")?.addEventListener("click",e=>{const b=e.target.closest("[data-s]");if(b)openCrown(false,+b.dataset.s)});
+  m.querySelector("#mh-back").onclick=()=>{clearInterval(iv);pzClose()};
+  if(saved)check();
+}
+
+// ---- Gym Word ----
+const ANSW="squat bench press curls lunge plank chest delts quads glute bicep traps sweat power speed pulse heart lungs water sleep steps miles track cycle climb boxer fiber grain fruit salad steak toned lifts heavy light grips chalk strap plate racks belts shoes socks spine bones joint ankle wrist elbow knees thigh torso waist blood nerve relax pumps gains shred carbs sugar shake meals diets tempo pause drops round paced racer relay medal coach teams sport score goals habit daily early agile quick tough solid steel metal weigh scale grams kilos pound timer clock watch music towel sauna steam bands ropes cable pivot twist crawl clean throw punch kicks block dodge guard stand hikes trail bikes skate rower swing vault rings flips dance barre spins".split(" ");
+let WSET=null;const wordOK=w=>{if(!WSET){WSET=new Set(ANSW);for(let i=0;i<W5.length;i+=5)WSET.add(W5.slice(i,i+5))}return WSET.has(w)};
+function wordMarks(g,ans){const r=Array(5).fill("n"),left={};for(let i=0;i<5;i++){if(g[i]===ans[i])r[i]="y";else left[ans[i]]=(left[ans[i]]||0)+1}for(let i=0;i<5;i++)if(r[i]!=="y"&&left[g[i]]>0){r[i]="m";left[g[i]]--}return r}
+function openWord(daily){
+  const P=pz(),ans=daily?shuffled(ANSW,"gymword")[Math.floor(new Date(today()+"T12:00:00").getTime()/864e5)%ANSW.length]:ANSW[Math.floor(rnd()*ANSW.length)];
+  const saved=daily&&P.word&&P.word.d===today()?P.word:null;let gs=saved?saved.g.slice():[],cur="",over=saved?!!saved.over:false;
+  const m=openModal(`${mhead(daily?"Daily Gym Word":"Gym Word")}<p class="muted" style="font-size:.88rem;text-align:center;margin:0">Green is the right letter in the right place. Yellow is in the word but somewhere else.</p>
+    <div class="wgrid" id="w-grid"></div><div id="w-foot"><div class="wkeys" id="w-keys"></div></div>`);
+  m.classList.add("pzsheet");
+  const draw=()=>{m.querySelector("#w-grid").innerHTML=Array.from({length:6},(_,r)=>{const g=gs[r],mk=g?wordMarks(g,ans):null,txt=g||(r===gs.length?cur:"");
+      return `<div class="wrow">${Array.from({length:5},(_,i)=>`<span class="wc ${mk?mk[i]:txt[i]?"t":""}">${(txt[i]||"").toUpperCase()}</span>`).join("")}</div>`}).join("");
+    const kb=m.querySelector("#w-keys");if(!kb)return;const st={};gs.forEach(g=>wordMarks(g,ans).forEach((v,i)=>{const o=st[g[i]];if(v==="y"||(v==="m"&&o!=="y")||(v==="n"&&!o))st[g[i]]=v}));
+    kb.innerHTML=["qwertyuiop","asdfghjkl","⏎zxcvbnm⌫"].map(row=>`<div class="wkr">${[...row].map(ch=>`<button class="wky ${st[ch]||""}${ch==="⏎"||ch==="⌫"?" wide":""}" data-k="${ch}" aria-label="${ch==="⏎"?"Enter":ch==="⌫"?"Delete":ch}">${ch==="⏎"?"Enter":ch.toUpperCase()}</button>`).join("")}</div>`).join("")};
+  const finish=won=>{over=true;if(daily){P.word={d:today(),g:gs.slice(),over:1};save()}const already=saved&&saved.over;
+    const r=already?{xp:0}:pzFinish("word",won?40:10,daily,won);
+    m.querySelector("#w-foot").innerHTML=pzResult(won?"Got it!":"So close",won?`${gs.length} ${gs.length===1?"try":"tries"} · the word was ${ans.toUpperCase()}`:`The word was ${ans.toUpperCase()}`,r);
+    m.querySelector("#pz-again").onclick=()=>openWord(false);m.querySelector("#pz-done").onclick=pzClose};
+  const key=k=>{if(over)return;
+    if(k==="⌫"||k==="Backspace")cur=cur.slice(0,-1);
+    else if(k==="⏎"||k==="Enter"){if(cur.length<5){toast("!","Not enough letters","","");return}if(!wordOK(cur)){toast("!","Not in the word list","Try another word.","");return}
+      gs.push(cur);cur="";if(daily){P.word={d:today(),g:gs.slice()};save()}draw();if(gs[gs.length-1]===ans)finish(true);else if(gs.length>=6)finish(false);return}
+    else if(/^[a-z]$/i.test(k)&&cur.length<5)cur+=k.toLowerCase();draw()};
+  draw();if(over)finish(gs[gs.length-1]===ans);
+  m.querySelector("#w-foot").addEventListener("click",e=>{const b=e.target.closest("[data-k]");if(b)key(b.dataset.k)});
+  const onKey=e=>{if(!m.isConnected){document.removeEventListener("keydown",onKey);return}if(e.metaKey||e.ctrlKey)return;key(e.key)};document.addEventListener("keydown",onKey);
+  m.querySelector("#mh-back").onclick=pzClose;
+}
+
+// ---- Block Stack ----
+const BSH=(()=>{const base=[[[0,0]],[[0,0],[0,1]],[[0,0],[0,1],[0,2]],[[0,0],[0,1],[0,2],[0,3]],[[0,0],[0,1],[0,2],[0,3],[0,4]],[[0,0],[0,1],[1,0],[1,1]],[[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]],
+    [[0,0],[1,0],[1,1]],[[0,0],[1,0],[2,0],[2,1]],[[0,0],[1,0],[2,0],[2,1],[2,2]],[[0,0],[0,1],[0,2],[1,1]],[[0,0],[0,1],[1,1],[1,2]],[[0,1],[0,2],[1,0],[1,1]],[[0,0],[0,1],[0,2],[1,0],[1,1],[1,2]]];
+  const norm=s=>{const mr=Math.min(...s.map(c=>c[0])),mc=Math.min(...s.map(c=>c[1]));return s.map(([r,c])=>[r-mr,c-mc]).sort((a,b)=>a[0]-b[0]||a[1]-b[1])},seen=new Set(),out=[];
+  base.forEach((s,ci)=>{let cur=s;for(let k=0;k<4;k++){cur=norm(cur.map(([r,c])=>[c,-r]));const key=JSON.stringify(cur);if(!seen.has(key)){seen.add(key);out.push({c:cur,col:ci%7,h:Math.max(...cur.map(x=>x[0]))+1,w:Math.max(...cur.map(x=>x[1]))+1})}}});return out})();
+const BCOL=["#ff6b6b","#ffa94d","#ffd43b","#69db7c","#4dabf7","#b197fc","#f783ac"];
+function openBlock(daily){
+  const P=pz(),rng=daily?seedRand("block"+today()):rnd,N=8;let grid=new Array(64).fill(-1),tray=[],score=0,streak=0,over=false;
+  const fits=(sh,r,c)=>sh.c.every(([dr,dc])=>{const rr=r+dr,cc=c+dc;return rr>=0&&cc>=0&&rr<N&&cc<N&&grid[rr*N+cc]<0});
+  const anyFit=sh=>{for(let r=0;r<N;r++)for(let c=0;c<N;c++)if(fits(sh,r,c))return true;return false};
+  const deal=()=>{for(let t=0;t<30;t++){tray=[0,1,2].map(()=>BSH[Math.floor(rng()*BSH.length)]);if(tray.some(anyFit))break}};
+  const m=openModal(`${mhead(daily?"Daily Block Stack":"Block Stack")}<div class="pzbar"><span><span class="eyebrow">Score</span> <b class="num" id="bk-score">0</b></span><span class="muted num">Best ${P.best.block||0}</span></div>
+    <div class="bkgrid" id="bk-grid"></div><div id="bk-foot"><div class="bktray" id="bk-tray"></div><div class="btgrid"><span class="note" style="padding:0">${daily?"Score 150 to clear today's daily.":"Drag a block onto the board."}</span><button class="btn ghost sm" id="bk-end">End game</button></div></div>`);
+  m.classList.add("pzsheet");const gel=m.querySelector("#bk-grid");
+  const drawGrid=(ghost,gcol)=>{gel.innerHTML=grid.map((v,i)=>`<i class="${v>=0?"f":ghost&&ghost.has(i)?"g":""}" style="${v>=0?`background:${BCOL[v]}`:ghost&&ghost.has(i)?`background:${BCOL[gcol]}`:""}"></i>`).join("")};
+  const pieceHTML=(sh,cell)=>`<span class="bkp" style="width:${sh.w*cell}px;height:${sh.h*cell}px">${sh.c.map(([r,c])=>`<i style="left:${c*cell}px;top:${r*cell}px;width:${cell-2}px;height:${cell-2}px;background:${BCOL[sh.col]}"></i>`).join("")}</span>`;
+  const drawTray=()=>{const el=m.querySelector("#bk-tray");if(!el)return;el.innerHTML=tray.map((sh,i)=>`<button class="bkslot${sh&&!anyFit(sh)?" dead":""}" data-t="${i}" ${sh?"":"disabled"} aria-label="Block ${i+1}">${sh?pieceHTML(sh,18):""}</button>`).join("");const s=m.querySelector("#bk-score");if(s)s.textContent=score};
+  const end=()=>{if(over)return;over=true;const pb=score>(P.best.block||0);if(pb)P.best.block=score;const r=pzFinish("block",Math.min(50,Math.floor(score/8)),daily,score>=150);
+    m.querySelector("#bk-foot").innerHTML=pzResult(score>=150?"Nice stacking":"Board full",`Score ${score}${pb?" · new best":""}${daily&&score<150?" · 150 clears the daily":""}`,r,daily?"Try again":"Play again");
+    m.querySelector("#pz-again").onclick=()=>openBlock(daily);m.querySelector("#pz-done").onclick=pzClose};
+  const place=(ti,r,c)=>{const sh=tray[ti];sh.c.forEach(([dr,dc])=>grid[(r+dr)*N+c+dc]=sh.col);score+=sh.c.length;tray[ti]=null;
+    const rows=[],cols=[];for(let i=0;i<N;i++){if([...Array(N).keys()].every(j=>grid[i*N+j]>=0))rows.push(i);if([...Array(N).keys()].every(j=>grid[j*N+i]>=0))cols.push(i)}
+    const k=rows.length+cols.length;if(k){streak++;score+=10*k*k+5*(streak-1);rows.forEach(i=>{for(let j=0;j<N;j++)grid[i*N+j]=-1});cols.forEach(i=>{for(let j=0;j<N;j++)grid[j*N+i]=-1});try{navigator.vibrate&&navigator.vibrate(20)}catch(e){}}else streak=0;
+    if(tray.every(x=>!x))deal();drawGrid();drawTray();if(!tray.some(x=>x&&anyFit(x)))setTimeout(end,500)};
+  deal();drawGrid();drawTray();
+  let dg=null;
+  m.querySelector("#bk-tray").addEventListener("pointerdown",e=>{const b=e.target.closest("[data-t]");if(!b||over||b.disabled)return;const ti=+b.dataset.t,sh=tray[ti],gr=gel.getBoundingClientRect(),cell=gr.width/N;
+    const fl=document.createElement("div");fl.className="bkfloat";fl.innerHTML=pieceHTML(sh,cell);document.body.appendChild(fl);b.classList.add("lift");
+    dg={ti,sh,fl,cell,b,pos:null};try{b.setPointerCapture(e.pointerId)}catch(x){}move(e);e.preventDefault()});
+  const move=e=>{if(!dg)return;const {sh,fl,cell}=dg,gr=gel.getBoundingClientRect(),x=e.clientX-sh.w*cell/2,y=e.clientY-sh.h*cell-46;fl.style.transform=`translate(${x}px,${y}px)`;
+    const c=Math.round((x-gr.left)/cell),r=Math.round((y-gr.top)/cell),ok=fits(sh,r,c);dg.pos=ok?[r,c]:null;drawGrid(ok?new Set(sh.c.map(([dr,dc])=>(r+dr)*N+c+dc)):null,sh.col)};
+  const drop=()=>{if(!dg)return;const d=dg;dg=null;d.fl.remove();d.b.classList.remove("lift");if(d.pos)place(d.ti,d.pos[0],d.pos[1]);else drawGrid()};
+  const tr=m.querySelector("#bk-tray");tr.addEventListener("pointermove",move);tr.addEventListener("pointerup",drop);tr.addEventListener("pointercancel",drop);
+  m.querySelector("#bk-end").onclick=end;
+  m.querySelector("#mh-back").onclick=()=>{if(dg)dg.fl.remove();pzClose()};
+}
+
+/* ---------- Workout posts: exercises, weights and an optional photo ---------- */
+const phPath=key=>`${me.id}/${key.replace(/[^\w-]/g,"_")}.jpg`,phUrls={};
+function photoURL(path){return phUrls[path]||(phUrls[path]=sb.storage.from("workout-photos").createSignedUrl(path,3600).then(r=>r.error||!r.data?"":r.data.signedUrl).catch(()=>""))}
+function hydratePhotos(root){root.querySelectorAll("img[data-php]").forEach(async img=>{const p=img.dataset.php;img.removeAttribute("data-php");const u=await photoURL(p);if(u)img.src=u;else img.remove()})}
+async function setPostPhoto(key,path){
+  const q=lsGet("vtppl-actq")||[],qi=q.find(a=>a.kind==="workout"&&a.payload&&a.payload.key===key);
+  if(qi){if(path)qi.payload.photo=path;else delete qi.payload.photo;lsSet("vtppl-actq",q);return true}
+  const {data,error}=await sb.from("activity").select("id,payload").eq("user_id",me.id).eq("kind","workout").order("created_at",{ascending:false}).limit(8);
+  const row=!error&&(data||[]).find(a=>a.payload&&a.payload.key===key);if(!row)return false;
+  const pl={...row.payload};if(path)pl.photo=path;else delete pl.photo;
+  return !(await sb.from("activity").update({payload:pl}).eq("id",row.id)).error;
+}
+async function sharePhoto(key,dataURL){
+  if(!sb||!me||!myProfile||!state.sessions[key])return;
+  try{const blob=await (await fetch(dataURL)).blob(),path=phPath(key);
+    const {error}=await sb.storage.from("workout-photos").upload(path,blob,{upsert:true,contentType:"image/jpeg"});if(error)throw error;
+    delete phUrls[path];let ok=await setPostPhoto(key,path);if(!ok){await wait(3500);ok=await setPostPhoto(key,path)}
+    state.sessions[key].shared=1;save();toast("✓",ok?"Photo shared with friends":"Photo uploaded",ok?"It's on your workout post.":"It will show once your workout post syncs.","");loadSocial(true)}
+  catch(e){toast("!","Photo saved on this phone only",/bucket|not found|security|schema/i.test(e&&e.message||"")?"Sharing photos needs the latest Supabase update.":sbErr(e),"")}
+}
+async function unsharePhoto(key){
+  if(!sb||!me||!state.sessions[key])return;const path=phPath(key);delete state.sessions[key].shared;save();
+  try{await setPostPhoto(key,null);await sb.storage.from("workout-photos").remove([path]);delete phUrls[path];toast("✓","Photo removed from your post","It's still on this phone.","");loadSocial(true)}catch(e){}
+}
+document.addEventListener("change",async e=>{if(e.target.id!=="sum-share")return;const key=e.target.dataset.key,s=state.sessions[key];if(!s||!s.photo)return;
+  if(e.target.checked){const src=await PH.get(key).catch(()=>null);if(src)sharePhoto(key,src)}else if(s.shared)unsharePhoto(key)});
+const exLines=(ex,max)=>ex.slice(0,max||99).map(x=>{const st=x.s.filter(v=>v[2]!=="w");return st.length?`<span><b>${esc(x.n)}</b> ${st.map(v=>(v[2]==="d"?"D ":"")+fmtSet(x.k,v)).join(", ")}</span>`:""}).join("");
+function openPost(id){
+  const a=social.feed.find(x=>String(x.id)===String(id));if(!a)return;const d=a.payload||{},p=social.profiles[a.user_id],mine=a.user_id===me.id;
+  const m=openModal(`${mhead("Workout")}<div class="prow" style="border:0;padding:0">${avHTML(p,46)}<span class="prow-t"><b>${mine?"You":"@"+esc(p?p.username:"someone")}</b><span class="muted">${esc(d.name||"Workout")} · ${ago(a.created_at)}</span></span></div>
+    <div class="sumgrid"><div><b>${d.sets||0}</b><span>Sets</span></div><div><b>${fmtNum(d.volume||0)}</b><span>kg moved</span></div><div><b>${(d.prs||[]).length}</b><span>PRs</span></div></div>
+    ${d.photo?`<img class="wphoto" data-php="${esc(d.photo)}" alt="Workout photo">`:""}
+    ${d.prs&&d.prs.length?`<span class="chips">${d.prs.map(x=>`<span class="chip">PR · ${esc(x)}</span>`).join("")}</span>`:""}
+    ${d.ex&&d.ex.length?`<div class="hist">${d.ex.map(x=>`<div class="hrow" style="grid-template-columns:minmax(0,1fr)"><span class="s"><b>${esc(x.n)}</b><br><span class="muted">${x.s.map(v=>(v[2]==="w"?"W ":v[2]==="d"?"D ":"")+fmtSet(x.k,v)).join(", ")}</span></span></div>`).join("")}</div><p class="note" style="padding:0">Weight × reps for each set. W is a warm-up, D a drop set.</p>`:`<p class="muted">No exercise details on this post.</p>`}
+    <div class="btnrow">${mine?"":`<button class="btn ghost" id="po-prof">View profile</button>`}${mine&&d.photo&&d.key?`<button class="btn ghost" id="po-unshare">Remove photo from post</button>`:""}</div>`);
+  hydratePhotos(m);m.querySelector("#mh-back").onclick=closeModal;
+  m.querySelector("#po-prof")?.addEventListener("click",()=>openPerson(a.user_id));
+  m.querySelector("#po-unshare")?.addEventListener("click",async()=>{if(state.sessions[d.key])await unsharePhoto(d.key);else{await sb.from("activity").update({payload:{...d,photo:undefined}}).eq("id",a.id);await sb.storage.from("workout-photos").remove([d.photo]);await loadSocial(true)}closeModal()});
+}
+/* ---------- Move discs in the shop ---------- */
+const DISC_PRICE=120,weeklyDiscs=()=>shuffled(DISCS,"disc"+weekStart(today())).slice(0,4);
+document.addEventListener("click",e=>{const b=e.target.closest("[data-buydisc]");if(!b)return;const k=b.dataset.buydisc;if(gems(compute())<DISC_PRICE)return;
+  state.spent=(state.spent||0)+DISC_PRICE;addDisc(k);save();refresh();toast("💿",`Move disc: ${MV[k].n}`,"Teach it from any pet's profile.","")});
+let pendingBattle=null;
+
 /* ---------- Bottom bar: pick your tabs ---------- */
-const PAGES={train:"Workout",today:"Today",cardio:"Cardio",progress:"Ranks",shop:"Shop",friends:"Friends",profile:"Profile",plan:"Plan"};
+const PAGES={train:"Workout",today:"Today",cardio:"Cardio",progress:"Ranks",shop:"Shop",friends:"Friends",profile:"Profile",plan:"Plan",battle:"Battle",puzzles:"Puzzles"};
 const BAR_DEF=["train","progress","shop","friends","profile","plan"];
 const ICON={};document.querySelectorAll("nav.tabs .tab").forEach(t=>{const s=t.querySelector("svg");if(s)ICON[t.dataset.v]=s.outerHTML});
 ICON.today=`<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="8" rx="2"/><rect x="13.5" y="3.5" width="7" height="5" rx="2"/><rect x="13.5" y="11.5" width="7" height="9" rx="2"/><rect x="3.5" y="14.5" width="7" height="6" rx="2"/></svg>`;
 ICON.cardio=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12.5h4l2.2-5.5 4.2 11 2.4-6.5 1.4 1h4.8"/></svg>`;
+ICON.battle=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l9 9M4 4v3.500M4 4h3.500M20 4l-9 9M20 4v3.500M20 4h-3.500M6.500 14.500l3 3M17.500 14.500l-3 3M5 19l3-3M19 19l-3-3"/></svg>`;
+ICON.puzzles=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h4a2 2 0 1 1 4 0h4v4a2 2 0 1 0 0 4v4H4z"/></svg>`;
 ICON.more=`<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><path d="M17 14v6M14 17h6"/></svg>`;
 const barPins=()=>{let b=Array.isArray(state.bar)?state.bar.filter((v,i,a)=>PAGES[v]&&a.indexOf(v)===i):null;if(!b||b.length<3)b=BAR_DEF.slice();return b.slice(0,6)};
 function renderBar(){
   const pins=barPins(),inn=$("nav.tabs .in");inn.style.gridTemplateColumns=`repeat(${pins.length+1},minmax(0,1fr))`;
-  inn.innerHTML=pins.map(v=>`<button class="tab" role="tab" id="t-${v}" data-v="${v}" aria-selected="${view===v}">${ICON[v]}<span class="tl">${PAGES[v]}</span>${v==="friends"?'<span class="tbadge" id="tb-friends" hidden></span>':""}</button>`).join("")
+  inn.innerHTML=pins.map(v=>`<button class="tab" role="tab" id="t-${v}" data-v="${v}" aria-selected="${view===v}">${ICON[v]}<span class="tl">${PAGES[v]}</span>${v==="friends"||v==="battle"?`<span class="tbadge" id="tb-${v}" hidden></span>`:""}</button>`).join("")
     +`<button class="tab" id="t-more" aria-selected="${!pins.includes(view)}" aria-haspopup="dialog">${ICON.more}<span class="tl">${pins.includes(view)?"More":PAGES[view]}</span><span class="tbadge" id="tb-more" hidden></span></button>`;
   updateBadges();
 }
 function openMore(){
   const pins=barPins(),order=pins.concat(Object.keys(PAGES).filter(v=>!pins.includes(v)));
-  const m=openModal(`${mhead("More")}<div class="moregrid">${Object.keys(PAGES).map(v=>`<button class="mitem${view===v?" on":""}" data-go="${v}">${ICON[v]}<b>${PAGES[v]}</b>${pins.includes(v)?"":'<small>In More</small>'}</button>`).join("")}</div>
+  const m=openModal(`${mhead("More")}<div class="moregrid">${Object.keys(PAGES).map(v=>`<button class="mitem${view===v?" on":""}" data-go="${v}">${ICON[v]}<b>${PAGES[v]}</b>${(v==="battle"||v==="puzzles")&&!(state.seenNew||{})[v]?'<small class="newdot">New</small>':pins.includes(v)?"":'<small>In More</small>'}</button>`).join("")}</div>
     <div class="ph"><h3>Your bottom bar</h3><span class="muted num">${pins.length} / 6</span></div>
     <p class="note" style="padding:0;margin-top:-6px">Turn tabs on or off and move them up or down. Anything that's off stays here in More.</p>
     <div class="baredit">${order.map(v=>{const on=pins.includes(v),i=pins.indexOf(v);return `<div class="berow${on?"":" off"}"><span class="be-i">${ICON[v]}</span><b>${PAGES[v]}</b>
@@ -4287,13 +5017,13 @@ $("#days").addEventListener("click",e=>{const b=e.target.closest(".day");if(!b)r
 $("#lvlpill").addEventListener("click",()=>go("profile"));
 $("#ctr-gems").addEventListener("click",()=>go("shop"));
 function go(vw){view=vw;
-  ["train","today","cardio","progress","shop","friends","profile","plan"].forEach(n=>$("#v-"+n).hidden=n!==vw);renderBar();
+  ["train","today","cardio","progress","shop","friends","profile","plan","battle","puzzles"].forEach(n=>$("#v-"+n).hidden=n!==vw);if(PAGES[vw]&&(vw==="battle"||vw==="puzzles")){state.seenNew=state.seenNew||{};state.seenNew[vw]=1}renderBar();
   if(state.visits.d!==today())state.visits={d:today()};state.visits[vw]=1;refresh();window.scrollTo(0,0);
-  if(vw==="friends"&&me&&myProfile&&Date.now()-social.at>3000)loadSocial(true)}
+  if(vw==="friends"&&me&&myProfile&&Date.now()-social.at>3000)loadSocial(true);if(vw==="battle"){if(me&&myProfile&&!social.loaded)loadSocial(true);else loadBattles(true)}}
 document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{
   document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-selected",x===b));
   ["cardio","rules","science"].forEach(n=>$("#p-"+n).hidden=n!==b.dataset.p)}));
-function refresh(){let c=compute();if(checkChallenges(c))c=compute();applyTheme();renderHeader(c);renderPlanBox();if(view==="train"){renderTrain();welcome();chalCard(c)}if(view==="progress")renderProgress();if(view==="shop")renderShop(c);if(view==="friends"&&!chat.open)renderFriends();updateBadges();if(view==="profile")renderProfile();if(view==="today")renderToday(c);if(view==="cardio")renderCardio(c)}
+function refresh(){let c=compute();if(checkChallenges(c))c=compute();applyTheme();renderHeader(c);renderPlanBox();if(view==="train"){renderTrain();welcome();chalCard(c)}if(view==="progress")renderProgress();if(view==="shop")renderShop(c);if(view==="friends"&&!chat.open)renderFriends();updateBadges();if(view==="profile")renderProfile();if(view==="today")renderToday(c);if(view==="cardio")renderCardio(c);if(view==="battle"&&!bt.cur)renderBattle();if(view==="puzzles")renderPuzzles()}
 // No zooming: block pinch and double-tap zoom so the layout stays put (text boxes are 16px so iPhone doesn't zoom on focus).
 ["gesturestart","gesturechange","gestureend"].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));
 document.addEventListener("touchmove",e=>{if(e.touches.length>1||(e.scale!==undefined&&e.scale!==1))e.preventDefault()},{passive:false});
@@ -4306,7 +5036,7 @@ save();
 commit(()=>{},{quiet:true});
 refresh();
 pushRefresh().then(()=>{if(view==="profile")renderProfile()});
-if(/^#(chat=|friends|train)/.test(location.hash))routeTo(location.hash);
+if(/^#(chat=|friends|train|battle)/.test(location.hash))routeTo(location.hash);
 let lastDay=today();
 document.addEventListener("visibilitychange",()=>{if(document.hidden)return;pollMsgs();
   if(today()!==lastDay){lastDay=today();useFreezes();refresh();pushSchedule()}});
