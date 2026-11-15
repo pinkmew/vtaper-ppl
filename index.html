@@ -1069,6 +1069,26 @@ body{min-height:100dvh}
 .pk-pick b{font-size:.95rem;line-height:1.2;text-align:center}.pk-pick small{color:var(--muted);font-weight:700;font-size:.78rem}
 .pk-it.on .pk-pick small{color:var(--xp)}
 .pk-info{position:absolute;top:6px;right:6px;width:30px;height:30px;border-radius:50%;border:0;background:var(--surface);color:var(--muted);font-size:1rem;cursor:pointer;display:grid;place-items:center}
+
+/* ---- v30: personalisation ---- */
+.pcard{display:flex;gap:12px;align-items:flex-start;background:linear-gradient(135deg,var(--xp-soft),var(--surface-2));border-radius:16px;padding:14px;margin:10px 0;box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--xp) 45%,transparent)}
+.pcard[hidden]{display:none}.pcard>div{display:flex;flex-direction:column;gap:6px;flex:1;min-width:0}.pcard span{font-size:.88rem;color:var(--muted);line-height:1.35}.pcard .btnrow{margin-top:4px}
+.pc-ico{font-size:1.5rem;line-height:1;flex:none}
+.pbstart{display:flex;gap:12px;align-items:flex-start;text-align:left;border:0;border-radius:16px;padding:14px;background:var(--xp-soft);color:var(--fg);cursor:pointer;font-family:var(--body);box-shadow:inset 0 0 0 2px var(--xp)}
+.pbstart>span:last-child{display:flex;flex-direction:column;gap:3px}.pbstart b{font-size:1.05rem}.pbstart small{color:var(--muted);font-size:.84rem;line-height:1.35}
+.pbprog{height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden;flex:none}.pbprog i{display:block;height:100%;background:var(--xp);border-radius:99px;transition:width .25s}
+.sheet.pbsheet h2{font-size:1.35rem}
+.bwbig{font-size:1.4rem}.bwbig input{font-size:1.6rem;padding:14px}
+.pbvol{display:flex;flex-wrap:wrap;gap:6px}.pbvol span{background:var(--surface-2);border-radius:99px;padding:5px 10px;font-size:.8rem;color:var(--muted);font-weight:700}.pbvol b{color:var(--fg)}
+.pbday{background:var(--surface-2);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.pbd-h{display:flex;justify-content:space-between;gap:8px;font-size:.92rem}
+.pbex{display:flex;align-items:center;gap:8px;justify-content:space-between}.pbex-n{display:flex;flex-direction:column;min-width:0;font-size:.9rem;font-weight:700}.pbex-n small{color:var(--muted);font-weight:600;font-size:.78rem}
+.chip.ev{border:0;cursor:pointer;font-family:var(--body);font-weight:800;white-space:nowrap}
+.chip.ev-r{background:color-mix(in srgb,#4cc38a 22%,var(--surface-2));color:#7fe0b0}.chip.ev-e{background:color-mix(in srgb,var(--xp) 18%,var(--surface-2));color:var(--xp)}
+.evbadge{align-self:flex-start;font-weight:800;font-size:.78rem;padding:4px 10px;border-radius:99px}.evbadge.ev-r{background:color-mix(in srgb,#4cc38a 22%,var(--surface-2));color:#7fe0b0}.evbadge.ev-e{background:color-mix(in srgb,var(--xp) 18%,var(--surface-2));color:var(--xp)}
+.evrow{display:flex;flex-direction:column;gap:2px;text-align:left;border:0;border-top:1px solid var(--line);background:none;color:var(--fg);padding:10px 0;cursor:pointer;font-family:var(--body);width:100%}
+.evrow span{color:var(--muted);font-size:.86rem}
+.bwgoal{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:.88rem;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -1087,6 +1107,7 @@ body{min-height:100dvh}
 
   <main>
     <div class="ihint" id="ihint" hidden></div>
+    <div class="pcard" id="pcard" hidden></div>
     <section id="v-train" class="view"></section>
     <section id="v-today" class="view" hidden></section>
     <section id="v-cardio" class="view" hidden></section>
@@ -1106,113 +1127,9 @@ body{min-height:100dvh}
         <button role="tab" id="seg-science" data-p="science" aria-selected="false">Science</button>
       </div>
 
-      <div id="p-cardio" class="view" style="margin-top:0">
-        <div class="panel">
-          <h2>Cardio plan</h2>
-          <p>On a cut, cardio adds to your calorie burn. Lifting is still what keeps the muscle, so keep cardio easy enough that it never hurts your sessions.</p>
-        </div>
-        <div class="panel">
-          <h3>Weekly layout</h3>
-          <div class="row"><b>Daily</b><p>8–10k steps. This is your main fat-loss tool after diet.</p></div>
-          <div class="row"><b>Tue</b><p>25 min incline walk or bike after Pull A. Easy pace: you could talk in full sentences.</p></div>
-          <div class="row"><b>Fri</b><p>25 min incline walk or bike after Pull B, same easy pace.</p></div>
-          <div class="row"><b>Sat</b><p>Optional sprint work after Legs B. Follow the progression below.</p></div>
-          <div class="row"><b>Sun</b><p>Rest. A relaxed walk is fine.</p></div>
-        </div>
-        <div class="panel">
-          <h3>Sprint progression</h3>
-          <p class="muted">Warm up first every time: 5 min jog, leg swings, A-skips. Never sprint flat out while the hernia is unrepaired.</p>
-          <div class="stage"><span class="wk">Wk 1–4</span><p>6–8 strides of 60–80 m at about 70% effort. Walk back to recover.</p></div>
-          <div class="stage"><span class="wk">Wk 5–8</span><p>4–6 hill sprints, 10–15 seconds at about 85%. Hills cut groin stress.</p></div>
-          <div class="stage"><span class="wk">Wk 9+</span><p>4–6 flat sprints of 40–60 m at about 90%, with 2–3 min rest between.</p></div>
-        </div>
-        <div class="panel">
-          <h3>If fat loss stalls</h3>
-          <p>Add 2,000 daily steps or a third 25-minute session before cutting food further. Change one thing at a time and give it two weeks.</p>
-        </div>
-      </div>
-
-      <div id="p-rules" class="view" style="margin-top:0" hidden>
-        <div class="panel">
-          <h2>How to progress</h2>
-          <ol>
-            <li>Start with a weight you can lift for the bottom of the rep range.</li>
-            <li>Add reps each week until every set reaches the top of the range.</li>
-            <li>Then add the smallest jump (2.5 kg, or the next dumbbell) and repeat. The app tells you when.</li>
-            <li>Compounds stop 1–2 reps short of failure. Isolation work goes to 0–1 reps short.</li>
-            <li>Deload every 6–8 weeks, or if strength drops two sessions in a row: same exercises, half the sets.</li>
-          </ol>
-          <p class="muted">On a cut, holding your numbers steady is a win.</p>
-        </div>
-        <div class="panel">
-          <h3>How XP and ranks work</h3>
-          <ul>
-            <li>10 XP per set, 50 XP per personal record, 40 XP per rank up, 100 XP for finishing a workout, plus bonus XP for medals.</li>
-            <li>Warm-up sets earn nothing and never count toward records. Drop sets earn XP and volume but can't set a record.</li>
-            <li>A PR means your best estimated one-rep max on that lift went up. It's worked out from weight and reps, so more reps at the same weight counts.</li>
-            <li>Each lift is ranked by your estimated max compared with your bodyweight, from Bronze I up to Champion III. The standards are estimates for a male lifter, and machine and cable lifts are rougher because stacks differ between gyms.</li>
-            <li>Exercises you create yourself rank by improvement since your first session instead.</li>
-            <li>A muscle's rank is the average of its top three lifts, so the bodygraph shows your strong and weak points from day one. Keep your bodyweight up to date on the Profile tab.</li>
-            <li>Swaps and extra exercises keep their own history, so going back to the regular plan never loses your numbers.</li>
-          </ul>
-        </div>
-        <div class="panel">
-          <h3>Cut nutrition</h3>
-          <ul>
-            <li>Lose about 0.5–1% of bodyweight a week, closer to 0.5% as you get leaner.</li>
-            <li>Protein around 2–2.2 g per kg of bodyweight, spread over 3–4 meals.</li>
-            <li>Keep most carbs around your training.</li>
-            <li>Sleep 7–9 hours. Short sleep makes a cut cost more muscle.</li>
-          </ul>
-        </div>
-        <div class="panel warnpanel">
-          <h3>Hernia and back rules</h3>
-          <ul>
-            <li>No max-effort singles or grinding reps, especially squats, RDLs and leg press. PRs here come from reps, not maxing out.</li>
-            <li>Breathe out through the hard part of each rep instead of holding your breath.</li>
-            <li>Stop the exercise if you feel a bulge, dragging or sharp pain in your groin.</li>
-            <li>If rows or RDLs flare your lower back, swap to chest-supported rows and lying leg curls.</li>
-            <li>Get the night-time back pain checked by a GP or physio if it continues.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div id="p-science" class="view" style="margin-top:0" hidden>
-        <div class="panel">
-          <h2>Where this comes from</h2>
-          <p>The structure follows peer-reviewed hypertrophy research. Exercise choice follows what you enjoy, because research rarely picks one best exercise and consistency matters more.</p>
-          <p class="muted">Jeff Nippard's programmes are built on much of this same research. Arnold's split is classic bodybuilding: high volume, each muscle twice a week, proven in practice more than in studies.</p>
-        </div>
-        <div class="panel">
-          <h3>Key findings used</h3>
-          <div class="finding">
-            <span class="what">Train each muscle twice a week</span>
-            <p>A 2016 meta-analysis found twice-weekly training grew more muscle than once a week.</p>
-            <a href="https://pubmed.ncbi.nlm.nih.gov/27102172/" target="_blank" rel="noopener">Schoenfeld et al., 2016 · Sports Medicine</a>
-          </div>
-          <div class="finding">
-            <span class="what">More weekly sets, more growth, up to a point</span>
-            <p>Growth rose with weekly volume, with 10+ sets per muscle doing best. A later review suggested 12–20 weekly sets for trained men.</p>
-            <a href="https://pubmed.ncbi.nlm.nih.gov/27433992/" target="_blank" rel="noopener">Schoenfeld et al., 2017 · J Sports Sciences</a>
-            <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8884877/" target="_blank" rel="noopener">Baz-Valle et al., 2022 · J Human Kinetics</a>
-          </div>
-          <div class="finding">
-            <span class="what">Overhead triceps work beats pushdowns alone</span>
-            <p>Over 12 weeks, the triceps long head grew about 28.5% with overhead extensions versus 19.6% with pushdowns.</p>
-            <a href="https://pubmed.ncbi.nlm.nih.gov/35819335/" target="_blank" rel="noopener">Maeo et al., 2023 · Eur J Sport Science</a>
-          </div>
-          <div class="finding">
-            <span class="what">Protein benefits level off around 1.6 g/kg</span>
-            <p>A 49-study meta-analysis found little extra muscle gain above about 1.6 g/kg a day. Cutting raises needs, so this plan aims a little higher.</p>
-            <a href="https://pubmed.ncbi.nlm.nih.gov/28698222/" target="_blank" rel="noopener">Morton et al., 2018 · Br J Sports Med</a>
-          </div>
-          <div class="finding">
-            <span class="what">Lose weight slowly to keep muscle</span>
-            <p>A review of natural bodybuilding prep recommends losing about 0.5–1% of bodyweight a week.</p>
-            <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4033492/" target="_blank" rel="noopener">Helms et al., 2014 · JISSN</a>
-          </div>
-        </div>
-      </div>
+      <div id="p-cardio" class="view" style="margin-top:0"></div>
+      <div id="p-rules" class="view" style="margin-top:0" hidden></div>
+      <div id="p-science" class="view" style="margin-top:0" hidden></div>
     </section>
   </main>
 </div>
@@ -1242,21 +1159,21 @@ const PLAN=[
  {d:"Mon",type:"push",name:"Push A",focus:"Chest strength, triceps",time:"65–70 min",ex:[
   ["inc-db-press","Incline DB press",3,"6–10","Main lift. Stop 1–2 reps short of failure. Log the weight of one dumbbell.",[],"load"],
   ["bench","Bench press",3,"6–8","Controlled. Breathe out as you press.",[],"load"],
-  ["smith-ohp","Smith machine shoulder press",3,"8–10","",["V-taper"],"load"],
+  ["smith-ohp","Smith machine shoulder press",3,"8–10","",[],"load"],
   ["cable-fly","Cable fly",3,"12–15","Deep stretch at the start of each rep.",[],"load"],
-  ["cable-lat","Cable lateral raise",4,"12–15","",["V-taper"],"load"],
-  ["oh-cable-tri","Overhead cable triceps extension",3,"10–12","Stretch at the bottom.",["Research-backed"],"load"],
+  ["cable-lat","Cable lateral raise",4,"12–15","",[],"load"],
+  ["oh-cable-tri","Overhead cable triceps extension",3,"10–12","Stretch at the bottom.",[],"load"],
   ["pushdown","Triceps pushdown",3,"12–15","Last set to failure.",[],"load"]]},
  {d:"Tue",type:"pull",name:"Pull A",focus:"Lat width, biceps, side delts",time:"65 min + 25 min cardio",ex:[
-  ["pullup","Pull-ups",4,"6–10","Log added weight, 0 for bodyweight. Can't hit 6 yet? Swap to lat pulldown.",["V-taper"],"bw"],
+  ["pullup","Pull-ups",4,"6–10","Log added weight, 0 for bodyweight. Can't hit 6 yet? Swap to lat pulldown.",[],"bw"],
   ["cs-row","Chest-supported row",3,"8–12","Spares your lower back.",[],"load"],
-  ["sa-pulldown","Single-arm cable pulldown",3,"10–12","Drive the elbow to your hip.",["V-taper"],"load"],
-  ["db-lat","DB lateral raise",3,"15–20","",["V-taper"],"load"],
+  ["sa-pulldown","Single-arm cable pulldown",3,"10–12","Drive the elbow to your hip.",[],"load"],
+  ["db-lat","DB lateral raise",3,"15–20","",[],"load"],
   ["rear-delt","Rear delt fly",3,"15","",[],"load"],
   ["inc-curl","Incline DB curl",3,"10–12","Full stretch at the bottom.",[],"load"],
   ["hammer","Hammer curl",3,"12","",[],"load"]]},
  {d:"Wed",type:"legs",name:"Legs A",focus:"Quads, core",time:"60–65 min",ex:[
-  ["squat","Barbell squat",3,"6–10","Keep 2–3 reps in the tank. Swap to hack squat if your groin or back complains.",["Careful"],"load"],
+  ["squat","Barbell squat",3,"6–10","Keep 2–3 reps in the tank. Swap to hack squat if your back complains.",[],"load"],
   ["leg-press","Leg press",3,"10–15","Breathe out as you push. No breath-holding.",[],"load"],
   ["leg-ext","Leg extension",3,"12–15","",[],"load"],
   ["seated-curl","Seated leg curl",3,"10–12","",[],"load"],
@@ -1264,23 +1181,23 @@ const PLAN=[
   ["abductor","Hip abductor",3,"15–20","",[],"load"],
   ["core","Core: dead bug + glute-squeeze plank",3,"8/side · 30s","Fixes pelvic tilt. Back pressed flat on dead bugs.",[],"none"]]},
  {d:"Thu",type:"push",name:"Push B",focus:"Shoulders first, triceps",time:"60–65 min",ex:[
-  ["smith-ohp","Smith machine shoulder press",4,"6–10","Main lift, done fresh.",["V-taper"],"load"],
+  ["smith-ohp","Smith machine shoulder press",4,"6–10","Main lift, done fresh.",[],"load"],
   ["inc-smith","Incline Smith press",3,"8–10","",[],"load"],
   ["pec-deck","Pec deck fly",3,"12–15","Squeeze for a second at the middle.",[],"load"],
-  ["lat-raise","Lateral raise (DB or machine)",4,"12–20","Last set: drop set.",["V-taper"],"load"],
-  ["oh-db-tri","Overhead DB triceps extension",3,"10–12","",["Research-backed"],"load"],
+  ["lat-raise","Lateral raise (DB or machine)",4,"12–20","Last set: drop set.",[],"load"],
+  ["oh-db-tri","Overhead DB triceps extension",3,"10–12","",[],"load"],
   ["pushdown-rope","Triceps pushdown (rope)",3,"12–15","",[],"load"],
   ["pushups","Push-ups (finisher)",1,"max","Optional. Leave 1–2 reps in the tank.",[],"reps"]]},
  {d:"Fri",type:"pull",name:"Pull B",focus:"Back thickness, biceps",time:"65 min + 25 min cardio",ex:[
-  ["pulldown","Lat pulldown (wide or neutral)",3,"8–12","",["V-taper"],"load"],
-  ["bb-row","Barbell row",3,"8–10","Moderate load. Swap to machine row if your back complains.",["Careful"],"load"],
+  ["pulldown","Lat pulldown (wide or neutral)",3,"8–12","",[],"load"],
+  ["bb-row","Barbell row",3,"8–10","Moderate load. Swap to machine row if your back complains.",[],"load"],
   ["cable-row","Seated cable row",3,"10–12","",[],"load"],
-  ["cable-lat","Cable lateral raise",3,"15","",["V-taper"],"load"],
+  ["cable-lat","Cable lateral raise",3,"15","",[],"load"],
   ["face-pull","Face pull",3,"15","",[],"load"],
   ["ez-curl","EZ-bar curl",3,"8–10","",[],"load"],
   ["cable-curl","Cable curl",3,"12–15","Last set to failure.",[],"load"]]},
  {d:"Sat",type:"legs",name:"Legs B",focus:"Hamstrings, glutes",time:"60 min + optional sprints",ex:[
-  ["rdl","Romanian deadlift",3,"8–10","Moderate load, neutral back.",["Careful"],"load"],
+  ["rdl","Romanian deadlift",3,"8–10","Moderate load, neutral back.",[],"load"],
   ["hip-thrust","Hip thrust",3,"10–12","Squeeze at the top.",[],"load"],
   ["hack","Hack squat",3,"10–12","",[],"load"],
   ["lying-curl","Lying leg curl",3,"10–12","",[],"load"],
@@ -1367,7 +1284,7 @@ function migrate(s){
 }
 function ensurePlans(s){
   if(!s.plans||!s.plans.length){const custom=s.days&&Object.keys(s.days).length;
-    s.plans=[{id:"p1",name:s.planName||(custom?"My plan":"V-Taper PPL"),builtin:!custom,days:s.days||{},tpl:s.tpl||{}}];s.active="p1"}
+    s.plans=[{id:"p1",name:s.planName||(custom?"My plan":"Push / Pull / Legs"),builtin:!custom,days:s.days||{},tpl:s.tpl||{}}];s.active="p1"}
   let ap=s.plans.find(p=>p.id===s.active);if(!ap){ap=s.plans[0];s.active=ap.id}
   s.days=ap.days||(ap.days={});s.tpl=ap.tpl||(ap.tpl={});s.planName=ap.name;return s;
 }
@@ -1493,7 +1410,7 @@ function bwStats(){
 }
 // What it takes to reach the next rank on a lift, based on the last session's top set.
 function nextRank(x,c){
-  const t=c.tierOf(x),I=STD[x],h=c.hist[x];if(!t||!I||t.step>=17||!h)return null;
+  const t=c.tierOf(x),I=stdOf(x),h=c.hist[x];if(!t||!I||t.step>=17||!h)return null;
   const kind=EX[x].kind,lo=stepLo(t.step),hi=stepLo(t.step+1),pct=Math.max(0,Math.min(1,(t.L-lo)/(hi-lo))),bw=bwAt();
   const top=h.at(-1).sets.reduce((a,b)=>scoreOf(x,b)>scoreOf(x,a)?b:a);
   let txt;
@@ -1672,7 +1589,7 @@ function renderTrain(){
   if(rest&&!slots.length){
     el.innerHTML=`<div class="hero" style="${st}"><span class="tag">${DAYNAMES[current]}</span><h2>Rest day</h2>
       <p>Walk, stretch and eat your protein. Muscle gets built while you recover.</p>
-      <ul style="margin:4px 0 0;padding-left:20px"><li>Relaxed walk toward 8–10k steps</li><li>Couch stretch, 60–90 seconds per side</li><li>Log your bodyweight on the Profile tab</li></ul></div>
+      <ul style="margin:4px 0 0;padding-left:20px"><li>Relaxed walk toward ${myGoal()==="lose"?"8–10k":"7–9k"} steps</li><li>Couch stretch, 60–90 seconds per side</li><li>Log your bodyweight on the Profile tab</li></ul></div>
       ${weekCard(c)}<button class="addex" id="addex">+ Train anyway: add an exercise</button>`;return;
   }
   if(state.plans.length>1)html+=`<div class="weekbar"><span>This week · <b>${esc(state.planName)}</b></span><button id="swplan">Switch plan</button></div>`;
@@ -1689,7 +1606,7 @@ function renderTrain(){
     const x=sl.id,meta=EX[x]||{name:"Removed exercise",kind:"none",tags:[]},kind=meta.kind,n=sl.sets,ext=extraOf(sess,sl.u);
     const last=lastFor(x,key),co=coach(sl,last),t=c.tierOf(x);
     const allDone=n>0&&Array.from({length:n},(_,s)=>sess.sets[setKey(sl.u,s)]?.done).every(Boolean);
-    const chips=(meta.tags||[]).map(t=>`<span class="chip">${esc(t)}</span>`).join("")+`<span class="chip">${esc(MNAME[meta.muscle]||"")}</span>`+(t?`<span class="rank" style="--tier:var(${tierVar(t.step)})">${stepName(t.step)}</span>`:"");
+    const chips=evChip(x)+(meta.tags||[]).filter(t=>!/V-taper|Research-backed|Careful/.test(t)).map(t=>`<span class="chip">${esc(t)}</span>`).join("")+`<span class="chip">${esc(MNAME[meta.muscle]||"")}</span>`+(t?`<span class="rank" style="--tier:var(${tierVar(t.step)})">${stepName(t.step)}</span>`:"");
     let body="";
     if(kind==="none"){
       body=`<div class="sets">${Array.from({length:n},(_,s)=>{const k=setKey(sl.u,s);return `<button class="set" data-k="${k}" data-x="${x}" aria-pressed="${!!sess.sets[k]?.done}" aria-label="${esc(meta.name)} set ${s+1}">${s+1}</button>`}).join("")}</div>`;
@@ -2097,14 +2014,15 @@ function renderProfile(){
   // Bodyweight
   const days=Object.keys(state.bw).sort();let pace="";
   if(bs.rate!=null){const r=bs.rate;
-    pace=r>=.5&&r<=1?`<span class="pace ok">On pace · ${r.toFixed(2)}%/wk</span>`:r>1?`<span class="pace warn">Too fast · ${r.toFixed(2)}%/wk</span>`:r>=.25?`<span class="pace">A little slow · ${r.toFixed(2)}%/wk</span>`:`<span class="pace warn">Stalled · ${r.toFixed(2)}%/wk</span>`}
+    const [cls,txt]=paceFor(r);pace=`<span class="pace ${cls}">${txt}</span>`}
   html+=`<div class="panel"><h3>Bodyweight</h3>
-    <form class="bwform" id="bwform"><label class="field"><input id="bwin" type="number" inputmode="decimal" step="0.1" min="30" max="250" placeholder="${state.bw[today()]??latestBW()??"77.0"}" aria-label="Today's weight in kg"><span>kg</span></label>
+    <div class="bwgoal"><span>${esc(goalLine())}</span><button class="link" id="bw-goal">Change</button></div>
+    <form class="bwform" id="bwform"><label class="field"><input id="bwin" type="number" inputmode="decimal" step="0.1" min="30" max="250" placeholder="${state.bw[today()]??latestBW()??"Your weight"}" aria-label="Today's weight in kg"><span>kg</span></label>
     <button class="btn sm" type="submit">${state.bw[today()]!=null?"Update today":"Log today"}</button></form>`;
-  if(!days.length)html+=`<p class="muted">Weigh in each morning after the toilet, before food. Your ranks use this number, and the app shows whether your cut is on pace.</p>`;
+  if(!days.length)html+=`<p class="muted">Weigh in each morning after the toilet, before food. Your ranks use this number, and the app shows whether you're on pace for your goal.</p>`;
   else{
     html+=`<div style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap"><span><b class="num" style="font-size:1.6rem">${bs.cur!=null?bs.cur.toFixed(1):latestBW().toFixed(1)}</b> <span class="muted">kg ${bs.cur!=null?"7-day avg":"latest"}</span></span>${pace}</div>`;
-    if(bs.rate==null)html+=`<p class="muted" style="font-size:.85rem">Log at least 3 weigh-ins in each of the last two weeks to see your weekly rate. Target: 0.5–1% a week.</p>`;
+    if(bs.rate==null)html+=`<p class="muted" style="font-size:.85rem">Log at least 3 weigh-ins in each of the last two weeks to see your weekly rate.</p>`;
     const recent=days.slice(-30),pts=recent.map(d=>({label:fmtD(d),y:state.bw[d]}));
     const avg=recent.map(d=>{const w=days.filter(x=>x<=d&&x>=addDays(d,-6)).map(x=>state.bw[x]);return {y:w.reduce((a,b)=>a+b,0)/w.length}});
     if(pts.length>=2)html+=lineChart("bwchart",pts,{avg,dotsOnly:true,aria:"Bodyweight trend",unit:" kg"})+`<div class="legend"><span><i class="dot"></i>Daily weigh-in</span><span><i class="g"></i>7-day average</span></div>`;
@@ -2127,6 +2045,7 @@ $("#v-profile").addEventListener("click",async e=>{
   const id=e.target.id;
   if(e.target.dataset.del){const d=e.target.dataset.del;commit(()=>{delete state.bw[d]},{quiet:true});refresh();return}
   if(id==="editname"||e.target.closest("#editav")){openProfileEdit();return}
+  if(id==="bw-goal"){openWeightGoal();return}
   const tr=e.target.closest("[data-treat]");
   if(tr){const t=TREATS.find(q=>q.id===tr.dataset.treat);if(gems(compute())<t.price)return;state.spent=(state.spent||0)+t.price;gainPet(t.xp,true);save();refresh();toast("✓",`${petName(state.pet)} enjoyed the ${t.name.toLowerCase()}`,"",`+${t.xp}`,"pet XP");return}
   if(e.target.closest("#pet-choose")){if(Object.keys(state.pets).some(id=>PETS[id]))openPetPicker();else{shopTab="pet";go("shop")}return}
@@ -2155,7 +2074,7 @@ const stepName=s=>TIERS[Math.floor(s/3)].n+" "+ROMAN[s%3];
 const tierVar=s=>TIERS[Math.floor(s/3)].v;
 const progStep=g=>{let t=0;PT.forEach((v,i)=>{if(g>=v-1e-9)t=i});return t*3};
 // Intermediate standard per lift: estimated one-rep max as a multiple of bodyweight (reps for reps-only lifts).
-// These are estimates for a male lifter. Dumbbell lifts are per dumbbell. Machine and cable numbers vary by gym.
+// These are estimates for a male lifter (women's ranks scale them, see sexF). Dumbbell lifts are per dumbbell. Machine and cable numbers vary by gym.
 const STD={bench:1.2,"inc-db-press":.45,"db-bench":.5,"inc-smith":1.0,"machine-press":1.1,"cable-fly":.35,"cable-cross":.3,"pec-deck":1.0,dips:1.5,pushups:35,
  "smith-ohp":.85,"db-ohp":.42,"machine-ohp":.85,"cable-lat":.15,"db-lat":.17,"lat-raise":.17,"machine-lat":.6,"rear-delt":.6,"reverse-pec":.6,"face-pull":.5,
  "oh-cable-tri":.55,pushdown:.65,"pushdown-rope":.55,"oh-db-tri":.4,skull:.55,"cg-bench":1.0,"sa-pushdown":.3,
@@ -2172,8 +2091,8 @@ const STD={bench:1.2,"inc-db-press":.45,"db-bench":.5,"inc-smith":1.0,"machine-p
  deadlift:1.9,"rack-pull":2.1,"good-morning":.8,"front-squat":1.2,"box-squat":1.45,"belt-squat":1.4,"v-squat":1.6,"split-squat":.4,"rev-lunge":.4,"step-up":.35,sissy:15,"bw-squat":50,trapbar:2.0,
  sldl:1.4,"db-rdl":.5,nordic:8,ghr:12,sumo:1.9,"bb-bridge":2.0,"kb-swing":.4,"sl-calf":20,"smith-calf":1.8,"tib-raise":25,
  "ab-wheel":15,crunch:40,situp:40,"dec-situp":25,"leg-raise":20,"hanging-leg-raise":15,"russian-twist":40,"machine-crunch":1.0,"v-up":20};
-const bwAt=d=>latestBW(d)??latestBW()??77;
-function levelL(x,score,date){const I=STD[x];if(!I)return null;return EX[x]?.kind==="reps"?score/I:score/bwAt(date)/I}
+const bwAt=d=>latestBW(d)??latestBW()??(state.prof&&state.prof.bw)??(state.prof&&state.prof.sex==="f"?65:77);
+function levelL(x,score,date){const I=stdOf(x);if(!I)return null;return EX[x]?.kind==="reps"?score/I:score/bwAt(date)/I}
 function emblem(step,size=44){
   if(step==null)return `<svg width="${size}" height="${size*52/48}" viewBox="0 0 48 52" aria-hidden="true"><path d="M24 2 L44 9 V27 Q44 41 24 50 Q4 41 4 27 V9 Z" fill="var(--line)"/><text x="24" y="33" text-anchor="middle" font-size="20" font-weight="800" fill="var(--muted)">?</text></svg>`;
   const n=step%3+1,x0=24-(n-1)*3.5;
@@ -2193,7 +2112,7 @@ function showSummary(key,res){
     <div style="display:flex;flex-direction:column;gap:4px;${lvUp?"text-align:center":""}"><span class="eyebrow">${lvUp?`Level up · ${esc(c.title)}`:"Workout complete"}</span><h2>${esc(p.type==="rest"?"Extra session":p.name)} done</h2></div>
     <div class="sumgrid"><div><b>${sets.length}</b><span>Sets</span></div><div><b>${fmtNum(vol)}</b><span>kg moved</span></div><div><b style="color:var(--xp)">+${xp}</b><span>XP${bst>1?` · ×${bst} boost`:""}</span></div></div>
     ${rus.length?`<div class="panel" style="padding:12px"><span class="eyebrow">Rank ups</span>${rus.map(r=>`<div class="rurow">${emblem(r.to,30)}<span><b>${stepName(r.to)}</b><br><span class="muted">${esc(exName(r.x))}</span></span></div>`).join("")}</div>`:""}
-    ${prs.length?`<div class="panel" style="padding:12px"><span class="eyebrow">Personal records</span>${prs.map(r=>`<p>${esc(exName(r.x))}</p>`).join("")}</div>`:(rus.length?"":`<p class="muted">No PRs today. Matching your numbers on a cut still counts as progress.</p>`)}
+    ${prs.length?`<div class="panel" style="padding:12px"><span class="eyebrow">Personal records</span>${prs.map(r=>`<p>${esc(exName(r.x))}</p>`).join("")}</div>`:(rus.length?"":`<p class="muted">No PRs today. ${myGoal()==="lose"?"Matching your numbers while losing fat still counts as progress.":"Matching your numbers still counts. Strength comes in waves."}</p>`)}
     <div style="display:flex;flex-direction:column;gap:6px"><span class="muted num">Level ${c.level} · ${fmtNum(c.into)} / ${fmtNum(c.need)} XP</span><span class="bar"><i style="width:${(c.into/c.need*100).toFixed(1)}%"></i></span></div>
     <label class="btn ghost phbtn" for="ph-in" data-phkey="${key}">${s.photo?"Photo added ✓ · change it":"Add a workout photo"}</label>
     ${me&&myProfile?`<label class="swrow"><input type="checkbox" id="sum-share" data-key="${key}" ${s.photo&&!s.shared?"":"checked"}> Share the photo with friends</label><p class="note" style="padding:0;margin-top:-8px">Friends see your exercises and weights on the post. The photo is only added if this is on.</p>`:""}
@@ -2228,7 +2147,7 @@ const PRESETS=[
  {id:"fb3",name:"Full body · 3 days",desc:"Mon, Wed, Fri. Good for beginners or busy weeks.",days:[R("Full body A","Full","push","Whole body",X.fullA),REST,R("Full body B","Full","pull","Whole body",X.fullB),REST,R("Full body C","Full","legs","Whole body",X.fullC),REST,REST]},
  {id:"arnold6",name:"Arnold split · 6 days",desc:"Chest and back, shoulders and arms, legs, then repeat.",days:[R("Chest & back","Ch/Bk","push","Chest, back",X.chestback),R("Shoulders & arms","Sh/Arm","pull","Shoulders, biceps, triceps",X.shoulderarm),R("Legs","Legs","legs","Quads, hamstrings, calves",X.legs),R("Chest & back","Ch/Bk","push","Chest, back",X.chestback),R("Shoulders & arms","Sh/Arm","pull","Shoulders, biceps, triceps",X.shoulderarm),R("Legs","Legs","legs","Quads, glutes, hamstrings",X.lowerB),REST]},
  {id:"bro5",name:"Body-part split · 5 days",desc:"Chest, back, shoulders, legs, arms. One muscle group a day.",days:[R("Chest","Chest","push","Chest",X.chest),R("Back","Back","pull","Lats, upper back",X.back),R("Shoulders","Delts","push","Shoulders",X.shoulders),R("Legs","Legs","legs","Quads, hamstrings, calves",X.legs),R("Arms","Arms","pull","Biceps, triceps",X.arms),REST,REST]},
- {id:"default",name:"V-Taper PPL · 6 days",desc:"The plan the app came with: push, pull, legs twice a week.",days:null}
+ {id:"default",name:"Push / Pull / Legs · 6 days",desc:"Push, pull, legs twice a week. Each muscle trained twice.",days:null}
 ];
 const planDays=pl=>[0,1,2,3,4,5,6].filter(d=>((pl.days&&pl.days[d]&&pl.days[d].type)||PLAN[d].type)!=="rest").length;
 function loadPlan(id){ // make a saved plan the live one
@@ -2261,9 +2180,11 @@ function rotateCheck(){
 const nextPlan=()=>{const i=state.plans.findIndex(p=>p.id===state.active);return state.plans[(i+1)%state.plans.length]};
 function openCreatePlan(){
   const m=openModal(`${mhead("New plan")}<h2>Create a plan</h2>
-    <p class="muted" style="font-size:.9rem">Pick a starting point. It's added next to your other plans, and you can change every day afterwards.</p>
+    <button class="pbstart" id="cp-build"><span class="pc-ico" aria-hidden="true">✨</span><span><b>Build a plan for me</b><small>Answer a few questions about your goal, schedule, equipment and injuries. Exercises are picked using muscle-growth research.</small></span></button>
+    <p class="muted" style="font-size:.9rem">Or pick a starting point. It's added next to your other plans, and you can change every day afterwards.</p>
     <div class="menu">${PRESETS.map(pr=>`<button data-preset="${pr.id}"><span style="display:block">${esc(pr.name)}</span><span class="muted" style="font-weight:500;font-size:.85rem">${esc(pr.desc)}</span></button>`).join("")}</div>`);
   m.querySelector("#mh-back").onclick=closeModal;
+  m.querySelector("#cp-build").onclick=()=>openBuilder({title:"Build a plan"});
   m.querySelector(".menu").addEventListener("click",e=>{const b=e.target.closest("[data-preset]");if(!b)return;
     const pr=PRESETS.find(q=>q.id===b.dataset.preset),dn=pr.id==="blank"?"My plan":pr.name.split(" · ")[0];
     const m2=openModal(`${mhead("New plan","Save")}<h2>Name your plan</h2>
@@ -2302,6 +2223,7 @@ function renderPlanBox(){
     <button class="addex" id="pb-create">+ Create a new plan</button>
     ${multi?`<label class="switch"><input type="checkbox" id="pb-rot" ${state.rotate?"checked":""}><span><b>Switch plans automatically each week</b><span class="muted">${state.rotate?`Next Monday: ${esc(nx.name)}`:"Rotates through your plans every Monday."}</span></span></label>`
       :`<p class="muted" style="font-size:.88rem">Alternate between splits? Create a second plan, then switch between them each week.</p>`}`;
+  renderGuides();
 }
 $("#v-plan").addEventListener("click",e=>{
   const b=e.target.closest("button");if(!b)return;
@@ -3676,7 +3598,7 @@ function openAuth(mode){
   const m=openModal(`${mhead("Account")}<h2>${up?"Create your account":"Sign in"}</h2>
     <p class="muted" style="font-size:.9rem">${up?"Back up your progress and train with friends. Your username is how friends find you.":"Welcome back. Your progress loads from your account."}</p>
     <form id="authf" class="authf">
-      ${up?`<label><span class="eyebrow">Username</span><input class="txt" id="au-user" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20" value="${esc(cleanName(state.name==="Lifter"?"":state.name))}" placeholder="e.g. alexi_lifts"><small id="au-uhint" class="muted">3–20 letters, numbers or underscores.</small></label>`:""}
+      ${up?`<label><span class="eyebrow">Username</span><input class="txt" id="au-user" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="20" value="${esc(cleanName(state.name==="Lifter"?"":state.name))}" placeholder="e.g. sam_lifts"><small id="au-uhint" class="muted">3–20 letters, numbers or underscores.</small></label>`:""}
       <label><span class="eyebrow">Email</span><input class="txt" id="au-email" type="email" autocomplete="email" autocapitalize="none" spellcheck="false" placeholder="you@example.com"></label>
       <label><span class="eyebrow">Password</span><input class="txt" id="au-pass" type="password" autocomplete="${up?"new-password":"current-password"}" placeholder="${up?"At least 6 characters":"Your password"}"></label>
       <p id="au-err" class="formerr" hidden></p>
@@ -3738,7 +3660,7 @@ function openCheckEmail(email,sendNow){
 }
 function openPickUsername(){
   const m=openModal(`<h2>Pick a username</h2><p class="muted" style="font-size:.9rem">Friends search for you by this. You can change it later.</p>
-    <input class="txt" id="pu-name" autocapitalize="none" spellcheck="false" maxlength="20" value="${esc(cleanName(state.name==="Lifter"?"":state.name))}" placeholder="e.g. alexi_lifts">
+    <input class="txt" id="pu-name" autocapitalize="none" spellcheck="false" maxlength="20" value="${esc(cleanName(state.name==="Lifter"?"":state.name))}" placeholder="e.g. sam_lifts">
     <p id="pu-err" class="formerr" hidden></p><button class="btn" id="pu-go">Save username</button>`);
   const inp=m.querySelector("#pu-name");inp.addEventListener("input",()=>{const c=cleanName(inp.value);if(c!==inp.value)inp.value=c});
   m.querySelector("#pu-go").onclick=async()=>{const r=await createProfile(inp.value);
@@ -5285,6 +5207,307 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-buydisc]")
   state.spent=(state.spent||0)+DISC_PRICE;addDisc(k);save();refresh();toast("💿",`Move disc: ${MV[k].n}`,"Teach it from any pet's profile.","")});
 let pendingBattle=null;
 
+
+/* ---------- Your profile: goal, standards, injuries, equipment ---------- */
+const GOALS={muscle:{n:"Build muscle",d:"Grow muscle at a steady weight or a slow gain",ico:"💪"},lose:{n:"Lose fat, keep muscle",d:"Drop body fat slowly while keeping your strength",ico:"🔥"},
+  gain:{n:"Lean bulk",d:"Gain weight slowly to add as much muscle as possible",ico:"📈"},strength:{n:"Get stronger",d:"Lift heavier on the big lifts",ico:"🏋"},fit:{n:"General fitness",d:"Stay healthy, fit and consistent",ico:"❤"}};
+const INJ={hernia:"Hernia or groin",back:"Lower back",shoulder:"Shoulder",knee:"Knee",elbow:"Elbow or wrist"};
+const FOCUS={chest:"Chest",back:"Back",shoulders:"Shoulders",arms:"Arms",legs:"Legs",glutes:"Glutes"};
+const EQUIP={gym:{n:"Full gym",d:"Barbells, machines, cables and dumbbells"},db:{n:"Dumbbells at home",d:"Adjustable dumbbells and a bench"},bw:{n:"Bodyweight only",d:"No equipment, just you and a chair or table"}};
+const EXP={new:{n:"New to lifting",d:"Less than 6 months of regular training"},some:{n:"Some experience",d:"6 months to 2 years"},exp:{n:"Experienced",d:"More than 2 years of consistent training"}};
+const prof=()=>state.prof||(state.prof={});
+const myGoal=()=>prof().goal||"muscle";
+const hasInj=k=>(prof().inj||[]).includes(k);
+const RATE_OPTS={lose:[.25,.5,.75,1],gain:[.1,.25,.5]},RATE_DEF={lose:.5,gain:.25};
+const myRate=()=>{const g=myGoal();return RATE_OPTS[g]?(prof().rate??RATE_DEF[g]):0};
+// Strength standards: female lifters' ranks use scaled standards (estimates).
+const LOWER=new Set(["quads","hamstrings","glutes","hips","calves","lowerback"]);
+const sexF=x=>prof().sex!=="f"?1:LOWER.has((EX[x]||{}).muscle)?.75:(EX[x]||{}).muscle==="core"?.85:.62;
+const stdOf=x=>STD[x]?STD[x]*sexF(x):null;
+
+// What the weekly bodyweight change means for your goal. rate = % lost per week (negative = gained).
+function paceFor(rate){
+  const g=myGoal(),t=myRate(),gain=-rate,f=v=>`${Math.abs(v).toFixed(2)}%/wk ${v>=0?"down":"up"}`;
+  if(g==="lose"){if(rate>=t-.2&&rate<=Math.max(t+.25,t*1.4))return ["ok","On pace · "+f(rate)];if(rate>t+.25)return ["warn","Faster than planned · "+f(rate)];if(rate>.1)return ["","A little slow · "+f(rate)];return ["warn","Not dropping · "+f(rate)]}
+  if(g==="gain"){if(gain>=t-.1&&gain<=t+.2)return ["ok","On pace · "+f(rate)];if(gain>t+.2)return ["warn","Gaining fast · "+f(rate)];if(gain>0)return ["","A little slow · "+f(rate)];return ["warn","Not gaining · "+f(rate)]}
+  if(g==="muscle"&&gain>=-.15&&gain<=.35)return ["ok","On track · "+f(rate)];
+  if(Math.abs(rate)<=.25)return ["ok","Steady · "+f(rate)];return ["",(rate>0?"Drifting down · ":"Drifting up · ")+f(rate)];
+}
+const goalLine=()=>{const g=myGoal(),r=myRate(),bw=latestBW(),kg=bw&&r?` (about ${(bw*r/100).toFixed(2)} kg)`:"",tw=prof().target;
+  return g==="lose"?`Goal: lose ${r}% a week${kg}${tw?` · target ${tw} kg`:""}`:g==="gain"?`Goal: gain ${r}% a week${kg}${tw?` · target ${tw} kg`:""}`:`Goal: ${GOALS[g].n.toLowerCase()}${g==="muscle"?" · steady weight or a slow gain":" · keep your weight steady"}${tw?` · target ${tw} kg`:""}`};
+function openWeightGoal(){
+  const p=prof();let g=myGoal(),r=myRate();
+  const m=openModal(`${mhead("Your goal","Save")}<h2>What are you working towards?</h2><div class="dfl" id="wg-g">${Object.entries(GOALS).map(([k,v])=>`<button class="dfb${k===g?" last":""}" data-g="${k}"><b>${v.ico} ${v.n}</b><span>${v.d}</span></button>`).join("")}</div>
+    <div id="wg-r"></div><label class="pe-sect"><span class="eyebrow">Target weight (optional)</span><input class="txt" id="wg-t" type="number" inputmode="decimal" step="0.1" min="30" max="250" value="${p.target??""}" placeholder="kg"></label>
+    <button class="btn" id="wg-save">Save goal</button>`);
+  const drawR=()=>{m.querySelectorAll("#wg-g .dfb").forEach(b=>b.classList.toggle("last",b.dataset.g===g));const el=m.querySelector("#wg-r");
+    if(!RATE_OPTS[g]){el.innerHTML="";return}if(!RATE_OPTS[g].includes(r))r=RATE_DEF[g];
+    el.innerHTML=`<span class="eyebrow">${g==="lose"?"How fast to lose":"How fast to gain"}</span><div class="seg3" id="wg-rate">${RATE_OPTS[g].map(v=>`<button data-r="${v}" aria-pressed="${v===r}">${v}%/wk</button>`).join("")}</div>
+      <p class="note" style="padding:0">${g==="lose"?"0.5–1% a week keeps the most muscle; slower is gentler and easier to stick to.":"0.25–0.5% a week limits fat gain; newer lifters can use the faster end."}</p>`};
+  drawR();
+  m.querySelector("#wg-g").onclick=e=>{const b=e.target.closest("[data-g]");if(b){g=b.dataset.g;drawR()}};
+  m.querySelector("#wg-r").onclick=e=>{const b=e.target.closest("[data-r]");if(b){r=+b.dataset.r;drawR()}};
+  const doSave=()=>{p.goal=g;if(RATE_OPTS[g])p.rate=r;const t=parseFloat(m.querySelector("#wg-t").value);p.target=t>=30&&t<=250?Math.round(t*10)/10:null;save();closeModal();refresh();toast("✓","Goal saved",goalLine(),"")};
+  m.querySelector("#wg-save").onclick=doSave;m.querySelector("#mh-save").onclick=doSave;m.querySelector("#mh-back").onclick=closeModal;
+}
+
+/* ---------- Evidence behind exercise picks ---------- */
+const CITE={
+  chaves:["Chaves et al., 2020 · Int J Exercise Science","https://pmc.ncbi.nlm.nih.gov/articles/PMC7449336/"],
+  maeo23:["Maeo et al., 2023 · Eur J Sport Science","https://pubmed.ncbi.nlm.nih.gov/35819335/"],
+  maeo21:["Maeo et al., 2021 · Med Sci Sports Exerc","https://pubmed.ncbi.nlm.nih.gov/33009197/"],
+  kino:["Kinoshita et al., 2023 · Frontiers in Physiology","https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2023.1272106/full"],
+  kubo:["Kubo et al., 2019 · Eur J Applied Physiology","https://link.springer.com/article/10.1007/s00421-019-04181-y"],
+  plotkin:["Plotkin et al., 2023 · Frontiers in Physiology","https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2023.1279170/full"],
+  pedrosa:["Pedrosa et al., 2022 · Eur J Sport Science","https://sportrxiv.org/index.php/server/preprint/view/455"],
+  kassiano:["Kassiano et al., 2023 · J Strength Cond Research","https://www.researchgate.net/publication/365127382_Greater_gastrocnemius_muscle_hypertrophy_after_partial_range_of_motion_training_performed_at_long_muscle_lengths"],
+  zabaleta:["Zabaleta-Korta et al., 2023 · J Human Kinetics","https://pubmed.ncbi.nlm.nih.gov/37559762/"],
+  larsen:["Larsen et al., 2025 · Frontiers in Physiology","https://doaj.org/article/3c93be70ff61469c9cf475fb4f5360ea"]};
+// r: research-backed (a direct muscle-growth study), e: expert pick (sound reasoning, no direct study yet)
+const EV_DATA=[
+  [["inc-db-press","bb-inc-bench","inc-smith","inc-machine-press"],"r","Incline pressing grew the upper chest more than flat pressing",
+    "In an 8-week trial, the incline bench group gained more upper-chest thickness than the flat bench group, while the middle and lower chest grew about the same.",["chaves"],"Use a 30–45° bench."],
+  [["bench","db-bench","machine-press","smith-bench"],"e","A strong all-round chest builder",
+    "Flat pressing grew the middle and lower chest as well as incline pressing did, but less of the upper chest. Pair it with an incline press across the week.",["chaves"],""],
+  [["oh-cable-tri","oh-db-tri","ez-oh-ext"],"r","Overhead extensions grew the triceps far more than pushdowns",
+    "Over 12 weeks, the triceps long head grew about 28.5% with overhead extensions versus 19.6% with pushdowns, because the arm overhead stretches the long head.",["maeo23"],"Let the weight stretch you at the bottom."],
+  [["pushdown","pushdown-rope","sa-pushdown","bar-pushdown"],"e","Good triceps work, best alongside an overhead extension",
+    "Pushdowns grew less triceps than overhead extensions in a head-to-head study, so use them as a second triceps exercise, not the only one.",["maeo23"],""],
+  [["seated-curl"],"r","Seated leg curls grew the hamstrings more than lying curls",
+    "Over 12 weeks, whole-hamstring volume grew 14.1% with seated curls versus 9.3% with lying curls. Sitting stretches the hamstrings at the hip.",["maeo21"],"Lean your torso slightly forward."],
+  [["lying-curl"],"e","Fine hamstring work; seated curls grew more",
+    "In a direct comparison, seated curls grew the hamstrings about half as much again as lying curls. Use lying curls when there's no seated machine.",["maeo21"],""],
+  [["standing-calf","calf","smith-calf","sl-calf","donkey-calf"],"r","Straight-knee calf raises grew the calves several times more than seated ones",
+    "After 12 weeks, the gastrocnemius grew 9–12% with standing calf raises versus about 1–2% seated. Pausing in the deep stretch at the bottom also grew more calf than full reps in another study.",["kino","kassiano"],"Pause at the bottom of every rep."],
+  [["seated-calf"],"e","Mainly trains the soleus",
+    "Seated raises bend the knee, which takes the bigger gastrocnemius out. Standing raises grew the calf far more in a direct comparison.",["kino"],""],
+  [["squat","hack","pendulum","smith-squat","belt-squat","front-squat","box-squat","v-squat"],"r","Deep squats grew the glutes about three times more than half squats",
+    "After 10 weeks, full-depth squats grew the glutes 6.7% versus 2.2% for half squats, and the adductors 6.2% versus 2.7%. Quad growth was similar.",["kubo"],"Squat as deep as you can with good form."],
+  [["hip-thrust","bb-bridge","glute-bridge"],"r","Hip thrusts grew the glutes as much as squats, with less leg fatigue",
+    "Over 9 weeks, hip thrusts and back squats grew the glutes by similar amounts. Squats grew the quads and adductors more, so the hip thrust is the glute-specific choice.",["plotkin"],"Squeeze hard at the top."],
+  [["leg-ext","sl-leg-ext"],"r","Leg extensions focused on the deep bend grew the quads more",
+    "Training the bottom half of the leg extension (knee most bent) grew the quads more than full reps over 12 weeks.",["pedrosa"],"Focus on the deep-bend half of each rep."],
+  [["preacher"],"r","Preacher curls grew the lower biceps (small study)",
+    "In 9 weeks, preacher curls significantly grew the lower biceps, while incline curls showed no significant change. The study was small, so treat this as a lean, not a rule.",["zabaleta"],""],
+  [["cable-lat","db-lat","lat-raise","machine-lat"],"r","Cables and dumbbells grew the side delts equally",
+    "In trained lifters over 8 weeks, cable and dumbbell lateral raises grew the side delts by the same amount. Pick whichever you can push closest to failure.",["larsen"],"Go close to failure; light weight is fine."],
+  [["pulldown","pullup","neutral-pullup","cg-pulldown","wide-pulldown","chinup","machine-pulldown"],"e","A deep lat stretch under load",
+    "There's no head-to-head growth study picking the best lat exercise yet. Vertical pulls load the lats through a big stretch and are a staple of successful programmes.",[],"Let your arms fully extend at the top."],
+  [["cs-row","cable-row","machine-row","seal-row","db-row","tbar"],"e","Back thickness without lower-back strain",
+    "Supported rows let you push your upper back hard without your lower back giving out first.",[],""],
+  [["rdl","db-rdl","sldl","sl-rdl"],"e","Trains the hamstrings and glutes in a long stretch",
+    "Hamstrings grew more when trained at long lengths (see seated leg curls). RDLs load the same stretch from the hip.",["maeo21"],"Push your hips back until you feel the stretch."],
+  [["cable-fly","pec-deck","db-fly","inc-db-fly","machine-fly"],"e","Chest work with a deep stretch",
+    "Flys let you load the chest at a long length with little triceps or shoulder fatigue, which makes them a good second chest exercise.",[],"Get a deep stretch at the start of each rep."],
+  [["inc-curl","bayesian"],"e","Works the biceps from a stretched position",
+    "With the arm behind your body, the biceps are stretched at the start of each rep. A good partner for preacher curls.",[],""],
+  [["bss","lunge","split-squat","rev-lunge"],"e","Glutes and quads in a deep stretch with little spinal load",
+    "Single-leg work trains the legs hard while sparing the lower back, which makes it a good squat alternative.",[],""],
+  [["reverse-pec","face-pull","rear-delt","cable-rear-fly","db-rear-fly"],"e","Rear delts barely work during pressing",
+    "Direct rear delt work fills the gap that presses and most rows leave, and helps balance the shoulders.",[],""]];
+const EVID={};for(const [ids,k,head,why,cites,tip] of EV_DATA)for(const id of ids)EVID[id]={k,head,why,cites,tip};
+const evChip=x=>{const e=EVID[x];return e?`<button class="chip ev ev-${e.k}" data-ev="${x}">${e.k==="r"?"🔬 Research-backed":"★ Expert pick"}</button>`:""};
+function openEvidence(x){
+  const e=EVID[x];if(!e)return;const m=openModal(`${mhead(EX[x]?EX[x].name:"Exercise")}<span class="evbadge ev-${e.k}">${e.k==="r"?"🔬 Research-backed":"★ Expert pick"}</span><h2>${esc(e.head)}</h2><p>${esc(e.why)}</p>
+    ${e.tip?`<p class="note" style="padding:0"><b>Tip:</b> ${esc(e.tip)}</p>`:""}
+    ${e.cites.length?`<div class="finding">${e.cites.map(c=>`<a href="${CITE[c][1]}" target="_blank" rel="noopener">${esc(CITE[c][0])}</a>`).join("")}</div>`:""}
+    <p class="muted" style="font-size:.82rem">${e.k==="r"?"Backed by a study that measured muscle growth directly. Single studies can be overturned, so the app updates as research does.":"No study has measured growth for this exercise against the alternatives yet. It's recommended on sound reasoning and how well it works in practice."}</p>
+    <button class="btn" data-close>Got it</button>`);
+  const back=m.querySelector("#mh-back");if(back&&!back.onclick)back.onclick=closeModal;
+}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-ev]");if(!b)return;e.preventDefault();e.stopPropagation();const prev=document.getElementById("modal").hidden?null:document.getElementById("modal").innerHTML;
+  openEvidence(b.dataset.ev);if(prev!=null){const bk=$("#mh-back");if(bk)bk.onclick=()=>{const md=$("#modal");md.innerHTML=prev;md.hidden=false;if(window.__pbRebind)window.__pbRebind()}}},true);
+
+/* ---------- Plan builder ---------- */
+const EQ_BW=new Set(["w-pushup","dec-pushup","diamond","pike-pushup","bench-dips","inverted-row","bw-squat","split-squat","bss","lunge","rev-lunge","step-up","sl-rdl","nordic","sl-thrust","sl-calf","sissy","dead-bug","plank","side-plank","crunch","leg-raise"]);
+const EQ_DB=new Set([...EQ_BW,"inc-db-press","db-bench","db-fly","inc-db-fly","db-ohp","db-lat","db-rear-fly","oh-db-tri","kickback","inc-curl","hammer","db-curl","conc-curl","db-row","db-pullover","goblet","db-rdl","shrug"]);
+const AVOID={hernia:["squat","front-squat","box-squat","deadlift","rdl","sldl","good-morning","bb-row","pendlay","rack-pull","sumo","hanging-leg-raise","leg-raise","situp","dec-situp","v-up","ab-wheel","cable-crunch","crunch"],
+  back:["squat","front-squat","box-squat","deadlift","rdl","sldl","good-morning","bb-row","pendlay","tbar","rack-pull","sumo","smith-ohp"],
+  shoulder:["bench","bb-inc-bench","dec-bench","dips","bench-dips","upright-row","ohp","smith-ohp","pike-pushup"],
+  knee:["sissy","bss","lunge","split-squat","rev-lunge","front-squat","step-up"],
+  elbow:["skull","ez-oh-ext","cg-bench","jm-press","bb-curl","ez-curl","diamond"]};
+const SLOT={chest:["inc-db-press","bb-inc-bench","inc-machine-press","inc-smith","machine-press","db-bench","bench","dec-pushup","w-pushup"],
+  chest2:["machine-press","db-bench","bench","inc-machine-press","inc-db-press","w-pushup","dec-pushup"],
+  fly:["cable-fly","pec-deck","db-fly","inc-db-fly","machine-fly","w-pushup"],
+  vpull:["pulldown","pullup","neutral-pullup","cg-pulldown","machine-pulldown","db-pullover","inverted-row"],
+  row:["cs-row","cable-row","machine-row","seal-row","db-row","inverted-row"],
+  ohp:["machine-ohp","db-ohp","smith-ohp","landmine-press","pike-pushup","w-pushup"],
+  latr:["cable-lat","db-lat","machine-lat"],rear:["reverse-pec","face-pull","cable-rear-fly","db-rear-fly"],
+  trioh:["oh-cable-tri","oh-db-tri","ez-oh-ext","diamond"],tripush:["pushdown-rope","pushdown","sa-pushdown","kickback","bench-dips","diamond"],
+  bi:["preacher","bayesian","inc-curl","cable-curl","db-curl","conc-curl"],bi2:["inc-curl","hammer","bayesian","db-curl","cable-curl"],
+  quad:["squat","hack","pendulum","leg-press","smith-squat","belt-squat","goblet","bss","split-squat","bw-squat"],
+  quad2:["leg-press","hack","bss","pendulum","goblet","lunge","split-squat","step-up","bw-squat"],
+  ext:["leg-ext","sl-leg-ext","sissy","split-squat","step-up"],hinge:["rdl","db-rdl","sldl","sl-rdl","back-ext","sl-thrust"],
+  curl:["seated-curl","lying-curl","nordic","sl-rdl"],glute:["hip-thrust","bb-bridge","glute-bridge","sl-thrust","glute-kb"],
+  calf:["standing-calf","calf","smith-calf","sl-calf","seated-calf"],core:["cable-crunch","pallof","dead-bug","plank","side-plank"]};
+const COMPOUND=new Set(["chest","chest2","vpull","row","ohp","quad","quad2","hinge","glute"]);
+const FOCUS_SLOTS={chest:["chest","chest2","fly"],back:["vpull","row","rear"],shoulders:["ohp","latr","rear"],arms:["bi","bi2","trioh","tripush"],legs:["quad","quad2","ext","curl","hinge","calf"],glutes:["glute","hinge","quad"]};
+const SESS={
+  fullA:{n:"Full body A",tag:"Full",type:"push",s:[["quad",3],["chest",3],["row",3],["curl",2],["latr",2],["trioh",2],["bi",2],["calf",2]]},
+  fullB:{n:"Full body B",tag:"Full",type:"pull",s:[["hinge",3],["vpull",3],["chest2",3],["ext",2],["rear",2],["tripush",2],["bi2",2],["core",2]]},
+  fullC:{n:"Full body C",tag:"Full",type:"legs",s:[["glute",3],["ohp",3],["vpull",3,1],["quad2",3],["fly",2],["latr",2],["curl",2]]},
+  upA:{n:"Upper A",tag:"Upper",type:"push",s:[["chest",3],["row",3],["ohp",2],["vpull",3],["latr",3],["trioh",2],["bi",2]]},
+  upB:{n:"Upper B",tag:"Upper",type:"pull",s:[["vpull",3,1],["chest2",3],["row",3,1],["fly",2],["latr",2],["tripush",2],["bi2",2]]},
+  loA:{n:"Lower A",tag:"Lower",type:"legs",s:[["quad",3],["curl",3],["ext",2],["glute",2],["calf",3],["core",2]]},
+  loB:{n:"Lower B",tag:"Lower",type:"legs",s:[["hinge",3],["quad2",3],["curl",2],["glute",2],["calf",3],["core",2]]},
+  push:{n:"Push",tag:"Push",type:"push",s:[["chest",3],["ohp",2],["chest2",2],["fly",2],["latr",3],["trioh",2],["tripush",2]]},
+  pull:{n:"Pull",tag:"Pull",type:"pull",s:[["vpull",3],["row",3],["vpull",2,1],["rear",2],["bi",2],["bi2",2]]},
+  legs:{n:"Legs",tag:"Legs",type:"legs",s:[["quad",3],["curl",3],["hinge",2],["ext",2],["glute",2],["calf",3]]}};
+const SPLITS={2:{n:"Full body · 2 days",d:[0,3],s:["fullA","fullB"]},3:{n:"Full body · 3 days",d:[0,2,4],s:["fullA","fullB","fullC"]},
+  4:{n:"Upper / Lower · 4 days",d:[0,1,3,4],s:["upA","loA","upB","loB"]},5:{n:"Upper / Lower / Push / Pull / Legs",d:[0,1,3,4,5],s:["upA","loA","push","pull","legs"]},
+  6:{n:"Push / Pull / Legs · 6 days",d:[0,1,2,3,4,5],s:["push","pull","legs","push","pull","legs"]}};
+const DAYN=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+function pickEx(slot,alt,P,used){
+  const eq=P.equip||"gym",inj=P.inj||[],ok=id=>EX[id]&&(eq==="gym"||(eq==="db"?EQ_DB:EQ_BW).has(id))&&!inj.some(k=>(AVOID[k]||[]).includes(id))&&!used.has(id);
+  const c=SLOT[slot].filter(ok);return c[Math.min(alt||0,c.length-1)]||null;
+}
+function buildPlan(P){
+  // Without equipment there's too little to fill separate pull or arm days, so bodyweight plans rotate full-body sessions.
+  const BWSPL={4:{n:"Full body · 4 days",d:[0,1,3,4],s:["fullA","fullB","fullC","fullA"]},5:{n:"Full body · 5 days",d:[0,1,2,4,5],s:["fullA","fullB","fullC","fullA","fullB"]},6:{n:"Full body · 6 days",d:[0,1,2,3,4,5],s:["fullA","fullB","fullC","fullA","fullB","fullC"]}};
+  const sp=(P.equip==="bw"&&BWSPL[P.days])||SPLITS[P.days]||SPLITS[3],mins=P.mins||60,days={},tpl={},vol={},focusSlots=new Set((P.focus||[]).flatMap(f=>FOCUS_SLOTS[f]||[]));
+  sp.s.forEach((sk,i)=>{
+    const S=SESS[sk],d=sp.d[i],repeat=sp.s.indexOf(sk)!==i,used=new Set();let items=[];
+    for(const [slot,base,alt] of S.s){
+      const id=pickEx(slot,(alt||0)+(repeat&&COMPOUND.has(slot)?1:0),P,used);if(!id)continue;used.add(id);
+      let sets=P.exp==="new"?Math.max(2,base-(COMPOUND.has(slot)?0:1)):base;if(P.exp==="exp"&&COMPOUND.has(slot)&&items.filter(x=>x.comp).length<2)sets++;
+      if(focusSlots.has(slot))sets++;
+      const comp=COMPOUND.has(slot),first=comp&&!items.some(x=>x.comp);
+      const reps=P.goal==="strength"&&first?"4–6":comp?"6–10":slot==="latr"?"12–20":slot==="core"?"10–15":"10–15";
+      items.push({slot,id,sets,reps,comp});
+    }
+    // fit the session length: about 3 min per compound set and 2.3 per isolation set, plus a warm-up
+    const est=()=>6+items.reduce((a,x)=>a+x.sets*(x.comp?3:2.3),0);
+    while(est()>mins&&items.length>4){const i2=items.map((x,j)=>[x,j]).reverse().find(([x])=>!x.comp&&!focusSlots.has(x.slot))||items.map((x,j)=>[x,j]).reverse()[0];
+      if(i2[0].sets>2&&!i2[0].comp)i2[0].sets--;else items.splice(i2[1],1)}
+    while(est()>mins){const big=items.reduce((a,b)=>b.sets>a.sets?b:a);if(big.sets<=2)break;big.sets--}
+    const inj=P.inj||[];
+    tpl[d]=items.map(x=>{const e=EVID[x.id],notes=[];if(e&&e.tip)notes.push(e.tip);
+      if(x.comp&&(inj.includes("hernia")||inj.includes("back")))notes.push("Breathe out through the effort. Stop 2 reps short of failure.");
+      if(inj.includes("knee")&&["quad","quad2","ext"].includes(x.slot))notes.push("Use a pain-free depth and control the way down.");
+      if(inj.includes("shoulder")&&["chest","chest2","ohp","fly"].includes(x.slot))notes.push("Elbows about 45° from your sides. Skip any range that hurts.");
+      vol[EX[x.id].muscle]=(vol[EX[x.id].muscle]||0)+x.sets;
+      return {u:uid(),id:x.id,sets:x.sets,reps:x.reps,note:notes.join(" ")}});
+    const mus=[...new Set(items.map(x=>MNAME[EX[x.id].muscle]))].slice(0,4).join(", ");
+    days[d]={name:S.n+(repeat?" (2)":""),tag:S.tag,type:S.type,focus:mus,time:`~${Math.round(est()/5)*5} min`};
+  });
+  return {name:sp.n.split(" · ")[0],days,tpl,vol};
+}
+function addBuiltPlan(name,days,tpl){
+  const np={id:uid(),name,builtin:false,days,tpl,made:"builder"};save();
+  const only=state.plans.length===1&&state.plans[0];
+  if(only&&only.builtin&&!Object.keys(only.days||{}).length&&!Object.keys(only.tpl||{}).length&&!Object.keys(state.sessions).length)state.plans=[];
+  state.plans.push(np);state.welcomed=true;
+  if(state.plans.length===1){state.active=np.id;state.days=np.days;state.tpl=np.tpl;state.planName=np.name;state.rotWeek=weekStart(today());save()}else usePlan(np.id);
+}
+// The questions. Each step: key, title, kind (one | many | num), options.
+function builderSteps(P){
+  const st=[
+    {k:"goal",t:"What's your main goal?",kind:"one",o:Object.entries(GOALS).map(([k,v])=>[k,`${v.ico} ${v.n}`,v.d])},
+    {k:"sex",t:"Which strength standards should your ranks use?",kind:"one",sub:"Ranks compare your lifts with your bodyweight. Women's standards are scaled to be fair. You can change this later.",o:[["m","Men's standards",""],["f","Women's standards",""]]},
+    {k:"bw",t:"What do you weigh?",kind:"num",sub:"Used for your ranks and protein target. It's only stored on your phone and your account."},
+    {k:"exp",t:"How long have you been lifting?",kind:"one",o:Object.entries(EXP).map(([k,v])=>[k,v.n,v.d])},
+    {k:"days",t:"How many days a week can you train?",kind:"one",o:[2,3,4,5,6].map(n=>[n,`${n} days`,SPLITS[n].n])},
+    {k:"mins",t:"How long can each session be?",kind:"one",o:[[45,"45 minutes",""],[60,"60 minutes",""],[75,"75 minutes",""],[90,"90 minutes",""]]},
+    {k:"equip",t:"What equipment do you have?",kind:"one",o:Object.entries(EQUIP).map(([k,v])=>[k,v.n,v.d])},
+    {k:"inj",t:"Any injuries or areas to protect?",kind:"many",none:"None",sub:"Exercises that load these areas are swapped for safer options, and you'll get rules for them. This isn't medical advice: see a GP or physio for anything that persists.",o:Object.entries(INJ).map(([k,v])=>[k,v,""])},
+    {k:"focus",t:"Any muscles you want to bring up?",kind:"many",max:2,none:"Keep it balanced",sub:"Pick up to two. They get extra sets each week.",o:Object.entries(FOCUS).map(([k,v])=>[k,v,""])}];
+  if(RATE_OPTS[P.goal])st.splice(1,0,{k:"rate",t:P.goal==="lose"?"How fast do you want to lose?":"How fast do you want to gain?",kind:"one",sub:P.goal==="lose"?"0.5–1% of bodyweight a week keeps the most muscle.":"0.25–0.5% a week limits fat gain.",o:RATE_OPTS[P.goal].map(v=>[v,`${v}% a week`,v===RATE_DEF[P.goal]?"Recommended":""])});
+  return st;
+}
+function openBuilder(opts){
+  opts=opts||{};const was=prof(),P={goal:was.goal||"muscle",sex:was.sex||"m",exp:was.exp||"some",days:was.days||Math.min(6,Math.max(2,planDays(state.plans.find(p=>p.id===state.active)||{})||4)),mins:was.mins||60,equip:was.equip||"gym",inj:(was.inj||[]).slice(),focus:(was.focus||[]).slice(),rate:was.rate,bw:latestBW()||was.bw||null};
+  let i=0;
+  const draw=()=>{const steps=builderSteps(P),s=steps[i];if(!s)return review();
+    const val=P[s.k],body=s.kind==="num"?`<label class="field bwbig"><input id="pb-num" type="number" inputmode="decimal" step="0.1" min="30" max="250" value="${val??""}" placeholder="kg"><span>kg</span></label><button class="btn" id="pb-next">Next</button>`
+      :`<div class="dfl" id="pb-opts">${s.kind==="many"?`<button class="dfb${!val.length?" last":""}" data-none="1"><b>${s.none}</b></button>`:""}${s.o.map(([k,n,d])=>{const on=s.kind==="many"?val.includes(k):val===k;return `<button class="dfb${on?" last":""}" data-o="${k}" aria-pressed="${on}"><b>${n}</b>${d?`<span>${d}</span>`:""}</button>`}).join("")}</div>${s.kind==="many"?`<button class="btn" id="pb-next">Next</button>`:""}`;
+    const m=openModal(`${mhead(opts.title||"Personalise")}<div class="pbprog"><i style="width:${(i/steps.length*100).toFixed(0)}%"></i></div><span class="eyebrow">Question ${i+1} of ${steps.length}</span><h2>${s.t}</h2>${s.sub?`<p class="muted" style="font-size:.9rem;margin:0">${s.sub}</p>`:""}${body}`);
+    m.classList.add("pbsheet");
+    m.querySelector("#mh-back").onclick=()=>{if(i>0){i--;draw()}else closeModal()};
+    const next=()=>{i++;draw()};
+    if(s.kind==="num"){const inp=m.querySelector("#pb-num");m.querySelector("#pb-next").onclick=()=>{const v=parseFloat((inp.value||"").replace(",","."));if(!(v>=30&&v<=250)){toast("!","Enter your weight in kg","Between 30 and 250.","");inp.focus();return}P.bw=Math.round(v*10)/10;next()};return}
+    m.querySelector("#pb-opts").onclick=e=>{const b=e.target.closest("button");if(!b)return;
+      if(s.kind==="one"){const raw=b.dataset.o,v=typeof s.o[0][0]==="number"?+raw:raw;P[s.k]=v;if(s.k==="goal"&&RATE_OPTS[v]&&!RATE_OPTS[v].includes(P.rate))P.rate=RATE_DEF[v];next();return}
+      if(b.dataset.none){P[s.k]=[];draw();return}const k=b.dataset.o,arr=P[s.k];if(arr.includes(k))P[s.k]=arr.filter(x=>x!==k);else{if(s.max&&arr.length>=s.max)arr.shift();arr.push(k)}draw()};
+    m.querySelector("#pb-next")?.addEventListener("click",next);
+  };
+  const saveProf=()=>{const p=prof();Object.assign(p,{goal:P.goal,sex:P.sex,exp:P.exp,days:P.days,mins:P.mins,equip:P.equip,inj:P.inj,focus:P.focus,done:today()});if(RATE_OPTS[P.goal])p.rate=P.rate??RATE_DEF[P.goal];
+    if(P.bw&&!state.bw[today()]&&latestBW()!==P.bw)state.bw[today()]=P.bw;p.bw=P.bw;save()};
+  const review=()=>{
+    const B=buildPlan(P),hasPlan=Object.keys(state.sessions).length>0;
+    const m=openModal(`${mhead("Your plan")}<span class="eyebrow">Built for you</span><h2>${esc(B.name)}</h2>
+      <p class="muted" style="font-size:.9rem;margin:0">${GOALS[P.goal].n} · ${EXP[P.exp].n.toLowerCase()} · ${P.days} days · up to ${P.mins} min · ${EQUIP[P.equip].n.toLowerCase()}${P.inj.length?` · protecting ${P.inj.map(k=>INJ[k].toLowerCase()).join(", ")}`:""}</p>
+      <div class="pbvol">${Object.entries(B.vol).filter(([k])=>k!=="core").sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span>${esc(MNAME[k])} <b>${v}</b></span>`).join("")}</div><p class="note" style="padding:0;margin:0">Weekly sets per muscle. Research found growth keeps rising with sets, with about 10+ a week per muscle doing best.</p>
+      ${Object.keys(B.days).map(d=>{const dy=B.days[d];return `<div class="pbday"><div class="pbd-h"><b>${DAYN[d]} · ${esc(dy.name)}</b><span class="muted">${dy.time}</span></div>${B.tpl[d].map(x=>`<div class="pbex"><span class="pbex-n">${esc(EX[x.id].name)}<small>${x.sets} × ${x.reps}</small></span>${evChip(x.id)}</div>`).join("")}</div>`}).join("")}
+      <p class="muted" style="font-size:.85rem">Tap 🔬 or ★ to see why an exercise was picked. You can change any day afterwards.</p>
+      <button class="btn" id="pb-use">Use this plan</button>${opts.keepOption||hasPlan?`<button class="btn ghost" id="pb-keep">Keep my current plan, just save my answers</button>`:""}<button class="btn ghost sm" id="pb-redo">Change my answers</button>`);
+    m.classList.add("pbsheet");window.__pbRebind=()=>bind(document.getElementById("modal"),B);bind(m,B);
+  };
+  const bind=(m,B)=>{
+    m.querySelector("#mh-back").onclick=()=>{i=builderSteps(P).length-1;draw()};
+    m.querySelector("#pb-redo").onclick=()=>{i=0;draw()};
+    m.querySelector("#pb-use").onclick=()=>{saveProf();addBuiltPlan(B.name,B.days,B.tpl);closeModal();window.__pbRebind=null;refresh();go("train");toast("✓","Your plan is ready",`${B.name} is set for this week.`,"")};
+    m.querySelector("#pb-keep")?.addEventListener("click",()=>{saveProf();closeModal();window.__pbRebind=null;refresh();toast("✓","Saved","Your goal, standards and injuries are applied across the app.","")});
+  };
+  draw();
+}
+// One-time card asking everyone to personalise.
+function personaliseCard(){
+  const p=prof(),el=$("#pcard");if(!el)return;
+  if(p.done||(p.later&&p.later>today())){el.hidden=true;return}
+  el.hidden=false;el.innerHTML=`<span class="pc-ico" aria-hidden="true">✨</span><div><b>Make Costante yours</b><span>Answer a few quick questions about your goal, training days, equipment and any injuries. The app tailors your plan, advice and ranks to you.</span>
+    <div class="btnrow"><button class="btn sm" id="pc-go">Personalise</button><button class="btn sm ghost" id="pc-later">Later</button></div></div>`;
+  el.querySelector("#pc-go").onclick=()=>openBuilder({keepOption:true});
+  el.querySelector("#pc-later").onclick=()=>{p.later=addDays(today(),3);save();el.hidden=true};
+}
+
+/* ---------- Plan tab guides, written for you ---------- */
+function renderGuides(){
+  const g=myGoal(),p=prof(),bw=latestBW(),inj=p.inj||[],lift=[0,1,2,3,4,5,6].filter(d=>(state.days[d]||PLAN[d]||{}).type&&(state.days[d]||PLAN[d]).type!=="rest"),
+    rest=[0,1,2,3,4,5,6].filter(d=>!lift.includes(d)),dn=a=>a.map(d=>DAYN[d]).join(", ");
+  const steps=g==="lose"?"8–10k":g==="fit"?"8k+":"7–9k",sess=g==="lose"?"2–3":g==="fit"?"3":"1–2",len=g==="fit"?"30":"20–30";
+  const cardio=`<div class="panel"><h2>Cardio plan</h2><p>${g==="lose"?"While losing fat, cardio adds to your calorie burn. Lifting is what keeps the muscle, so keep cardio easy enough that it never hurts your sessions.":g==="fit"?"Mix steady cardio with your lifting for heart health and fitness. Keep most of it at a pace you could talk through.":"Easy cardio keeps your heart healthy and helps recovery. Done at an easy pace and apart from leg days, it won't slow muscle or strength gains."}</p>${goalLine?`<p class="muted" style="font-size:.88rem;margin:0">${esc(goalLine())} · <button class="link" id="g-goal">Change</button></p>`:""}</div>
+    <div class="panel"><h3>Your week</h3>
+      <div class="row"><b>Daily</b><p>${steps} steps.${g==="lose"?" After diet, this is your main fat-loss tool.":""}</p></div>
+      <div class="row"><b>${sess}×</b><p>${len} minutes of incline walking, cycling or rowing at an easy pace${rest.length?`, ideally on ${dn(rest.slice(0,3))} or after an upper-body day`:" after an upper-body day"}.</p></div>
+      ${lift.length?`<div class="row"><b>Lift</b><p>${dn(lift)}. Keep hard cardio away from the day before legs.</p></div>`:""}</div>
+    <div class="panel"><h3>Optional sprints</h3><p class="muted">Warm up first every time: 5 min jog, leg swings, A-skips.${inj.includes("hernia")?" Never sprint flat out while a hernia is unrepaired; hills put less stress on the groin.":""}${inj.includes("knee")?" Skip sprints if your knee hurts during or after.":""}</p>
+      <div class="stage"><span class="wk">Wk 1–4</span><p>6–8 strides of 60–80 m at about 70% effort. Walk back to recover.</p></div>
+      <div class="stage"><span class="wk">Wk 5–8</span><p>4–6 hill sprints, 10–15 seconds at about 85%.</p></div>
+      <div class="stage"><span class="wk">Wk 9+</span><p>4–6 flat sprints of 40–60 m at about 90%, with 2–3 min rest between.</p></div></div>
+    ${g==="lose"?`<div class="panel"><h3>If fat loss stalls</h3><p>Add 2,000 daily steps or another cardio session before cutting food further. Change one thing at a time and give it two weeks.</p></div>`:""}`;
+  const prot=bw?`${Math.round(bw*(g==="lose"?2.0:1.6))}–${Math.round(bw*2.2)} g`:null;
+  const NUT={lose:["Lose fat, keep muscle",[`Aim to lose about ${myRate()}% of your bodyweight a week${bw?` (about ${(bw*myRate()/100).toFixed(2)} kg)`:""}.`,`Protein around 2–2.2 g per kg of bodyweight${prot?` (${prot} a day)`:""}, over 3–4 meals.`,"Keep most carbs around your training.","Sleep 7–9 hours. Short sleep makes a diet cost more muscle."]],
+    gain:["Lean bulk",[`Aim to gain about ${myRate()}% of your bodyweight a week${bw?` (about ${(bw*myRate()/100).toFixed(2)} kg)`:""}.`,"A small surplus of roughly 200–300 kcal a day is enough. Eating more mostly adds fat.",`Protein around 1.6–2.2 g per kg${prot?` (${prot} a day)`:""}.`,"Sleep 7–9 hours."]],
+    muscle:["Build muscle",["Eat around maintenance or a small surplus. A slow upward trend in weight is fine.",`Protein around 1.6–2.2 g per kg${prot?` (${prot} a day)`:""}, over 3–4 meals.`,"Sleep 7–9 hours."]],
+    strength:["Get stronger",["Eat at least at maintenance. Strength stalls quickly in a deficit.",`Protein around 1.6–2.2 g per kg${prot?` (${prot} a day)`:""}.`,"Sleep 7–9 hours, especially before heavy days."]],
+    fit:["Fuel your training",["Eat mostly whole foods with protein at each meal.",`Around 1.2–1.6 g of protein per kg${bw?` (${Math.round(bw*1.2)}–${Math.round(bw*1.6)} g a day)`:""} supports your training.`,"Sleep 7–9 hours."]]}[g];
+  const RULES={hernia:["Hernia or groin",["No max-effort singles or grinding reps. Make progress with reps, not by maxing out.","Breathe out through the hard part of each rep instead of holding your breath.","Stop the exercise if you feel a bulge, dragging or sharp pain in your groin.","Machines and supported exercises are safer than heavy barbell squats and deadlifts."]],
+    back:["Lower back",["Brace your core before every rep and keep your spine neutral.","Prefer chest-supported rows, machines and leg presses over heavy barbell hinges.","Stop 2 reps short of failure on anything that loads your back.","If rows or RDLs flare your back, swap to chest-supported rows and seated leg curls."]],
+    shoulder:["Shoulder",["Press with dumbbells or machines, elbows about 45° from your sides.","Skip any range of motion that hurts; partial ranges still build muscle.","Warm up with light band pull-aparts or face pulls.","Build rear delts and upper back to balance your pressing."]],
+    knee:["Knee",["Control the way down on squats and presses; no bouncing.","Use the deepest pain-free depth; it can grow over time.","Leg extensions and leg presses let you load the quads safely.","Stop if pain is sharp or lasts into the next day."]],
+    elbow:["Elbow or wrist",["Use neutral grips, ropes and cables where you can.","Lower the weight slowly and avoid locking out hard.","Skull crushers and straight-bar curls are the usual culprits; swap them if they hurt.","Wrist wraps can help on pressing days."]]};
+  const rules=`<div class="panel"><h2>How to progress</h2><ol><li>Start with a weight you can lift for the bottom of the rep range.</li><li>Add reps each week until every set reaches the top of the range.</li><li>Then add the smallest jump (2.5 kg, or the next dumbbell) and repeat. The app tells you when.</li><li>Compounds stop 1–2 reps short of failure. Isolation work goes to 0–1 reps short.</li><li>Deload every 6–8 weeks, or if strength drops two sessions in a row: same exercises, half the sets.</li>
+      ${g==="lose"?"<li>While losing fat, holding your numbers steady is a win.</li>":""}</ol></div>
+    <div class="panel"><h3>How XP and ranks work</h3><ul><li>10 XP per set, 50 XP per personal record, 40 XP per rank up, 100 XP for finishing a workout, plus bonus XP for medals.</li><li>Warm-up sets earn nothing and never count toward records. Drop sets earn XP and volume but can't set a record.</li>
+      <li>A PR means your best estimated one-rep max on that lift went up. It's worked out from weight and reps, so more reps at the same weight counts.</li>
+      <li>Each lift is ranked by your estimated max compared with your bodyweight, from Bronze I up to Champion III. You're using <b>${p.sex==="f"?"women's":"men's"}</b> standards (<button class="link" id="g-std">change</button>). They're estimates, and machine and cable lifts are rougher because stacks differ between gyms.</li>
+      <li>Exercises you create yourself rank by improvement since your first session instead.</li><li>A muscle's rank is the average of its top three lifts. Keep your bodyweight up to date on the Profile tab.</li></ul></div>
+    <div class="panel"><h3>${NUT[0]}</h3><ul>${NUT[1].map(x=>`<li>${x}</li>`).join("")}</ul></div>
+    ${inj.length?inj.filter(k=>RULES[k]).map(k=>`<div class="panel"><h3>${RULES[k][0]} rules</h3><ul>${RULES[k][1].map(x=>`<li>${x}</li>`).join("")}</ul><p class="muted" style="font-size:.82rem;margin:0">General guidance, not medical advice. See a GP or physio if pain persists.</p></div>`).join("")
+      :`<div class="panel"><h3>Injuries</h3><p class="muted" style="margin:0">Tell the app about any injuries and it swaps risky exercises and adds rules here. <button class="link" id="g-inj">Add an injury</button></p></div>`}`;
+  const best=EV_DATA.filter(r=>r[1]==="r");
+  const science=`<div class="panel"><h2>Where this comes from</h2><p>Plans follow peer-reviewed muscle-growth research. Where a study has compared exercises head to head, the app recommends the winner and shows you the study. Where no study exists yet, picks are labelled as expert picks.</p></div>
+    <div class="panel"><h3>Key findings used</h3>
+      <div class="finding"><span class="what">Train each muscle twice a week</span><p>A 2016 meta-analysis found twice-weekly training grew more muscle than once a week.</p><a href="https://pubmed.ncbi.nlm.nih.gov/27102172/" target="_blank" rel="noopener">Schoenfeld et al., 2016 · Sports Medicine</a></div>
+      <div class="finding"><span class="what">More weekly sets, more growth, up to a point</span><p>Growth rose with weekly volume, with 10+ sets per muscle doing best. A later review suggested 12–20 weekly sets for trained lifters.</p><a href="https://pubmed.ncbi.nlm.nih.gov/27433992/" target="_blank" rel="noopener">Schoenfeld et al., 2017 · J Sports Sciences</a><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8884877/" target="_blank" rel="noopener">Baz-Valle et al., 2022 · J Human Kinetics</a></div>
+      <div class="finding"><span class="what">Protein benefits level off around 1.6 g/kg</span><p>A 49-study meta-analysis found little extra muscle gain above about 1.6 g/kg a day.${g==="lose"?" Dieting raises needs, so your target is a little higher.":""}</p><a href="https://pubmed.ncbi.nlm.nih.gov/28698222/" target="_blank" rel="noopener">Morton et al., 2018 · Br J Sports Med</a></div>
+      ${g==="lose"?`<div class="finding"><span class="what">Lose weight slowly to keep muscle</span><p>A review of natural bodybuilding prep recommends losing about 0.5–1% of bodyweight a week.</p><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4033492/" target="_blank" rel="noopener">Helms et al., 2014 · JISSN</a></div>`:""}</div>
+    <div class="panel"><h3>Best exercises by the research</h3><p class="muted" style="font-size:.88rem;margin:0">Tap one to see the study.</p>
+      ${best.map(([ids,k,head])=>`<button class="evrow" data-ev="${ids[0]}"><b>${esc(EX[ids[0]]?EX[ids[0]].name:ids[0])}</b><span>${esc(head)}</span></button>`).join("")}</div>`;
+  $("#p-cardio").innerHTML=cardio;$("#p-rules").innerHTML=rules;$("#p-science").innerHTML=science;
+  $("#g-goal")?.addEventListener("click",openWeightGoal);$("#g-std")?.addEventListener("click",()=>openBuilder({keepOption:true}));$("#g-inj")?.addEventListener("click",()=>openBuilder({keepOption:true}));
+}
+
 /* ---------- Bottom bar: pick your tabs ---------- */
 const PAGES={train:"Workout",today:"Today",cardio:"Cardio",progress:"Ranks",shop:"Shop",friends:"Friends",profile:"Profile",plan:"Plan",battle:"Battle",puzzles:"Puzzles"};
 const BAR_DEF=["train","progress","shop","friends","profile","plan"];
@@ -5414,7 +5637,7 @@ function go(vw){view=vw;
 document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{
   document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-selected",x===b));
   ["cardio","rules","science"].forEach(n=>$("#p-"+n).hidden=n!==b.dataset.p)}));
-function refresh(){let c=compute();if(checkChallenges(c))c=compute();applyTheme();renderHeader(c);renderPlanBox();if(view==="train"){renderTrain();welcome();chalCard(c)}if(view==="progress")renderProgress();if(view==="shop")renderShop(c);if(view==="friends"&&!chat.open)renderFriends();updateBadges();if(view==="profile")renderProfile();if(view==="today")renderToday(c);if(view==="cardio")renderCardio(c);if(view==="battle"&&!bt.cur)renderBattle();if(view==="puzzles")renderPuzzles()}
+function refresh(){let c=compute();if(checkChallenges(c))c=compute();applyTheme();renderHeader(c);renderPlanBox();if(view==="train"){renderTrain();welcome();chalCard(c)}if(view==="train"||view==="today")personaliseCard();else{const pc=$("#pcard");if(pc)pc.hidden=true}if(view==="progress")renderProgress();if(view==="shop")renderShop(c);if(view==="friends"&&!chat.open)renderFriends();updateBadges();if(view==="profile")renderProfile();if(view==="today")renderToday(c);if(view==="cardio")renderCardio(c);if(view==="battle"&&!bt.cur)renderBattle();if(view==="puzzles")renderPuzzles()}
 // No zooming: block pinch and double-tap zoom so the layout stays put (text boxes are 16px so iPhone doesn't zoom on focus).
 ["gesturestart","gesturechange","gestureend"].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));
 document.addEventListener("touchmove",e=>{if(e.touches.length>1||(e.scale!==undefined&&e.scale!==1))e.preventDefault()},{passive:false});
