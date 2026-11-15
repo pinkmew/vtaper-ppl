@@ -1000,6 +1000,15 @@ button.bmv{cursor:pointer}button.bmv[aria-pressed="true"]{box-shadow:inset 0 0 0
 .bbtime{font-family:var(--display);font-size:1.5rem;font-weight:900;padding:2px 12px;border-radius:10px;background:var(--surface-2)}.bbtime.low{color:#fff;background:#e5484d;animation:bump .5s infinite}
 .bbvs{display:flex;align-items:center;justify-content:center;gap:16px}.bbvs>span{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 14px;border-radius:16px;background:var(--surface-2);min-width:110px}
 .bbvs>span.top{box-shadow:inset 0 0 0 2px var(--xp)}.bbvs b{font-family:var(--display);font-size:1.6rem}.bbvs small{color:var(--muted);font-weight:700}.bbvs i{font-style:normal;color:var(--muted);font-weight:800}
+
+/* ---- v25: keep the bottom bar steady ---- */
+html,body{overscroll-behavior-y:none}
+nav.tabs,.rest{-webkit-transform:translateZ(0);transform:translateZ(0);-webkit-backface-visibility:hidden;backface-visibility:hidden;will-change:transform}
+.rest{transform:translateX(-50%) translateZ(0)}
+body{min-height:100dvh}
+.ihint{display:flex;gap:10px;align-items:flex-start;background:var(--surface-2);border-radius:14px;padding:10px 12px;margin:10px 0;font-size:.86rem;line-height:1.35;box-shadow:inset 0 0 0 1px var(--line)}
+.ihint[hidden]{display:none}.ihint-i{font-size:1.4rem;line-height:1}.ihint>span:nth-child(2){flex:1}
+.ihint-x{border:0;background:none;color:var(--muted);font-size:1rem;padding:2px 4px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -1017,6 +1026,7 @@ button.bmv{cursor:pointer}button.bmv[aria-pressed="true"]{box-shadow:inset 0 0 0
   </header>
 
   <main>
+    <div class="ihint" id="ihint" hidden></div>
     <section id="v-train" class="view"></section>
     <section id="v-today" class="view" hidden></section>
     <section id="v-cardio" class="view" hidden></section>
@@ -4019,6 +4029,11 @@ const VAPID_PUBLIC="BGtBJgj1zLZXGCWnsNOHbq3C-Pr_zD62IJGM_TWzPf2eUa6OIbQ61qp305VF
 const NDEF={remind:true,remindAt:"18:00",rest:true,streak:true,streakAt:"20:00",social:true};
 const nset=()=>({...NDEF,...(state.notif||{})});
 const IOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+// Opened in a phone browser instead of the home screen app: the browser's toolbar moves the bottom bar around. Suggest installing, once.
+(()=>{const el=document.getElementById("ihint"),mobile=IOS||/Android/i.test(navigator.userAgent);
+  if(!el||STANDALONE||!mobile||lsGet("vtppl-ihint")||window!==window.top)return;
+  el.innerHTML=`<span class="ihint-i" aria-hidden="true">📲</span><span><b>Get the full app</b><br>${IOS?"In Safari tap <b>Share</b> then <b>Add to Home Screen</b>":"In Chrome tap <b>⋮</b> then <b>Add to Home screen</b>"}, then open Costante from the icon. It runs full screen and the bottom bar stays put.</span><button class="ihint-x" aria-label="Dismiss">✕</button>`;
+  el.hidden=false;el.querySelector(".ihint-x").onclick=()=>{el.hidden=true;lsSet("vtppl-ihint",1)}})();
 const pushOK=()=>CLOUD_HOST&&"serviceWorker" in navigator&&"PushManager" in window&&"Notification" in window;
 const push={sub:null,status:"checking",busy:false,timer:null};
 const b64uBytes=s=>{const b=atob(s.replace(/-/g,"+").replace(/_/g,"/")+"===".slice((s.length+3)%4)),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a};
