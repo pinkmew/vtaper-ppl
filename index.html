@@ -1031,6 +1031,35 @@ body{min-height:100dvh}
 .xpchip small{font-size:.64rem;font-weight:800;letter-spacing:.1em;margin-top:2px}
 .wgrid{--wsz:max(34px,min(15vw,58px,calc((100dvh - 400px) / var(--rows,6) - 6px)))}
 .wrow{grid-template-columns:repeat(5,var(--wsz))}.wc{font-size:calc(var(--wsz) * .48)}
+
+/* ---- v28: profile card + customise screen ---- */
+.prof.meprof{flex-direction:column;align-items:stretch;gap:12px}
+.mp-top{display:flex;align-items:center;gap:14px;min-width:0}
+.mp-av{border:0;background:none;padding:0;cursor:pointer;flex:none}
+.meprof .prof-l{gap:2px}.meprof h2{font-size:1.45rem;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.meprof .ptitle{font-size:1rem;line-height:1.2}.mp-lv{font-weight:700;font-size:.88rem;color:var(--muted)}
+.prof[class*="bn-"] .mp-lv{color:#e9dcc8}
+.meprof .prof-r{gap:2px}.meprof .prof-r .eyebrow{font-size:.62rem}
+.mp-xp{display:flex;flex-direction:column;gap:6px;font-size:.88rem}
+.mp-edit{align-self:stretch}
+.sheet.pesheet{max-width:480px}
+.pe-card{box-shadow:inset 0 0 0 1px var(--line);min-height:96px;flex:none}
+.pe-card .prof-l{gap:2px}.pe-card h2{font-size:1.3rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pe-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--surface-2);border-radius:14px;padding:4px;flex:none}
+.pe-tabs button{border:0;border-radius:10px;padding:9px 4px;background:none;color:var(--muted);font-weight:800;font-size:.9rem;cursor:pointer;font-family:var(--body)}
+.pe-tabs button[aria-selected="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 4px rgba(0,0,0,.35)}
+.pe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;flex:none}
+.pe-grid[data-k="title"]{grid-template-columns:repeat(2,1fr)}
+.pe-it{border:0;border-radius:14px;background:var(--surface-2);color:var(--fg);padding:10px 6px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;font-family:var(--body);min-width:0;box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--rc) 45%,transparent)}
+.pe-it small{font-size:.74rem;font-weight:700;color:var(--muted);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pe-it.on{box-shadow:inset 0 0 0 2.5px var(--xp);background:var(--xp-soft)}.pe-it.on small{color:var(--fg)}
+.pe-it:active{transform:scale(.97)}
+.pe-bn{display:grid;place-items:center;width:100%;height:46px;border-radius:9px;font-size:.72rem;color:var(--muted);font-weight:700;overflow:hidden}
+.pe-th{display:flex;width:100%;height:46px;border-radius:9px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)}.pe-th i{flex:1}.pe-th i:last-child{flex:.6}
+.pe-tt{display:grid;place-items:center;width:100%;min-height:46px;border-radius:9px;background:var(--surface);color:var(--xp);font-weight:800;font-size:.9rem;padding:4px 6px;text-align:center;line-height:1.15}
+.pe-it.more{box-shadow:inset 0 0 0 1.5px var(--line);background:none}.pe-lock{display:grid;place-items:center;height:46px;font-family:var(--display);font-weight:900;font-size:1.3rem;color:var(--muted)}
+.pe-sect{display:flex;flex-direction:column;gap:6px}
+.pe-none{background:var(--surface)}
 </style>
 </head>
 <body>
@@ -1577,7 +1606,7 @@ function toast(ico,title,sub,xp,unit="XP"){
 }
 function openModal(html){const m=$("#modal");m.innerHTML=`<div class="sheet" role="dialog" aria-modal="true">${html}</div>`;m.hidden=false;
   m.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",closeModal));return m.firstElementChild}
-function closeModal(){$("#modal").hidden=true;$("#modal").innerHTML="";}
+function closeModal(){$("#modal").hidden=true;$("#modal").innerHTML="";if(typeof applyTheme==="function")applyTheme(state.equip.theme)}
 $("#modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal()});
 
 /* ---------- Rest timer ---------- */
@@ -2034,10 +2063,11 @@ $("#v-progress").addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" "
 let showReset=false,calOff=0;const CATS=["Workouts","Cardio","Streaks","Records","Lifts","Ranks","Body","Recovery","Extras"];
 function renderProfile(){
   const c=compute(),el=$("#v-profile"),bs=bwStats(),ms=muscleStats(c),os=overallStep(ms);
-  let html=`<div class="panel prof${state.equip.banner?" bn-"+state.equip.banner:""}">${avatarHTML(64)}<div class="prof-l"><h2 id="pname">${esc(state.name||"Lifter")}</h2><span class="ptitle">${esc(titleName()||c.title)} · Level ${c.level}</span>
-      <span class="muted num">${fmtNum(c.into)} / ${fmtNum(c.need)} XP · ${fmtNum(c.xp)} total</span><span class="bar"><i style="width:${(c.into/c.need*100).toFixed(1)}%"></i></span>
-      <button class="btn sm ghost" id="editname" style="align-self:flex-start;margin-top:4px">Edit profile</button></div>
-    <div class="prof-r">${emblem(os,72)}<span class="eyebrow">${os==null?"Unranked":stepName(os)}</span></div></div>
+  let html=`<div class="panel prof meprof${state.equip.banner?" bn-"+state.equip.banner:""}">
+    <div class="mp-top"><button class="mp-av" id="editav" aria-label="Edit profile">${avatarHTML(68)}</button><div class="prof-l"><h2 id="pname">${esc(state.name||"Lifter")}</h2><span class="ptitle">${esc(titleName()||c.title)}</span><span class="mp-lv">Level ${c.level}</span></div>
+      <div class="prof-r">${emblem(os,56)}<span class="eyebrow">${os==null?"Unranked":stepName(os)}</span></div></div>
+    <div class="mp-xp"><span class="muted num">${fmtNum(c.into)} / ${fmtNum(c.need)} XP · ${fmtNum(c.xp)} total</span><span class="bar"><i style="width:${(c.into/c.need*100).toFixed(1)}%"></i></span></div>
+    <button class="btn sm ghost mp-edit" id="editname">✎ Customise profile</button></div>
     <p class="note">10 XP a set · 50 XP a PR · 40 XP a rank up · 100 XP a finished workout · medal bonuses</p>`+petCard(c);
   // Month calendar: tap a trained day to review it
   const base=parseD(today()),first=new Date(base.getFullYear(),base.getMonth()+calOff,1),y=first.getFullYear(),mo=first.getMonth(),n=new Date(y,mo+1,0).getDate(),lead=(first.getDay()+6)%7;
@@ -2086,7 +2116,7 @@ $("#v-profile").addEventListener("submit",e=>{
 $("#v-profile").addEventListener("click",async e=>{
   const id=e.target.id;
   if(e.target.dataset.del){const d=e.target.dataset.del;commit(()=>{delete state.bw[d]},{quiet:true});refresh();return}
-  if(id==="editname"){openProfileEdit();return}
+  if(id==="editname"||e.target.closest("#editav")){openProfileEdit();return}
   const tr=e.target.closest("[data-treat]");
   if(tr){const t=TREATS.find(q=>q.id===tr.dataset.treat);if(gems(compute())<t.price)return;state.spent=(state.spent||0)+t.price;gainPet(t.xp,true);save();refresh();toast("✓",`${petName(state.pet)} enjoyed the ${t.name.toLowerCase()}`,"",`+${t.xp}`,"pet XP");return}
   if(e.target.closest("#pet-choose")){shopTab="pet";go("shop");return}
@@ -2278,33 +2308,62 @@ document.addEventListener("visibilitychange",()=>{if(!document.hidden){rotateChe
 
 /* ---------- Profile editing ---------- */
 const avatarHTML=(size,frame=state.equip.frame)=>`<span class="avw${frame?" fr-"+frame:""}" style="--s:${size}px">${state.avatar?`<img class="avatar" style="width:${size}px;height:${size}px" src="${state.avatar}" alt="Profile picture">`:`<span class="avatar" style="width:${size}px;height:${size}px;font-size:${size*.42}px" aria-hidden="true">${esc((state.name||"L").trim().charAt(0).toUpperCase()||"L")}</span>`}</span>`;
-function openProfileEdit(){
-  let pic=state.avatar||"";
-  const m=openModal(`${mhead("Profile","Save")}<h2>Edit profile</h2>
-    <div class="pe-pic"><span id="pe-prev"></span><div class="btnrow"><label class="btn sm ghost" for="pe-file">Choose photo</label><button class="btn sm ghost" id="pe-rm">Remove photo</button></div>
+function openProfileEdit(start){
+  let pic=state.avatar||"",tab=start||"frame";const d={frame:state.equip.frame||"",banner:state.equip.banner||"",title:state.equip.title||"",theme:state.equip.theme||""},was={...d};
+  const c=compute(),TABS=[["frame","Frame"],["banner","Banner"],["title","Title"],["theme","Theme"]];
+  const m=openModal(`${mhead("Edit profile","Save")}
+    <div class="panel prof pe-card" id="pe-card"></div>
+    <div class="pe-tabs" role="tablist">${TABS.map(([k,n])=>`<button role="tab" data-pt="${k}">${n}</button>`).join("")}</div>
+    <div class="pe-grid" id="pe-grid"></div>
+    <button class="link" id="pe-shop" style="align-self:center">Get more in the Shop</button>
+    <div class="pe-sect"><span class="eyebrow">Photo</span><div class="btnrow"><label class="btn sm ghost" for="pe-file">Choose photo</label><button class="btn sm ghost" id="pe-rm">Remove photo</button></div>
       <input type="file" id="pe-file" accept="image/*" class="sr"></div>
-    <label style="display:flex;flex-direction:column;gap:6px"><span class="eyebrow">Username</span><input class="txt" id="pe-name" maxlength="20" value="${esc(myProfile?myProfile.username:(state.name||""))}" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Pick a username">${myProfile?(nextNameChange()?`<small class="muted">You can change your username once a week. Next change: <b>${fmtD(iso(nextNameChange()))}</b>.</small>`:`<small class="muted">Friends find you by this. 3–20 letters, numbers or underscores. You can change it once a week.</small>`):""}</label>
+    <label class="pe-sect"><span class="eyebrow">Username</span><input class="txt" id="pe-name" maxlength="20" value="${esc(myProfile?myProfile.username:(state.name||""))}" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Pick a username">${myProfile?(nextNameChange()?`<small class="muted">You can change your username once a week. Next change: <b>${fmtD(iso(nextNameChange()))}</b>.</small>`:`<small class="muted">Friends find you by this. 3–20 letters, numbers or underscores. You can change it once a week.</small>`):""}</label>
     <p id="pe-err" class="formerr" hidden></p>
     <button class="btn" id="pe-save">Save profile</button>`);
-  const prev=()=>{m.querySelector("#pe-prev").innerHTML=pic?`<img class="avatar" style="width:96px;height:96px" src="${pic}" alt="Profile picture preview">`:`<span class="avatar" style="width:96px;height:96px;font-size:40px">${esc((m.querySelector("#pe-name").value||"L").trim().charAt(0).toUpperCase()||"L")}</span>`;m.querySelector("#pe-rm").hidden=!pic};
-  prev();
-  m.querySelector("#pe-name").addEventListener("input",()=>{if(!pic)prev()});
-  m.querySelector("#pe-rm").onclick=()=>{pic="";prev()};
+  m.classList.add("pesheet");
+  const nameNow=()=>(m.querySelector("#pe-name").value||state.name||"L").trim();
+  const av=(size,frame)=>`<span class="avw${frame?" fr-"+frame:""}" style="--s:${size}px">${pic?`<img class="avatar" style="width:${size}px;height:${size}px" src="${pic}" alt="">`:`<span class="avatar" style="width:${size}px;height:${size}px;font-size:${size*.42}px" aria-hidden="true">${esc(nameNow().charAt(0).toUpperCase()||"L")}</span>`}</span>`;
+  const tName=id=>{const t=SHOP.title.items.find(i=>i.id===id);return id&&t?t.name:c.title};
+  const card=()=>{const el=m.querySelector("#pe-card");el.className=`panel prof pe-card${d.banner?" bn-"+d.banner:""}`;
+    el.innerHTML=`${av(64,d.frame)}<div class="prof-l"><h2>${esc(nameNow())}</h2><span class="ptitle">${esc(tName(d.title))}</span><span class="muted" style="font-size:.85rem">Level ${c.level} · preview</span></div>`;
+    m.querySelector("#pe-rm").hidden=!pic};
+  const owned=k=>SHOP[k].items.filter(it=>owns(k,it.id));
+  const grid=()=>{
+    m.querySelectorAll("[data-pt]").forEach(b=>b.setAttribute("aria-selected",b.dataset.pt===tab));
+    const items=owned(tab),locked=SHOP[tab].items.length-items.length,g=m.querySelector("#pe-grid");g.dataset.k=tab;
+    g.innerHTML=items.map(it=>{const on=(d[tab]||"")===it.id,rc=`var(${RAR[Math.min(it.r||0,5)].v})`;
+      const pv=tab==="frame"?av(46,it.id):tab==="banner"?`<span class="pe-bn ${it.id?"bn-"+it.id:"pe-none"}">${it.id?"":"None"}</span>`
+        :tab==="theme"?`<span class="pe-th">${(()=>{const t=THEMES[it.id]||{bg:"#17130d",surface:"#211b12",xp:"#f6a51e",fg:"#f7efe2"};return `<i style="background:${t.bg}"></i><i style="background:${t.surface}"></i><i style="background:${t.xp}"></i>`})()}</span>`
+        :`<span class="pe-tt">${esc(it.id?it.name:c.title)}</span>`;
+      return `<button class="pe-it${on?" on":""}" data-pick="${esc(it.id)}" aria-pressed="${on}" style="--rc:${rc}">${pv}<small>${esc(tab==="title"&&!it.id?"Level title":it.name)}</small></button>`}).join("")
+      +(locked?`<button class="pe-it more" id="pe-more"><span class="pe-lock">+${locked}</span><small>More in Shop</small></button>`:"");
+  };
+  card();grid();
+  m.querySelector(".pe-tabs").onclick=e=>{const b=e.target.closest("[data-pt]");if(!b)return;tab=b.dataset.pt;grid()};
+  m.querySelector("#pe-grid").onclick=e=>{const b=e.target.closest("[data-pick]");if(b){d[tab]=b.dataset.pick;if(tab==="theme")applyTheme(d.theme);card();grid();return}
+    if(e.target.closest("#pe-more"))goShop()};
+  const goShop=()=>{applyTheme(was.theme);closeModal();shopTab=tab;go("shop")};
+  m.querySelector("#pe-shop").onclick=goShop;
+  m.querySelector("#pe-name").addEventListener("input",()=>{if(!pic)card()});
+  m.querySelector("#pe-rm").onclick=()=>{pic="";card();if(tab==="frame")grid()};
   m.querySelector("#pe-file").addEventListener("change",e=>{
     const f=e.target.files&&e.target.files[0];if(!f)return;
     const url=URL.createObjectURL(f),img=new Image();
     img.onload=()=>{const S=192,cv=document.createElement("canvas");cv.width=cv.height=S;const side=Math.min(img.width,img.height);
-      cv.getContext("2d").drawImage(img,(img.width-side)/2,(img.height-side)/2,side,side,0,0,S,S);pic=cv.toDataURL("image/jpeg",.82);URL.revokeObjectURL(url);prev()};
+      cv.getContext("2d").drawImage(img,(img.width-side)/2,(img.height-side)/2,side,side,0,0,S,S);pic=cv.toDataURL("image/jpeg",.82);URL.revokeObjectURL(url);card();if(tab==="frame")grid()};
     img.onerror=()=>{URL.revokeObjectURL(url);toast("!","That photo didn't work","Try a different picture.","")};img.src=url});
   if(myProfile){const ni=m.querySelector("#pe-name");if(nextNameChange()){ni.readOnly=true;ni.classList.add("locked")}
-    ni.addEventListener("input",e=>{const c=cleanName(e.target.value);if(c!==e.target.value)e.target.value=c});}
+    ni.addEventListener("input",e=>{const v=cleanName(e.target.value);if(v!==e.target.value)e.target.value=v});}
   const doSave=async()=>{let nm=m.querySelector("#pe-name").value.trim();if(!nm){m.querySelector("#pe-name").focus();toast("!","Pick a username","It can't be empty.","");return}
     if(myProfile&&cleanName(nm)!==myProfile.username){
       const r=await changeUsername(nm);if(!r.ok){const e=m.querySelector("#pe-err");e.textContent=r.msg;e.hidden=false;return}
       if(r.changed)setTimeout(()=>toast("✓",`You're now @${myProfile.username}`,"Your next username change is available in 7 days.",""),350)}
-    if(myProfile)nm=myProfile.username
-    state.name=nm;state.avatar=pic;const ok=save();closeModal();refresh();toast(ok?"✓":"!",ok?"Profile saved":"Couldn't save",ok?"":"The photo may be too large for this phone's storage.","")};
-  m.querySelector("#pe-save").onclick=doSave;m.querySelector("#mh-save").onclick=doSave;m.querySelector("#mh-back").onclick=closeModal;
+    if(myProfile)nm=myProfile.username;
+    state.name=nm;state.avatar=pic;for(const k of ["frame","banner","title","theme"])if(owns(k,d[k]))state.equip[k]=d[k];
+    applyTheme();const ok=save();closeModal();refresh();toast(ok?"✓":"!",ok?"Profile saved":"Couldn't save",ok?"":"The photo may be too large for this phone's storage.","")};
+  m.querySelector("#pe-save").onclick=doSave;m.querySelector("#mh-save").onclick=doSave;
+  m.querySelector("#mh-back").onclick=()=>{applyTheme(was.theme);closeModal()};
 }
 
 /* ---------- Gems, shop items ---------- */
