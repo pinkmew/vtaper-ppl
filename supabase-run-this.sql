@@ -332,7 +332,8 @@ revoke execute on function public.grant_pet(text, text, boolean) from public, an
 grant execute on function public.grant_pet(text, text, boolean) to authenticated;
 
 -- The admin's list of everyone who has an Origin pet.
-create or replace function public.list_grants() returns table (username text, pet_id text, granted_at timestamptz)
+drop function if exists public.list_grants();
+create function public.list_grants() returns table (username text, pet_id text, granted_at timestamptz)
 language plpgsql security definer set search_path = public as $$
 begin
   if not exists (select 1 from admins where user_id = auth.uid()) then raise exception 'Only the app admin can do that'; end if;
