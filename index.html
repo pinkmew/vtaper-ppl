@@ -1009,6 +1009,11 @@ body{min-height:100dvh}
 .ihint{display:flex;gap:10px;align-items:flex-start;background:var(--surface-2);border-radius:14px;padding:10px 12px;margin:10px 0;font-size:.86rem;line-height:1.35;box-shadow:inset 0 0 0 1px var(--line)}
 .ihint[hidden]{display:none}.ihint-i{font-size:1.4rem;line-height:1}.ihint>span:nth-child(2){flex:1}
 .ihint-x{border:0;background:none;color:var(--muted);font-size:1rem;padding:2px 4px;cursor:pointer}
+
+/* ---- v26: steady leaderboards ---- */
+.sheet.lbsheet{height:min(86dvh,760px)}
+.lbbox{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;transition:opacity .15s}
+.lbbox.busy{opacity:.45;pointer-events:none}
 </style>
 </head>
 <body>
@@ -4587,7 +4592,7 @@ function renderBattle(){
   h+=`<div class="panel"><h3>Rewards</h3><p class="muted" style="font-size:.9rem">Every battle gives you and your pets XP, more for a win. Wins also pay gems. Friend battles move your rank; practice doesn't.</p>
       <div class="capgrid"><span>Battle XP today</span><b class="num">${c.b||0} / ${CAPS.b}</b><span>Gems today</span><b class="num">${c.g||0} / ${CAPS.g}</b><span>Pet XP today</span><b class="num">${c.x||0} / ${CAPS.x}</b></div></div>
     <div class="btgrid"><button class="btn ghost sm" id="bt-types">Type chart</button><button class="btn ghost sm" id="bt-how">How battles work</button></div>`;
-  el.innerHTML=h;
+  if(el._h===h)return;el._h=h;el.innerHTML=h;
 }
 function openTypes(){
   const m=openModal(`${mhead("Type chart")}<p class="muted" style="font-size:.9rem">A move does double damage to types it's strong against and half to types that resist it. Pets gain a second type at level 8. A move that matches its user's type hits 50% harder.</p>
@@ -4780,8 +4785,28 @@ const DIFF={easy:{n:"Easy",x:.6},medium:{n:"Medium",x:1},hard:{n:"Hard",x:1.6}};
 const DIFF_D={crown:{easy:"6 × 6 grid",medium:"7 × 7 grid",hard:"8 × 8 grid"},word:{easy:"7 tries",medium:"6 tries",hard:"5 tries, and every green and yellow letter must be used in your next guess"},
   block:{easy:"Mostly small, friendly blocks",medium:"The normal mix of blocks",hard:"Bigger, awkward blocks"}};
 const pzOnline=()=>!!(sb&&me&&myProfile);
-async function pzSubmit(k,mode,score,time){if(!pzOnline())return null;
-  try{const {data,error}=await sb.rpc("puzzle_submit",{p_game:k,p_mode:mode,p_day:today(),p_score:Math.round(score)||0,p_time:Math.round(time)||0});return error?null:data}catch(e){return null}}
+// Scores wait in a queue on the phone until the server accepts them, so nothing is lost offline or before setup.
+let pzFlushing=false;
+function pzQueue(it){const P=pz();P.q=(P.q||[]).filter(x=>!(x.k===it.k&&x.mode==="daily"&&it.mode==="daily"&&x.day===it.day));P.q.push(it);if(P.q.length>30)P.q=P.q.slice(-30);save();pzFlush()}
+async function pzFlush(){
+  if(!pzOnline()||pzFlushing)return;const P=pz();if(!(P.q||[]).length)return;pzFlushing=true;let sent=0,stuck=false;
+  try{for(let it;!stuck&&(it=(P.q||[])[0]);){
+    let res;try{res=await sb.rpc("puzzle_submit",{p_game:it.k,p_mode:it.mode,p_day:it.day,p_score:Math.round(it.score)||0,p_time:Math.round(it.time)||0})}catch(e){stuck=true;break}
+    if(res.error){if(/ended|look right|Unknown puzzle/i.test(res.error.message||""))P.q=P.q.filter(x=>x!==it);else stuck=true;continue}
+    P.q=P.q.filter(x=>x!==it);sent++;P.sent=P.sent||{};if(it.mode==="daily")P.sent[it.k+it.day]=1;
+    if(it.post==="daily")postActivity("puzzle",{g:it.k,daily:1,score:it.score,time:it.time,of:it.of});
+    else if(it.post==="pb"&&res.data){P.posted=P.posted||{};const pk=it.k+it.mode+it.day;if(!P.posted[pk]){if(Object.keys(P.posted).length>40)P.posted={};P.posted[pk]=1;postActivity("puzzle",{g:it.k,diff:it.mode,score:it.score,time:it.time,pb:1})}}}}
+  finally{pzFlushing=false;save();if(sent)for(const k in lbCache)delete lbCache[k]}
+}
+// Today's dailies finished on this phone but never sent (e.g. played before the server was set up).
+function pzBackfill(){
+  const P=pz(),d=today(),day=pzDay();P.sent=P.sent||{};P.bf=P.bf||{};const want=(k,o)=>{if(!P.sent[k+d]&&!P.bf[k+d]){P.bf[k+d]=1;pzQueue({k,mode:"daily",day:d,post:"daily",...o})}};
+  if(day.crown&&P.crown&&P.crown.d===d&&P.crown.m.filter(v=>v===2).length>=6)want("crown",{score:0,time:Math.max(4,P.crown.t||4)});
+  if(P.word&&P.word.d===d&&P.word.over&&P.word.g.length){const ans=shuffled(ANSW,"gymword")[Math.floor(new Date(d+"T12:00:00").getTime()/864e5)%ANSW.length];
+    if(P.word.g[P.word.g.length-1]===ans)want("word",{score:P.word.g.length,time:P.word.t||0,of:6})}
+  if(day.block&&(P.dblock&&P.dblock.d===d?P.dblock.s:P.best.block))want("block",{score:P.dblock&&P.dblock.d===d?P.dblock.s:P.best.block,time:0});
+}
+function pzSync(){if(!pzOnline())return;pzBackfill();pzFlush()}
 // Award XP (difficulty multiplier, capped per day), tick the daily, save the score and post to friends.
 // meta: {diff, score, time}
 function pzFinish(k,base,daily,ok,meta){
@@ -4790,10 +4815,8 @@ function pzFinish(k,base,daily,ok,meta){
   commit(()=>{got=awardXP("p",xp);if(first){day[k]=1;bonus=awardXP("p",20);
     if(["crown","word","block"].every(x=>day[x])&&!day.disc){day.disc=1;disc=randDisc();addDisc(disc)}}});
   if(disc)setTimeout(()=>toast("💿","All three daily puzzles done",`You won a move disc: ${MV[disc].n}.`,""),600);
-  if((ok||k==="block")&&meta.score!=null)pzSubmit(k,daily?"daily":diff,meta.score,meta.time).then(better=>{
-    const P=pz();P.posted=P.posted||{};const pk=k+diff+today();
-    if(first)postActivity("puzzle",{g:k,daily:1,score:meta.score,time:meta.time,of:meta.of});
-    else if(better&&!daily&&k!=="word"&&!P.posted[pk]){if(Object.keys(P.posted).length>40)P.posted={};P.posted[pk]=1;save();postActivity("puzzle",{g:k,diff,score:meta.score,time:meta.time,pb:1})}});
+  if((ok||k==="block")&&meta.score!=null){const P=pz();if(daily){P.bf=P.bf||{};P.bf[k+today()]=1;if(k==="block")P.dblock={d:today(),s:Math.max(meta.score,P.dblock&&P.dblock.d===today()?P.dblock.s:0)}}
+    pzQueue({k,mode:daily?"daily":diff,day:today(),score:meta.score,time:meta.time,of:meta.of,post:first?"daily":!daily&&k!=="word"?"pb":null})}
   return {xp:got+bonus,bonus,disc,capped:got<xp,diff:daily?null:diff};
 }
 const pzResult=(title,sub,r,again)=>`<div class="bt-res win"><h2>${title}</h2><p class="muted" style="text-align:center">${sub}</p><div class="sumgrid" style="grid-template-columns:1fr"><div><b style="color:var(--xp)">+${r.xp}</b><span>XP${r.bonus?" · includes the daily bonus":r.diff&&r.diff!=="medium"?` · ${DIFF[r.diff].n} ×${DIFF[r.diff].x}`:""}</span></div></div>
@@ -4808,7 +4831,7 @@ function pickDiff(k){
 const pzOpen=(k,daily,diff)=>k==="crown"?openCrown(daily,diff):k==="word"?openWord(daily,diff):openBlock(daily,diff);
 function renderPuzzles(){
   const day=pzDay(),c=capDay(),n=["crown","word","block"].filter(k=>day[k]).length;
-  $("#v-puzzles").innerHTML=`<div class="panel pzhead"><div class="pet-l"><span class="eyebrow">Daily puzzles</span><h3>${n} of 3 done</h3><span class="muted" style="font-size:.88rem">${day.disc?"Today's move disc collected. New puzzles tomorrow.":"Finish all three today for a free move disc."}</span>
+  const pel=$("#v-puzzles"),ph=`<div class="panel pzhead"><div class="pet-l"><span class="eyebrow">Daily puzzles</span><h3>${n} of 3 done</h3><span class="muted" style="font-size:.88rem">${day.disc?"Today's move disc collected. New puzzles tomorrow.":"Finish all three today for a free move disc."}</span>
       <span class="bar"><i style="width:${n/3*100}%"></i></span></div>${discPic(day.disc?"secondwind":"thunderclap",54)}</div>
     <button class="btn ghost" data-lb="crown">🏆 Leaderboards</button>
     ${Object.entries(PZ).map(([k,p])=>`<div class="panel pzcard"><div class="pz-top"><span class="pz-ico">${p.ico}</span><div class="pet-l"><h3>${p.n}${day[k]?' <span class="pill on">Done</span>':""}</h3><span class="muted" style="font-size:.88rem">${p.d}</span></div><button class="pz-lb" data-lb="${k}" aria-label="${p.n} leaderboard">🏆</button></div>
@@ -4817,6 +4840,7 @@ function renderPuzzles(){
     ${bbPanel()}
     <div class="panel"><h3>XP</h3><p class="muted" style="font-size:.9rem">Every puzzle you finish pays XP, as many times as you like, up to ${CAPS.p} a day. Easy pays ×0.6 and Hard ×1.6. The first daily clear of each adds 20 more.</p>
       <div class="capgrid"><span>Puzzle XP today</span><b class="num">${c.p||0} / ${CAPS.p}</b></div></div>`;
+  if(pel._h===ph)return;pel._h=ph;pel.innerHTML=ph;
 }
 document.addEventListener("click",e=>{if(!e.target.closest("#v-puzzles"))return;const t=e.target.closest("button");if(!t)return;
   if(t.dataset.pz){const k=t.dataset.pz;if(t.dataset.daily)pzOpen(k,true,"medium");else pickDiff(k)}
@@ -4825,28 +4849,33 @@ const pzClose=()=>{closeModal();refresh()};
 const fmtClock=s=>Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0");
 
 /* ---------- Puzzle leaderboards ---------- */
-const lbS={k:"crown",mode:"daily",scope:"all"};
+const lbS={k:"crown",mode:"daily",scope:"all"},lbCache={};
 const LB_NOTE={crown:{daily:"Fastest solve of today's grid.",all:"Fastest solve at this difficulty."},word:{daily:"Fewest tries on today's word, then fastest.",all:"Most words solved at this difficulty."},block:{daily:"Best score on today's blocks.",all:"Highest score at this difficulty."}};
 const lbVal=(k,mode,r)=>k==="crown"?fmtClock(r.time_s):k==="word"?(mode==="daily"?`${r.score}/6 · ${fmtClock(r.time_s)}`:`${r.wins} solved`):fmtNum(r.score);
 function openBoard(k){
-  if(k)lbS.k=k;
+  if(k)lbS.k=k;pzSync();
   const m=openModal(`${mhead("Leaderboards")}<div class="seg3" id="lb-g">${Object.entries(PZ).map(([g,p])=>`<button data-g="${g}">${p.n}</button>`).join("")}</div>
     <div class="seg3 sm" id="lb-m">${[["daily","Today"],["easy","Easy"],["medium","Medium"],["hard","Hard"]].map(([v,n])=>`<button data-m="${v}">${n}</button>`).join("")}</div>
     <div class="seg3 sm" id="lb-s"><button data-s="all">Everyone</button><button data-s="friends">Friends</button></div>
-    <p class="note" id="lb-note" style="padding:0"></p><div class="lb" id="lb-list"></div>`);
+    <p class="note" id="lb-note" style="padding:0"></p><div class="lb lbbox" id="lb-list"></div>`);
+  m.classList.add("lbsheet");
   m.querySelector("#mh-back").onclick=()=>{closeModal();refresh()};
-  let seq=0;
+  const el=m.querySelector("#lb-list");let seq=0;
+  const paint=(key,html)=>{if(el._k===key&&el._h===html){el.classList.remove("busy");return}el._k=key;el._h=html;el.innerHTML=html;el.classList.remove("busy")};
+  const rowsHTML=data=>!data.length?`<div class="empty"><b>No scores yet</b><span>${lbS.mode==="daily"?"Be the first to finish today's puzzle.":"Play a game at this difficulty to get on the board."}</span></div>`
+    :data.map(r=>`<button class="lbrow${r.user_id===me.id?" me":""}" data-u="${r.user_id}"><b class="lbn">${r.rank}</b>${avHTML(r,34)}<span class="prow-t"><b>${r.user_id===me.id?"You":"@"+esc(r.username)}</b><span class="muted">Lv ${r.level}</span></span><b class="num">${lbVal(lbS.k,lbS.mode,r)}</b></button>`).join("");
   const load=async()=>{
     const press=(sel,attr,v)=>m.querySelectorAll(sel+" button").forEach(b=>b.setAttribute("aria-pressed",b.dataset[attr]===v));
     press("#lb-g","g",lbS.k);press("#lb-m","m",lbS.mode);press("#lb-s","s",lbS.scope);
     m.querySelector("#lb-note").textContent=LB_NOTE[lbS.k][lbS.mode==="daily"?"daily":"all"];
-    const el=m.querySelector("#lb-list");
-    if(!pzOnline()){el.innerHTML=`<div class="empty"><b>Sign in to see the leaderboards</b><span>Create an account on your Profile and your scores will appear here.</span></div>`;return}
-    el.innerHTML=`<p class="muted">Loading…</p>`;const my=++seq;
+    if(!pzOnline()){paint("off",`<div class="empty"><b>Sign in to see the leaderboards</b><span>Create an account on your Profile and your scores will appear here.</span></div>`);return}
+    const key=[lbS.k,lbS.mode,lbS.scope,today()].join("|"),hit=lbCache[key],my=++seq;
+    if(hit)paint(key,hit.html);else el.classList.add("busy");
+    if(hit&&Date.now()-hit.at<15000)return;
+    if(pzFlushing||(pz().q||[]).length)await pzFlush();
     const {data,error}=await sb.rpc("puzzle_board",{p_game:lbS.k,p_mode:lbS.mode,p_day:today(),p_scope:lbS.scope});if(my!==seq||!el.isConnected)return;
-    if(error){el.innerHTML=/puzzle_board|schema cache|PGRST202/i.test((error.message||"")+(error.code||""))?`<div class="empty"><b>Leaderboards need one more setup step</b><span>Run the latest supabase-run-this.sql in Supabase.</span></div>`:`<p class="formerr">${esc(sbErr(error))}</p>`;return}
-    if(!data.length){el.innerHTML=`<div class="empty"><b>No scores yet</b><span>${lbS.mode==="daily"?"Be the first to finish today's puzzle.":"Play a game at this difficulty to get on the board."}</span></div>`;return}
-    el.innerHTML=data.map(r=>`<button class="lbrow${r.user_id===me.id?" me":""}" data-u="${r.user_id}"><b class="lbn">${r.rank}</b>${avHTML(r,34)}<span class="prow-t"><b>${r.user_id===me.id?"You":"@"+esc(r.username)}</b><span class="muted">Lv ${r.level}</span></span><b class="num">${lbVal(lbS.k,lbS.mode,r)}</b></button>`).join("");
+    if(error){paint("err",/puzzle_board|schema cache|PGRST202/i.test((error.message||"")+(error.code||""))?`<div class="empty"><b>Leaderboards need one more setup step</b><span>Run the latest supabase-run-this.sql in Supabase.</span></div>`:`<p class="formerr">${esc(sbErr(error))}</p>`);return}
+    const html=rowsHTML(data);lbCache[key]={html,at:Date.now()};paint(key,html);
   };
   m.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
     if(b.dataset.g){lbS.k=b.dataset.g;load()}else if(b.dataset.m){lbS.mode=b.dataset.m;load()}else if(b.dataset.s){lbS.scope=b.dataset.s;load()}
@@ -4860,7 +4889,7 @@ const bbMe=r=>r.p1===me.id?1:2,bbOpp=r=>r.p1===me.id?r.p2:r.p1,bbMy=r=>r["score"
 const bbNeeds=r=>(r.status==="open"&&bbMy(r)==null)||(r.status==="done"&&!(state.bbdone||{})[r.id]);
 const bbBadge=()=>pzOnline()&&bb.loaded?bb.list.filter(bbNeeds).length:0;
 async function loadBB(force){
-  if(!pzOnline())return;if(!force&&bb.loaded&&Date.now()-bb.at<8000)return;
+  if(!pzOnline())return;pzSync();if(!force&&bb.loaded&&Date.now()-bb.at<8000)return;
   const {data,error}=await sb.from("block_battles").select("*").order("updated_at",{ascending:false}).limit(30);
   if(error){bb.err=/block_battles|schema cache|does not exist/i.test(error.message||"")?"setup":sbErr(error);bb.loaded=false}else{bb.err="";bb.list=data;bb.loaded=true}
   bb.at=Date.now();updateBadges();if(view==="puzzles")renderPuzzles();
