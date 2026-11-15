@@ -1060,6 +1060,15 @@ body{min-height:100dvh}
 .pe-it.more{box-shadow:inset 0 0 0 1.5px var(--line);background:none}.pe-lock{display:grid;place-items:center;height:46px;font-family:var(--display);font-weight:900;font-size:1.3rem;color:var(--muted)}
 .pe-sect{display:flex;flex-direction:column;gap:6px}
 .pe-none{background:var(--surface)}
+
+/* ---- v29: pet picker ---- */
+.pk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.pk-it{position:relative;border-radius:16px;background:var(--surface-2);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--rc) 50%,transparent)}
+.pk-it.on{box-shadow:inset 0 0 0 2.5px var(--xp);background:var(--xp-soft)}
+.pk-pick{width:100%;border:0;background:none;color:var(--fg);display:flex;flex-direction:column;align-items:center;gap:3px;padding:12px 8px 10px;cursor:pointer;font-family:var(--body)}
+.pk-pick b{font-size:.95rem;line-height:1.2;text-align:center}.pk-pick small{color:var(--muted);font-weight:700;font-size:.78rem}
+.pk-it.on .pk-pick small{color:var(--xp)}
+.pk-info{position:absolute;top:6px;right:6px;width:30px;height:30px;border-radius:50%;border:0;background:var(--surface);color:var(--muted);font-size:1rem;cursor:pointer;display:grid;place-items:center}
 </style>
 </head>
 <body>
@@ -1353,6 +1362,7 @@ function migrate(s){
         se.sets=ns;se.mod=false}}
     s.v=2;
   }
+  if(s.v===2&&s.pets)for(const k in s.pets){const pt=s.pets[k];if(pt&&pt.moves&&pt.mvL==null)delete pt.moves}// only keep move sets a player picked themselves
   return s.v===2?Object.assign(blank(),s):null;
 }
 function ensurePlans(s){
@@ -2119,7 +2129,7 @@ $("#v-profile").addEventListener("click",async e=>{
   if(id==="editname"||e.target.closest("#editav")){openProfileEdit();return}
   const tr=e.target.closest("[data-treat]");
   if(tr){const t=TREATS.find(q=>q.id===tr.dataset.treat);if(gems(compute())<t.price)return;state.spent=(state.spent||0)+t.price;gainPet(t.xp,true);save();refresh();toast("✓",`${petName(state.pet)} enjoyed the ${t.name.toLowerCase()}`,"",`+${t.xp}`,"pet XP");return}
-  if(e.target.closest("#pet-choose")){shopTab="pet";go("shop");return}
+  if(e.target.closest("#pet-choose")){if(Object.keys(state.pets).some(id=>PETS[id]))openPetPicker();else{shopTab="pet";go("shop")}return}
   if(e.target.closest("#pet-open")){openPet(state.pet);return}
   if(id==="cal-prev"){calOff--;renderProfile();return}
   if(id==="cal-next"){if(calOff<0)calOff++;renderProfile();return}
@@ -3367,6 +3377,18 @@ function petCard(c){
       <div class="btnrow">${TREATS.map(t=>`<button class="btn sm ghost" data-treat="${t.id}" ${g<t.price?"disabled":""}>${t.name} ${GEM}${t.price}</button>`).join("")}<button class="btn sm ghost" id="pet-choose">Switch</button></div></div>
     <button class="petbtn bob" id="pet-open" aria-label="About ${esc(PETS[id].names[stg])}">${sprite(id,stg,84,petMyth(id))}</button></div>`;
 }
+function openPetPicker(){
+  const ids=Object.keys(state.pets).filter(id=>PETS[id]).sort((a,b)=>(a===state.pet?-1:b===state.pet?1:0)||state.pets[b].xp-state.pets[a].xp);
+  const m=openModal(`${mhead("Your pets")}<h2>Choose your active pet</h2><p class="muted" style="font-size:.9rem;margin:0">Your active pet earns XP from your workouts. Tap a pet to make it active, or ⓘ to see its profile.</p>
+    <div class="pk-grid">${ids.map(id=>{const pt=state.pets[id],L=petLevel(pt.xp).L,st=petStage(L),on=id===state.pet;
+      return `<div class="pk-it${on?" on":""}" style="--rc:var(${RAR[pt.myth?4:PETS[id].r].v})"><button class="pk-pick" data-pk="${id}" aria-pressed="${on}"><span class="bob">${sprite(id,st,68,!!pt.myth)}</span><b>${pt.myth?"✦ ":""}${esc(PETS[id].names[st])}</b><small>Lv ${L}${on?" · Active":""}</small></button><button class="pk-info" data-pi="${id}" aria-label="About ${esc(PETS[id].names[st])}">ⓘ</button></div>`}).join("")}</div>
+    <button class="btn ghost" id="pk-shop">Get more pets in the Shop</button>`);
+  m.querySelector("#mh-back").onclick=closeModal;
+  m.querySelector(".pk-grid").onclick=e=>{const pk=e.target.closest("[data-pk]"),pi=e.target.closest("[data-pi]");
+    if(pi){openPet(pi.dataset.pi);const bk=$("#mh-back");if(bk)bk.onclick=openPetPicker;return}
+    if(pk){const id=pk.dataset.pk;if(id!==state.pet){state.pet=id;save();refresh();const st=petStage(petLevel(state.pets[id].xp).L);toast("✓",`${PETS[id].names[st]} is now your active pet`,"It earns XP from your workouts.","")}closeModal()}};
+  m.querySelector("#pk-shop").onclick=()=>{closeModal();shopTab="pet";go("shop")};
+}
 const VIA={Starter:"Your starter",Shop:"Bought in the shop",code:"Redeemed with a code",gift:"A gift from the founder"};
 function openPet(id){
   const pt=state.pets[id];if(!pt)return;const P=PETS[id],lv=petLevel(pt.xp),stg=petStage(lv.L),my=!!pt.myth,act=state.pet===id,nextAt=stg===0?8:stg===1?20:null,snacks=inv().snack||0;
@@ -4480,8 +4502,10 @@ function learnset(id){
 }
 // p: {id,lv,tm?,moves?}
 const knownMoves=p=>learnset(p.id).filter(x=>x[0]<=p.lv).map(x=>x[1]).concat((p.tm||[]).filter(m=>MV[m]));
+// The moves a pet takes into battle: your picks first, then empty slots are filled with the newest moves it has learned.
 function activeMoves(p){const k=[...new Set(knownMoves(p))],sel=(p.moves||[]).filter((m,i,a)=>k.includes(m)&&a.indexOf(m)===i).slice(0,4);
-  if(sel.length)return sel;const lv=learnset(p.id).filter(x=>x[0]<=p.lv).map(x=>x[1]);return lv.slice(-4)}
+  const newest=learnset(p.id).filter(x=>x[0]<=p.lv).map(x=>x[1]).reverse().concat([...(p.tm||[])].reverse());
+  for(const m of newest){if(sel.length>=4)break;if(MV[m]&&!sel.includes(m))sel.push(m)}return sel}
 const monOf=(id,pt)=>{const lv=petLevel(pt.xp||0).L,p={id,lv,tm:pt.tm||[],moves:pt.moves||[]};return {id,lv,myth:!!pt.myth,moves:activeMoves(p)}};
 // ---- engine ----
 function mulberry(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
@@ -4588,7 +4612,7 @@ function openMoves(id){
   m.querySelector("#mv-pick").onclick=e=>{const b=e.target.closest("[data-mv]");if(!b)return;const k=b.dataset.mv;
     if(sel.includes(k))sel=sel.filter(x=>x!==k);else if(sel.length>=4){toast("!","Four moves at most","Take one off first.","");return}else sel.push(k);draw()};
   m.querySelector("#mh-back").onclick=()=>openPet(id);
-  m.querySelector("#mh-save").onclick=()=>{if(!sel.length){toast("!","Pick at least one move","","");return}pt.moves=sel;save();openPet(id);toast("✓","Moves saved","","")};
+  m.querySelector("#mh-save").onclick=()=>{if(!sel.length){toast("!","Pick at least one move","","");return}pt.moves=sel;pt.mvL=p.lv;save();openPet(id);toast("✓","Moves saved","","")};
 }
 const discPic=(mv,size)=>`<span class="disc" style="--tc:${TCOL[MV[mv].t]};--ds:${size||44}px" aria-hidden="true"></span>`;
 function addDisc(mv,n=1){state.discs=state.discs||{};state.discs[mv]=(state.discs[mv]||0)+n}
@@ -4600,7 +4624,8 @@ function openDiscs(id){
       :`<div class="empty"><b>No move discs yet</b><span>Buy them in the Shop, find them in chests, or finish all three daily puzzles for a free one.</span></div>`}`);
   m.querySelector("#mh-back").onclick=()=>openPet(id);
   m.querySelectorAll("[data-teach]").forEach(b=>b.onclick=()=>{const k=b.dataset.teach;if(!(state.discs[k]>0))return;state.discs[k]--;pt.tm=(pt.tm||[]).concat(k);
-    const cur=activeMoves({id,lv:p.lv,tm:pt.tm,moves:pt.moves||[]});if(cur.length<4&&!cur.includes(k))pt.moves=cur.concat(k);save();toast("♪",`${petName(id)} learned ${MV[k].n}`,cur.length<4?"It's ready to use.":"Swap it in with Change on its profile.","");openPet(id)});
+    if(pt.moves&&pt.mvL!=null&&pt.moves.length<4&&!pt.moves.includes(k))pt.moves=pt.moves.concat(k);
+    const ready=activeMoves({id,lv:p.lv,tm:pt.tm,moves:pt.moves||[]}).includes(k);save();toast("♪",`${petName(id)} learned ${MV[k].n}`,ready?"It's ready to use.":"Swap it in with Change on its profile.","");openPet(id)});
 }
 // A pet that belongs to someone else: read-only.
 function openPetView(p,owner,back){
@@ -5310,10 +5335,12 @@ function applyGrants(rows){
   const row=id=>rows.find(r=>r.user_id===me.id&&r.pet_id===id)||{};
   for(const id of originIds()){
     const g=row(id);
-    if(mine.has(id)&&!state.pets[id]){givePet(id,"gift",!!g.myth);if(g.level>1)state.pets[id].xp=petXpFor(g.level);fresh.push(id);changed=true}
-    else if(mine.has(id)&&state.pets[id]){const pt=state.pets[id];
+    if(mine.has(id)&&!state.pets[id]){givePet(id,"gift",!!g.myth);const pt=state.pets[id];pt.gl=g.level||1;if(g.level>1)pt.xp=petXpFor(g.level);fresh.push(id);changed=true}
+    else if(mine.has(id)&&state.pets[id]){const pt=state.pets[id],gl=g.level||1,L=petLevel(pt.xp).L;
       if(g.myth&&!pt.myth){pt.myth=true;changed=true;ups.push([id,"shiny"])}
-      if(g.level>petLevel(pt.xp).L){pt.xp=petXpFor(g.level);changed=true;ups.push([id,"level",g.level])}}
+      // The founder changed this pet's level in the admin panel: set it exactly (up or down) and give it that level's moves.
+      if(pt.gl==null?gl>L:gl!==pt.gl){if(gl!==L){pt.xp=petXpFor(gl);pt.moves=[];ups.push([id,"level",gl])}pt.gl=gl;changed=true}
+      else if(pt.gl==null){pt.gl=gl;changed=true}}
     else if(!mine.has(id)&&state.pets[id]){delete state.pets[id];if(state.pet===id)state.pet=Object.keys(state.pets)[0]||"";changed=true}}
   if(changed){save();refresh()}
   if(!fresh.length&&ups.length){const [id]=ups[0],sh=ups.some(u=>u[1]==="shiny"),lvl=ups.find(u=>u[1]==="level");
