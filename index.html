@@ -3043,9 +3043,9 @@ function showHatch(id,opts={}){
       hint.textContent=["","Something's moving…","It's cracking!","Almost there… one more tap!"][taps];return}
     done=true;btn.classList.add("burst");hint.textContent="";
     setTimeout(()=>{if(!m.isConnected)return;
-      m.innerHTML=`<div class="reveal" style="--rc:var(${my?"--r-myth":RAR[P.r].v})"><span class="rays"></span><span class="flash"></span><span class="rv-pic pop">${sprite(id,0,150,my)}</span>
+      m.innerHTML=`<div class="reveal" style="--rc:var(${my?"--r-myth":RAR[P.r].v})"><span class="rays"></span><span class="flash"></span><span class="rv-pic pop">${sprite(id,petStage(petLevel(state.pets[id]?.xp||0).L),150,my)}</span>
         <div class="btnrow" style="justify-content:center">${rarTag({r:P.r})}${my?'<span class="shinyb">★ Shiny</span>':""}</div>
-        <h2>${my?"A shiny ":""}${esc(P.names[0])} hatched!</h2><p class="muted">${my?`Only 1 in ${MYTH_ODDS} pets hatch shiny. `:""}${esc(PET_DESC[id]||"")}</p></div>
+        <h2>${my?"A shiny ":""}${esc(petName(id))} hatched!${(state.pets[id]?.xp||0)>0?` <span class="muted" style="font-size:.9rem">Lv ${petLevel(state.pets[id].xp).L}</span>`:""}</h2><p class="muted">${my?`Only 1 in ${MYTH_ODDS} pets hatch shiny. `:""}${esc(PET_DESC[id]||"")}</p></div>
         <div class="btnrow" style="justify-content:center">${opts.onDone?`<button class="btn" id="h-next">Continue</button>`:`<button class="btn" id="h-see">See its profile</button><button class="btn ghost" data-close>Done</button>`}</div>`;
       m.querySelector("[data-close]")?.addEventListener("click",closeModal);
       m.querySelector("#h-see")?.addEventListener("click",()=>openPet(id));
@@ -3112,7 +3112,9 @@ function mythModal(id,upgraded){
     <p class="muted">${upgraded?"It keeps its level and evolutions, now in rare colours.":`Only 1 in ${MYTH_ODDS} pets look like this. It sparkles forever.`}</p></div>
     <div class="btnrow" style="justify-content:center"><button class="btn" id="my-see">See its profile</button><button class="btn ghost" data-close>Nice</button></div>`).querySelector("#my-see").onclick=()=>openPet(id);
 }
-function petLevel(xp){let L=1,need=100;while(xp>=need){xp-=need;L++;need=100*L}return {L,into:xp,need}}
+const PET_MAX=100;
+function petLevel(xp){let L=1,need=100;while(xp>=need&&L<PET_MAX){xp-=need;L++;need=100*L}return L>=PET_MAX?{L,into:need,need,max:true}:{L,into:xp,need}}
+const petXpFor=L=>100*(Math.min(L,PET_MAX)-1)*Math.min(L,PET_MAX)/2;
 const petStage=L=>L>=20?2:L>=8?1:0;
 const petName=id=>PETS[id].names[petStage(petLevel(state.pets[id]?.xp||0).L)];
 function gainPet(n,viaTreat){
@@ -3135,7 +3137,7 @@ function petCard(c){
   const lv=petLevel(state.pets[id].xp),stg=petStage(lv.L),nextAt=stg===0?8:stg===1?20:null,g=gems(c);
   return `<div class="panel petcard" style="--rc:var(${RAR[PETS[id].r].v})"><div class="pet-l"><span class="eyebrow">${PETS[id].el} pet · ${RAR[PETS[id].r].n}${petMyth(id)?' <span class="shinyb">★ Shiny</span>':""}</span><h3>${esc(PETS[id].names[stg])} <span class="muted">Lv ${lv.L}</span></h3>
       <span class="bar"><i style="width:${(lv.into/lv.need*100).toFixed(0)}%"></i></span>
-      <span class="muted num" style="font-size:.85rem">${lv.into} / ${lv.need} XP${PETS[id].one?"":nextAt?` · evolves at Lv ${nextAt}`:" · final form"}</span>
+      <span class="muted num" style="font-size:.85rem">${lv.max?"Max level":`${lv.into} / ${lv.need} XP`}${PETS[id].one?"":nextAt?` · evolves at Lv ${nextAt}`:" · final form"}</span>
       <div class="btnrow">${TREATS.map(t=>`<button class="btn sm ghost" data-treat="${t.id}" ${g<t.price?"disabled":""}>${t.name} ${GEM}${t.price}</button>`).join("")}<button class="btn sm ghost" id="pet-choose">Switch</button></div></div>
     <button class="petbtn bob" id="pet-open" aria-label="About ${esc(PETS[id].names[stg])}">${sprite(id,stg,84,petMyth(id))}</button></div>`;
 }
@@ -3146,7 +3148,7 @@ function openPet(id){
     <div class="buy"><h2>${my?"✦ ":""}${esc(P.names[stg])}</h2>
       <div class="btnrow" style="justify-content:center">${rarTag({r:P.r})}${my?'<span class="shinyb">★ Shiny</span>':""}${act?'<span class="pill on">Active</span>':""}</div>
       <span class="muted">${P.el} type · Level ${lv.L}</span></div>
-    <div style="display:flex;flex-direction:column;gap:6px"><span class="bar"><i style="width:${(lv.into/lv.need*100).toFixed(0)}%"></i></span><span class="muted num" style="font-size:.85rem">${lv.into} / ${lv.need} XP${PETS[id].one?"":nextAt?` · evolves at Lv ${nextAt}`:" · final form"}</span></div>
+    <div style="display:flex;flex-direction:column;gap:6px"><span class="bar"><i style="width:${(lv.into/lv.need*100).toFixed(0)}%"></i></span><span class="muted num" style="font-size:.85rem">${lv.max?"Max level":`${lv.into} / ${lv.need} XP`}${PETS[id].one?"":nextAt?` · evolves at Lv ${nextAt}`:" · final form"}</span></div>
     <p class="pdesc">${esc(PET_DESC[id]||"")}</p>
     <div class="pfacts"><div><span class="eyebrow">Joined you</span><b>${pt.got?fmtD(pt.got):"Early days"}</b></div><div><span class="eyebrow">Found</span><b>${esc(VIA[pt.via]||(pt.via?"In a "+pt.via:"Your first pet"))}</b></div>
       ${my?`<div class="wide"><span class="eyebrow">Mythic</span><b>A 1 in ${MYTH_ODDS} shiny with its own colours</b></div>`:""}</div>
@@ -3541,7 +3543,7 @@ async function loadSocial(force){
       sb.from("messages").select("*").order("id",{ascending:false}).limit(300)]);
     for(const r of [fr,gm,fd])if(r.error)throw r.error;
     if(!ms.error){takeMsgs(ms.data);chat.ready=true}
-    const pg=await sb.from("pet_grants").select("user_id,pet_id");if(!pg.error)applyGrants(pg.data);
+    const pg=await sb.from("pet_grants").select("*");if(!pg.error)applyGrants(pg.data);
     social.friendships=fr.data;social.feed=fd.data;
     const myG=[...new Set(gm.data.filter(x=>x.user_id===me.id).map(x=>x.group_id))];
     social.members={};gm.data.forEach(x=>{if(myG.includes(x.group_id))(social.members[x.group_id]=social.members[x.group_id]||[]).push(x.user_id)});
@@ -4214,11 +4216,21 @@ const originIds=()=>Object.keys(PETS).filter(k=>PETS[k].origin);
 const hasGrant=(uid,pet)=>!!(social.grants&&social.grants[uid]&&social.grants[uid].has(pet));
 function applyGrants(rows){
   social.grants={};for(const r of rows)(social.grants[r.user_id]=social.grants[r.user_id]||new Set()).add(r.pet_id);
-  const mine=social.grants[me.id]||new Set();let changed=false;const fresh=[];
+  const mine=social.grants[me.id]||new Set();let changed=false;const fresh=[],ups=[];
+  const row=id=>rows.find(r=>r.user_id===me.id&&r.pet_id===id)||{};
   for(const id of originIds()){
-    if(mine.has(id)&&!state.pets[id]){givePet(id,"gift");fresh.push(id);changed=true}
+    const g=row(id);
+    if(mine.has(id)&&!state.pets[id]){givePet(id,"gift",!!g.myth);if(g.level>1)state.pets[id].xp=petXpFor(g.level);fresh.push(id);changed=true}
+    else if(mine.has(id)&&state.pets[id]){const pt=state.pets[id];
+      if(g.myth&&!pt.myth){pt.myth=true;changed=true;ups.push([id,"shiny"])}
+      if(g.level>petLevel(pt.xp).L){pt.xp=petXpFor(g.level);changed=true;ups.push([id,"level",g.level])}}
     else if(!mine.has(id)&&state.pets[id]){delete state.pets[id];if(state.pet===id)state.pet=Object.keys(state.pets)[0]||"";changed=true}}
   if(changed){save();refresh()}
+  if(!fresh.length&&ups.length){const [id]=ups[0],sh=ups.some(u=>u[1]==="shiny"),lvl=ups.find(u=>u[1]==="level");
+    openModal(`<div class="reveal" style="--rc:var(${sh?"--r-myth":"--r-origin"})"><span class="rays"></span><span class="rv-pic pop">${sprite(id,petStage(petLevel(state.pets[id].xp).L),150,petMyth(id))}</span>
+      <div class="btnrow" style="justify-content:center">${rarTag({r:PETS[id].r})}${petMyth(id)?'<span class="shinyb">★ Shiny</span>':""}</div>
+      <h2>${esc(petName(id))} ${sh&&lvl?`turned shiny and reached level ${lvl[2]}`:sh?"turned shiny!":`reached level ${lvl[2]}!`}</h2><p class="muted">A gift from the founder.</p></div>
+      <div class="btnrow" style="justify-content:center"><button class="btn" id="up-see">See its profile</button><button class="btn ghost" data-close>Amazing</button></div>`).querySelector("#up-see").onclick=()=>openPet(id)}
   if(fresh.length){fresh.forEach(id=>postActivity("origin",{id,myth:petMyth(id)}));
     const next=i=>showHatch(fresh[i],{intro:"A gift from the founder",onDone:i<fresh.length-1?()=>next(i+1):null});next(0)}
 }
@@ -4239,15 +4251,19 @@ function openAdmin(sel){
     <div class="adm-pets">${ids.map(id=>`<button class="adm-pet${id===sel?" on":""}" data-ap="${id}">${sprite(id,top(id),56)}<b>${esc(PETS[id].names[top(id)])}</b></button>`).join("")}</div>
     <form id="adm-form" style="display:flex;flex-direction:column;gap:10px">
       <label class="fld"><span>Their username</span><input class="txt" id="adm-user" placeholder="username" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"></label>
+      <div class="row2"><label class="switch" style="align-items:center"><input type="checkbox" id="adm-myth"><span><b>Shiny</b><span class="muted">Mythic colours</span></span></label>
+        <label class="fld"><span>Level (1 to ${PET_MAX})</span><input class="txt" id="adm-level" inputmode="numeric" value="1"></label></div>
       <p id="adm-msg" class="formerr" hidden></p>
-      <div class="btnrow"><button class="btn" type="submit">Give ${esc(PETS[sel].names[0])}</button><button class="btn ghost" type="button" id="adm-take">Take it back</button></div></form>
+      <div class="btnrow"><button class="btn" type="submit">Give or update</button><button class="btn ghost" type="button" id="adm-take">Take it back</button></div></form>
     <h3>Who has Origin pets</h3><div id="adm-list"><p class="muted">Loading…</p></div>`);
   m.querySelector("#mh-back").onclick=closeModal;
   m.querySelectorAll("[data-ap]").forEach(b=>b.onclick=()=>openAdmin(b.dataset.ap));
   const say=(t,ok)=>{const e=m.querySelector("#adm-msg");e.textContent=t;e.hidden=false;e.style.color=ok?"var(--good)":""};
   const user=()=>m.querySelector("#adm-user").value.trim().replace(/^@/,"").toLowerCase();
   const act=async give=>{const u=user();if(!u){say("Type a username first.");return}
-    const {data,error}=await sb.rpc("grant_pet",{p_username:u,p_pet:sel,p_give:give});
+    const lv=Math.max(1,Math.min(PET_MAX,parseInt(m.querySelector("#adm-level").value)||1));
+    let {data,error}=give?await sb.rpc("set_pet_grant",{p_username:u,p_pet:sel,p_myth:m.querySelector("#adm-myth").checked,p_level:lv}):await sb.rpc("grant_pet",{p_username:u,p_pet:sel,p_give:false});
+    if(give&&error&&/could not find|schema cache|PGRST202/i.test(error.message+error.code)){if(m.querySelector("#adm-myth").checked||lv>1){say("Shiny and level need the latest Supabase update (supabase-update-5.sql). Giving it as a normal pet for now.")}({data,error}=await sb.rpc("grant_pet",{p_username:u,p_pet:sel,p_give:true}))}
     if(error){say(sbErr(error));return}say(data,true);loadList();loadSocial(true)};
   m.querySelector("#adm-form").addEventListener("submit",e=>{e.preventDefault();act(true)});
   const take=m.querySelector("#adm-take");
@@ -4257,9 +4273,10 @@ function openAdmin(sel){
   async function loadList(){
     const {data,error}=await sb.rpc("list_grants"),el=m.querySelector("#adm-list");if(!el||!el.isConnected)return;
     if(error){el.innerHTML=`<p class="formerr">${esc(sbErr(error))}</p>`;return}
-    el.innerHTML=data.length?data.map(r=>`<div class="berow">${PETS[r.pet_id]?`<span class="be-i">${sprite(r.pet_id,PETS[r.pet_id].one?0:2,32)}</span>`:""}<b>@${esc(r.username)}</b><span class="muted" style="font-size:.8rem">${esc(PETS[r.pet_id]?PETS[r.pet_id].names[PETS[r.pet_id].one?0:2]:r.pet_id)} · ${fmtD(String(r.granted_at).slice(0,10))}</span>
-      <button class="be-mv" data-fill="${esc(r.username)}" data-pet="${esc(r.pet_id)}" aria-label="Select @${esc(r.username)}">✎</button></div>`).join(""):`<p class="muted">Nobody yet.</p>`;
-    el.querySelectorAll("[data-fill]").forEach(b=>b.onclick=()=>{if(b.dataset.pet!==sel&&PETS[b.dataset.pet]){openAdmin(b.dataset.pet);setTimeout(()=>{const i=$("#adm-user");if(i)i.value=b.dataset.fill},30);return}m.querySelector("#adm-user").value=b.dataset.fill});
+    el.innerHTML=data.length?data.map(r=>`<div class="berow">${PETS[r.pet_id]?`<span class="be-i">${sprite(r.pet_id,PETS[r.pet_id].one?0:2,32)}</span>`:""}<b>@${esc(r.username)}</b><span class="muted" style="font-size:.8rem">${r.myth?"★ ":""}${esc(PETS[r.pet_id]?PETS[r.pet_id].names[PETS[r.pet_id].one?0:2]:r.pet_id)}${r.level>1?` · Lv ${r.level}`:""} · ${fmtD(String(r.granted_at).slice(0,10))}</span>
+      <button class="be-mv" data-fill="${esc(r.username)}" data-pet="${esc(r.pet_id)}" data-myth="${r.myth?1:""}" data-level="${r.level||1}" aria-label="Edit @${esc(r.username)}">✎</button></div>`).join(""):`<p class="muted">Nobody yet.</p>`;
+    const fill=()=>{}; el.querySelectorAll("[data-fill]").forEach(b=>b.onclick=()=>{const put=()=>{const i=$("#adm-user");if(!i)return;i.value=b.dataset.fill;$("#adm-myth").checked=!!b.dataset.myth;$("#adm-level").value=b.dataset.level;i.scrollIntoView({block:"center"})};
+      if(b.dataset.pet!==sel&&PETS[b.dataset.pet]){openAdmin(b.dataset.pet);setTimeout(put,30);return}put()});
   }
   loadList();
 }
