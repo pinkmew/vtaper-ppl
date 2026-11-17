@@ -1179,7 +1179,7 @@ body{min-height:100dvh}
 </nav>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
+<script id="sbjs" async src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
 <script>
 /* ---------- Default plan ----------
    [id, name, sets, reps, note, tags, kind]
@@ -6174,7 +6174,12 @@ function refresh(){let c=compute();if(checkChallenges(c))c=compute();applyTheme(
 // No zooming: block pinch and double-tap zoom so the layout stays put (text boxes are 16px so iPhone doesn't zoom on focus).
 ["gesturestart","gesturechange","gestureend"].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));
 document.addEventListener("touchmove",e=>{if(e.touches.length>1||(e.scale!==undefined&&e.scale!==1))e.preventDefault()},{passive:false});
-cloudInit();
+// The account library loads in the background, so a slow or blocked download never stops the app opening.
+if(window.supabase)cloudInit();
+else if(CLOUD_HOST){const js=document.getElementById("sbjs");cloud.status="checking";
+  const fail=()=>{if(!sb){cloud.status="unavailable";refresh()}},wait=setTimeout(fail,20000);
+  js&&js.addEventListener("load",()=>{clearTimeout(wait);cloudInit();refresh()});js&&js.addEventListener("error",()=>{clearTimeout(wait);fail()});if(!js)fail()}
+else cloudInit();
 rotateCheck();
 founderCheck();
 useFreezes();
